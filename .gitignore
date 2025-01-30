@@ -1,5 +1,27 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.idea
+.cache
+.turbo
+.vscode
+build
+dist
+node_modules
+e2e/reports
+coverage
+
+# Yarn2
+.yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+yarn-error.log
+.pnp.*
+
+
 # dependencies
 /node_modules
 /.pnp

@@ -48,14 +48,18 @@ $block: '.wrapper';
         }
     }
 
-    &__cra-logo {
+    &__next-logo {
         width: 160px;
-        height: 50px;
+        height: 32px;
         margin-top: 12px;
-        background-image: url('../../assets/cra-logo.svg');
+        background-image: url('../../assets/next-logo-light.svg');
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
+
+        &_dark {
+            background-image: url('../../assets/next-logo-dark.svg');
+        }
     }
 
     &__content {

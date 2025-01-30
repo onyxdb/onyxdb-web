@@ -1,10 +1,12 @@
+'use client';
+
 import React from 'react';
 import block from 'bem-cn-lite';
 import {Button, Icon} from '@gravity-ui/uikit';
-import {BookOpen, CopyTransparent, ListUl, LogoTelegram} from '@gravity-ui/icons';
-import Storybook from '../icons/Storybook';
-import GitHub from '../icons/GitHub';
-import Figma from '../icons/Figma';
+import {BookOpen, CopyTransparent, ListCheck, ListUl, LogoTelegram} from '@gravity-ui/icons';
+import Storybook from '../../assets/icons/storybook.svg';
+import Figma from '../../assets/icons/figma.svg';
+import GitHub from '../../assets/icons/github.svg';
 
 import './InfoButtons.scss';
 
@@ -86,17 +88,28 @@ export const InfoButtons: React.FC = () => {
             </div>
 
             <div className={b('block')}>
-                <div className={b('title')}>About Create React App</div>
+                <div className={b('title')}>About Next.js</div>
                 <div className={b('buttons')}>
                     <div className={b('button')}>
                         <Button
                             size="l"
                             view="outlined"
-                            href="https://create-react-app.dev"
+                            href="https://nextjs.org/docs"
                             target="_blank"
                         >
                             <Icon data={BookOpen} />
                             Docs
+                        </Button>
+                    </div>
+                    <div className={b('button')}>
+                        <Button
+                            size="l"
+                            view="outlined"
+                            href="https://nextjs.org/learn"
+                            target="_blank"
+                        >
+                            <Icon data={ListCheck} />
+                            Learn
                         </Button>
                     </div>
                 </div>

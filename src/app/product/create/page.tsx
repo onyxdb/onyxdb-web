@@ -7,19 +7,19 @@ import {Button} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
-import {projectsApi} from '@/app/apis';
+import {productsApi} from '@/app/apis';
 
-interface ProjectFormValues {
+interface ProductFormValues {
     name: string;
     description: string;
     parentId?: string;
     ownerId: string;
 }
 
-export default function CreateProjectPage() {
+export default function CreateProductPage() {
     const router = useRouter();
 
-    const formik = useFormik<ProjectFormValues>({
+    const formik = useFormik<ProductFormValues>({
         initialValues: {
             name: '',
             description: '',
@@ -27,7 +27,7 @@ export default function CreateProjectPage() {
             ownerId: '',
         },
         validate: (values) => {
-            const errors: Partial<ProjectFormValues> = {};
+            const errors: Partial<ProductFormValues> = {};
 
             if (!values.name) {
                 errors.name = 'Название обязательно';
@@ -49,8 +49,8 @@ export default function CreateProjectPage() {
         },
         onSubmit: async (values) => {
             try {
-                await projectsApi.createProject({projectDTO: values});
-                router.push('/projects'); // Перенаправление на страницу проектов после успешного создания
+                await productsApi.createProduct({productDTO: values});
+                router.push('/products'); // Перенаправление на страницу проектов после успешного создания
             } catch (error) {
                 console.error('Ошибка при создании проекта:', error);
             }

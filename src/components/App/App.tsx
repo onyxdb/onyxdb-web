@@ -38,10 +38,10 @@ export const App: React.FC<AppProps> = ({children}) => {
             onItemClick: () => router.push('/access'), // Переход на /access
         },
         {
-            id: 'projects',
-            title: 'Проекты',
+            id: 'products',
+            title: 'Продукты',
             icon: Cpu,
-            onItemClick: () => router.push('/projects'), // Переход на /projects
+            onItemClick: () => router.push('/products'), // Переход на /products
         },
         // ];
 

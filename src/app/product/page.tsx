@@ -3,33 +3,33 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {ProjectDTO} from '@/generated/api';
-import {projectsApi} from '@/app/apis';
+import {ProductDTO} from '@/generated/api';
+import {productsApi} from '@/app/apis';
 
-export default function ProjectsPage() {
+export default function ProductsPage() {
     const router = useRouter();
-    const [projects, setProjects] = useState<ProjectDTO[]>([]);
+    const [products, setProducts] = useState<ProductDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     useEffect(() => {
-        projectsApi
-            .getAllProjects()
-            .then((response) => setProjects(response.data))
-            .catch((error) => console.error('Error fetching projects:', error));
+        productsApi
+            .getAllProducts()
+            .then((response) => setProducts(response.data))
+            .catch((error) => console.error('Error fetching products:', error));
     }, []);
 
     const MyTable = withTableSorting(Table);
 
-    const columns: TableColumnConfig<ProjectDTO>[] = [
+    const columns: TableColumnConfig<ProductDTO>[] = [
         {
             id: 'name',
             name: 'Название',
-            template: (project) => (
+            template: (product) => (
                 <span
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/projects/${project.id}/info`)}
+                    onClick={() => router.push(`/products/${product.id}/info`)}
                 >
-                    {project.name}
+                    {product.name}
                 </span>
             ),
             meta: {
@@ -50,19 +50,19 @@ export default function ProjectsPage() {
         {
             id: 'ownerId',
             name: 'Владелец',
-            template: (project) => (
+            template: (product) => (
                 <span
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/accounts/${project.ownerId}/info`)}
+                    onClick={() => router.push(`/accounts/${product.ownerId}/info`)}
                 >
-                    {project.ownerId}
+                    {product.ownerId}
                 </span>
             ),
         },
     ];
 
-    const handleCreateProject = () => {
-        router.push('/projects/create');
+    const handleCreateProduct = () => {
+        router.push('/products/create');
     };
 
     return (
@@ -76,7 +76,7 @@ export default function ProjectsPage() {
                 }}
             >
                 <h1>Каталог проектов</h1>
-                <Button view="action" size="l" onClick={handleCreateProject}>
+                <Button view="action" size="l" onClick={handleCreateProduct}>
                     Создать проект
                 </Button>
             </div>
@@ -88,7 +88,7 @@ export default function ProjectsPage() {
                 />
             </div>
             <MyTable
-                data={projects}
+                data={products}
                 columns={columns}
                 // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
                 // sortState={sorting}

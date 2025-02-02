@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {useFormik} from 'formik';
 import {Button} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {ProjectsApi} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
-import {NumberField} from '@/components/formik/NumberField';
+import {projectsApi} from '@/app/apis';
 
 interface ProjectFormValues {
     name: string;
@@ -49,7 +49,6 @@ export default function CreateProjectPage() {
         },
         onSubmit: async (values) => {
             try {
-                const projectsApi = new ProjectsApi();
                 await projectsApi.createProject({projectDTO: values});
                 router.push('/projects'); // Перенаправление на страницу проектов после успешного создания
             } catch (error) {
@@ -68,7 +67,7 @@ export default function CreateProjectPage() {
                     value={formik.values.name}
                     onChange={formik.handleChange('name')}
                     onBlur={formik.handleBlur('name')}
-                    error={formik.touched.name && formik.errors.name}
+                    error={formik.touched.name ? formik.errors.name : undefined}
                     placeholder="Введите название проекта"
                 />
                 <TextAreaField
@@ -77,7 +76,7 @@ export default function CreateProjectPage() {
                     value={formik.values.description}
                     onChange={formik.handleChange('description')}
                     onBlur={formik.handleBlur('description')}
-                    error={formik.touched.description && formik.errors.description}
+                    error={formik.touched.description ? formik.errors.description : undefined}
                     placeholder="Введите описание проекта"
                 />
                 <InputField
@@ -86,16 +85,16 @@ export default function CreateProjectPage() {
                     value={formik.values.parentId || ''}
                     onChange={formik.handleChange('parentId')}
                     onBlur={formik.handleBlur('parentId')}
-                    error={formik.touched.parentId && formik.errors.parentId}
+                    error={formik.touched.parentId ? formik.errors.parentId : undefined}
                     placeholder="Введите ID родительского проекта"
                 />
-                <NumberField
+                <InputField
                     label="ID владельца"
                     name="ownerId"
-                    value={Number(formik.values.ownerId)}
+                    value={formik.values.ownerId}
                     onChange={(value) => formik.setFieldValue('ownerId', value)}
                     onBlur={formik.handleBlur('ownerId')}
-                    error={formik.touched.ownerId && formik.errors.ownerId}
+                    error={formik.touched.ownerId ? formik.errors.ownerId : undefined}
                     placeholder="Введите ID владельца"
                 />
                 <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>

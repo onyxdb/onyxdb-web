@@ -3894,7 +3894,7 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          *
-         * @summary Get all permissions
+         * @summary Get all access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4088,7 +4088,7 @@ export const PermissionsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get all permissions
+         * @summary Get all access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4216,7 +4216,7 @@ export const PermissionsApiFactory = function (
         },
         /**
          *
-         * @summary Get all permissions
+         * @summary Get all access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4368,7 +4368,7 @@ export class PermissionsApi extends BaseAPI {
 
     /**
      *
-     * @summary Get all permissions
+     * @summary Get all access
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionsApi

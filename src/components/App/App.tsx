@@ -27,19 +27,19 @@ export const App: React.FC<AppProps> = ({children}) => {
     const items: AsideHeaderDefaultProps['menuItems'] = [
         {
             id: 'accounts',
-            title: 'Сервис Акаунтов',
+            title: 'Аккаунты',
             icon: Persons,
             onItemClick: () => router.push('/accounts'), // Переход на /accounts
         },
         {
             id: 'access',
-            title: 'Сервис Доступов',
+            title: 'Доступы',
             icon: ListCheck,
             onItemClick: () => router.push('/access'), // Переход на /access
         },
         {
             id: 'projects',
-            title: 'Сервис Проектов',
+            title: 'Проекты',
             icon: Cpu,
             onItemClick: () => router.push('/projects'), // Переход на /projects
         },

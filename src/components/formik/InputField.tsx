@@ -6,7 +6,7 @@ interface InputFieldProps {
     name: string;
     value: string;
     onChange: (value: string) => void;
-    onBlur: () => void;
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
     error?: string;
     placeholder?: string;
 }
@@ -34,7 +34,7 @@ export const InputField: React.FC<InputFieldProps> = ({
                 placeholder={placeholder}
                 error={error}
             />
-            {error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}
+            {/*{error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}*/}
         </div>
     );
 };

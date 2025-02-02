@@ -6,7 +6,7 @@ interface NumberFieldProps {
     name: string;
     value: number;
     onChange: (value: number) => void;
-    onBlur: () => void;
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
     error?: string;
     placeholder?: string;
 }
@@ -35,7 +35,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
                 placeholder={placeholder}
                 error={error}
             />
-            {error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}
+            {/*{error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}*/}
         </div>
     );
 };

@@ -13,25 +13,25 @@
  */
 
 import type {Configuration} from './configuration';
-import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from 'axios';
+import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-    DUMMY_BASE_URL,
     assertParamExists,
+    createRequestFunction,
+    DUMMY_BASE_URL,
+    serializeDataIfNeeded,
     setApiKeyToObject,
     setBasicAuthToObject,
     setBearerAuthToObject,
     setOAuthToObject,
     setSearchParams,
-    serializeDataIfNeeded,
     toPathString,
-    createRequestFunction,
 } from './common';
 import type {RequestArgs} from './base';
 // @ts-ignore
-import {BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap} from './base';
+import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
 
 /**
  *
@@ -77,6 +77,12 @@ export interface AccountDTO {
     lastName?: string;
     /**
      *
+     * @type {{ [key: string]: object; }}
+     * @memberof AccountDTO
+     */
+    data?: {[key: string]: object};
+    /**
+     *
      * @type {string}
      * @memberof AccountDTO
      */
@@ -88,6 +94,7 @@ export interface AccountDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -101,6 +108,7 @@ export interface BadRequestResponse {
      */
     message: string;
 }
+
 /**
  *
  * @export
@@ -133,6 +141,12 @@ export interface BusinessRoleDTO {
     parentId?: string;
     /**
      *
+     * @type {{ [key: string]: object; }}
+     * @memberof BusinessRoleDTO
+     */
+    data?: {[key: string]: object};
+    /**
+     *
      * @type {string}
      * @memberof BusinessRoleDTO
      */
@@ -144,6 +158,7 @@ export interface BusinessRoleDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -181,6 +196,7 @@ export interface DomainComponentDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -194,6 +210,7 @@ export interface NotFoundResponse {
      */
     message: string;
 }
+
 /**
  *
  * @export
@@ -249,6 +266,7 @@ export interface OrganizationUnitDTO {
      */
     ownerId?: string;
 }
+
 /**
  *
  * @export
@@ -286,55 +304,63 @@ export interface PermissionDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
- * @interface ProjectDTO
+ * @interface ProductDTO
  */
-export interface ProjectDTO {
+export interface ProductDTO {
     /**
      *
      * @type {string}
-     * @memberof ProjectDTO
+     * @memberof ProductDTO
      */
     id?: string;
     /**
      *
      * @type {string}
-     * @memberof ProjectDTO
+     * @memberof ProductDTO
      */
     name?: string;
     /**
      *
      * @type {string}
-     * @memberof ProjectDTO
+     * @memberof ProductDTO
      */
     description?: string;
     /**
      *
      * @type {string}
-     * @memberof ProjectDTO
-     */
-    createdAt?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof ProjectDTO
-     */
-    updatedAt?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof ProjectDTO
+     * @memberof ProductDTO
      */
     parentId?: string;
     /**
      *
      * @type {string}
-     * @memberof ProjectDTO
+     * @memberof ProductDTO
      */
     ownerId?: string;
+    /**
+     *
+     * @type {{ [key: string]: object; }}
+     * @memberof ProductDTO
+     */
+    data?: {[key: string]: object};
+    /**
+     *
+     * @type {string}
+     * @memberof ProductDTO
+     */
+    createdAt?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ProductDTO
+     */
+    updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -376,7 +402,7 @@ export interface RoleDTO {
      * @type {string}
      * @memberof RoleDTO
      */
-    projectId?: string;
+    productId?: string;
     /**
      *
      * @type {string}
@@ -3894,7 +3920,7 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          *
-         * @summary Get all access
+         * @summary Get all permissions
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4088,7 +4114,7 @@ export const PermissionsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get all access
+         * @summary Get all permissions
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4216,7 +4242,7 @@ export const PermissionsApiFactory = function (
         },
         /**
          *
-         * @summary Get all access
+         * @summary Get all permissions
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4368,7 +4394,7 @@ export class PermissionsApi extends BaseAPI {
 
     /**
      *
-     * @summary Get all access
+     * @summary Get all permissions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionsApi
@@ -4419,25 +4445,25 @@ export class PermissionsApi extends BaseAPI {
 }
 
 /**
- * ProjectsApi - axios parameter creator
+ * ProductsApi - axios parameter creator
  * @export
  */
-export const ProjectsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ProductsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary Create a new project
-         * @param {ProjectDTO} projectDTO
+         * @summary Create a new product
+         * @param {ProductDTO} productDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProject: async (
-            projectDTO: ProjectDTO,
+        createProduct: async (
+            productDTO: ProductDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'projectDTO' is not null or undefined
-            assertParamExists('createProject', 'projectDTO', projectDTO);
-            const localVarPath = `/api/v1/projects`;
+            // verify required parameter 'productDTO' is not null or undefined
+            assertParamExists('createProduct', 'productDTO', productDTO);
+            const localVarPath = `/api/v1/products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4460,7 +4486,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                projectDTO,
+                productDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -4472,20 +4498,20 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Delete a project by ID
-         * @param {string} projectId
+         * @summary Delete a product by ID
+         * @param {string} productId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteProject: async (
-            projectId: string,
+        deleteProduct: async (
+            productId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('deleteProject', 'projectId', projectId);
-            const localVarPath = `/api/v1/projects/{projectId}`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('deleteProduct', 'productId', productId);
+            const localVarPath = `/api/v1/products/{productId}`.replace(
+                `{${'productId'}}`,
+                encodeURIComponent(String(productId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4514,12 +4540,12 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Get all projects
+         * @summary Get all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProjects: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/projects`;
+        getAllProducts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4547,20 +4573,20 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Get a project by ID
-         * @param {string} projectId
+         * @summary Get a product by ID
+         * @param {string} productId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProjectById: async (
-            projectId: string,
+        getProductById: async (
+            productId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('getProjectById', 'projectId', projectId);
-            const localVarPath = `/api/v1/projects/{projectId}`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('getProductById', 'productId', productId);
+            const localVarPath = `/api/v1/products/{productId}`.replace(
+                `{${'productId'}}`,
+                encodeURIComponent(String(productId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4589,24 +4615,24 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Update a project by ID
-         * @param {string} projectId
-         * @param {ProjectDTO} projectDTO
+         * @summary Update a product by ID
+         * @param {string} productId
+         * @param {ProductDTO} productDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProject: async (
-            projectId: string,
-            projectDTO: ProjectDTO,
+        updateProduct: async (
+            productId: string,
+            productDTO: ProductDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('updateProject', 'projectId', projectId);
-            // verify required parameter 'projectDTO' is not null or undefined
-            assertParamExists('updateProject', 'projectDTO', projectDTO);
-            const localVarPath = `/api/v1/projects/{projectId}`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('updateProduct', 'productId', productId);
+            // verify required parameter 'productDTO' is not null or undefined
+            assertParamExists('updateProduct', 'productDTO', productDTO);
+            const localVarPath = `/api/v1/products/{productId}`.replace(
+                `{${'productId'}}`,
+                encodeURIComponent(String(productId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4630,7 +4656,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                projectDTO,
+                productDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -4644,30 +4670,30 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
 };
 
 /**
- * ProjectsApi - functional programming interface
+ * ProductsApi - functional programming interface
  * @export
  */
-export const ProjectsApiFp = function (configuration?: Configuration) {
-    const localVarAxiosParamCreator = ProjectsApiAxiosParamCreator(configuration);
+export const ProductsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ProductsApiAxiosParamCreator(configuration);
     return {
         /**
          *
-         * @summary Create a new project
-         * @param {ProjectDTO} projectDTO
+         * @summary Create a new product
+         * @param {ProductDTO} productDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createProject(
-            projectDTO: ProjectDTO,
+        async createProduct(
+            productDTO: ProductDTO,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createProject(
-                projectDTO,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProduct(
+                productDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['ProjectsApi.createProject']?.[localVarOperationServerIndex]
+                operationServerMap['ProductsApi.createProduct']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -4679,22 +4705,22 @@ export const ProjectsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Delete a project by ID
-         * @param {string} projectId
+         * @summary Delete a product by ID
+         * @param {string} productId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteProject(
-            projectId: string,
+        async deleteProduct(
+            productId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProject(
-                projectId,
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProduct(
+                productId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['ProjectsApi.deleteProject']?.[localVarOperationServerIndex]
+                operationServerMap['ProductsApi.deleteProduct']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -4706,17 +4732,17 @@ export const ProjectsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get all projects
+         * @summary Get all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllProjects(
+        async getAllProducts(
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProjectDTO>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProjects(options);
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['ProjectsApi.getAllProjects']?.[localVarOperationServerIndex]
+                operationServerMap['ProductsApi.getAllProducts']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -4728,22 +4754,22 @@ export const ProjectsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get a project by ID
-         * @param {string} projectId
+         * @summary Get a product by ID
+         * @param {string} productId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProjectById(
-            projectId: string,
+        async getProductById(
+            productId: string,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProjectById(
-                projectId,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductById(
+                productId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['ProjectsApi.getProjectById']?.[localVarOperationServerIndex]
+                operationServerMap['ProductsApi.getProductById']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -4755,25 +4781,25 @@ export const ProjectsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Update a project by ID
-         * @param {string} projectId
-         * @param {ProjectDTO} projectDTO
+         * @summary Update a product by ID
+         * @param {string} productId
+         * @param {ProductDTO} productDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateProject(
-            projectId: string,
-            projectDTO: ProjectDTO,
+        async updateProduct(
+            productId: string,
+            productDTO: ProductDTO,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProject(
-                projectId,
-                projectDTO,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProduct(
+                productId,
+                productDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['ProjectsApi.updateProject']?.[localVarOperationServerIndex]
+                operationServerMap['ProductsApi.updateProduct']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -4787,236 +4813,236 @@ export const ProjectsApiFp = function (configuration?: Configuration) {
 };
 
 /**
- * ProjectsApi - factory interface
+ * ProductsApi - factory interface
  * @export
  */
-export const ProjectsApiFactory = function (
+export const ProductsApiFactory = function (
     configuration?: Configuration,
     basePath?: string,
     axios?: AxiosInstance,
 ) {
-    const localVarFp = ProjectsApiFp(configuration);
+    const localVarFp = ProductsApiFp(configuration);
     return {
         /**
          *
-         * @summary Create a new project
-         * @param {ProjectsApiCreateProjectRequest} requestParameters Request parameters.
+         * @summary Create a new product
+         * @param {ProductsApiCreateProductRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProject(
-            requestParameters: ProjectsApiCreateProjectRequest,
+        createProduct(
+            requestParameters: ProductsApiCreateProductRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ProjectDTO> {
+        ): AxiosPromise<ProductDTO> {
             return localVarFp
-                .createProject(requestParameters.projectDTO, options)
+                .createProduct(requestParameters.productDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Delete a project by ID
-         * @param {ProjectsApiDeleteProjectRequest} requestParameters Request parameters.
+         * @summary Delete a product by ID
+         * @param {ProductsApiDeleteProductRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteProject(
-            requestParameters: ProjectsApiDeleteProjectRequest,
+        deleteProduct(
+            requestParameters: ProductsApiDeleteProductRequest,
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .deleteProject(requestParameters.projectId, options)
+                .deleteProduct(requestParameters.productId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get all projects
+         * @summary Get all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProjects(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProjectDTO>> {
-            return localVarFp.getAllProjects(options).then((request) => request(axios, basePath));
+        getAllProducts(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductDTO>> {
+            return localVarFp.getAllProducts(options).then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get a project by ID
-         * @param {ProjectsApiGetProjectByIdRequest} requestParameters Request parameters.
+         * @summary Get a product by ID
+         * @param {ProductsApiGetProductByIdRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProjectById(
-            requestParameters: ProjectsApiGetProjectByIdRequest,
+        getProductById(
+            requestParameters: ProductsApiGetProductByIdRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ProjectDTO> {
+        ): AxiosPromise<ProductDTO> {
             return localVarFp
-                .getProjectById(requestParameters.projectId, options)
+                .getProductById(requestParameters.productId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Update a project by ID
-         * @param {ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
+         * @summary Update a product by ID
+         * @param {ProductsApiUpdateProductRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProject(
-            requestParameters: ProjectsApiUpdateProjectRequest,
+        updateProduct(
+            requestParameters: ProductsApiUpdateProductRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ProjectDTO> {
+        ): AxiosPromise<ProductDTO> {
             return localVarFp
-                .updateProject(requestParameters.projectId, requestParameters.projectDTO, options)
+                .updateProduct(requestParameters.productId, requestParameters.productDTO, options)
                 .then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * Request parameters for createProject operation in ProjectsApi.
+ * Request parameters for createProduct operation in ProductsApi.
  * @export
- * @interface ProjectsApiCreateProjectRequest
+ * @interface ProductsApiCreateProductRequest
  */
-export interface ProjectsApiCreateProjectRequest {
+export interface ProductsApiCreateProductRequest {
     /**
      *
-     * @type {ProjectDTO}
-     * @memberof ProjectsApiCreateProject
+     * @type {ProductDTO}
+     * @memberof ProductsApiCreateProduct
      */
-    readonly projectDTO: ProjectDTO;
+    readonly productDTO: ProductDTO;
 }
 
 /**
- * Request parameters for deleteProject operation in ProjectsApi.
+ * Request parameters for deleteProduct operation in ProductsApi.
  * @export
- * @interface ProjectsApiDeleteProjectRequest
+ * @interface ProductsApiDeleteProductRequest
  */
-export interface ProjectsApiDeleteProjectRequest {
+export interface ProductsApiDeleteProductRequest {
     /**
      *
      * @type {string}
-     * @memberof ProjectsApiDeleteProject
+     * @memberof ProductsApiDeleteProduct
      */
-    readonly projectId: string;
+    readonly productId: string;
 }
 
 /**
- * Request parameters for getProjectById operation in ProjectsApi.
+ * Request parameters for getProductById operation in ProductsApi.
  * @export
- * @interface ProjectsApiGetProjectByIdRequest
+ * @interface ProductsApiGetProductByIdRequest
  */
-export interface ProjectsApiGetProjectByIdRequest {
+export interface ProductsApiGetProductByIdRequest {
     /**
      *
      * @type {string}
-     * @memberof ProjectsApiGetProjectById
+     * @memberof ProductsApiGetProductById
      */
-    readonly projectId: string;
+    readonly productId: string;
 }
 
 /**
- * Request parameters for updateProject operation in ProjectsApi.
+ * Request parameters for updateProduct operation in ProductsApi.
  * @export
- * @interface ProjectsApiUpdateProjectRequest
+ * @interface ProductsApiUpdateProductRequest
  */
-export interface ProjectsApiUpdateProjectRequest {
+export interface ProductsApiUpdateProductRequest {
     /**
      *
      * @type {string}
-     * @memberof ProjectsApiUpdateProject
+     * @memberof ProductsApiUpdateProduct
      */
-    readonly projectId: string;
+    readonly productId: string;
 
     /**
      *
-     * @type {ProjectDTO}
-     * @memberof ProjectsApiUpdateProject
+     * @type {ProductDTO}
+     * @memberof ProductsApiUpdateProduct
      */
-    readonly projectDTO: ProjectDTO;
+    readonly productDTO: ProductDTO;
 }
 
 /**
- * ProjectsApi - object-oriented interface
+ * ProductsApi - object-oriented interface
  * @export
- * @class ProjectsApi
+ * @class ProductsApi
  * @extends {BaseAPI}
  */
-export class ProjectsApi extends BaseAPI {
+export class ProductsApi extends BaseAPI {
     /**
      *
-     * @summary Create a new project
-     * @param {ProjectsApiCreateProjectRequest} requestParameters Request parameters.
+     * @summary Create a new product
+     * @param {ProductsApiCreateProductRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProjectsApi
+     * @memberof ProductsApi
      */
-    public createProject(
-        requestParameters: ProjectsApiCreateProjectRequest,
+    public createProduct(
+        requestParameters: ProductsApiCreateProductRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return ProjectsApiFp(this.configuration)
-            .createProject(requestParameters.projectDTO, options)
+        return ProductsApiFp(this.configuration)
+            .createProduct(requestParameters.productDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Delete a project by ID
-     * @param {ProjectsApiDeleteProjectRequest} requestParameters Request parameters.
+     * @summary Delete a product by ID
+     * @param {ProductsApiDeleteProductRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProjectsApi
+     * @memberof ProductsApi
      */
-    public deleteProject(
-        requestParameters: ProjectsApiDeleteProjectRequest,
+    public deleteProduct(
+        requestParameters: ProductsApiDeleteProductRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return ProjectsApiFp(this.configuration)
-            .deleteProject(requestParameters.projectId, options)
+        return ProductsApiFp(this.configuration)
+            .deleteProduct(requestParameters.productId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Get all projects
+     * @summary Get all products
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProjectsApi
+     * @memberof ProductsApi
      */
-    public getAllProjects(options?: RawAxiosRequestConfig) {
-        return ProjectsApiFp(this.configuration)
-            .getAllProjects(options)
+    public getAllProducts(options?: RawAxiosRequestConfig) {
+        return ProductsApiFp(this.configuration)
+            .getAllProducts(options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Get a project by ID
-     * @param {ProjectsApiGetProjectByIdRequest} requestParameters Request parameters.
+     * @summary Get a product by ID
+     * @param {ProductsApiGetProductByIdRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProjectsApi
+     * @memberof ProductsApi
      */
-    public getProjectById(
-        requestParameters: ProjectsApiGetProjectByIdRequest,
+    public getProductById(
+        requestParameters: ProductsApiGetProductByIdRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return ProjectsApiFp(this.configuration)
-            .getProjectById(requestParameters.projectId, options)
+        return ProductsApiFp(this.configuration)
+            .getProductById(requestParameters.productId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Update a project by ID
-     * @param {ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
+     * @summary Update a product by ID
+     * @param {ProductsApiUpdateProductRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProjectsApi
+     * @memberof ProductsApi
      */
-    public updateProject(
-        requestParameters: ProjectsApiUpdateProjectRequest,
+    public updateProduct(
+        requestParameters: ProductsApiUpdateProductRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return ProjectsApiFp(this.configuration)
-            .updateProject(requestParameters.projectId, requestParameters.projectDTO, options)
+        return ProductsApiFp(this.configuration)
+            .updateProduct(requestParameters.productId, requestParameters.productDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }

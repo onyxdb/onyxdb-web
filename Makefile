@@ -11,4 +11,4 @@ uup:
 
 .PHONY: oapi
 oapi:
-	npx openapi-generator-cli generate -i http://localhost:9002/internal/api-docs -g typescript-axios -o ./src/api
+	yarn openapi-generator-cli generate

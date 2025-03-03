@@ -1,31 +1,50 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {AbbrApi, CircleQuestion, Comment, Cpu, Ghost, ListCheck, Moon, Person, Persons, Sun} from '@gravity-ui/icons';
+import {
+    AbbrApi,
+    CircleQuestion,
+    Cpu,
+    Ghost,
+    ListCheck,
+    Moon,
+    Persons,
+    Sun,
+} from '@gravity-ui/icons';
 import {AsideHeader, FooterItem} from '@gravity-ui/navigation';
-import {useRouter} from 'next/navigation';
-import {AsideHeaderDefaultProps} from '@gravity-ui/navigation/build/esm/components/AsideHeader/types';
-import {Theme, ThemeProvider} from '@gravity-ui/uikit';
+import {ThemeProvider} from '@gravity-ui/uikit';
 import useCookie, {booleanCookie, stringCookie} from '@/hooks/useCookie';
+import {LoginInfo} from '@/components/Login/LoginInfo';
 
 interface AppProps {
     children: React.ReactNode;
 }
 
 function useIsSystemDark() {
-    const [isDark, setIsDark] = useState(
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
-    );
+    const [isDark, setIsDark] = useState(false);
+
     useEffect(() => {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
-            setIsDark(event.matches);
-        });
-    }, [setIsDark]);
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            setIsDark(mediaQuery.matches);
+
+            const handleChange = (event: MediaQueryListEvent) => {
+                setIsDark(event.matches);
+            };
+
+            mediaQuery.addEventListener('change', handleChange);
+
+            return () => {
+                mediaQuery.removeEventListener('change', handleChange);
+            };
+        }
+        return () => {};
+    }, []);
+
     return isDark;
 }
 
 export const App: React.FC<AppProps> = ({children}) => {
-    const router = useRouter();
     const isSystemDark = useIsSystemDark();
 
     const [theme, setTheme] = useCookie<'system' | 'dark' | 'light'>(
@@ -36,21 +55,21 @@ export const App: React.FC<AppProps> = ({children}) => {
 
     const isDarkMode = theme === 'dark' || (theme === 'system' && isSystemDark);
 
-    const menuItems: AsideHeaderDefaultProps['menuItems'] = [
+    const menuItems = [
         {
-            id: 'accounts',
+            // id: 'accounts',
             title: 'Аккаунты',
             icon: Persons,
             link: '/accounts',
         },
         {
-            id: 'access',
+            // id: 'access',
             title: 'Доступы',
             icon: ListCheck,
             link: '/access',
         },
         {
-            id: 'products',
+            // id: 'products',
             title: 'Продукты',
             icon: Cpu,
             link: '/products',
@@ -65,18 +84,18 @@ export const App: React.FC<AppProps> = ({children}) => {
         //     icon: isDarkMode ? Moon : Sun,
         //     onItemClick: toggleTheme, // Смена темы
         // },
-        {
-            id: 'support',
-            title: 'Поддержка',
-            icon: Comment,
-            onItemClick: () => window.open('https://t.me/your_support_chat', '_blank'), // Открыть чат поддержки
-        },
-        {
-            id: 'user',
-            title: 'Учётная запись',
-            icon: Person,
-            onItemClick: () => router.push('/user'), // Переход на /user
-        },
+        // {
+        //     // id: 'support',
+        //     title: 'Поддержка',
+        //     icon: Comment,
+        //     onItemClick: () => window.open('https://t.me/your_support_chat', '_blank'), // Открыть чат поддержки
+        // },
+        // {
+        //     // id: 'user',
+        //     title: 'Учётная запись',
+        //     icon: Person,
+        //     onItemClick: () => router.push('/user'), // Переход на /user
+        // },
     ];
 
     const activeTab = menuItems.find((m) => m.link && location.pathname.startsWith(m.link))?.title;
@@ -88,7 +107,11 @@ export const App: React.FC<AppProps> = ({children}) => {
                 compact={asideCollapsed ?? false}
                 onChangeCompact={setAsideCollapsed}
                 logo={{icon: Ghost, text: 'OnyxDB'}}
-                menuItems={menuItems}
+                menuItems={menuItems.map((mi) => ({
+                    ...mi,
+                    id: mi.title,
+                    current: activeTab === mi.title,
+                }))}
                 renderFooter={(data: {compact: boolean}) => {
                     return (
                         <>
@@ -121,14 +144,25 @@ export const App: React.FC<AppProps> = ({children}) => {
                             />
                             <FooterItem
                                 compact={data.compact}
-                                item={{id: 'about', title: 'About', link: '/about', icon: CircleQuestion}}
+                                item={{
+                                    id: 'about',
+                                    title: 'About',
+                                    link: '/about',
+                                    icon: CircleQuestion,
+                                }}
                             />
                             <FooterItem
                                 compact={data.compact}
-                                item={{id: 'api', title: 'API', link: '/api/v1/docs', icon: AbbrApi}}
+                                item={{
+                                    id: 'api',
+                                    title: 'API',
+                                    link: '/api/v1/docs',
+                                    icon: AbbrApi,
+                                }}
                             />
                         </>
-                    );}
+                    );
+                }}
                 renderContent={() => children}
             />
         </ThemeProvider>

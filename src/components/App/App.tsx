@@ -1,58 +1,70 @@
 'use client';
 
-import React, {useState} from 'react';
-import {Comment, Cpu, Ghost, ListCheck, Moon, Person, Persons, Sun} from '@gravity-ui/icons';
-import {AsideHeader} from '@gravity-ui/navigation';
+import React, {useEffect, useState} from 'react';
+import {AbbrApi, CircleQuestion, Comment, Cpu, Ghost, ListCheck, Moon, Person, Persons, Sun} from '@gravity-ui/icons';
+import {AsideHeader, FooterItem} from '@gravity-ui/navigation';
 import {useRouter} from 'next/navigation';
 import {AsideHeaderDefaultProps} from '@gravity-ui/navigation/build/esm/components/AsideHeader/types';
 import {Theme, ThemeProvider} from '@gravity-ui/uikit';
+import useCookie, {booleanCookie, stringCookie} from '@/hooks/useCookie';
 
 interface AppProps {
     children: React.ReactNode;
 }
 
-const DARK = 'dark';
-const LIGHT = 'light';
-const DEFAULT_THEME = DARK;
+function useIsSystemDark() {
+    const [isDark, setIsDark] = useState(
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+    );
+    useEffect(() => {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+            setIsDark(event.matches);
+        });
+    }, [setIsDark]);
+    return isDark;
+}
 
 export const App: React.FC<AppProps> = ({children}) => {
     const router = useRouter();
-    const [isCompact, setIsCompact] = useState<boolean>(false);
-    const [theme, setTheme] = React.useState<Theme>(DEFAULT_THEME);
+    const isSystemDark = useIsSystemDark();
 
-    const toggleTheme = () => {
-        setTheme(theme === LIGHT ? DARK : LIGHT);
-    };
+    const [theme, setTheme] = useCookie<'system' | 'dark' | 'light'>(
+        'ambient_mode',
+        stringCookie<'system' | 'dark' | 'light'>('system'),
+    );
+    const [asideCollapsed, setAsideCollapsed] = useCookie('aside_collapsed', booleanCookie(false));
 
-    const items: AsideHeaderDefaultProps['menuItems'] = [
+    const isDarkMode = theme === 'dark' || (theme === 'system' && isSystemDark);
+
+    const menuItems: AsideHeaderDefaultProps['menuItems'] = [
         {
             id: 'accounts',
             title: 'Аккаунты',
             icon: Persons,
-            onItemClick: () => router.push('/accounts'), // Переход на /accounts
+            link: '/accounts',
         },
         {
             id: 'access',
             title: 'Доступы',
             icon: ListCheck,
-            onItemClick: () => router.push('/access'), // Переход на /access
+            link: '/access',
         },
         {
             id: 'products',
             title: 'Продукты',
             icon: Cpu,
-            onItemClick: () => router.push('/products'), // Переход на /products
+            link: '/products',
         },
         // ];
 
         // Элементы для нижней части сайдбара
         // const secondaryItems: AsideHeaderProps['secondaryItems'] = [
-        {
-            id: 'theme',
-            title: 'Тема',
-            icon: theme === LIGHT ? Sun : Moon,
-            onItemClick: toggleTheme, // Смена темы
-        },
+        // {
+        //     id: 'theme',
+        //     title: 'Тема',
+        //     icon: isDarkMode ? Moon : Sun,
+        //     onItemClick: toggleTheme, // Смена темы
+        // },
         {
             id: 'support',
             title: 'Поддержка',
@@ -67,23 +79,56 @@ export const App: React.FC<AppProps> = ({children}) => {
         },
     ];
 
-    // const pitems: AsideHeaderDefaultProps['panelItems'] = [
-    //     {
-    //         id: 'user',
-    //         visible: true,
-    //     },
-    // ];
+    const activeTab = menuItems.find((m) => m.link && location.pathname.startsWith(m.link))?.title;
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme ?? 'system'}>
             <AsideHeader
+                headerDecoration={true}
+                compact={asideCollapsed ?? false}
+                onChangeCompact={setAsideCollapsed}
                 logo={{icon: Ghost, text: 'OnyxDB'}}
-                compact={isCompact}
-                hideCollapseButton={false}
-                menuItems={items}
-                // panelItems={pitems}
-                // TODO Как вставить footer?
-                onChangeCompact={() => setIsCompact(!isCompact)}
+                menuItems={menuItems}
+                renderFooter={(data: {compact: boolean}) => {
+                    return (
+                        <>
+                            <FooterItem
+                                compact={data.compact}
+                                item={{
+                                    id: 'login',
+                                    title: <LoginInfo />,
+                                }}
+                            />
+                            <FooterItem
+                                compact={data.compact}
+                                item={{
+                                    id: 'ambient_mode',
+                                    title: `Mode: ${theme}`,
+                                    icon: isDarkMode ? Moon : Sun,
+                                    link: '#',
+                                    onItemClickCapture: (e) => {
+                                        e.preventDefault();
+                                        switch (theme) {
+                                            case 'light':
+                                                return setTheme(isSystemDark ? 'dark' : 'system');
+                                            case 'dark':
+                                                return setTheme(isSystemDark ? 'system' : 'light');
+                                            default:
+                                                return setTheme(isDarkMode ? 'light' : 'dark');
+                                        }
+                                    },
+                                }}
+                            />
+                            <FooterItem
+                                compact={data.compact}
+                                item={{id: 'about', title: 'About', link: '/about', icon: CircleQuestion}}
+                            />
+                            <FooterItem
+                                compact={data.compact}
+                                item={{id: 'api', title: 'API', link: '/api/v1/docs', icon: AbbrApi}}
+                            />
+                        </>
+                    );}
                 renderContent={() => children}
             />
         </ThemeProvider>

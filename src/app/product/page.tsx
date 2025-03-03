@@ -1,21 +1,29 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
+import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {ProductDTO} from '@/generated/api';
-import {productsApi} from '@/app/apis';
+import {AccountDTO, ProductDTO} from '@/generated/api';
+import {accountsApi, productsApi} from '@/app/apis';
 
 export default function ProductsPage() {
     const router = useRouter();
     const [products, setProducts] = useState<ProductDTO[]>([]);
-    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [accounts, setAccounts] = useState<AccountDTO[]>([]);
+    // const [searchQuery, setSearchQuery] = useState<string>('');
 
     useEffect(() => {
         productsApi
             .getAllProducts()
             .then((response) => setProducts(response.data))
             .catch((error) => console.error('Error fetching products:', error));
+    }, []);
+
+    useEffect(() => {
+        accountsApi
+            .getAllAccounts()
+            .then((response) => setAccounts(response.data))
+            .catch((error) => console.error('Error fetching accounts:', error));
     }, []);
 
     const MyTable = withTableSorting(Table);
@@ -55,7 +63,7 @@ export default function ProductsPage() {
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
                     onClick={() => router.push(`/accounts/${product.ownerId}/info`)}
                 >
-                    {product.ownerId}
+                    {accounts.find((x) => x.id == product.ownerId)?.username ?? 'not stated'}
                 </span>
             ),
         },
@@ -80,13 +88,13 @@ export default function ProductsPage() {
                     Создать проект
                 </Button>
             </div>
-            <div style={{marginBottom: '20px'}}>
-                <TextInput
-                    placeholder="Поиск по названию"
-                    value={searchQuery}
-                    onUpdate={(value) => setSearchQuery(value)}
-                />
-            </div>
+            {/*<div style={{marginBottom: '20px'}}>*/}
+            {/*    <TextInput*/}
+            {/*        placeholder="Поиск по названию"*/}
+            {/*        value={searchQuery}*/}
+            {/*        onUpdate={(value) => setSearchQuery(value)}*/}
+            {/*    />*/}
+            {/*</div>*/}
             <MyTable
                 data={products}
                 columns={columns}

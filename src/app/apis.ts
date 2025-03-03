@@ -5,7 +5,7 @@ import {
     DomainComponentsApi,
     OrganizationUnitsApi,
     PermissionsApi,
-    ProjectsApi,
+    ProductsApi,
 } from '@/generated/api';
 
 const config = new Configuration({
@@ -13,9 +13,8 @@ const config = new Configuration({
 });
 
 export const accountsApi = new AccountsApi(config);
-
-export const businessRolesApi = new BusinessRolesApi();
-export const domainComponentsApi = new DomainComponentsApi();
-export const organizationUnitsApi = new OrganizationUnitsApi();
-export const permissionsApi = new PermissionsApi();
-export const projectsApi = new ProjectsApi();
+export const businessRolesApi = new BusinessRolesApi(config);
+export const domainComponentsApi = new DomainComponentsApi(config);
+export const organizationUnitsApi = new OrganizationUnitsApi(config);
+export const permissionsApi = new PermissionsApi(config);
+export const productsApi = new ProductsApi(config);

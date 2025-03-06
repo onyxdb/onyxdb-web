@@ -162,6 +162,20 @@ export interface BusinessRoleDTO {
 /**
  *
  * @export
+ * @interface CheckPermission200Response
+ */
+export interface CheckPermission200Response {
+    /**
+     *
+     * @type {boolean}
+     * @memberof CheckPermission200Response
+     */
+    hasAccess?: boolean;
+}
+
+/**
+ *
+ * @export
  * @interface DomainComponentDTO
  */
 export interface DomainComponentDTO {
@@ -195,6 +209,92 @@ export interface DomainComponentDTO {
      * @memberof DomainComponentDTO
      */
     updatedAt?: string;
+}
+
+/**
+ *
+ * @export
+ * @interface GetCurrentUser200Response
+ */
+export interface GetCurrentUser200Response {
+    /**
+     *
+     * @type {string}
+     * @memberof GetCurrentUser200Response
+     */
+    id?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof GetCurrentUser200Response
+     */
+    username?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof GetCurrentUser200Response
+     */
+    email?: string;
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof GetCurrentUser200Response
+     */
+    roles?: Array<string>;
+}
+
+/**
+ *
+ * @export
+ * @interface Login200Response
+ */
+export interface Login200Response {
+    /**
+     *
+     * @type {string}
+     * @memberof Login200Response
+     */
+    accessToken?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof Login200Response
+     */
+    refreshToken?: string;
+}
+
+/**
+ *
+ * @export
+ * @interface LoginRequest
+ */
+export interface LoginRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof LoginRequest
+     */
+    username?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof LoginRequest
+     */
+    password?: string;
+}
+
+/**
+ *
+ * @export
+ * @interface LogoutRequest
+ */
+export interface LogoutRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof LogoutRequest
+     */
+    refreshToken?: string;
 }
 
 /**
@@ -270,6 +370,166 @@ export interface OrganizationUnitDTO {
 /**
  *
  * @export
+ * @interface PaginatedAccountResponse
+ */
+export interface PaginatedAccountResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedAccountResponse
+     */
+    totalCount?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedAccountResponse
+     */
+    startPosition?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedAccountResponse
+     */
+    endPosition?: number;
+    /**
+     *
+     * @type {Array<AccountDTO>}
+     * @memberof PaginatedAccountResponse
+     */
+    data?: Array<AccountDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface PaginatedBusinessRoleResponse
+ */
+export interface PaginatedBusinessRoleResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedBusinessRoleResponse
+     */
+    totalCount?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedBusinessRoleResponse
+     */
+    startPosition?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedBusinessRoleResponse
+     */
+    endPosition?: number;
+    /**
+     *
+     * @type {Array<BusinessRoleDTO>}
+     * @memberof PaginatedBusinessRoleResponse
+     */
+    data?: Array<BusinessRoleDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface PaginatedOrganizationUnitResponse
+ */
+export interface PaginatedOrganizationUnitResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedOrganizationUnitResponse
+     */
+    totalCount?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedOrganizationUnitResponse
+     */
+    startPosition?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedOrganizationUnitResponse
+     */
+    endPosition?: number;
+    /**
+     *
+     * @type {Array<OrganizationUnitDTO>}
+     * @memberof PaginatedOrganizationUnitResponse
+     */
+    data?: Array<OrganizationUnitDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface PaginatedRoleRequestResponse
+ */
+export interface PaginatedRoleRequestResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedRoleRequestResponse
+     */
+    totalCount?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedRoleRequestResponse
+     */
+    startPosition?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedRoleRequestResponse
+     */
+    endPosition?: number;
+    /**
+     *
+     * @type {Array<RoleRequestDTO>}
+     * @memberof PaginatedRoleRequestResponse
+     */
+    data?: Array<RoleRequestDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface PaginatedRoleResponse
+ */
+export interface PaginatedRoleResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedRoleResponse
+     */
+    totalCount?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedRoleResponse
+     */
+    startPosition?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedRoleResponse
+     */
+    endPosition?: number;
+    /**
+     *
+     * @type {Array<RoleDTO>}
+     * @memberof PaginatedRoleResponse
+     */
+    data?: Array<RoleDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface PermissionDTO
  */
 export interface PermissionDTO {
@@ -285,6 +545,12 @@ export interface PermissionDTO {
      * @memberof PermissionDTO
      */
     actionType?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof PermissionDTO
+     */
+    resourceType?: string;
     /**
      *
      * @type {{ [key: string]: object; }}
@@ -364,6 +630,40 @@ export interface ProductDTO {
 /**
  *
  * @export
+ * @interface ProductTreeDTO
+ */
+export interface ProductTreeDTO {
+    /**
+     *
+     * @type {ProductDTO}
+     * @memberof ProductTreeDTO
+     */
+    product?: ProductDTO;
+    /**
+     *
+     * @type {Array<ProductTreeDTO>}
+     * @memberof ProductTreeDTO
+     */
+    children?: Array<ProductTreeDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface RefreshToken200Response
+ */
+export interface RefreshToken200Response {
+    /**
+     *
+     * @type {string}
+     * @memberof RefreshToken200Response
+     */
+    accessToken?: string;
+}
+
+/**
+ *
+ * @export
  * @interface RoleDTO
  */
 export interface RoleDTO {
@@ -393,6 +693,12 @@ export interface RoleDTO {
     shopName?: string;
     /**
      *
+     * @type {boolean}
+     * @memberof RoleDTO
+     */
+    isShopHidden?: boolean;
+    /**
+     *
      * @type {string}
      * @memberof RoleDTO
      */
@@ -408,6 +714,12 @@ export interface RoleDTO {
      * @type {string}
      * @memberof RoleDTO
      */
+    orgUnitId?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleDTO
+     */
     createdAt?: string;
     /**
      *
@@ -418,11 +730,208 @@ export interface RoleDTO {
 }
 
 /**
+ *
+ * @export
+ * @interface RoleRequestDTO
+ */
+export interface RoleRequestDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    id?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    roleId?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    accountId?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    ownerId?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    reason?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    status?: RoleRequestDTOStatusEnum;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    createdAt?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestDTO
+     */
+    resolvedAt?: string;
+}
+
+export const RoleRequestDTOStatusEnum = {
+    Waiting: 'WAITING',
+    Approved: 'APPROVED',
+    Declined: 'DECLINED',
+} as const;
+
+export type RoleRequestDTOStatusEnum =
+    (typeof RoleRequestDTOStatusEnum)[keyof typeof RoleRequestDTOStatusEnum];
+
+/**
+ *
+ * @export
+ * @interface RoleWithPermissionsDTO
+ */
+export interface RoleWithPermissionsDTO {
+    /**
+     *
+     * @type {RoleDTO}
+     * @memberof RoleWithPermissionsDTO
+     */
+    role?: RoleDTO;
+    /**
+     *
+     * @type {Array<PermissionDTO>}
+     * @memberof RoleWithPermissionsDTO
+     */
+    permissions?: Array<PermissionDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface UnauthorizedResponse
+ */
+export interface UnauthorizedResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof UnauthorizedResponse
+     */
+    message: string;
+}
+
+/**
  * AccountsApi - axios parameter creator
  * @export
  */
 export const AccountsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         *
+         * @summary Add business role to account link
+         * @param {string} accountId
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addBusinessRoleToAccount: async (
+            accountId: string,
+            businessRoleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('addBusinessRoleToAccount', 'accountId', accountId);
+            // verify required parameter 'businessRoleId' is not null or undefined
+            assertParamExists('addBusinessRoleToAccount', 'businessRoleId', businessRoleId);
+            const localVarPath = `/api/v1/accounts/{accountId}/business-roles/{businessRoleId}`
+                .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${'businessRoleId'}}`, encodeURIComponent(String(businessRoleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Add role to account link
+         * @param {string} accountId
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addRoleToAccount: async (
+            accountId: string,
+            roleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('addRoleToAccount', 'accountId', accountId);
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('addRoleToAccount', 'roleId', roleId);
+            const localVarPath = `/api/v1/accounts/{accountId}/roles/{roleId}`
+                .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${'roleId'}}`, encodeURIComponent(String(roleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          *
          * @summary Create a new account
@@ -447,6 +956,10 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -497,6 +1010,56 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get account business roles
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountBusinessRoles: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountBusinessRoles', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/business-roles`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -539,6 +1102,56 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get account roles
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountRoles: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountRoles', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/roles`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -556,10 +1169,18 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          *
          * @summary Get all accounts
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllAccounts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllAccounts: async (
+            search?: string,
+            limit?: number,
+            offset?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/accounts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -571,6 +1192,120 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Remove Business Role from Account
+         * @param {string} accountId
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeBusinessRoleFromAccount: async (
+            accountId: string,
+            businessRoleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('removeBusinessRoleFromAccount', 'accountId', accountId);
+            // verify required parameter 'businessRoleId' is not null or undefined
+            assertParamExists('removeBusinessRoleFromAccount', 'businessRoleId', businessRoleId);
+            const localVarPath = `/api/v1/accounts/{accountId}/business-roles/{businessRoleId}`
+                .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${'businessRoleId'}}`, encodeURIComponent(String(businessRoleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Remove Role from Account
+         * @param {string} accountId
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeRoleFromAccount: async (
+            accountId: string,
+            roleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('removeRoleFromAccount', 'accountId', accountId);
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('removeRoleFromAccount', 'roleId', roleId);
+            const localVarPath = `/api/v1/accounts/{accountId}/roles/{roleId}`
+                .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+                .replace(`{${'roleId'}}`, encodeURIComponent(String(roleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -618,6 +1353,10 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -649,6 +1388,67 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 export const AccountsApiFp = function (configuration?: Configuration) {
     const localVarAxiosParamCreator = AccountsApiAxiosParamCreator(configuration);
     return {
+        /**
+         *
+         * @summary Add business role to account link
+         * @param {string} accountId
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addBusinessRoleToAccount(
+            accountId: string,
+            businessRoleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addBusinessRoleToAccount(
+                accountId,
+                businessRoleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.addBusinessRoleToAccount']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Add role to account link
+         * @param {string} accountId
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addRoleToAccount(
+            accountId: string,
+            roleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addRoleToAccount(
+                accountId,
+                roleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.addRoleToAccount']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          *
          * @summary Create a new account
@@ -705,6 +1505,36 @@ export const AccountsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get account business roles
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountBusinessRoles(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BusinessRoleDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountBusinessRoles(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountBusinessRoles']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get an account by ID
          * @param {string} accountId
          * @param {*} [options] Override http request option.
@@ -732,18 +1562,120 @@ export const AccountsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get account roles
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountRoles(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RoleDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountRoles(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountRoles']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get all accounts
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getAllAccounts(
+            search?: string,
+            limit?: number,
+            offset?: number,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AccountDTO>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllAccounts(options);
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedAccountResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllAccounts(
+                search,
+                limit,
+                offset,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['AccountsApi.getAllAccounts']?.[localVarOperationServerIndex]
                     ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Remove Business Role from Account
+         * @param {string} accountId
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async removeBusinessRoleFromAccount(
+            accountId: string,
+            businessRoleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeBusinessRoleFromAccount(
+                accountId,
+                businessRoleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.removeBusinessRoleFromAccount']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Remove Role from Account
+         * @param {string} accountId
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async removeRoleFromAccount(
+            accountId: string,
+            roleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeRoleFromAccount(
+                accountId,
+                roleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.removeRoleFromAccount']?.[
+                    localVarOperationServerIndex
+                ]?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -798,6 +1730,40 @@ export const AccountsApiFactory = function (
     return {
         /**
          *
+         * @summary Add business role to account link
+         * @param {AccountsApiAddBusinessRoleToAccountRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addBusinessRoleToAccount(
+            requestParameters: AccountsApiAddBusinessRoleToAccountRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .addBusinessRoleToAccount(
+                    requestParameters.accountId,
+                    requestParameters.businessRoleId,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Add role to account link
+         * @param {AccountsApiAddRoleToAccountRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addRoleToAccount(
+            requestParameters: AccountsApiAddRoleToAccountRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .addRoleToAccount(requestParameters.accountId, requestParameters.roleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Create a new account
          * @param {AccountsApiCreateAccountRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -828,6 +1794,21 @@ export const AccountsApiFactory = function (
         },
         /**
          *
+         * @summary Get account business roles
+         * @param {AccountsApiGetAccountBusinessRolesRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountBusinessRoles(
+            requestParameters: AccountsApiGetAccountBusinessRolesRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<BusinessRoleDTO>> {
+            return localVarFp
+                .getAccountBusinessRoles(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Get an account by ID
          * @param {AccountsApiGetAccountByIdRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -843,12 +1824,76 @@ export const AccountsApiFactory = function (
         },
         /**
          *
-         * @summary Get all accounts
+         * @summary Get account roles
+         * @param {AccountsApiGetAccountRolesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllAccounts(options?: RawAxiosRequestConfig): AxiosPromise<Array<AccountDTO>> {
-            return localVarFp.getAllAccounts(options).then((request) => request(axios, basePath));
+        getAccountRoles(
+            requestParameters: AccountsApiGetAccountRolesRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<RoleDTO>> {
+            return localVarFp
+                .getAccountRoles(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get all accounts
+         * @param {AccountsApiGetAllAccountsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllAccounts(
+            requestParameters: AccountsApiGetAllAccountsRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<PaginatedAccountResponse> {
+            return localVarFp
+                .getAllAccounts(
+                    requestParameters.search,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Remove Business Role from Account
+         * @param {AccountsApiRemoveBusinessRoleFromAccountRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeBusinessRoleFromAccount(
+            requestParameters: AccountsApiRemoveBusinessRoleFromAccountRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .removeBusinessRoleFromAccount(
+                    requestParameters.accountId,
+                    requestParameters.businessRoleId,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Remove Role from Account
+         * @param {AccountsApiRemoveRoleFromAccountRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeRoleFromAccount(
+            requestParameters: AccountsApiRemoveRoleFromAccountRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .removeRoleFromAccount(
+                    requestParameters.accountId,
+                    requestParameters.roleId,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
         },
         /**
          *
@@ -867,6 +1912,48 @@ export const AccountsApiFactory = function (
         },
     };
 };
+
+/**
+ * Request parameters for addBusinessRoleToAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiAddBusinessRoleToAccountRequest
+ */
+export interface AccountsApiAddBusinessRoleToAccountRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiAddBusinessRoleToAccount
+     */
+    readonly accountId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiAddBusinessRoleToAccount
+     */
+    readonly businessRoleId: string;
+}
+
+/**
+ * Request parameters for addRoleToAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiAddRoleToAccountRequest
+ */
+export interface AccountsApiAddRoleToAccountRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiAddRoleToAccount
+     */
+    readonly accountId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiAddRoleToAccount
+     */
+    readonly roleId: string;
+}
 
 /**
  * Request parameters for createAccount operation in AccountsApi.
@@ -897,6 +1984,20 @@ export interface AccountsApiDeleteAccountRequest {
 }
 
 /**
+ * Request parameters for getAccountBusinessRoles operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountBusinessRolesRequest
+ */
+export interface AccountsApiGetAccountBusinessRolesRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountBusinessRoles
+     */
+    readonly accountId: string;
+}
+
+/**
  * Request parameters for getAccountById operation in AccountsApi.
  * @export
  * @interface AccountsApiGetAccountByIdRequest
@@ -908,6 +2009,90 @@ export interface AccountsApiGetAccountByIdRequest {
      * @memberof AccountsApiGetAccountById
      */
     readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAccountRoles operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountRolesRequest
+ */
+export interface AccountsApiGetAccountRolesRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountRoles
+     */
+    readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAllAccounts operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAllAccountsRequest
+ */
+export interface AccountsApiGetAllAccountsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAllAccounts
+     */
+    readonly search?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof AccountsApiGetAllAccounts
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof AccountsApiGetAllAccounts
+     */
+    readonly offset?: number;
+}
+
+/**
+ * Request parameters for removeBusinessRoleFromAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiRemoveBusinessRoleFromAccountRequest
+ */
+export interface AccountsApiRemoveBusinessRoleFromAccountRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiRemoveBusinessRoleFromAccount
+     */
+    readonly accountId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiRemoveBusinessRoleFromAccount
+     */
+    readonly businessRoleId: string;
+}
+
+/**
+ * Request parameters for removeRoleFromAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiRemoveRoleFromAccountRequest
+ */
+export interface AccountsApiRemoveRoleFromAccountRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiRemoveRoleFromAccount
+     */
+    readonly accountId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiRemoveRoleFromAccount
+     */
+    readonly roleId: string;
 }
 
 /**
@@ -938,6 +2123,44 @@ export interface AccountsApiUpdateAccountRequest {
  * @extends {BaseAPI}
  */
 export class AccountsApi extends BaseAPI {
+    /**
+     *
+     * @summary Add business role to account link
+     * @param {AccountsApiAddBusinessRoleToAccountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public addBusinessRoleToAccount(
+        requestParameters: AccountsApiAddBusinessRoleToAccountRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .addBusinessRoleToAccount(
+                requestParameters.accountId,
+                requestParameters.businessRoleId,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Add role to account link
+     * @param {AccountsApiAddRoleToAccountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public addRoleToAccount(
+        requestParameters: AccountsApiAddRoleToAccountRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .addRoleToAccount(requestParameters.accountId, requestParameters.roleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      *
      * @summary Create a new account
@@ -974,6 +2197,23 @@ export class AccountsApi extends BaseAPI {
 
     /**
      *
+     * @summary Get account business roles
+     * @param {AccountsApiGetAccountBusinessRolesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAccountBusinessRoles(
+        requestParameters: AccountsApiGetAccountBusinessRolesRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAccountBusinessRoles(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @summary Get an account by ID
      * @param {AccountsApiGetAccountByIdRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -991,14 +2231,78 @@ export class AccountsApi extends BaseAPI {
 
     /**
      *
-     * @summary Get all accounts
+     * @summary Get account roles
+     * @param {AccountsApiGetAccountRolesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getAllAccounts(options?: RawAxiosRequestConfig) {
+    public getAccountRoles(
+        requestParameters: AccountsApiGetAccountRolesRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
         return AccountsApiFp(this.configuration)
-            .getAllAccounts(options)
+            .getAccountRoles(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get all accounts
+     * @param {AccountsApiGetAllAccountsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAllAccounts(
+        requestParameters: AccountsApiGetAllAccountsRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAllAccounts(
+                requestParameters.search,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Remove Business Role from Account
+     * @param {AccountsApiRemoveBusinessRoleFromAccountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public removeBusinessRoleFromAccount(
+        requestParameters: AccountsApiRemoveBusinessRoleFromAccountRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .removeBusinessRoleFromAccount(
+                requestParameters.accountId,
+                requestParameters.businessRoleId,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Remove Role from Account
+     * @param {AccountsApiRemoveRoleFromAccountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public removeRoleFromAccount(
+        requestParameters: AccountsApiRemoveRoleFromAccountRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .removeRoleFromAccount(requestParameters.accountId, requestParameters.roleId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -1016,6 +2320,488 @@ export class AccountsApi extends BaseAPI {
     ) {
         return AccountsApiFp(this.configuration)
             .updateAccount(requestParameters.accountId, requestParameters.accountDTO, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * AuthApi - axios parameter creator
+ * @export
+ */
+export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Получение информации о текущем пользователе
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/auth/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Аутентификация пользователя
+         * @param {LoginRequest} loginRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login: async (
+            loginRequest: LoginRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'loginRequest' is not null or undefined
+            assertParamExists('login', 'loginRequest', loginRequest);
+            const localVarPath = `/api/v1/auth/login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                loginRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Выход пользователя из системы
+         * @param {LogoutRequest} logoutRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logout: async (
+            logoutRequest: LogoutRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'logoutRequest' is not null or undefined
+            assertParamExists('logout', 'logoutRequest', logoutRequest);
+            const localVarPath = `/api/v1/auth/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                logoutRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Обновление access токена
+         * @param {LogoutRequest} logoutRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refreshToken: async (
+            logoutRequest: LogoutRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'logoutRequest' is not null or undefined
+            assertParamExists('refreshToken', 'logoutRequest', logoutRequest);
+            const localVarPath = `/api/v1/auth/refresh-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                logoutRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * AuthApi - functional programming interface
+ * @export
+ */
+export const AuthApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Получение информации о текущем пользователе
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCurrentUser(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentUser200Response>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AuthApi.getCurrentUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Аутентификация пользователя
+         * @param {LoginRequest} loginRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async login(
+            loginRequest: LoginRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Login200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.login(loginRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AuthApi.login']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Выход пользователя из системы
+         * @param {LogoutRequest} logoutRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logout(
+            logoutRequest: LogoutRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logout(
+                logoutRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AuthApi.logout']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Обновление access токена
+         * @param {LogoutRequest} logoutRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async refreshToken(
+            logoutRequest: LogoutRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<RefreshToken200Response>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refreshToken(
+                logoutRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AuthApi.refreshToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * AuthApi - factory interface
+ * @export
+ */
+export const AuthApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = AuthApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Получение информации о текущем пользователе
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentUser(options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentUser200Response> {
+            return localVarFp.getCurrentUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Аутентификация пользователя
+         * @param {AuthApiLoginRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login(
+            requestParameters: AuthApiLoginRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Login200Response> {
+            return localVarFp
+                .login(requestParameters.loginRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Выход пользователя из системы
+         * @param {AuthApiLogoutRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logout(
+            requestParameters: AuthApiLogoutRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .logout(requestParameters.logoutRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Обновление access токена
+         * @param {AuthApiRefreshTokenRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refreshToken(
+            requestParameters: AuthApiRefreshTokenRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RefreshToken200Response> {
+            return localVarFp
+                .refreshToken(requestParameters.logoutRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for login operation in AuthApi.
+ * @export
+ * @interface AuthApiLoginRequest
+ */
+export interface AuthApiLoginRequest {
+    /**
+     *
+     * @type {LoginRequest}
+     * @memberof AuthApiLogin
+     */
+    readonly loginRequest: LoginRequest;
+}
+
+/**
+ * Request parameters for logout operation in AuthApi.
+ * @export
+ * @interface AuthApiLogoutRequest
+ */
+export interface AuthApiLogoutRequest {
+    /**
+     *
+     * @type {LogoutRequest}
+     * @memberof AuthApiLogout
+     */
+    readonly logoutRequest: LogoutRequest;
+}
+
+/**
+ * Request parameters for refreshToken operation in AuthApi.
+ * @export
+ * @interface AuthApiRefreshTokenRequest
+ */
+export interface AuthApiRefreshTokenRequest {
+    /**
+     *
+     * @type {LogoutRequest}
+     * @memberof AuthApiRefreshToken
+     */
+    readonly logoutRequest: LogoutRequest;
+}
+
+/**
+ * AuthApi - object-oriented interface
+ * @export
+ * @class AuthApi
+ * @extends {BaseAPI}
+ */
+export class AuthApi extends BaseAPI {
+    /**
+     *
+     * @summary Получение информации о текущем пользователе
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public getCurrentUser(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration)
+            .getCurrentUser(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Аутентификация пользователя
+     * @param {AuthApiLoginRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public login(requestParameters: AuthApiLoginRequest, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration)
+            .login(requestParameters.loginRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Выход пользователя из системы
+     * @param {AuthApiLogoutRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public logout(requestParameters: AuthApiLogoutRequest, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration)
+            .logout(requestParameters.logoutRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Обновление access токена
+     * @param {AuthApiRefreshTokenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public refreshToken(
+        requestParameters: AuthApiRefreshTokenRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AuthApiFp(this.configuration)
+            .refreshToken(requestParameters.logoutRequest, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -1057,6 +2843,10 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1095,6 +2885,10 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -1145,6 +2939,10 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1162,10 +2960,18 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
         /**
          *
          * @summary Get all business roles
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllBusinessRoles: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllBusinessRoles: async (
+            search?: string,
+            limit?: number,
+            offset?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/business-roles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1177,6 +2983,22 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -1220,6 +3042,102 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get a business role children business roles
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBusinessRoleChildrenBRs: async (
+            businessRoleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'businessRoleId' is not null or undefined
+            assertParamExists('getBusinessRoleChildrenBRs', 'businessRoleId', businessRoleId);
+            const localVarPath = `/api/v1/business-roles/{businessRoleId}/children`.replace(
+                `{${'businessRoleId'}}`,
+                encodeURIComponent(String(businessRoleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get a business role parents business roles
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBusinessRoleParentsBRs: async (
+            businessRoleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'businessRoleId' is not null or undefined
+            assertParamExists('getBusinessRoleParentsBRs', 'businessRoleId', businessRoleId);
+            const localVarPath = `/api/v1/business-roles/{businessRoleId}/parents`.replace(
+                `{${'businessRoleId'}}`,
+                encodeURIComponent(String(businessRoleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1261,6 +3179,10 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -1307,6 +3229,10 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1352,6 +3278,10 @@ export const BusinessRolesApiAxiosParamCreator = function (configuration?: Confi
             const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -1474,15 +3404,29 @@ export const BusinessRolesApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get all business roles
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getAllBusinessRoles(
+            search?: string,
+            limit?: number,
+            offset?: number,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BusinessRoleDTO>>
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<PaginatedBusinessRoleResponse>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllBusinessRoles(options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllBusinessRoles(
+                search,
+                limit,
+                offset,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['BusinessRolesApi.getAllBusinessRoles']?.[
@@ -1514,6 +3458,66 @@ export const BusinessRolesApiFp = function (configuration?: Configuration) {
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['BusinessRolesApi.getBusinessRoleById']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get a business role children business roles
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBusinessRoleChildrenBRs(
+            businessRoleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BusinessRoleDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBusinessRoleChildrenBRs(
+                businessRoleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['BusinessRolesApi.getBusinessRoleChildrenBRs']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get a business role parents business roles
+         * @param {string} businessRoleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBusinessRoleParentsBRs(
+            businessRoleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BusinessRoleDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBusinessRoleParentsBRs(
+                businessRoleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['BusinessRolesApi.getBusinessRoleParentsBRs']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -1680,12 +3684,21 @@ export const BusinessRolesApiFactory = function (
         /**
          *
          * @summary Get all business roles
+         * @param {BusinessRolesApiGetAllBusinessRolesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllBusinessRoles(options?: RawAxiosRequestConfig): AxiosPromise<Array<BusinessRoleDTO>> {
+        getAllBusinessRoles(
+            requestParameters: BusinessRolesApiGetAllBusinessRolesRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<PaginatedBusinessRoleResponse> {
             return localVarFp
-                .getAllBusinessRoles(options)
+                .getAllBusinessRoles(
+                    requestParameters.search,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -1701,6 +3714,36 @@ export const BusinessRolesApiFactory = function (
         ): AxiosPromise<BusinessRoleDTO> {
             return localVarFp
                 .getBusinessRoleById(requestParameters.businessRoleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get a business role children business roles
+         * @param {BusinessRolesApiGetBusinessRoleChildrenBRsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBusinessRoleChildrenBRs(
+            requestParameters: BusinessRolesApiGetBusinessRoleChildrenBRsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<BusinessRoleDTO>> {
+            return localVarFp
+                .getBusinessRoleChildrenBRs(requestParameters.businessRoleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get a business role parents business roles
+         * @param {BusinessRolesApiGetBusinessRoleParentsBRsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBusinessRoleParentsBRs(
+            requestParameters: BusinessRolesApiGetBusinessRoleParentsBRsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<BusinessRoleDTO>> {
+            return localVarFp
+                .getBusinessRoleParentsBRs(requestParameters.businessRoleId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -1809,6 +3852,34 @@ export interface BusinessRolesApiDeleteBusinessRoleRequest {
 }
 
 /**
+ * Request parameters for getAllBusinessRoles operation in BusinessRolesApi.
+ * @export
+ * @interface BusinessRolesApiGetAllBusinessRolesRequest
+ */
+export interface BusinessRolesApiGetAllBusinessRolesRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof BusinessRolesApiGetAllBusinessRoles
+     */
+    readonly search?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof BusinessRolesApiGetAllBusinessRoles
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof BusinessRolesApiGetAllBusinessRoles
+     */
+    readonly offset?: number;
+}
+
+/**
  * Request parameters for getBusinessRoleById operation in BusinessRolesApi.
  * @export
  * @interface BusinessRolesApiGetBusinessRoleByIdRequest
@@ -1818,6 +3889,34 @@ export interface BusinessRolesApiGetBusinessRoleByIdRequest {
      *
      * @type {string}
      * @memberof BusinessRolesApiGetBusinessRoleById
+     */
+    readonly businessRoleId: string;
+}
+
+/**
+ * Request parameters for getBusinessRoleChildrenBRs operation in BusinessRolesApi.
+ * @export
+ * @interface BusinessRolesApiGetBusinessRoleChildrenBRsRequest
+ */
+export interface BusinessRolesApiGetBusinessRoleChildrenBRsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof BusinessRolesApiGetBusinessRoleChildrenBRs
+     */
+    readonly businessRoleId: string;
+}
+
+/**
+ * Request parameters for getBusinessRoleParentsBRs operation in BusinessRolesApi.
+ * @export
+ * @interface BusinessRolesApiGetBusinessRoleParentsBRsRequest
+ */
+export interface BusinessRolesApiGetBusinessRoleParentsBRsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof BusinessRolesApiGetBusinessRoleParentsBRs
      */
     readonly businessRoleId: string;
 }
@@ -1943,13 +4042,22 @@ export class BusinessRolesApi extends BaseAPI {
     /**
      *
      * @summary Get all business roles
+     * @param {BusinessRolesApiGetAllBusinessRolesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BusinessRolesApi
      */
-    public getAllBusinessRoles(options?: RawAxiosRequestConfig) {
+    public getAllBusinessRoles(
+        requestParameters: BusinessRolesApiGetAllBusinessRolesRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
         return BusinessRolesApiFp(this.configuration)
-            .getAllBusinessRoles(options)
+            .getAllBusinessRoles(
+                requestParameters.search,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -1967,6 +4075,40 @@ export class BusinessRolesApi extends BaseAPI {
     ) {
         return BusinessRolesApiFp(this.configuration)
             .getBusinessRoleById(requestParameters.businessRoleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get a business role children business roles
+     * @param {BusinessRolesApiGetBusinessRoleChildrenBRsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BusinessRolesApi
+     */
+    public getBusinessRoleChildrenBRs(
+        requestParameters: BusinessRolesApiGetBusinessRoleChildrenBRsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return BusinessRolesApiFp(this.configuration)
+            .getBusinessRoleChildrenBRs(requestParameters.businessRoleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get a business role parents business roles
+     * @param {BusinessRolesApiGetBusinessRoleParentsBRsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BusinessRolesApi
+     */
+    public getBusinessRoleParentsBRs(
+        requestParameters: BusinessRolesApiGetBusinessRoleParentsBRsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return BusinessRolesApiFp(this.configuration)
+            .getBusinessRoleParentsBRs(requestParameters.businessRoleId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -2061,6 +4203,10 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2085,19 +4231,19 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
         /**
          *
          * @summary Delete a domain component by ID
-         * @param {string} domainComponentId
+         * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteDomainComponent: async (
-            domainComponentId: string,
+            dcId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'domainComponentId' is not null or undefined
-            assertParamExists('deleteDomainComponent', 'domainComponentId', domainComponentId);
-            const localVarPath = `/api/v1/domain-components/{domainComponentId}`.replace(
-                `{${'domainComponentId'}}`,
-                encodeURIComponent(String(domainComponentId)),
+            // verify required parameter 'dcId' is not null or undefined
+            assertParamExists('deleteDomainComponent', 'dcId', dcId);
+            const localVarPath = `/api/v1/domain-components/{dcId}`.replace(
+                `{${'dcId'}}`,
+                encodeURIComponent(String(dcId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2109,6 +4255,10 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -2145,6 +4295,10 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -2162,19 +4316,19 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
         /**
          *
          * @summary Get a domain component by ID
-         * @param {string} domainComponentId
+         * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getDomainComponentById: async (
-            domainComponentId: string,
+            dcId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'domainComponentId' is not null or undefined
-            assertParamExists('getDomainComponentById', 'domainComponentId', domainComponentId);
-            const localVarPath = `/api/v1/domain-components/{domainComponentId}`.replace(
-                `{${'domainComponentId'}}`,
-                encodeURIComponent(String(domainComponentId)),
+            // verify required parameter 'dcId' is not null or undefined
+            assertParamExists('getDomainComponentById', 'dcId', dcId);
+            const localVarPath = `/api/v1/domain-components/{dcId}`.replace(
+                `{${'dcId'}}`,
+                encodeURIComponent(String(dcId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2186,6 +4340,10 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -2203,25 +4361,22 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          *
-         * @summary Get Domain component organization units
-         * @param {string} domainComponentId
+         * @summary Получение корневых элементов organization-unit
+         * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getOrganizationUnitsByDomainComponentId: async (
-            domainComponentId: string,
+        getDomainComponentRootsOrganizationUnits: async (
+            dcId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'domainComponentId' is not null or undefined
-            assertParamExists(
-                'getOrganizationUnitsByDomainComponentId',
-                'domainComponentId',
-                domainComponentId,
-            );
-            const localVarPath = `/api/v1/domain-components/{domainComponentId}/org-units`.replace(
-                `{${'domainComponentId'}}`,
-                encodeURIComponent(String(domainComponentId)),
-            );
+            // verify required parameter 'dcId' is not null or undefined
+            assertParamExists('getDomainComponentRootsOrganizationUnits', 'dcId', dcId);
+            const localVarPath =
+                `/api/v1/domain-components/{dcId}/organization-units/roots`.replace(
+                    `{${'dcId'}}`,
+                    encodeURIComponent(String(dcId)),
+                );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2232,6 +4387,10 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -2250,23 +4409,23 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
         /**
          *
          * @summary Update a domain component by ID
-         * @param {string} domainComponentId
+         * @param {string} dcId
          * @param {DomainComponentDTO} domainComponentDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateDomainComponent: async (
-            domainComponentId: string,
+            dcId: string,
             domainComponentDTO: DomainComponentDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'domainComponentId' is not null or undefined
-            assertParamExists('updateDomainComponent', 'domainComponentId', domainComponentId);
+            // verify required parameter 'dcId' is not null or undefined
+            assertParamExists('updateDomainComponent', 'dcId', dcId);
             // verify required parameter 'domainComponentDTO' is not null or undefined
             assertParamExists('updateDomainComponent', 'domainComponentDTO', domainComponentDTO);
-            const localVarPath = `/api/v1/domain-components/{domainComponentId}`.replace(
-                `{${'domainComponentId'}}`,
-                encodeURIComponent(String(domainComponentId)),
+            const localVarPath = `/api/v1/domain-components/{dcId}`.replace(
+                `{${'dcId'}}`,
+                encodeURIComponent(String(dcId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2278,6 +4437,10 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -2341,16 +4504,16 @@ export const DomainComponentsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Delete a domain component by ID
-         * @param {string} domainComponentId
+         * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteDomainComponent(
-            domainComponentId: string,
+            dcId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDomainComponent(
-                domainComponentId,
+                dcId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2395,16 +4558,16 @@ export const DomainComponentsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get a domain component by ID
-         * @param {string} domainComponentId
+         * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getDomainComponentById(
-            domainComponentId: string,
+            dcId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DomainComponentDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDomainComponentById(
-                domainComponentId,
+                dcId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2422,27 +4585,27 @@ export const DomainComponentsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get Domain component organization units
-         * @param {string} domainComponentId
+         * @summary Получение корневых элементов organization-unit
+         * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getOrganizationUnitsByDomainComponentId(
-            domainComponentId: string,
+        async getDomainComponentRootsOrganizationUnits(
+            dcId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrganizationUnitDTO>>
         > {
             const localVarAxiosArgs =
-                await localVarAxiosParamCreator.getOrganizationUnitsByDomainComponentId(
-                    domainComponentId,
+                await localVarAxiosParamCreator.getDomainComponentRootsOrganizationUnits(
+                    dcId,
                     options,
                 );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['DomainComponentsApi.getOrganizationUnitsByDomainComponentId']?.[
-                    localVarOperationServerIndex
-                ]?.url;
+                operationServerMap[
+                    'DomainComponentsApi.getDomainComponentRootsOrganizationUnits'
+                ]?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -2454,18 +4617,18 @@ export const DomainComponentsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Update a domain component by ID
-         * @param {string} domainComponentId
+         * @param {string} dcId
          * @param {DomainComponentDTO} domainComponentDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateDomainComponent(
-            domainComponentId: string,
+            dcId: string,
             domainComponentDTO: DomainComponentDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DomainComponentDTO>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateDomainComponent(
-                domainComponentId,
+                dcId,
                 domainComponentDTO,
                 options,
             );
@@ -2523,7 +4686,7 @@ export const DomainComponentsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .deleteDomainComponent(requestParameters.domainComponentId, options)
+                .deleteDomainComponent(requestParameters.dcId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -2551,25 +4714,22 @@ export const DomainComponentsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<DomainComponentDTO> {
             return localVarFp
-                .getDomainComponentById(requestParameters.domainComponentId, options)
+                .getDomainComponentById(requestParameters.dcId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get Domain component organization units
-         * @param {DomainComponentsApiGetOrganizationUnitsByDomainComponentIdRequest} requestParameters Request parameters.
+         * @summary Получение корневых элементов organization-unit
+         * @param {DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getOrganizationUnitsByDomainComponentId(
-            requestParameters: DomainComponentsApiGetOrganizationUnitsByDomainComponentIdRequest,
+        getDomainComponentRootsOrganizationUnits(
+            requestParameters: DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest,
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<Array<OrganizationUnitDTO>> {
             return localVarFp
-                .getOrganizationUnitsByDomainComponentId(
-                    requestParameters.domainComponentId,
-                    options,
-                )
+                .getDomainComponentRootsOrganizationUnits(requestParameters.dcId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -2585,7 +4745,7 @@ export const DomainComponentsApiFactory = function (
         ): AxiosPromise<DomainComponentDTO> {
             return localVarFp
                 .updateDomainComponent(
-                    requestParameters.domainComponentId,
+                    requestParameters.dcId,
                     requestParameters.domainComponentDTO,
                     options,
                 )
@@ -2619,7 +4779,7 @@ export interface DomainComponentsApiDeleteDomainComponentRequest {
      * @type {string}
      * @memberof DomainComponentsApiDeleteDomainComponent
      */
-    readonly domainComponentId: string;
+    readonly dcId: string;
 }
 
 /**
@@ -2633,21 +4793,21 @@ export interface DomainComponentsApiGetDomainComponentByIdRequest {
      * @type {string}
      * @memberof DomainComponentsApiGetDomainComponentById
      */
-    readonly domainComponentId: string;
+    readonly dcId: string;
 }
 
 /**
- * Request parameters for getOrganizationUnitsByDomainComponentId operation in DomainComponentsApi.
+ * Request parameters for getDomainComponentRootsOrganizationUnits operation in DomainComponentsApi.
  * @export
- * @interface DomainComponentsApiGetOrganizationUnitsByDomainComponentIdRequest
+ * @interface DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest
  */
-export interface DomainComponentsApiGetOrganizationUnitsByDomainComponentIdRequest {
+export interface DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest {
     /**
      *
      * @type {string}
-     * @memberof DomainComponentsApiGetOrganizationUnitsByDomainComponentId
+     * @memberof DomainComponentsApiGetDomainComponentRootsOrganizationUnits
      */
-    readonly domainComponentId: string;
+    readonly dcId: string;
 }
 
 /**
@@ -2661,7 +4821,7 @@ export interface DomainComponentsApiUpdateDomainComponentRequest {
      * @type {string}
      * @memberof DomainComponentsApiUpdateDomainComponent
      */
-    readonly domainComponentId: string;
+    readonly dcId: string;
 
     /**
      *
@@ -2708,7 +4868,7 @@ export class DomainComponentsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return DomainComponentsApiFp(this.configuration)
-            .deleteDomainComponent(requestParameters.domainComponentId, options)
+            .deleteDomainComponent(requestParameters.dcId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -2738,24 +4898,24 @@ export class DomainComponentsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return DomainComponentsApiFp(this.configuration)
-            .getDomainComponentById(requestParameters.domainComponentId, options)
+            .getDomainComponentById(requestParameters.dcId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Get Domain component organization units
-     * @param {DomainComponentsApiGetOrganizationUnitsByDomainComponentIdRequest} requestParameters Request parameters.
+     * @summary Получение корневых элементов organization-unit
+     * @param {DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainComponentsApi
      */
-    public getOrganizationUnitsByDomainComponentId(
-        requestParameters: DomainComponentsApiGetOrganizationUnitsByDomainComponentIdRequest,
+    public getDomainComponentRootsOrganizationUnits(
+        requestParameters: DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest,
         options?: RawAxiosRequestConfig,
     ) {
         return DomainComponentsApiFp(this.configuration)
-            .getOrganizationUnitsByDomainComponentId(requestParameters.domainComponentId, options)
+            .getDomainComponentRootsOrganizationUnits(requestParameters.dcId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -2773,7 +4933,7 @@ export class DomainComponentsApi extends BaseAPI {
     ) {
         return DomainComponentsApiFp(this.configuration)
             .updateDomainComponent(
-                requestParameters.domainComponentId,
+                requestParameters.dcId,
                 requestParameters.domainComponentDTO,
                 options,
             )
@@ -2790,31 +4950,23 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Add account to org. unit link
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {string} accountId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         addAccountToOrganizationUnit: async (
-            organizationUnitId: string,
+            ouId: string,
             accountId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'organizationUnitId' is not null or undefined
-            assertParamExists(
-                'addAccountToOrganizationUnit',
-                'organizationUnitId',
-                organizationUnitId,
-            );
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('addAccountToOrganizationUnit', 'ouId', ouId);
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('addAccountToOrganizationUnit', 'accountId', accountId);
-            const localVarPath =
-                `/api/v1/organization-units/{organizationUnitId}/accounts/{accountId}`
-                    .replace(
-                        `{${'organizationUnitId'}}`,
-                        encodeURIComponent(String(organizationUnitId)),
-                    )
-                    .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)));
+            const localVarPath = `/api/v1/organization-units/{ouId}/accounts/{accountId}`
+                .replace(`{${'ouId'}}`, encodeURIComponent(String(ouId)))
+                .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2825,6 +4977,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -2865,6 +5021,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2889,19 +5049,19 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Delete an organization unit by ID
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteOrganizationUnit: async (
-            organizationUnitId: string,
+            ouId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'organizationUnitId' is not null or undefined
-            assertParamExists('deleteOrganizationUnit', 'organizationUnitId', organizationUnitId);
-            const localVarPath = `/api/v1/organization-units/{organizationUnitId}`.replace(
-                `{${'organizationUnitId'}}`,
-                encodeURIComponent(String(organizationUnitId)),
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('deleteOrganizationUnit', 'ouId', ouId);
+            const localVarPath = `/api/v1/organization-units/{ouId}`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2913,6 +5073,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -2931,23 +5095,19 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Get all organization unit accounts
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountsByOrganizationUnitId: async (
-            organizationUnitId: string,
+        getAccountsByouId: async (
+            ouId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'organizationUnitId' is not null or undefined
-            assertParamExists(
-                'getAccountsByOrganizationUnitId',
-                'organizationUnitId',
-                organizationUnitId,
-            );
-            const localVarPath = `/api/v1/organization-units/{organizationUnitId}/accounts`.replace(
-                `{${'organizationUnitId'}}`,
-                encodeURIComponent(String(organizationUnitId)),
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('getAccountsByouId', 'ouId', ouId);
+            const localVarPath = `/api/v1/organization-units/{ouId}/accounts`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2959,6 +5119,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -2977,10 +5141,18 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Get all organization units
+         * @param {string} [parentOuId]
+         * @param {string} [dcId]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getAllOrganizationUnits: async (
+            parentOuId?: string,
+            dcId?: string,
+            limit?: number,
+            offset?: number,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/organization-units`;
@@ -2994,6 +5166,26 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (parentOuId !== undefined) {
+                localVarQueryParameter['parentOuId'] = parentOuId;
+            }
+
+            if (dcId !== undefined) {
+                localVarQueryParameter['dcId'] = dcId;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -3012,19 +5204,19 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Get an organization unit by ID
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getOrganizationUnitById: async (
-            organizationUnitId: string,
+            ouId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'organizationUnitId' is not null or undefined
-            assertParamExists('getOrganizationUnitById', 'organizationUnitId', organizationUnitId);
-            const localVarPath = `/api/v1/organization-units/{organizationUnitId}`.replace(
-                `{${'organizationUnitId'}}`,
-                encodeURIComponent(String(organizationUnitId)),
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('getOrganizationUnitById', 'ouId', ouId);
+            const localVarPath = `/api/v1/organization-units/{ouId}`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3036,6 +5228,56 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов organization-unit
+         * @param {string} ouId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOrganizationUnitChildren: async (
+            ouId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('getOrganizationUnitChildren', 'ouId', ouId);
+            const localVarPath = `/api/v1/organization-units/{ouId}/children`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -3054,31 +5296,23 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Delete account to org. unit link
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {string} accountId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         removeAccountFromOrganizationUnit: async (
-            organizationUnitId: string,
+            ouId: string,
             accountId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'organizationUnitId' is not null or undefined
-            assertParamExists(
-                'removeAccountFromOrganizationUnit',
-                'organizationUnitId',
-                organizationUnitId,
-            );
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('removeAccountFromOrganizationUnit', 'ouId', ouId);
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('removeAccountFromOrganizationUnit', 'accountId', accountId);
-            const localVarPath =
-                `/api/v1/organization-units/{organizationUnitId}/accounts/{accountId}`
-                    .replace(
-                        `{${'organizationUnitId'}}`,
-                        encodeURIComponent(String(organizationUnitId)),
-                    )
-                    .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)));
+            const localVarPath = `/api/v1/organization-units/{ouId}/accounts/{accountId}`
+                .replace(`{${'ouId'}}`, encodeURIComponent(String(ouId)))
+                .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3089,6 +5323,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -3107,23 +5345,23 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Update an organization unit by ID
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {OrganizationUnitDTO} organizationUnitDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateOrganizationUnit: async (
-            organizationUnitId: string,
+            ouId: string,
             organizationUnitDTO: OrganizationUnitDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'organizationUnitId' is not null or undefined
-            assertParamExists('updateOrganizationUnit', 'organizationUnitId', organizationUnitId);
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('updateOrganizationUnit', 'ouId', ouId);
             // verify required parameter 'organizationUnitDTO' is not null or undefined
             assertParamExists('updateOrganizationUnit', 'organizationUnitDTO', organizationUnitDTO);
-            const localVarPath = `/api/v1/organization-units/{organizationUnitId}`.replace(
-                `{${'organizationUnitId'}}`,
-                encodeURIComponent(String(organizationUnitId)),
+            const localVarPath = `/api/v1/organization-units/{ouId}`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3135,6 +5373,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -3170,18 +5412,18 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Add account to org. unit link
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {string} accountId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async addAccountToOrganizationUnit(
-            organizationUnitId: string,
+            ouId: string,
             accountId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addAccountToOrganizationUnit(
-                organizationUnitId,
+                ouId,
                 accountId,
                 options,
             );
@@ -3231,16 +5473,16 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Delete an organization unit by ID
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteOrganizationUnit(
-            organizationUnitId: string,
+            ouId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteOrganizationUnit(
-                organizationUnitId,
+                ouId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -3259,22 +5501,21 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get all organization unit accounts
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAccountsByOrganizationUnitId(
-            organizationUnitId: string,
+        async getAccountsByouId(
+            ouId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AccountDTO>>> {
-            const localVarAxiosArgs =
-                await localVarAxiosParamCreator.getAccountsByOrganizationUnitId(
-                    organizationUnitId,
-                    options,
-                );
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountsByouId(
+                ouId,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['OrganizationUnitsApi.getAccountsByOrganizationUnitId']?.[
+                operationServerMap['OrganizationUnitsApi.getAccountsByouId']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -3288,16 +5529,32 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get all organization units
+         * @param {string} [parentOuId]
+         * @param {string} [dcId]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getAllOrganizationUnits(
+            parentOuId?: string,
+            dcId?: string,
+            limit?: number,
+            offset?: number,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrganizationUnitDTO>>
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<PaginatedOrganizationUnitResponse>
         > {
-            const localVarAxiosArgs =
-                await localVarAxiosParamCreator.getAllOrganizationUnits(options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllOrganizationUnits(
+                parentOuId,
+                dcId,
+                limit,
+                offset,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['OrganizationUnitsApi.getAllOrganizationUnits']?.[
@@ -3314,18 +5571,18 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get an organization unit by ID
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getOrganizationUnitById(
-            organizationUnitId: string,
+            ouId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrganizationUnitDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getOrganizationUnitById(
-                organizationUnitId,
+                ouId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -3343,20 +5600,50 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Получение дочерних элементов organization-unit
+         * @param {string} ouId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getOrganizationUnitChildren(
+            ouId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrganizationUnitDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOrganizationUnitChildren(
+                ouId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['OrganizationUnitsApi.getOrganizationUnitChildren']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {string} accountId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async removeAccountFromOrganizationUnit(
-            organizationUnitId: string,
+            ouId: string,
             accountId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs =
                 await localVarAxiosParamCreator.removeAccountFromOrganizationUnit(
-                    organizationUnitId,
+                    ouId,
                     accountId,
                     options,
                 );
@@ -3376,20 +5663,20 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Update an organization unit by ID
-         * @param {string} organizationUnitId
+         * @param {string} ouId
          * @param {OrganizationUnitDTO} organizationUnitDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateOrganizationUnit(
-            organizationUnitId: string,
+            ouId: string,
             organizationUnitDTO: OrganizationUnitDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrganizationUnitDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateOrganizationUnit(
-                organizationUnitId,
+                ouId,
                 organizationUnitDTO,
                 options,
             );
@@ -3433,7 +5720,7 @@ export const OrganizationUnitsApiFactory = function (
         ): AxiosPromise<void> {
             return localVarFp
                 .addAccountToOrganizationUnit(
-                    requestParameters.organizationUnitId,
+                    requestParameters.ouId,
                     requestParameters.accountId,
                     options,
                 )
@@ -3466,35 +5753,43 @@ export const OrganizationUnitsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .deleteOrganizationUnit(requestParameters.organizationUnitId, options)
+                .deleteOrganizationUnit(requestParameters.ouId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
          * @summary Get all organization unit accounts
-         * @param {OrganizationUnitsApiGetAccountsByOrganizationUnitIdRequest} requestParameters Request parameters.
+         * @param {OrganizationUnitsApiGetAccountsByouIdRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountsByOrganizationUnitId(
-            requestParameters: OrganizationUnitsApiGetAccountsByOrganizationUnitIdRequest,
+        getAccountsByouId(
+            requestParameters: OrganizationUnitsApiGetAccountsByouIdRequest,
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<Array<AccountDTO>> {
             return localVarFp
-                .getAccountsByOrganizationUnitId(requestParameters.organizationUnitId, options)
+                .getAccountsByouId(requestParameters.ouId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
          * @summary Get all organization units
+         * @param {OrganizationUnitsApiGetAllOrganizationUnitsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getAllOrganizationUnits(
+            requestParameters: OrganizationUnitsApiGetAllOrganizationUnitsRequest = {},
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<Array<OrganizationUnitDTO>> {
+        ): AxiosPromise<PaginatedOrganizationUnitResponse> {
             return localVarFp
-                .getAllOrganizationUnits(options)
+                .getAllOrganizationUnits(
+                    requestParameters.parentOuId,
+                    requestParameters.dcId,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -3509,7 +5804,22 @@ export const OrganizationUnitsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<OrganizationUnitDTO> {
             return localVarFp
-                .getOrganizationUnitById(requestParameters.organizationUnitId, options)
+                .getOrganizationUnitById(requestParameters.ouId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов organization-unit
+         * @param {OrganizationUnitsApiGetOrganizationUnitChildrenRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOrganizationUnitChildren(
+            requestParameters: OrganizationUnitsApiGetOrganizationUnitChildrenRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<OrganizationUnitDTO>> {
+            return localVarFp
+                .getOrganizationUnitChildren(requestParameters.ouId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -3525,7 +5835,7 @@ export const OrganizationUnitsApiFactory = function (
         ): AxiosPromise<void> {
             return localVarFp
                 .removeAccountFromOrganizationUnit(
-                    requestParameters.organizationUnitId,
+                    requestParameters.ouId,
                     requestParameters.accountId,
                     options,
                 )
@@ -3544,7 +5854,7 @@ export const OrganizationUnitsApiFactory = function (
         ): AxiosPromise<OrganizationUnitDTO> {
             return localVarFp
                 .updateOrganizationUnit(
-                    requestParameters.organizationUnitId,
+                    requestParameters.ouId,
                     requestParameters.organizationUnitDTO,
                     options,
                 )
@@ -3564,7 +5874,7 @@ export interface OrganizationUnitsApiAddAccountToOrganizationUnitRequest {
      * @type {string}
      * @memberof OrganizationUnitsApiAddAccountToOrganizationUnit
      */
-    readonly organizationUnitId: string;
+    readonly ouId: string;
 
     /**
      *
@@ -3599,21 +5909,56 @@ export interface OrganizationUnitsApiDeleteOrganizationUnitRequest {
      * @type {string}
      * @memberof OrganizationUnitsApiDeleteOrganizationUnit
      */
-    readonly organizationUnitId: string;
+    readonly ouId: string;
 }
 
 /**
- * Request parameters for getAccountsByOrganizationUnitId operation in OrganizationUnitsApi.
+ * Request parameters for getAccountsByouId operation in OrganizationUnitsApi.
  * @export
- * @interface OrganizationUnitsApiGetAccountsByOrganizationUnitIdRequest
+ * @interface OrganizationUnitsApiGetAccountsByouIdRequest
  */
-export interface OrganizationUnitsApiGetAccountsByOrganizationUnitIdRequest {
+export interface OrganizationUnitsApiGetAccountsByouIdRequest {
     /**
      *
      * @type {string}
-     * @memberof OrganizationUnitsApiGetAccountsByOrganizationUnitId
+     * @memberof OrganizationUnitsApiGetAccountsByouId
      */
-    readonly organizationUnitId: string;
+    readonly ouId: string;
+}
+
+/**
+ * Request parameters for getAllOrganizationUnits operation in OrganizationUnitsApi.
+ * @export
+ * @interface OrganizationUnitsApiGetAllOrganizationUnitsRequest
+ */
+export interface OrganizationUnitsApiGetAllOrganizationUnitsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OrganizationUnitsApiGetAllOrganizationUnits
+     */
+    readonly parentOuId?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof OrganizationUnitsApiGetAllOrganizationUnits
+     */
+    readonly dcId?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof OrganizationUnitsApiGetAllOrganizationUnits
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof OrganizationUnitsApiGetAllOrganizationUnits
+     */
+    readonly offset?: number;
 }
 
 /**
@@ -3627,7 +5972,21 @@ export interface OrganizationUnitsApiGetOrganizationUnitByIdRequest {
      * @type {string}
      * @memberof OrganizationUnitsApiGetOrganizationUnitById
      */
-    readonly organizationUnitId: string;
+    readonly ouId: string;
+}
+
+/**
+ * Request parameters for getOrganizationUnitChildren operation in OrganizationUnitsApi.
+ * @export
+ * @interface OrganizationUnitsApiGetOrganizationUnitChildrenRequest
+ */
+export interface OrganizationUnitsApiGetOrganizationUnitChildrenRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OrganizationUnitsApiGetOrganizationUnitChildren
+     */
+    readonly ouId: string;
 }
 
 /**
@@ -3641,7 +6000,7 @@ export interface OrganizationUnitsApiRemoveAccountFromOrganizationUnitRequest {
      * @type {string}
      * @memberof OrganizationUnitsApiRemoveAccountFromOrganizationUnit
      */
-    readonly organizationUnitId: string;
+    readonly ouId: string;
 
     /**
      *
@@ -3662,7 +6021,7 @@ export interface OrganizationUnitsApiUpdateOrganizationUnitRequest {
      * @type {string}
      * @memberof OrganizationUnitsApiUpdateOrganizationUnit
      */
-    readonly organizationUnitId: string;
+    readonly ouId: string;
 
     /**
      *
@@ -3693,7 +6052,7 @@ export class OrganizationUnitsApi extends BaseAPI {
     ) {
         return OrganizationUnitsApiFp(this.configuration)
             .addAccountToOrganizationUnit(
-                requestParameters.organizationUnitId,
+                requestParameters.ouId,
                 requestParameters.accountId,
                 options,
             )
@@ -3730,37 +6089,47 @@ export class OrganizationUnitsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return OrganizationUnitsApiFp(this.configuration)
-            .deleteOrganizationUnit(requestParameters.organizationUnitId, options)
+            .deleteOrganizationUnit(requestParameters.ouId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
      * @summary Get all organization unit accounts
-     * @param {OrganizationUnitsApiGetAccountsByOrganizationUnitIdRequest} requestParameters Request parameters.
+     * @param {OrganizationUnitsApiGetAccountsByouIdRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrganizationUnitsApi
      */
-    public getAccountsByOrganizationUnitId(
-        requestParameters: OrganizationUnitsApiGetAccountsByOrganizationUnitIdRequest,
+    public getAccountsByouId(
+        requestParameters: OrganizationUnitsApiGetAccountsByouIdRequest,
         options?: RawAxiosRequestConfig,
     ) {
         return OrganizationUnitsApiFp(this.configuration)
-            .getAccountsByOrganizationUnitId(requestParameters.organizationUnitId, options)
+            .getAccountsByouId(requestParameters.ouId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
      * @summary Get all organization units
+     * @param {OrganizationUnitsApiGetAllOrganizationUnitsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrganizationUnitsApi
      */
-    public getAllOrganizationUnits(options?: RawAxiosRequestConfig) {
+    public getAllOrganizationUnits(
+        requestParameters: OrganizationUnitsApiGetAllOrganizationUnitsRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
         return OrganizationUnitsApiFp(this.configuration)
-            .getAllOrganizationUnits(options)
+            .getAllOrganizationUnits(
+                requestParameters.parentOuId,
+                requestParameters.dcId,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -3777,7 +6146,24 @@ export class OrganizationUnitsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return OrganizationUnitsApiFp(this.configuration)
-            .getOrganizationUnitById(requestParameters.organizationUnitId, options)
+            .getOrganizationUnitById(requestParameters.ouId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Получение дочерних элементов organization-unit
+     * @param {OrganizationUnitsApiGetOrganizationUnitChildrenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrganizationUnitsApi
+     */
+    public getOrganizationUnitChildren(
+        requestParameters: OrganizationUnitsApiGetOrganizationUnitChildrenRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return OrganizationUnitsApiFp(this.configuration)
+            .getOrganizationUnitChildren(requestParameters.ouId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -3795,7 +6181,7 @@ export class OrganizationUnitsApi extends BaseAPI {
     ) {
         return OrganizationUnitsApiFp(this.configuration)
             .removeAccountFromOrganizationUnit(
-                requestParameters.organizationUnitId,
+                requestParameters.ouId,
                 requestParameters.accountId,
                 options,
             )
@@ -3816,7 +6202,7 @@ export class OrganizationUnitsApi extends BaseAPI {
     ) {
         return OrganizationUnitsApiFp(this.configuration)
             .updateOrganizationUnit(
-                requestParameters.organizationUnitId,
+                requestParameters.ouId,
                 requestParameters.organizationUnitDTO,
                 options,
             )
@@ -3832,100 +6218,20 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          *
-         * @summary Create a new permission
-         * @param {PermissionDTO} permissionDTO
+         * @summary Проверка наличия доступа у текущего пользователя
+         * @param {string} actionType
+         * @param {string} [resourceId]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPermission: async (
-            permissionDTO: PermissionDTO,
+        checkPermission: async (
+            actionType: string,
+            resourceId?: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'permissionDTO' is not null or undefined
-            assertParamExists('createPermission', 'permissionDTO', permissionDTO);
-            const localVarPath = `/api/v1/permissions`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                permissionDTO,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Delete a permission by ID
-         * @param {string} permissionId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deletePermission: async (
-            permissionId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'permissionId' is not null or undefined
-            assertParamExists('deletePermission', 'permissionId', permissionId);
-            const localVarPath = `/api/v1/permissions/{permissionId}`.replace(
-                `{${'permissionId'}}`,
-                encodeURIComponent(String(permissionId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Get all permissions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllPermissions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/permissions`;
+            // verify required parameter 'actionType' is not null or undefined
+            assertParamExists('checkPermission', 'actionType', actionType);
+            const localVarPath = `/api/v1/permissions/check`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3936,6 +6242,18 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (actionType !== undefined) {
+                localVarQueryParameter['actionType'] = actionType;
+            }
+
+            if (resourceId !== undefined) {
+                localVarQueryParameter['resourceId'] = resourceId;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -3979,53 +6297,9 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Update a permission by ID
-         * @param {string} permissionId
-         * @param {PermissionDTO} permissionDTO
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updatePermission: async (
-            permissionId: string,
-            permissionDTO: PermissionDTO,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'permissionId' is not null or undefined
-            assertParamExists('updatePermission', 'permissionId', permissionId);
-            // verify required parameter 'permissionDTO' is not null or undefined
-            assertParamExists('updatePermission', 'permissionDTO', permissionDTO);
-            const localVarPath = `/api/v1/permissions/{permissionId}`.replace(
-                `{${'permissionId'}}`,
-                encodeURIComponent(String(permissionId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -4035,11 +6309,6 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
                 ...headersFromBaseOptions,
                 ...options.headers,
             };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                permissionDTO,
-                localVarRequestOptions,
-                configuration,
-            );
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4058,77 +6327,28 @@ export const PermissionsApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary Create a new permission
-         * @param {PermissionDTO} permissionDTO
+         * @summary Проверка наличия доступа у текущего пользователя
+         * @param {string} actionType
+         * @param {string} [resourceId]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPermission(
-            permissionDTO: PermissionDTO,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PermissionDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPermission(
-                permissionDTO,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['PermissionsApi.createPermission']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Delete a permission by ID
-         * @param {string} permissionId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deletePermission(
-            permissionId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePermission(
-                permissionId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['PermissionsApi.deletePermission']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Get all permissions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllPermissions(
+        async checkPermission(
+            actionType: string,
+            resourceId?: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PermissionDTO>>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<CheckPermission200Response>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPermissions(options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkPermission(
+                actionType,
+                resourceId,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['PermissionsApi.getAllPermissions']?.[
-                    localVarOperationServerIndex
-                ]?.url;
+                operationServerMap['PermissionsApi.checkPermission']?.[localVarOperationServerIndex]
+                    ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -4165,37 +6385,6 @@ export const PermissionsApiFp = function (configuration?: Configuration) {
                     configuration,
                 )(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         *
-         * @summary Update a permission by ID
-         * @param {string} permissionId
-         * @param {PermissionDTO} permissionDTO
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updatePermission(
-            permissionId: string,
-            permissionDTO: PermissionDTO,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PermissionDTO>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePermission(
-                permissionId,
-                permissionDTO,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['PermissionsApi.updatePermission']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
     };
 };
 
@@ -4212,43 +6401,21 @@ export const PermissionsApiFactory = function (
     return {
         /**
          *
-         * @summary Create a new permission
-         * @param {PermissionsApiCreatePermissionRequest} requestParameters Request parameters.
+         * @summary Проверка наличия доступа у текущего пользователя
+         * @param {PermissionsApiCheckPermissionRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPermission(
-            requestParameters: PermissionsApiCreatePermissionRequest,
+        checkPermission(
+            requestParameters: PermissionsApiCheckPermissionRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<PermissionDTO> {
+        ): AxiosPromise<CheckPermission200Response> {
             return localVarFp
-                .createPermission(requestParameters.permissionDTO, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete a permission by ID
-         * @param {PermissionsApiDeletePermissionRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deletePermission(
-            requestParameters: PermissionsApiDeletePermissionRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .deletePermission(requestParameters.permissionId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get all permissions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllPermissions(options?: RawAxiosRequestConfig): AxiosPromise<Array<PermissionDTO>> {
-            return localVarFp
-                .getAllPermissions(options)
+                .checkPermission(
+                    requestParameters.actionType,
+                    requestParameters.resourceId,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -4266,54 +6433,28 @@ export const PermissionsApiFactory = function (
                 .getPermissionById(requestParameters.permissionId, options)
                 .then((request) => request(axios, basePath));
         },
-        /**
-         *
-         * @summary Update a permission by ID
-         * @param {PermissionsApiUpdatePermissionRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updatePermission(
-            requestParameters: PermissionsApiUpdatePermissionRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<PermissionDTO> {
-            return localVarFp
-                .updatePermission(
-                    requestParameters.permissionId,
-                    requestParameters.permissionDTO,
-                    options,
-                )
-                .then((request) => request(axios, basePath));
-        },
     };
 };
 
 /**
- * Request parameters for createPermission operation in PermissionsApi.
+ * Request parameters for checkPermission operation in PermissionsApi.
  * @export
- * @interface PermissionsApiCreatePermissionRequest
+ * @interface PermissionsApiCheckPermissionRequest
  */
-export interface PermissionsApiCreatePermissionRequest {
-    /**
-     *
-     * @type {PermissionDTO}
-     * @memberof PermissionsApiCreatePermission
-     */
-    readonly permissionDTO: PermissionDTO;
-}
-
-/**
- * Request parameters for deletePermission operation in PermissionsApi.
- * @export
- * @interface PermissionsApiDeletePermissionRequest
- */
-export interface PermissionsApiDeletePermissionRequest {
+export interface PermissionsApiCheckPermissionRequest {
     /**
      *
      * @type {string}
-     * @memberof PermissionsApiDeletePermission
+     * @memberof PermissionsApiCheckPermission
      */
-    readonly permissionId: string;
+    readonly actionType: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof PermissionsApiCheckPermission
+     */
+    readonly resourceId?: string;
 }
 
 /**
@@ -4331,27 +6472,6 @@ export interface PermissionsApiGetPermissionByIdRequest {
 }
 
 /**
- * Request parameters for updatePermission operation in PermissionsApi.
- * @export
- * @interface PermissionsApiUpdatePermissionRequest
- */
-export interface PermissionsApiUpdatePermissionRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof PermissionsApiUpdatePermission
-     */
-    readonly permissionId: string;
-
-    /**
-     *
-     * @type {PermissionDTO}
-     * @memberof PermissionsApiUpdatePermission
-     */
-    readonly permissionDTO: PermissionDTO;
-}
-
-/**
  * PermissionsApi - object-oriented interface
  * @export
  * @class PermissionsApi
@@ -4360,48 +6480,18 @@ export interface PermissionsApiUpdatePermissionRequest {
 export class PermissionsApi extends BaseAPI {
     /**
      *
-     * @summary Create a new permission
-     * @param {PermissionsApiCreatePermissionRequest} requestParameters Request parameters.
+     * @summary Проверка наличия доступа у текущего пользователя
+     * @param {PermissionsApiCheckPermissionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionsApi
      */
-    public createPermission(
-        requestParameters: PermissionsApiCreatePermissionRequest,
+    public checkPermission(
+        requestParameters: PermissionsApiCheckPermissionRequest,
         options?: RawAxiosRequestConfig,
     ) {
         return PermissionsApiFp(this.configuration)
-            .createPermission(requestParameters.permissionDTO, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Delete a permission by ID
-     * @param {PermissionsApiDeletePermissionRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PermissionsApi
-     */
-    public deletePermission(
-        requestParameters: PermissionsApiDeletePermissionRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return PermissionsApiFp(this.configuration)
-            .deletePermission(requestParameters.permissionId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Get all permissions
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PermissionsApi
-     */
-    public getAllPermissions(options?: RawAxiosRequestConfig) {
-        return PermissionsApiFp(this.configuration)
-            .getAllPermissions(options)
+            .checkPermission(requestParameters.actionType, requestParameters.resourceId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -4419,27 +6509,6 @@ export class PermissionsApi extends BaseAPI {
     ) {
         return PermissionsApiFp(this.configuration)
             .getPermissionById(requestParameters.permissionId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Update a permission by ID
-     * @param {PermissionsApiUpdatePermissionRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PermissionsApi
-     */
-    public updatePermission(
-        requestParameters: PermissionsApiUpdatePermissionRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return PermissionsApiFp(this.configuration)
-            .updatePermission(
-                requestParameters.permissionId,
-                requestParameters.permissionDTO,
-                options,
-            )
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -4474,6 +6543,10 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -4524,6 +6597,10 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
                 baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4556,6 +6633,10 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -4598,6 +6679,145 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов продукта
+         * @param {string} productId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductChildren: async (
+            productId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('getProductChildren', 'productId', productId);
+            const localVarPath = `/api/v1/products/{productId}/children`.replace(
+                `{${'productId'}}`,
+                encodeURIComponent(String(productId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов продукта деревом
+         * @param {string} productId
+         * @param {number} [depth]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductTree: async (
+            productId: string,
+            depth?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('getProductTree', 'productId', productId);
+            const localVarPath = `/api/v1/products/{productId}/tree`.replace(
+                `{${'productId'}}`,
+                encodeURIComponent(String(productId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (depth !== undefined) {
+                localVarQueryParameter['depth'] = depth;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Получение корневых элементов продуктов
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductsRoots: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/products-roots`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -4644,6 +6864,10 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -4781,6 +7005,85 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Получение дочерних элементов продукта
+         * @param {string} productId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProductChildren(
+            productId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductChildren(
+                productId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProductsApi.getProductChildren']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов продукта деревом
+         * @param {string} productId
+         * @param {number} [depth]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProductTree(
+            productId: string,
+            depth?: number,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductTreeDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductTree(
+                productId,
+                depth,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProductsApi.getProductTree']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Получение корневых элементов продуктов
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProductsRoots(
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductsRoots(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProductsApi.getProductsRoots']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Update a product by ID
          * @param {string} productId
          * @param {ProductDTO} productDTO
@@ -4879,6 +7182,45 @@ export const ProductsApiFactory = function (
         },
         /**
          *
+         * @summary Получение дочерних элементов продукта
+         * @param {ProductsApiGetProductChildrenRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductChildren(
+            requestParameters: ProductsApiGetProductChildrenRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<ProductDTO>> {
+            return localVarFp
+                .getProductChildren(requestParameters.productId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов продукта деревом
+         * @param {ProductsApiGetProductTreeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductTree(
+            requestParameters: ProductsApiGetProductTreeRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ProductTreeDTO> {
+            return localVarFp
+                .getProductTree(requestParameters.productId, requestParameters.depth, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Получение корневых элементов продуктов
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductsRoots(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductDTO>> {
+            return localVarFp.getProductsRoots(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Update a product by ID
          * @param {ProductsApiUpdateProductRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4935,6 +7277,41 @@ export interface ProductsApiGetProductByIdRequest {
      * @memberof ProductsApiGetProductById
      */
     readonly productId: string;
+}
+
+/**
+ * Request parameters for getProductChildren operation in ProductsApi.
+ * @export
+ * @interface ProductsApiGetProductChildrenRequest
+ */
+export interface ProductsApiGetProductChildrenRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductsApiGetProductChildren
+     */
+    readonly productId: string;
+}
+
+/**
+ * Request parameters for getProductTree operation in ProductsApi.
+ * @export
+ * @interface ProductsApiGetProductTreeRequest
+ */
+export interface ProductsApiGetProductTreeRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductsApiGetProductTree
+     */
+    readonly productId: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof ProductsApiGetProductTree
+     */
+    readonly depth?: number;
 }
 
 /**
@@ -5031,6 +7408,53 @@ export class ProductsApi extends BaseAPI {
 
     /**
      *
+     * @summary Получение дочерних элементов продукта
+     * @param {ProductsApiGetProductChildrenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductsApi
+     */
+    public getProductChildren(
+        requestParameters: ProductsApiGetProductChildrenRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProductsApiFp(this.configuration)
+            .getProductChildren(requestParameters.productId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Получение дочерних элементов продукта деревом
+     * @param {ProductsApiGetProductTreeRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductsApi
+     */
+    public getProductTree(
+        requestParameters: ProductsApiGetProductTreeRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProductsApiFp(this.configuration)
+            .getProductTree(requestParameters.productId, requestParameters.depth, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Получение корневых элементов продуктов
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductsApi
+     */
+    public getProductsRoots(options?: RawAxiosRequestConfig) {
+        return ProductsApiFp(this.configuration)
+            .getProductsRoots(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @summary Update a product by ID
      * @param {ProductsApiUpdateProductRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -5043,6 +7467,1644 @@ export class ProductsApi extends BaseAPI {
     ) {
         return ProductsApiFp(this.configuration)
             .updateProduct(requestParameters.productId, requestParameters.productDTO, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * RolesApi - axios parameter creator
+ * @export
+ */
+export const RolesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Create a new role
+         * @param {RoleWithPermissionsDTO} roleWithPermissionsDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRole: async (
+            roleWithPermissionsDTO: RoleWithPermissionsDTO,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleWithPermissionsDTO' is not null or undefined
+            assertParamExists('createRole', 'roleWithPermissionsDTO', roleWithPermissionsDTO);
+            const localVarPath = `/api/v1/roles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                roleWithPermissionsDTO,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Delete a role by ID
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteRole: async (
+            roleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('deleteRole', 'roleId', roleId);
+            const localVarPath = `/api/v1/roles/{roleId}`.replace(
+                `{${'roleId'}}`,
+                encodeURIComponent(String(roleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get all roles
+         * @param {string} [search]
+         * @param {string} [productId]
+         * @param {string} [orgUnitId]
+         * @param {number} [limit]
+         * @param {number} [offset]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllRoles: async (
+            search?: string,
+            productId?: string,
+            orgUnitId?: string,
+            limit?: number,
+            offset?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/roles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (productId !== undefined) {
+                localVarQueryParameter['productId'] = productId;
+            }
+
+            if (orgUnitId !== undefined) {
+                localVarQueryParameter['orgUnitId'] = orgUnitId;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get role permission
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPermissionsByRoleId: async (
+            roleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('getPermissionsByRoleId', 'roleId', roleId);
+            const localVarPath = `/api/v1/roles/{roleId}/permissions`.replace(
+                `{${'roleId'}}`,
+                encodeURIComponent(String(roleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get a role by ID
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoleById: async (
+            roleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('getRoleById', 'roleId', roleId);
+            const localVarPath = `/api/v1/roles/{roleId}`.replace(
+                `{${'roleId'}}`,
+                encodeURIComponent(String(roleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update a role by ID
+         * @param {string} roleId
+         * @param {RoleWithPermissionsDTO} roleWithPermissionsDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRole: async (
+            roleId: string,
+            roleWithPermissionsDTO: RoleWithPermissionsDTO,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('updateRole', 'roleId', roleId);
+            // verify required parameter 'roleWithPermissionsDTO' is not null or undefined
+            assertParamExists('updateRole', 'roleWithPermissionsDTO', roleWithPermissionsDTO);
+            const localVarPath = `/api/v1/roles/{roleId}`.replace(
+                `{${'roleId'}}`,
+                encodeURIComponent(String(roleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                roleWithPermissionsDTO,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * RolesApi - functional programming interface
+ * @export
+ */
+export const RolesApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = RolesApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create a new role
+         * @param {RoleWithPermissionsDTO} roleWithPermissionsDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createRole(
+            roleWithPermissionsDTO: RoleWithPermissionsDTO,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleWithPermissionsDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createRole(
+                roleWithPermissionsDTO,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.createRole']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Delete a role by ID
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteRole(
+            roleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteRole(roleId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.deleteRole']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get all roles
+         * @param {string} [search]
+         * @param {string} [productId]
+         * @param {string} [orgUnitId]
+         * @param {number} [limit]
+         * @param {number} [offset]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllRoles(
+            search?: string,
+            productId?: string,
+            orgUnitId?: string,
+            limit?: number,
+            offset?: number,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedRoleResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllRoles(
+                search,
+                productId,
+                orgUnitId,
+                limit,
+                offset,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.getAllRoles']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get role permission
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPermissionsByRoleId(
+            roleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PermissionDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPermissionsByRoleId(
+                roleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.getPermissionsByRoleId']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get a role by ID
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRoleById(
+            roleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRoleById(roleId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.getRoleById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update a role by ID
+         * @param {string} roleId
+         * @param {RoleWithPermissionsDTO} roleWithPermissionsDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateRole(
+            roleId: string,
+            roleWithPermissionsDTO: RoleWithPermissionsDTO,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleWithPermissionsDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateRole(
+                roleId,
+                roleWithPermissionsDTO,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.updateRole']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * RolesApi - factory interface
+ * @export
+ */
+export const RolesApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = RolesApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create a new role
+         * @param {RolesApiCreateRoleRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRole(
+            requestParameters: RolesApiCreateRoleRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleWithPermissionsDTO> {
+            return localVarFp
+                .createRole(requestParameters.roleWithPermissionsDTO, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete a role by ID
+         * @param {RolesApiDeleteRoleRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteRole(
+            requestParameters: RolesApiDeleteRoleRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .deleteRole(requestParameters.roleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get all roles
+         * @param {RolesApiGetAllRolesRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllRoles(
+            requestParameters: RolesApiGetAllRolesRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<PaginatedRoleResponse> {
+            return localVarFp
+                .getAllRoles(
+                    requestParameters.search,
+                    requestParameters.productId,
+                    requestParameters.orgUnitId,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get role permission
+         * @param {RolesApiGetPermissionsByRoleIdRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPermissionsByRoleId(
+            requestParameters: RolesApiGetPermissionsByRoleIdRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<PermissionDTO>> {
+            return localVarFp
+                .getPermissionsByRoleId(requestParameters.roleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get a role by ID
+         * @param {RolesApiGetRoleByIdRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoleById(
+            requestParameters: RolesApiGetRoleByIdRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleDTO> {
+            return localVarFp
+                .getRoleById(requestParameters.roleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update a role by ID
+         * @param {RolesApiUpdateRoleRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRole(
+            requestParameters: RolesApiUpdateRoleRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleWithPermissionsDTO> {
+            return localVarFp
+                .updateRole(
+                    requestParameters.roleId,
+                    requestParameters.roleWithPermissionsDTO,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createRole operation in RolesApi.
+ * @export
+ * @interface RolesApiCreateRoleRequest
+ */
+export interface RolesApiCreateRoleRequest {
+    /**
+     *
+     * @type {RoleWithPermissionsDTO}
+     * @memberof RolesApiCreateRole
+     */
+    readonly roleWithPermissionsDTO: RoleWithPermissionsDTO;
+}
+
+/**
+ * Request parameters for deleteRole operation in RolesApi.
+ * @export
+ * @interface RolesApiDeleteRoleRequest
+ */
+export interface RolesApiDeleteRoleRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiDeleteRole
+     */
+    readonly roleId: string;
+}
+
+/**
+ * Request parameters for getAllRoles operation in RolesApi.
+ * @export
+ * @interface RolesApiGetAllRolesRequest
+ */
+export interface RolesApiGetAllRolesRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetAllRoles
+     */
+    readonly search?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetAllRoles
+     */
+    readonly productId?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetAllRoles
+     */
+    readonly orgUnitId?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof RolesApiGetAllRoles
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof RolesApiGetAllRoles
+     */
+    readonly offset?: number;
+}
+
+/**
+ * Request parameters for getPermissionsByRoleId operation in RolesApi.
+ * @export
+ * @interface RolesApiGetPermissionsByRoleIdRequest
+ */
+export interface RolesApiGetPermissionsByRoleIdRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetPermissionsByRoleId
+     */
+    readonly roleId: string;
+}
+
+/**
+ * Request parameters for getRoleById operation in RolesApi.
+ * @export
+ * @interface RolesApiGetRoleByIdRequest
+ */
+export interface RolesApiGetRoleByIdRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetRoleById
+     */
+    readonly roleId: string;
+}
+
+/**
+ * Request parameters for updateRole operation in RolesApi.
+ * @export
+ * @interface RolesApiUpdateRoleRequest
+ */
+export interface RolesApiUpdateRoleRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiUpdateRole
+     */
+    readonly roleId: string;
+
+    /**
+     *
+     * @type {RoleWithPermissionsDTO}
+     * @memberof RolesApiUpdateRole
+     */
+    readonly roleWithPermissionsDTO: RoleWithPermissionsDTO;
+}
+
+/**
+ * RolesApi - object-oriented interface
+ * @export
+ * @class RolesApi
+ * @extends {BaseAPI}
+ */
+export class RolesApi extends BaseAPI {
+    /**
+     *
+     * @summary Create a new role
+     * @param {RolesApiCreateRoleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public createRole(
+        requestParameters: RolesApiCreateRoleRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .createRole(requestParameters.roleWithPermissionsDTO, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Delete a role by ID
+     * @param {RolesApiDeleteRoleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public deleteRole(
+        requestParameters: RolesApiDeleteRoleRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .deleteRole(requestParameters.roleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get all roles
+     * @param {RolesApiGetAllRolesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public getAllRoles(
+        requestParameters: RolesApiGetAllRolesRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .getAllRoles(
+                requestParameters.search,
+                requestParameters.productId,
+                requestParameters.orgUnitId,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get role permission
+     * @param {RolesApiGetPermissionsByRoleIdRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public getPermissionsByRoleId(
+        requestParameters: RolesApiGetPermissionsByRoleIdRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .getPermissionsByRoleId(requestParameters.roleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get a role by ID
+     * @param {RolesApiGetRoleByIdRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public getRoleById(
+        requestParameters: RolesApiGetRoleByIdRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .getRoleById(requestParameters.roleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update a role by ID
+     * @param {RolesApiUpdateRoleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public updateRole(
+        requestParameters: RolesApiUpdateRoleRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .updateRole(requestParameters.roleId, requestParameters.roleWithPermissionsDTO, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * RolesRequestsApi - axios parameter creator
+ * @export
+ */
+export const RolesRequestsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Create a new role request
+         * @param {RoleRequestDTO} roleRequestDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRoleRequest: async (
+            roleRequestDTO: RoleRequestDTO,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleRequestDTO' is not null or undefined
+            assertParamExists('createRoleRequest', 'roleRequestDTO', roleRequestDTO);
+            const localVarPath = `/api/v1/roles-requests`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                roleRequestDTO,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get all roles requests
+         * @param {string} [ownerId]
+         * @param {string} [status]
+         * @param {string} [accountId]
+         * @param {number} [limit]
+         * @param {number} [offset]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllRolesRequests: async (
+            ownerId?: string,
+            status?: string,
+            accountId?: string,
+            limit?: number,
+            offset?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/roles-requests`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (ownerId !== undefined) {
+                localVarQueryParameter['ownerId'] = ownerId;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (accountId !== undefined) {
+                localVarQueryParameter['accountId'] = accountId;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get a role Request by ID
+         * @param {string} roleRequestId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoleRequestById: async (
+            roleRequestId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleRequestId' is not null or undefined
+            assertParamExists('getRoleRequestById', 'roleRequestId', roleRequestId);
+            const localVarPath = `/api/v1/roles-requests/{roleRequestId}`.replace(
+                `{${'roleRequestId'}}`,
+                encodeURIComponent(String(roleRequestId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update a role request by ID
+         * @param {string} roleRequestId
+         * @param {RoleRequestDTO} roleRequestDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRoleRequest: async (
+            roleRequestId: string,
+            roleRequestDTO: RoleRequestDTO,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleRequestId' is not null or undefined
+            assertParamExists('updateRoleRequest', 'roleRequestId', roleRequestId);
+            // verify required parameter 'roleRequestDTO' is not null or undefined
+            assertParamExists('updateRoleRequest', 'roleRequestDTO', roleRequestDTO);
+            const localVarPath = `/api/v1/roles-requests/{roleRequestId}`.replace(
+                `{${'roleRequestId'}}`,
+                encodeURIComponent(String(roleRequestId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                roleRequestDTO,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update a role request status by ID
+         * @param {string} roleRequestId
+         * @param {string} newStatus
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRoleRequestStatus: async (
+            roleRequestId: string,
+            newStatus: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleRequestId' is not null or undefined
+            assertParamExists('updateRoleRequestStatus', 'roleRequestId', roleRequestId);
+            // verify required parameter 'newStatus' is not null or undefined
+            assertParamExists('updateRoleRequestStatus', 'newStatus', newStatus);
+            const localVarPath = `/api/v1/roles-requests/{roleRequestId}`.replace(
+                `{${'roleRequestId'}}`,
+                encodeURIComponent(String(roleRequestId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (newStatus !== undefined) {
+                localVarQueryParameter['newStatus'] = newStatus;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * RolesRequestsApi - functional programming interface
+ * @export
+ */
+export const RolesRequestsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = RolesRequestsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create a new role request
+         * @param {RoleRequestDTO} roleRequestDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createRoleRequest(
+            roleRequestDTO: RoleRequestDTO,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleRequestDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createRoleRequest(
+                roleRequestDTO,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesRequestsApi.createRoleRequest']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get all roles requests
+         * @param {string} [ownerId]
+         * @param {string} [status]
+         * @param {string} [accountId]
+         * @param {number} [limit]
+         * @param {number} [offset]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllRolesRequests(
+            ownerId?: string,
+            status?: string,
+            accountId?: string,
+            limit?: number,
+            offset?: number,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedRoleRequestResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllRolesRequests(
+                ownerId,
+                status,
+                accountId,
+                limit,
+                offset,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesRequestsApi.getAllRolesRequests']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get a role Request by ID
+         * @param {string} roleRequestId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRoleRequestById(
+            roleRequestId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleRequestDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRoleRequestById(
+                roleRequestId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesRequestsApi.getRoleRequestById']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update a role request by ID
+         * @param {string} roleRequestId
+         * @param {RoleRequestDTO} roleRequestDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateRoleRequest(
+            roleRequestId: string,
+            roleRequestDTO: RoleRequestDTO,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleRequestDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateRoleRequest(
+                roleRequestId,
+                roleRequestDTO,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesRequestsApi.updateRoleRequest']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update a role request status by ID
+         * @param {string} roleRequestId
+         * @param {string} newStatus
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateRoleRequestStatus(
+            roleRequestId: string,
+            newStatus: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleRequestDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateRoleRequestStatus(
+                roleRequestId,
+                newStatus,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesRequestsApi.updateRoleRequestStatus']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * RolesRequestsApi - factory interface
+ * @export
+ */
+export const RolesRequestsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = RolesRequestsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create a new role request
+         * @param {RolesRequestsApiCreateRoleRequestRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRoleRequest(
+            requestParameters: RolesRequestsApiCreateRoleRequestRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleRequestDTO> {
+            return localVarFp
+                .createRoleRequest(requestParameters.roleRequestDTO, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get all roles requests
+         * @param {RolesRequestsApiGetAllRolesRequestsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllRolesRequests(
+            requestParameters: RolesRequestsApiGetAllRolesRequestsRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<PaginatedRoleRequestResponse> {
+            return localVarFp
+                .getAllRolesRequests(
+                    requestParameters.ownerId,
+                    requestParameters.status,
+                    requestParameters.accountId,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get a role Request by ID
+         * @param {RolesRequestsApiGetRoleRequestByIdRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoleRequestById(
+            requestParameters: RolesRequestsApiGetRoleRequestByIdRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleRequestDTO> {
+            return localVarFp
+                .getRoleRequestById(requestParameters.roleRequestId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update a role request by ID
+         * @param {RolesRequestsApiUpdateRoleRequestRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRoleRequest(
+            requestParameters: RolesRequestsApiUpdateRoleRequestRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleRequestDTO> {
+            return localVarFp
+                .updateRoleRequest(
+                    requestParameters.roleRequestId,
+                    requestParameters.roleRequestDTO,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update a role request status by ID
+         * @param {RolesRequestsApiUpdateRoleRequestStatusRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRoleRequestStatus(
+            requestParameters: RolesRequestsApiUpdateRoleRequestStatusRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleRequestDTO> {
+            return localVarFp
+                .updateRoleRequestStatus(
+                    requestParameters.roleRequestId,
+                    requestParameters.newStatus,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createRoleRequest operation in RolesRequestsApi.
+ * @export
+ * @interface RolesRequestsApiCreateRoleRequestRequest
+ */
+export interface RolesRequestsApiCreateRoleRequestRequest {
+    /**
+     *
+     * @type {RoleRequestDTO}
+     * @memberof RolesRequestsApiCreateRoleRequest
+     */
+    readonly roleRequestDTO: RoleRequestDTO;
+}
+
+/**
+ * Request parameters for getAllRolesRequests operation in RolesRequestsApi.
+ * @export
+ * @interface RolesRequestsApiGetAllRolesRequestsRequest
+ */
+export interface RolesRequestsApiGetAllRolesRequestsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiGetAllRolesRequests
+     */
+    readonly ownerId?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiGetAllRolesRequests
+     */
+    readonly status?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiGetAllRolesRequests
+     */
+    readonly accountId?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof RolesRequestsApiGetAllRolesRequests
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof RolesRequestsApiGetAllRolesRequests
+     */
+    readonly offset?: number;
+}
+
+/**
+ * Request parameters for getRoleRequestById operation in RolesRequestsApi.
+ * @export
+ * @interface RolesRequestsApiGetRoleRequestByIdRequest
+ */
+export interface RolesRequestsApiGetRoleRequestByIdRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiGetRoleRequestById
+     */
+    readonly roleRequestId: string;
+}
+
+/**
+ * Request parameters for updateRoleRequest operation in RolesRequestsApi.
+ * @export
+ * @interface RolesRequestsApiUpdateRoleRequestRequest
+ */
+export interface RolesRequestsApiUpdateRoleRequestRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiUpdateRoleRequest
+     */
+    readonly roleRequestId: string;
+
+    /**
+     *
+     * @type {RoleRequestDTO}
+     * @memberof RolesRequestsApiUpdateRoleRequest
+     */
+    readonly roleRequestDTO: RoleRequestDTO;
+}
+
+/**
+ * Request parameters for updateRoleRequestStatus operation in RolesRequestsApi.
+ * @export
+ * @interface RolesRequestsApiUpdateRoleRequestStatusRequest
+ */
+export interface RolesRequestsApiUpdateRoleRequestStatusRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiUpdateRoleRequestStatus
+     */
+    readonly roleRequestId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiUpdateRoleRequestStatus
+     */
+    readonly newStatus: string;
+}
+
+/**
+ * RolesRequestsApi - object-oriented interface
+ * @export
+ * @class RolesRequestsApi
+ * @extends {BaseAPI}
+ */
+export class RolesRequestsApi extends BaseAPI {
+    /**
+     *
+     * @summary Create a new role request
+     * @param {RolesRequestsApiCreateRoleRequestRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesRequestsApi
+     */
+    public createRoleRequest(
+        requestParameters: RolesRequestsApiCreateRoleRequestRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesRequestsApiFp(this.configuration)
+            .createRoleRequest(requestParameters.roleRequestDTO, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get all roles requests
+     * @param {RolesRequestsApiGetAllRolesRequestsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesRequestsApi
+     */
+    public getAllRolesRequests(
+        requestParameters: RolesRequestsApiGetAllRolesRequestsRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesRequestsApiFp(this.configuration)
+            .getAllRolesRequests(
+                requestParameters.ownerId,
+                requestParameters.status,
+                requestParameters.accountId,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get a role Request by ID
+     * @param {RolesRequestsApiGetRoleRequestByIdRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesRequestsApi
+     */
+    public getRoleRequestById(
+        requestParameters: RolesRequestsApiGetRoleRequestByIdRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesRequestsApiFp(this.configuration)
+            .getRoleRequestById(requestParameters.roleRequestId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update a role request by ID
+     * @param {RolesRequestsApiUpdateRoleRequestRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesRequestsApi
+     */
+    public updateRoleRequest(
+        requestParameters: RolesRequestsApiUpdateRoleRequestRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesRequestsApiFp(this.configuration)
+            .updateRoleRequest(
+                requestParameters.roleRequestId,
+                requestParameters.roleRequestDTO,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update a role request status by ID
+     * @param {RolesRequestsApiUpdateRoleRequestStatusRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesRequestsApi
+     */
+    public updateRoleRequestStatus(
+        requestParameters: RolesRequestsApiUpdateRoleRequestStatusRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesRequestsApiFp(this.configuration)
+            .updateRoleRequestStatus(
+                requestParameters.roleRequestId,
+                requestParameters.newStatus,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -5072,6 +9134,10 @@ export const V1PingControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =

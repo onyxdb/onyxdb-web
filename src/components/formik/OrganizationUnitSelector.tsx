@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {List, TextInput} from '@gravity-ui/uikit';
 import {organizationUnitsApi} from '@/app/apis';
+import {OrganizationUnitDTO} from '@/generated/api';
 
 interface OrganizationUnitSelectorProps {
     onSelect: (organizationUnitId: string) => void;
@@ -10,20 +11,20 @@ interface OrganizationUnitSelectorProps {
 
 export const OrganizationUnitSelector: React.FC<OrganizationUnitSelectorProps> = ({onSelect}) => {
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [organizationUnits, setOrganizationUnits] = useState<any[]>([]);
+    const [organizationUnits, setOrganizationUnits] = useState<OrganizationUnitDTO[]>([]);
 
     useEffect(() => {
         organizationUnitsApi
             .getAllOrganizationUnits()
             .then((response) => {
-                setOrganizationUnits(response.data);
+                setOrganizationUnits(response.data.data ?? []);
             })
             .catch((error) => console.error('Error fetching organization units:', error));
     }, []);
 
     const listItems = organizationUnits.map((unit) => ({
-        id: unit.id,
-        title: unit.name,
+        id: unit.id ?? '',
+        title: unit.name ?? '',
     }));
 
     const handleItemClick = (item: {id: string; title: string}) => {

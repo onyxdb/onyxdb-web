@@ -22,7 +22,7 @@ export default function ProductsPage() {
     useEffect(() => {
         accountsApi
             .getAllAccounts()
-            .then((response) => setAccounts(response.data))
+            .then((response) => setAccounts(response.data.data ?? []))
             .catch((error) => console.error('Error fetching accounts:', error));
     }, []);
 

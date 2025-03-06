@@ -2,31 +2,32 @@
 
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'next/navigation';
-import {ProductDTO, ProductsApi} from '@/generated/api';
+import {AccountDTO} from '@/generated/api';
+import {accountsApi} from '@/app/apis';
 
-export default function ProductInfoPage() {
+export default function AccountInfoPage() {
     const params = useParams();
-    const productId = params.id as string;
-    const [product, setProduct] = useState<ProductDTO | null>(null);
+    const accountId = params.id as string;
+    const [account, setAccount] = useState<AccountDTO | null>(null);
 
     useEffect(() => {
-        const productsApi = new ProductsApi();
-        productsApi
-            .getProductById({productId})
-            .then((response) => setProduct(response.data))
-            .catch((error) => console.error('Error fetching product:', error));
-    }, [productId]);
+        accountsApi
+            .getAccountById({accountId})
+            .then((response) => setAccount(response.data))
+            .catch((error) => console.error('Error fetching account:', error));
+    }, [accountId]);
 
-    if (!product) {
+    if (!account) {
         return <div>Загрузка...</div>;
     }
 
     return (
         <div style={{padding: '20px'}}>
-            <h1>{product.name}</h1>
-            <p>{product.description}</p>
-            <p>Дата создания: {product.createdAt}</p>
-            <p>Владелец: {product.ownerId}</p>
+            <h1>{account.username}</h1>
+            <p>{account.email}</p>
+            <p>{account.firstName}</p>
+            <p>{account.lastName}</p>
+            <p>Дата создания: {account.createdAt}</p>
         </div>
     );
 }

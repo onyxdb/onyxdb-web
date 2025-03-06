@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {
     AbbrApi,
     CircleQuestion,
@@ -12,9 +12,10 @@ import {
     Sun,
 } from '@gravity-ui/icons';
 import {AsideHeader, FooterItem} from '@gravity-ui/navigation';
-import {ThemeProvider} from '@gravity-ui/uikit';
+import {Loader, ThemeProvider} from '@gravity-ui/uikit';
 import useCookie, {booleanCookie, stringCookie} from '@/hooks/useCookie';
 import {LoginInfo} from '@/components/Login/LoginInfo';
+import {usePathname} from 'next/navigation';
 
 interface AppProps {
     children: React.ReactNode;
@@ -63,6 +64,11 @@ export const App: React.FC<AppProps> = ({children}) => {
             link: '/accounts',
         },
         {
+            title: 'Оргструктура',
+            icon: Persons,
+            link: '/structure',
+        },
+        {
             // id: 'access',
             title: 'Доступы',
             icon: ListCheck,
@@ -74,97 +80,88 @@ export const App: React.FC<AppProps> = ({children}) => {
             icon: Cpu,
             link: '/products',
         },
-        // ];
-
-        // Элементы для нижней части сайдбара
-        // const secondaryItems: AsideHeaderProps['secondaryItems'] = [
-        // {
-        //     id: 'theme',
-        //     title: 'Тема',
-        //     icon: isDarkMode ? Moon : Sun,
-        //     onItemClick: toggleTheme, // Смена темы
-        // },
-        // {
-        //     // id: 'support',
-        //     title: 'Поддержка',
-        //     icon: Comment,
-        //     onItemClick: () => window.open('https://t.me/your_support_chat', '_blank'), // Открыть чат поддержки
-        // },
-        // {
-        //     // id: 'user',
-        //     title: 'Учётная запись',
-        //     icon: Person,
-        //     onItemClick: () => router.push('/user'), // Переход на /user
-        // },
     ];
 
-    const activeTab = menuItems.find((m) => m.link && location.pathname.startsWith(m.link))?.title;
+    const pathname = usePathname();
+    const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if (pathname) {
+            const tab = menuItems.find((m) => m.link && pathname.startsWith(m.link))?.title;
+            setActiveTab(tab);
+        }
+    }, [pathname, menuItems]);
 
     return (
         <ThemeProvider theme={theme ?? 'system'}>
-            <AsideHeader
-                headerDecoration={true}
-                compact={asideCollapsed ?? false}
-                onChangeCompact={setAsideCollapsed}
-                logo={{icon: Ghost, text: 'OnyxDB'}}
-                menuItems={menuItems.map((mi) => ({
-                    ...mi,
-                    id: mi.title,
-                    current: activeTab === mi.title,
-                }))}
-                renderFooter={(data: {compact: boolean}) => {
-                    return (
-                        <>
-                            <FooterItem
-                                compact={data.compact}
-                                item={{
-                                    id: 'login',
-                                    title: <LoginInfo />,
-                                }}
-                            />
-                            <FooterItem
-                                compact={data.compact}
-                                item={{
-                                    id: 'ambient_mode',
-                                    title: `Mode: ${theme}`,
-                                    icon: isDarkMode ? Moon : Sun,
-                                    link: '#',
-                                    onItemClickCapture: (e) => {
-                                        e.preventDefault();
-                                        switch (theme) {
-                                            case 'light':
-                                                return setTheme(isSystemDark ? 'dark' : 'system');
-                                            case 'dark':
-                                                return setTheme(isSystemDark ? 'system' : 'light');
-                                            default:
-                                                return setTheme(isDarkMode ? 'light' : 'dark');
-                                        }
-                                    },
-                                }}
-                            />
-                            <FooterItem
-                                compact={data.compact}
-                                item={{
-                                    id: 'about',
-                                    title: 'About',
-                                    link: '/about',
-                                    icon: CircleQuestion,
-                                }}
-                            />
-                            <FooterItem
-                                compact={data.compact}
-                                item={{
-                                    id: 'api',
-                                    title: 'API',
-                                    link: '/api/v1/docs',
-                                    icon: AbbrApi,
-                                }}
-                            />
-                        </>
-                    );
-                }}
-                renderContent={() => children}
-            />
+            <Suspense fallback={<Loader />}>
+                <AsideHeader
+                    headerDecoration={true}
+                    compact={asideCollapsed ?? false}
+                    onChangeCompact={setAsideCollapsed}
+                    logo={{icon: Ghost, text: 'OnyxDB'}}
+                    menuItems={menuItems.map((mi) => ({
+                        ...mi,
+                        id: mi.title,
+                        current: activeTab === mi.title,
+                    }))}
+                    renderFooter={(data: {compact: boolean}) => {
+                        return (
+                            <>
+                                <FooterItem
+                                    compact={data.compact}
+                                    item={{
+                                        id: 'login',
+                                        title: <LoginInfo />,
+                                    }}
+                                />
+                                <FooterItem
+                                    compact={data.compact}
+                                    item={{
+                                        id: 'ambient_mode',
+                                        title: `Mode: ${theme}`,
+                                        icon: isDarkMode ? Moon : Sun,
+                                        link: '#',
+                                        onItemClick: () => {
+                                            switch (theme) {
+                                                case 'light':
+                                                    return setTheme(
+                                                        isSystemDark ? 'dark' : 'system',
+                                                    );
+                                                case 'dark':
+                                                    return setTheme(
+                                                        isSystemDark ? 'system' : 'light',
+                                                    );
+                                                default:
+                                                    return setTheme(isDarkMode ? 'light' : 'dark');
+                                            }
+                                        },
+                                    }}
+                                />
+                                <FooterItem
+                                    compact={data.compact}
+                                    item={{
+                                        id: 'about',
+                                        title: 'About',
+                                        link: '/about',
+                                        icon: CircleQuestion,
+                                    }}
+                                />
+                                <FooterItem
+                                    compact={data.compact}
+                                    item={{
+                                        id: 'api',
+                                        title: 'API',
+                                        link: '/api/v1/docs',
+                                        icon: AbbrApi,
+                                    }}
+                                />
+                            </>
+                        );
+                    }}
+                    renderContent={() => children}
+                />
+            </Suspense>
         </ThemeProvider>
     );
 };

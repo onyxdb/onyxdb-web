@@ -68,7 +68,7 @@ export default function CreateAccountPage() {
                 if (selectedOrganizationUnitId && response.data.id) {
                     const organizationUnitsApi = new OrganizationUnitsApi();
                     await organizationUnitsApi.addAccountToOrganizationUnit({
-                        ouId: selectedOrganizationUnitId,
+                        organizationUnitId: selectedOrganizationUnitId,
                         accountId: response.data.id,
                     });
                 }

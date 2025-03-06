@@ -5295,6 +5295,52 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         },
         /**
          *
+         * @summary Получение родительских элементов organization-unit
+         * @param {string} ouId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOrganizationUnitParents: async (
+            ouId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('getOrganizationUnitParents', 'ouId', ouId);
+            const localVarPath = `/api/v1/organization-units/{ouId}/parents`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
          * @param {string} ouId
          * @param {string} accountId
@@ -5630,6 +5676,36 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Получение родительских элементов organization-unit
+         * @param {string} ouId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getOrganizationUnitParents(
+            ouId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrganizationUnitDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOrganizationUnitParents(
+                ouId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['OrganizationUnitsApi.getOrganizationUnitParents']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
          * @param {string} ouId
          * @param {string} accountId
@@ -5824,6 +5900,21 @@ export const OrganizationUnitsApiFactory = function (
         },
         /**
          *
+         * @summary Получение родительских элементов organization-unit
+         * @param {OrganizationUnitsApiGetOrganizationUnitParentsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOrganizationUnitParents(
+            requestParameters: OrganizationUnitsApiGetOrganizationUnitParentsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<OrganizationUnitDTO>> {
+            return localVarFp
+                .getOrganizationUnitParents(requestParameters.ouId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
          * @param {OrganizationUnitsApiRemoveAccountFromOrganizationUnitRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -5985,6 +6076,20 @@ export interface OrganizationUnitsApiGetOrganizationUnitChildrenRequest {
      *
      * @type {string}
      * @memberof OrganizationUnitsApiGetOrganizationUnitChildren
+     */
+    readonly ouId: string;
+}
+
+/**
+ * Request parameters for getOrganizationUnitParents operation in OrganizationUnitsApi.
+ * @export
+ * @interface OrganizationUnitsApiGetOrganizationUnitParentsRequest
+ */
+export interface OrganizationUnitsApiGetOrganizationUnitParentsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OrganizationUnitsApiGetOrganizationUnitParents
      */
     readonly ouId: string;
 }
@@ -6164,6 +6269,23 @@ export class OrganizationUnitsApi extends BaseAPI {
     ) {
         return OrganizationUnitsApiFp(this.configuration)
             .getOrganizationUnitChildren(requestParameters.ouId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Получение родительских элементов organization-unit
+     * @param {OrganizationUnitsApiGetOrganizationUnitParentsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrganizationUnitsApi
+     */
+    public getOrganizationUnitParents(
+        requestParameters: OrganizationUnitsApiGetOrganizationUnitParentsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return OrganizationUnitsApiFp(this.configuration)
+            .getOrganizationUnitParents(requestParameters.ouId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 

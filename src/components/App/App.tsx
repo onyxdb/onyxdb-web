@@ -48,13 +48,13 @@ function useIsSystemDark() {
 export const App: React.FC<AppProps> = ({children}) => {
     const isSystemDark = useIsSystemDark();
 
-    const [theme, setTheme] = useCookie<'system' | 'dark' | 'light'>(
+    const [theme, setTheme] = useCookie<'dark' | 'light'>(
         'ambient_mode',
-        stringCookie<'system' | 'dark' | 'light'>('system'),
+        stringCookie<'dark' | 'light'>('dark'),
     );
     const [asideCollapsed, setAsideCollapsed] = useCookie('aside_collapsed', booleanCookie(false));
 
-    const isDarkMode = theme === 'dark' || (theme === 'system' && isSystemDark);
+    const isDarkMode = theme === 'dark';
 
     const menuItems = [
         {
@@ -66,7 +66,7 @@ export const App: React.FC<AppProps> = ({children}) => {
         {
             title: 'Оргструктура',
             icon: Persons,
-            link: '/structure',
+            link: '/dc',
         },
         {
             // id: 'access',
@@ -126,11 +126,11 @@ export const App: React.FC<AppProps> = ({children}) => {
                                             switch (theme) {
                                                 case 'light':
                                                     return setTheme(
-                                                        isSystemDark ? 'dark' : 'system',
+                                                        isSystemDark ? 'dark' : 'light',
                                                     );
                                                 case 'dark':
                                                     return setTheme(
-                                                        isSystemDark ? 'system' : 'light',
+                                                        isSystemDark ? 'dark' : 'light',
                                                     );
                                                 default:
                                                     return setTheme(isDarkMode ? 'light' : 'dark');

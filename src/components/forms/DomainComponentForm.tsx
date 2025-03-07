@@ -2,18 +2,23 @@
 
 import React from 'react';
 import {useFormik} from 'formik';
-import {Button} from '@gravity-ui/uikit';
+import {Button, Text} from '@gravity-ui/uikit';
 import {DomainComponentDTO} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {Box} from '@/components/Layout/Box';
+import {TextAreaField} from '@/components/formik/TextAreaField';
 
 interface DomainComponentFormProps {
     initialValue?: DomainComponentDTO;
     onSubmit: (values: DomainComponentDTO) => void;
+    onClose: () => void;
 }
 
 export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
     initialValue,
     onSubmit,
+    onClose,
 }) => {
     const formik = useFormik<DomainComponentDTO>({
         initialValues: initialValue ?? {
@@ -26,6 +31,9 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
             if (!values.name) {
                 errors.name = 'Имя обязательно';
             }
+            if (!values.description) {
+                errors.description = 'Описание обязательно';
+            }
             return errors;
         },
         onSubmit,
@@ -33,11 +41,11 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
 
     return (
         <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
-            <h1>
+            <Text variant="header-1">
                 {initialValue
                     ? 'Редактирование Domain Component'
                     : 'Создание нового Domain Component'}
-            </h1>
+            </Text>
             <form onSubmit={formik.handleSubmit}>
                 <InputField
                     label="Название"
@@ -48,7 +56,7 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
                     error={formik.touched.name ? formik.errors.name : undefined}
                     placeholder="Введите название"
                 />
-                <InputField
+                <TextAreaField
                     label="Описание"
                     name="description"
                     value={formik.values.description ?? ''}
@@ -57,9 +65,16 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
                     error={formik.touched.description ? formik.errors.description : undefined}
                     placeholder="Введите описание"
                 />
-                <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
-                    {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}
-                </Button>
+                <HorizontalStack>
+                    <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
+                        {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                    </Button>
+                    <Box marginLeft="10px">
+                        <Button view="normal" onClick={onClose}>
+                            Закрыть
+                        </Button>
+                    </Box>
+                </HorizontalStack>
             </form>
         </div>
     );

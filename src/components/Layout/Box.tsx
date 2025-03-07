@@ -12,6 +12,8 @@ interface BoxProps {
     paddingRight?: string | number;
     paddingBottom?: string | number;
     paddingLeft?: string | number;
+    width?: string | number;
+    height?: string | number;
     style?: CSSProperties;
 }
 
@@ -27,6 +29,8 @@ export const Box: React.FC<BoxProps> = ({
     paddingRight,
     paddingBottom,
     paddingLeft,
+    width,
+    height,
     style,
 }) => {
     const boxStyle: CSSProperties = {
@@ -40,6 +44,8 @@ export const Box: React.FC<BoxProps> = ({
         paddingRight,
         paddingBottom,
         paddingLeft,
+        width,
+        height,
         ...style,
     };
 

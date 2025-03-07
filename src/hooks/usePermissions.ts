@@ -4,12 +4,22 @@ interface Permissions {
     [key: string]: any;
 }
 
+interface Action {
+    name: string;
+    action?: string;
+}
+
 export const usePermissions = () => {
     const [permissions, setPermissions] = useState<Permissions>({});
 
     useEffect(() => {
         setPermissions({
-            'web-global-business-roles': {},
+            'web-global-domain-components-create': {},
+            'web-global-domain-components-edit': {},
+            'web-global-domain-components-delete': {},
+            'web-global-business-roles-create': {},
+            'web-global-business-roles-edit': {},
+            'web-global-business-roles-delete': {},
             'web-product-123-edit': {},
             'web-product-123-view': {},
         });
@@ -18,5 +28,18 @@ export const usePermissions = () => {
         //     .catch((error) => console.error('Error fetching permissions:', error));
     }, []);
 
-    return {permissions};
+    function checkActions(actions: Action[]) {
+        for (const action of actions) {
+            if (permissions[action.name] || permissions[`${action.name}-${action.action}`]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkPermission(name: string, action?: string) {
+        return Boolean(permissions[name] || permissions[`${name}-${action}`]);
+    }
+
+    return {permissions, checkActions, checkPermission};
 };

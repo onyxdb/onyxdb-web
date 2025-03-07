@@ -1,42 +1,60 @@
 'use client';
 
 import React from 'react';
-import {Button, Card} from '@gravity-ui/uikit';
-import {OrganizationUnitDTO} from '@/generated/api';
-import {Pencil} from '@gravity-ui/icons';
-import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
+import {Pencil, TrashBin} from '@gravity-ui/icons';
+import {DomainComponentDTO} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
-import {Spacer} from '@/components/Layout/Spacer';
-import {OrgUnitBlock} from '@/components/OrgUnitBlockSmall';
+import {usePermissions} from '@/hooks/usePermissions';
 
 interface DomainComponentProps {
-    id: string;
-    name: string;
-    roots: OrganizationUnitDTO[];
+    data: DomainComponentDTO;
     onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+    onClick: () => void;
+    isActive: boolean;
 }
 
-export const DomainComponentBlock: React.FC<DomainComponentProps> = ({id, name, roots, onEdit}) => {
-    const handleEdit = () => {
-        onEdit(id);
-    };
+export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
+    data,
+    onEdit,
+    onDelete,
+    onClick,
+    isActive,
+}) => {
+    const {checkPermission} = usePermissions();
 
     return (
-        <Card style={{marginBottom: '20px', width: '300px'}}>
-            <div style={{padding: '16px'}}>
-                <HorizontalStack align="center">
-                    <div style={{fontWeight: 'bold'}}>
-                        <h2>{name}</h2>
-                    </div>
-                    <Spacer />
-                    <Button view="normal" size="m" onClick={handleEdit}>
-                        <Pencil />
-                    </Button>
-                </HorizontalStack>
-                <Box marginBottom="12px">
-                    {roots.map((root) => (
-                        <OrgUnitBlock data={root} />
-                    ))}
+        <Card
+            type="selection"
+            onClick={onClick}
+            selected={isActive}
+            style={{marginBottom: '10px', padding: '16px'}}
+        >
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div>
+                    <Text variant="header-1">{data.name}</Text>
+                    <Text variant="subheader-1" color="secondary" ellipsis={true}>
+                        {data.description}
+                    </Text>
+                </div>
+                <Box marginLeft="10px">
+                    {checkPermission('web-global-domain-components', 'create') && (
+                        <Box marginBottom="5px">
+                            <Button view="normal" size="m" onClick={() => onEdit(data.id ?? '???')}>
+                                <Icon data={Pencil} />
+                            </Button>
+                        </Box>
+                    )}
+                    {checkPermission('web-global-domain-components', 'delete') && (
+                        <Button
+                            view="outlined-danger"
+                            size="m"
+                            onClick={() => onDelete(data.id ?? '???')}
+                        >
+                            <Icon data={TrashBin} />
+                        </Button>
+                    )}
                 </Box>
             </div>
         </Card>

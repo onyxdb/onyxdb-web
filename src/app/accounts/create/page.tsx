@@ -5,9 +5,9 @@ import React, {useState} from 'react';
 import {useFormik} from 'formik';
 import {Button} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {AccountsApi, OrganizationUnitsApi} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {OrganizationUnitSelector} from '@/components/formik/OrganizationUnitSelector';
+import {accountsApi, organizationUnitsApi} from '@/app/apis';
 
 interface AccountFormValues {
     username: string;
@@ -62,11 +62,9 @@ export default function CreateAccountPage() {
         },
         onSubmit: async (values) => {
             try {
-                const accountsApi = new AccountsApi();
                 const response = await accountsApi.createAccount({accountDTO: values});
 
                 if (selectedOrganizationUnitId && response.data.id) {
-                    const organizationUnitsApi = new OrganizationUnitsApi();
                     await organizationUnitsApi.addAccountToOrganizationUnit({
                         ouId: selectedOrganizationUnitId,
                         accountId: response.data.id,

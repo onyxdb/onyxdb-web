@@ -3,9 +3,10 @@
 import React, {useEffect, useState} from 'react';
 import {Card, Label, User} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {AccountDTO, AccountsApi, OrganizationUnitDTO} from '@/generated/api';
+import {AccountDTO, OrganizationUnitDTO} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
+import {accountsApi} from '@/app/apis';
 
 interface DomainComponentProps {
     data: OrganizationUnitDTO;
@@ -17,11 +18,11 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({data}) => {
     const [owner, setOwner] = useState<AccountDTO | null>(null);
 
     useEffect(() => {
-        const api = new AccountsApi();
         if (data.ownerId) {
-            api.getAccountById({accountId: data.ownerId})
+            accountsApi
+                .getAccountById({accountId: data.ownerId})
                 .then((response) => setOwner(response.data))
-                .catch((error) => console.error('Error fetching product:', error));
+                .catch((error) => console.error('Error fetching account:', error));
         } else {
             setOwner({
                 username: '???',

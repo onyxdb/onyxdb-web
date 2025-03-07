@@ -13,25 +13,25 @@
  */
 
 import type {Configuration} from './configuration';
-import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from 'axios';
+import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-    DUMMY_BASE_URL,
     assertParamExists,
+    createRequestFunction,
+    DUMMY_BASE_URL,
+    serializeDataIfNeeded,
     setApiKeyToObject,
     setBasicAuthToObject,
     setBearerAuthToObject,
     setOAuthToObject,
     setSearchParams,
-    serializeDataIfNeeded,
     toPathString,
-    createRequestFunction,
 } from './common';
 import type {RequestArgs} from './base';
 // @ts-ignore
-import {BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap} from './base';
+import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
 
 /**
  *
@@ -94,6 +94,7 @@ export interface AccountDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -107,6 +108,7 @@ export interface BadRequestResponse {
      */
     message: string;
 }
+
 /**
  *
  * @export
@@ -162,6 +164,7 @@ export interface BusinessRoleDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -175,6 +178,7 @@ export interface CheckPermission200Response {
      */
     hasAccess?: boolean;
 }
+
 /**
  *
  * @export
@@ -212,6 +216,7 @@ export interface DomainComponentDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -229,8 +234,9 @@ export interface DomainTreeDTO {
      * @type {Array<OrganizationTreeDTO>}
      * @memberof DomainTreeDTO
      */
-    children?: Array<OrganizationTreeDTO>;
+    children: Array<OrganizationTreeDTO>;
 }
+
 /**
  *
  * @export
@@ -262,6 +268,7 @@ export interface GetCurrentUser200Response {
      */
     roles: Array<string>;
 }
+
 /**
  *
  * @export
@@ -281,6 +288,7 @@ export interface Login200Response {
      */
     refreshToken: string;
 }
+
 /**
  *
  * @export
@@ -300,6 +308,7 @@ export interface LoginRequest {
      */
     password: string;
 }
+
 /**
  *
  * @export
@@ -313,6 +322,7 @@ export interface LogoutRequest {
      */
     refreshToken: string;
 }
+
 /**
  *
  * @export
@@ -326,6 +336,7 @@ export interface NotFoundResponse {
      */
     message: string;
 }
+
 /**
  *
  * @export
@@ -334,11 +345,18 @@ export interface NotFoundResponse {
 export interface OrganizationTreeDTO {
     /**
      *
+     * @type {Array<OrganizationTreeDTO>}
+     * @memberof OrganizationTreeDTO
+     */
+    items: Array<OrganizationTreeDTO>;
+    /**
+     *
      * @type {OrganizationUnitDTO}
      * @memberof OrganizationTreeDTO
      */
-    item: OrganizationUnitDTO;
+    unit: OrganizationUnitDTO;
 }
+
 /**
  *
  * @export
@@ -368,7 +386,7 @@ export interface OrganizationUnitDTO {
      * @type {string}
      * @memberof OrganizationUnitDTO
      */
-    domainComponentId: string;
+    domainComponentId?: string;
     /**
      *
      * @type {string}
@@ -394,6 +412,7 @@ export interface OrganizationUnitDTO {
      */
     ownerId?: string;
 }
+
 /**
  *
  * @export
@@ -425,6 +444,7 @@ export interface PaginatedAccountResponse {
      */
     data: Array<AccountDTO>;
 }
+
 /**
  *
  * @export
@@ -456,6 +476,7 @@ export interface PaginatedBusinessRoleResponse {
      */
     data: Array<BusinessRoleDTO>;
 }
+
 /**
  *
  * @export
@@ -487,6 +508,7 @@ export interface PaginatedOrganizationUnitResponse {
      */
     data: Array<OrganizationUnitDTO>;
 }
+
 /**
  *
  * @export
@@ -518,6 +540,7 @@ export interface PaginatedRoleRequestResponse {
      */
     data: Array<RoleRequestDTO>;
 }
+
 /**
  *
  * @export
@@ -549,6 +572,7 @@ export interface PaginatedRoleResponse {
      */
     data: Array<RoleDTO>;
 }
+
 /**
  *
  * @export
@@ -592,6 +616,7 @@ export interface PermissionDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -647,6 +672,7 @@ export interface ProductDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -666,6 +692,7 @@ export interface ProductTreeDTO {
      */
     children?: Array<ProductTreeDTO>;
 }
+
 /**
  *
  * @export
@@ -679,6 +706,7 @@ export interface RefreshToken200Response {
      */
     accessToken: string;
 }
+
 /**
  *
  * @export
@@ -746,6 +774,7 @@ export interface RoleDTO {
      */
     updatedAt?: string;
 }
+
 /**
  *
  * @export
@@ -830,6 +859,7 @@ export interface RoleWithPermissionsDTO {
      */
     permissions: Array<PermissionDTO>;
 }
+
 /**
  *
  * @export

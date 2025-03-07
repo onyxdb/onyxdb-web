@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'next/navigation';
 import {ProductDTO, ProductsApi} from '@/generated/api';
+import {Loader} from '@gravity-ui/uikit';
 
 export default function ProductInfoPage() {
     const params = useParams();
@@ -18,7 +19,11 @@ export default function ProductInfoPage() {
     }, [productId]);
 
     if (!product) {
-        return <div>Загрузка...</div>;
+        return (
+            <div>
+                <Loader />
+            </div>
+        );
     }
 
     return (

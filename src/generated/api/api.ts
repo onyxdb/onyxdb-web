@@ -13,25 +13,25 @@
  */
 
 import type {Configuration} from './configuration';
-import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
+import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-    assertParamExists,
-    createRequestFunction,
     DUMMY_BASE_URL,
-    serializeDataIfNeeded,
+    assertParamExists,
     setApiKeyToObject,
     setBasicAuthToObject,
     setBearerAuthToObject,
     setOAuthToObject,
     setSearchParams,
+    serializeDataIfNeeded,
     toPathString,
+    createRequestFunction,
 } from './common';
 import type {RequestArgs} from './base';
 // @ts-ignore
-import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
+import {BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap} from './base';
 
 /**
  *
@@ -50,7 +50,7 @@ export interface AccountDTO {
      * @type {string}
      * @memberof AccountDTO
      */
-    username?: string;
+    username: string;
     /**
      *
      * @type {string}
@@ -62,7 +62,7 @@ export interface AccountDTO {
      * @type {string}
      * @memberof AccountDTO
      */
-    email?: string;
+    email: string;
     /**
      *
      * @type {string}
@@ -94,7 +94,6 @@ export interface AccountDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -108,7 +107,6 @@ export interface BadRequestResponse {
      */
     message: string;
 }
-
 /**
  *
  * @export
@@ -126,13 +124,19 @@ export interface BusinessRoleDTO {
      * @type {string}
      * @memberof BusinessRoleDTO
      */
-    name?: string;
+    name: string;
     /**
      *
      * @type {string}
      * @memberof BusinessRoleDTO
      */
-    description?: string;
+    shopName?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof BusinessRoleDTO
+     */
+    description: string;
     /**
      *
      * @type {string}
@@ -158,7 +162,6 @@ export interface BusinessRoleDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -172,7 +175,6 @@ export interface CheckPermission200Response {
      */
     hasAccess?: boolean;
 }
-
 /**
  *
  * @export
@@ -190,13 +192,13 @@ export interface DomainComponentDTO {
      * @type {string}
      * @memberof DomainComponentDTO
      */
-    name?: string;
+    name: string;
     /**
      *
      * @type {string}
      * @memberof DomainComponentDTO
      */
-    description?: string;
+    description: string;
     /**
      *
      * @type {string}
@@ -210,7 +212,25 @@ export interface DomainComponentDTO {
      */
     updatedAt?: string;
 }
-
+/**
+ *
+ * @export
+ * @interface DomainTreeDTO
+ */
+export interface DomainTreeDTO {
+    /**
+     *
+     * @type {DomainComponentDTO}
+     * @memberof DomainTreeDTO
+     */
+    item: DomainComponentDTO;
+    /**
+     *
+     * @type {Array<OrganizationTreeDTO>}
+     * @memberof DomainTreeDTO
+     */
+    children?: Array<OrganizationTreeDTO>;
+}
 /**
  *
  * @export
@@ -222,27 +242,26 @@ export interface GetCurrentUser200Response {
      * @type {string}
      * @memberof GetCurrentUser200Response
      */
-    id?: string;
+    id: string;
     /**
      *
      * @type {string}
      * @memberof GetCurrentUser200Response
      */
-    username?: string;
+    username: string;
     /**
      *
      * @type {string}
      * @memberof GetCurrentUser200Response
      */
-    email?: string;
+    email: string;
     /**
      *
      * @type {Array<string>}
      * @memberof GetCurrentUser200Response
      */
-    roles?: Array<string>;
+    roles: Array<string>;
 }
-
 /**
  *
  * @export
@@ -254,15 +273,14 @@ export interface Login200Response {
      * @type {string}
      * @memberof Login200Response
      */
-    accessToken?: string;
+    accessToken: string;
     /**
      *
      * @type {string}
      * @memberof Login200Response
      */
-    refreshToken?: string;
+    refreshToken: string;
 }
-
 /**
  *
  * @export
@@ -274,15 +292,14 @@ export interface LoginRequest {
      * @type {string}
      * @memberof LoginRequest
      */
-    username?: string;
+    username: string;
     /**
      *
      * @type {string}
      * @memberof LoginRequest
      */
-    password?: string;
+    password: string;
 }
-
 /**
  *
  * @export
@@ -294,9 +311,8 @@ export interface LogoutRequest {
      * @type {string}
      * @memberof LogoutRequest
      */
-    refreshToken?: string;
+    refreshToken: string;
 }
-
 /**
  *
  * @export
@@ -310,7 +326,19 @@ export interface NotFoundResponse {
      */
     message: string;
 }
-
+/**
+ *
+ * @export
+ * @interface OrganizationTreeDTO
+ */
+export interface OrganizationTreeDTO {
+    /**
+     *
+     * @type {OrganizationUnitDTO}
+     * @memberof OrganizationTreeDTO
+     */
+    item: OrganizationUnitDTO;
+}
 /**
  *
  * @export
@@ -328,19 +356,19 @@ export interface OrganizationUnitDTO {
      * @type {string}
      * @memberof OrganizationUnitDTO
      */
-    name?: string;
+    name: string;
     /**
      *
      * @type {string}
      * @memberof OrganizationUnitDTO
      */
-    description?: string;
+    description: string;
     /**
      *
      * @type {string}
      * @memberof OrganizationUnitDTO
      */
-    domainComponentId?: string;
+    domainComponentId: string;
     /**
      *
      * @type {string}
@@ -366,7 +394,6 @@ export interface OrganizationUnitDTO {
      */
     ownerId?: string;
 }
-
 /**
  *
  * @export
@@ -378,27 +405,26 @@ export interface PaginatedAccountResponse {
      * @type {number}
      * @memberof PaginatedAccountResponse
      */
-    totalCount?: number;
+    totalCount: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedAccountResponse
      */
-    startPosition?: number;
+    startPosition: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedAccountResponse
      */
-    endPosition?: number;
+    endPosition: number;
     /**
      *
      * @type {Array<AccountDTO>}
      * @memberof PaginatedAccountResponse
      */
-    data?: Array<AccountDTO>;
+    data: Array<AccountDTO>;
 }
-
 /**
  *
  * @export
@@ -410,27 +436,26 @@ export interface PaginatedBusinessRoleResponse {
      * @type {number}
      * @memberof PaginatedBusinessRoleResponse
      */
-    totalCount?: number;
+    totalCount: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedBusinessRoleResponse
      */
-    startPosition?: number;
+    startPosition: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedBusinessRoleResponse
      */
-    endPosition?: number;
+    endPosition: number;
     /**
      *
      * @type {Array<BusinessRoleDTO>}
      * @memberof PaginatedBusinessRoleResponse
      */
-    data?: Array<BusinessRoleDTO>;
+    data: Array<BusinessRoleDTO>;
 }
-
 /**
  *
  * @export
@@ -442,27 +467,26 @@ export interface PaginatedOrganizationUnitResponse {
      * @type {number}
      * @memberof PaginatedOrganizationUnitResponse
      */
-    totalCount?: number;
+    totalCount: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedOrganizationUnitResponse
      */
-    startPosition?: number;
+    startPosition: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedOrganizationUnitResponse
      */
-    endPosition?: number;
+    endPosition: number;
     /**
      *
      * @type {Array<OrganizationUnitDTO>}
      * @memberof PaginatedOrganizationUnitResponse
      */
-    data?: Array<OrganizationUnitDTO>;
+    data: Array<OrganizationUnitDTO>;
 }
-
 /**
  *
  * @export
@@ -474,27 +498,26 @@ export interface PaginatedRoleRequestResponse {
      * @type {number}
      * @memberof PaginatedRoleRequestResponse
      */
-    totalCount?: number;
+    totalCount: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedRoleRequestResponse
      */
-    startPosition?: number;
+    startPosition: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedRoleRequestResponse
      */
-    endPosition?: number;
+    endPosition: number;
     /**
      *
      * @type {Array<RoleRequestDTO>}
      * @memberof PaginatedRoleRequestResponse
      */
-    data?: Array<RoleRequestDTO>;
+    data: Array<RoleRequestDTO>;
 }
-
 /**
  *
  * @export
@@ -506,27 +529,26 @@ export interface PaginatedRoleResponse {
      * @type {number}
      * @memberof PaginatedRoleResponse
      */
-    totalCount?: number;
+    totalCount: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedRoleResponse
      */
-    startPosition?: number;
+    startPosition: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedRoleResponse
      */
-    endPosition?: number;
+    endPosition: number;
     /**
      *
      * @type {Array<RoleDTO>}
      * @memberof PaginatedRoleResponse
      */
-    data?: Array<RoleDTO>;
+    data: Array<RoleDTO>;
 }
-
 /**
  *
  * @export
@@ -544,13 +566,13 @@ export interface PermissionDTO {
      * @type {string}
      * @memberof PermissionDTO
      */
-    actionType?: string;
+    actionType: string;
     /**
      *
      * @type {string}
      * @memberof PermissionDTO
      */
-    resourceType?: string;
+    resourceType: string;
     /**
      *
      * @type {{ [key: string]: object; }}
@@ -570,7 +592,6 @@ export interface PermissionDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -588,13 +609,13 @@ export interface ProductDTO {
      * @type {string}
      * @memberof ProductDTO
      */
-    name?: string;
+    name: string;
     /**
      *
      * @type {string}
      * @memberof ProductDTO
      */
-    description?: string;
+    description: string;
     /**
      *
      * @type {string}
@@ -626,7 +647,6 @@ export interface ProductDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -638,7 +658,7 @@ export interface ProductTreeDTO {
      * @type {ProductDTO}
      * @memberof ProductTreeDTO
      */
-    product?: ProductDTO;
+    item?: ProductDTO;
     /**
      *
      * @type {Array<ProductTreeDTO>}
@@ -646,7 +666,6 @@ export interface ProductTreeDTO {
      */
     children?: Array<ProductTreeDTO>;
 }
-
 /**
  *
  * @export
@@ -658,9 +677,8 @@ export interface RefreshToken200Response {
      * @type {string}
      * @memberof RefreshToken200Response
      */
-    accessToken?: string;
+    accessToken: string;
 }
-
 /**
  *
  * @export
@@ -678,31 +696,31 @@ export interface RoleDTO {
      * @type {string}
      * @memberof RoleDTO
      */
-    roleType?: string;
+    roleType: string;
     /**
      *
      * @type {string}
      * @memberof RoleDTO
      */
-    name?: string;
+    name: string;
     /**
      *
      * @type {string}
      * @memberof RoleDTO
      */
-    shopName?: string;
+    shopName: string;
     /**
      *
      * @type {boolean}
      * @memberof RoleDTO
      */
-    isShopHidden?: boolean;
+    isShopHidden: boolean;
     /**
      *
      * @type {string}
      * @memberof RoleDTO
      */
-    description?: string;
+    description: string;
     /**
      *
      * @type {string}
@@ -728,7 +746,6 @@ export interface RoleDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -746,13 +763,13 @@ export interface RoleRequestDTO {
      * @type {string}
      * @memberof RoleRequestDTO
      */
-    roleId?: string;
+    roleId: string;
     /**
      *
      * @type {string}
      * @memberof RoleRequestDTO
      */
-    accountId?: string;
+    accountId: string;
     /**
      *
      * @type {string}
@@ -764,13 +781,13 @@ export interface RoleRequestDTO {
      * @type {string}
      * @memberof RoleRequestDTO
      */
-    reason?: string;
+    reason: string;
     /**
      *
      * @type {string}
      * @memberof RoleRequestDTO
      */
-    status?: RoleRequestDTOStatusEnum;
+    status: RoleRequestDTOStatusEnum;
     /**
      *
      * @type {string}
@@ -805,15 +822,14 @@ export interface RoleWithPermissionsDTO {
      * @type {RoleDTO}
      * @memberof RoleWithPermissionsDTO
      */
-    role?: RoleDTO;
+    role: RoleDTO;
     /**
      *
      * @type {Array<PermissionDTO>}
      * @memberof RoleWithPermissionsDTO
      */
-    permissions?: Array<PermissionDTO>;
+    permissions: Array<PermissionDTO>;
 }
-
 /**
  *
  * @export
@@ -4408,6 +4424,52 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          *
+         * @summary Get a domain component tree
+         * @param {string} dcId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDomainComponentTree: async (
+            dcId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'dcId' is not null or undefined
+            assertParamExists('getDomainComponentTree', 'dcId', dcId);
+            const localVarPath = `/api/v1/domain-components/{dcId}/tree`.replace(
+                `{${'dcId'}}`,
+                encodeURIComponent(String(dcId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Update a domain component by ID
          * @param {string} dcId
          * @param {DomainComponentDTO} domainComponentDTO
@@ -4616,6 +4678,34 @@ export const DomainComponentsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get a domain component tree
+         * @param {string} dcId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDomainComponentTree(
+            dcId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DomainTreeDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDomainComponentTree(
+                dcId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['DomainComponentsApi.getDomainComponentTree']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Update a domain component by ID
          * @param {string} dcId
          * @param {DomainComponentDTO} domainComponentDTO
@@ -4734,6 +4824,21 @@ export const DomainComponentsApiFactory = function (
         },
         /**
          *
+         * @summary Get a domain component tree
+         * @param {DomainComponentsApiGetDomainComponentTreeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDomainComponentTree(
+            requestParameters: DomainComponentsApiGetDomainComponentTreeRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<DomainTreeDTO> {
+            return localVarFp
+                .getDomainComponentTree(requestParameters.dcId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Update a domain component by ID
          * @param {DomainComponentsApiUpdateDomainComponentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4806,6 +4911,20 @@ export interface DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequ
      *
      * @type {string}
      * @memberof DomainComponentsApiGetDomainComponentRootsOrganizationUnits
+     */
+    readonly dcId: string;
+}
+
+/**
+ * Request parameters for getDomainComponentTree operation in DomainComponentsApi.
+ * @export
+ * @interface DomainComponentsApiGetDomainComponentTreeRequest
+ */
+export interface DomainComponentsApiGetDomainComponentTreeRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof DomainComponentsApiGetDomainComponentTree
      */
     readonly dcId: string;
 }
@@ -4916,6 +5035,23 @@ export class DomainComponentsApi extends BaseAPI {
     ) {
         return DomainComponentsApiFp(this.configuration)
             .getDomainComponentRootsOrganizationUnits(requestParameters.dcId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get a domain component tree
+     * @param {DomainComponentsApiGetDomainComponentTreeRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DomainComponentsApi
+     */
+    public getDomainComponentTree(
+        requestParameters: DomainComponentsApiGetDomainComponentTreeRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return DomainComponentsApiFp(this.configuration)
+            .getDomainComponentTree(requestParameters.dcId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -5341,6 +5477,52 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         },
         /**
          *
+         * @summary Получение дерева organization-unit
+         * @param {string} ouId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOrganizationUnitTree: async (
+            ouId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'ouId' is not null or undefined
+            assertParamExists('getOrganizationUnitTree', 'ouId', ouId);
+            const localVarPath = `/api/v1/organization-units/{ouId}/tree`.replace(
+                `{${'ouId'}}`,
+                encodeURIComponent(String(ouId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
          * @param {string} ouId
          * @param {string} accountId
@@ -5706,6 +5888,36 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Получение дерева organization-unit
+         * @param {string} ouId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getOrganizationUnitTree(
+            ouId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrganizationTreeDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOrganizationUnitTree(
+                ouId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['OrganizationUnitsApi.getOrganizationUnitTree']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
          * @param {string} ouId
          * @param {string} accountId
@@ -5915,6 +6127,21 @@ export const OrganizationUnitsApiFactory = function (
         },
         /**
          *
+         * @summary Получение дерева organization-unit
+         * @param {OrganizationUnitsApiGetOrganizationUnitTreeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOrganizationUnitTree(
+            requestParameters: OrganizationUnitsApiGetOrganizationUnitTreeRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<OrganizationTreeDTO> {
+            return localVarFp
+                .getOrganizationUnitTree(requestParameters.ouId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Delete account to org. unit link
          * @param {OrganizationUnitsApiRemoveAccountFromOrganizationUnitRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -6090,6 +6317,20 @@ export interface OrganizationUnitsApiGetOrganizationUnitParentsRequest {
      *
      * @type {string}
      * @memberof OrganizationUnitsApiGetOrganizationUnitParents
+     */
+    readonly ouId: string;
+}
+
+/**
+ * Request parameters for getOrganizationUnitTree operation in OrganizationUnitsApi.
+ * @export
+ * @interface OrganizationUnitsApiGetOrganizationUnitTreeRequest
+ */
+export interface OrganizationUnitsApiGetOrganizationUnitTreeRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OrganizationUnitsApiGetOrganizationUnitTree
      */
     readonly ouId: string;
 }
@@ -6286,6 +6527,23 @@ export class OrganizationUnitsApi extends BaseAPI {
     ) {
         return OrganizationUnitsApiFp(this.configuration)
             .getOrganizationUnitParents(requestParameters.ouId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Получение дерева organization-unit
+     * @param {OrganizationUnitsApiGetOrganizationUnitTreeRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrganizationUnitsApi
+     */
+    public getOrganizationUnitTree(
+        requestParameters: OrganizationUnitsApiGetOrganizationUnitTreeRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return OrganizationUnitsApiFp(this.configuration)
+            .getOrganizationUnitTree(requestParameters.ouId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 

@@ -60,7 +60,7 @@ export default function OrgViewPage({}: OrgViewPageProps) {
                 });
 
                 const currentOrgUnit = orgUnitsResponse.data.find(
-                    (orgUnit) => orgUnit.id === orgId,
+                    (orgUnitItem) => orgUnitItem.id === orgId,
                 );
                 if (!currentOrgUnit) {
                     throw Error(`Error fetching organization unit: ${currentOrgUnit}`);
@@ -75,7 +75,7 @@ export default function OrgViewPage({}: OrgViewPageProps) {
                 const items: BreadItems[] = [];
                 if (domainComponent) {
                     items.push({
-                        id: domainComponent.id,
+                        id: domainComponent.id ?? '???',
                         name: domainComponent.name,
                         href: currentOrgUnit.domainComponentId,
                     });

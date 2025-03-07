@@ -14,7 +14,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/:path*', // Все запросы, начинающиеся с /api
-                destination: 'http://localhost:9002/api/:path*', // Перенаправлять на бекенд
+                destination: 'http://localhost:9005/api/:path*', // Перенаправлять на бекенд
             },
         ];
     },

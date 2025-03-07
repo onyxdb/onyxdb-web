@@ -2,7 +2,8 @@
 
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'next/navigation';
-import {ProductDTO, ProductsApi} from '@/generated/api';
+import {ProductDTO} from '@/generated/api';
+import {productsApi} from '@/app/apis';
 
 export default function ProductInfoPage() {
     const params = useParams();
@@ -10,7 +11,6 @@ export default function ProductInfoPage() {
     const [product, setProduct] = useState<ProductDTO | null>(null);
 
     useEffect(() => {
-        const productsApi = new ProductsApi();
         productsApi
             .getProductById({productId})
             .then((response) => setProduct(response.data))

@@ -31,18 +31,24 @@ export function useCookie<T = string>(
     const {initial = null, serialize = JSON.stringify, deserialize = JSON.parse} = options;
 
     const [value, setValue] = useState<T | null>(() => {
-        const cookieValue = document.cookie.split('; ').find((row) => row.startsWith(`${key}=`));
-        if (cookieValue) {
-            return deserialize(cookieValue.split('=')[1]);
+        if (typeof window !== 'undefined') {
+            const cookieValue = document.cookie
+                .split('; ')
+                .find((row) => row.startsWith(`${key}=`));
+            if (cookieValue) {
+                return deserialize(cookieValue.split('=')[1]);
+            }
         }
         return initial;
     });
 
     useEffect(() => {
-        if (value === null) {
-            document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-        } else {
-            document.cookie = `${key}=${serialize(value)}; path=/`;
+        if (typeof window !== 'undefined') {
+            if (value === null) {
+                document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+            } else {
+                document.cookie = `${key}=${serialize(value)}; path=/`;
+            }
         }
     }, [key, value, serialize]);
 

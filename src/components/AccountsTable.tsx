@@ -57,7 +57,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) 
             template: (account) => (
                 <span
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/accounts/${account.id}/view`)}
+                    onClick={() => router.push(`/accounts/view/${account.id}`)}
                 >
                     {account.username}
                 </span>

@@ -386,7 +386,7 @@ export interface OrganizationUnitDTO {
      * @type {string}
      * @memberof OrganizationUnitDTO
      */
-    domainComponentId?: string;
+    domainComponentId: string;
     /**
      *
      * @type {string}
@@ -1168,6 +1168,52 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
+         * @summary Get account organization-units
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountOrganizationUnits: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountOrganizationUnits', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/organization-units`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Get account roles
          * @param {string} accountId
          * @param {*} [options] Override http request option.
@@ -1608,6 +1654,36 @@ export const AccountsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get account organization-units
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountOrganizationUnits(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrganizationUnitDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountOrganizationUnits(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountOrganizationUnits']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get account roles
          * @param {string} accountId
          * @param {*} [options] Override http request option.
@@ -1870,6 +1946,21 @@ export const AccountsApiFactory = function (
         },
         /**
          *
+         * @summary Get account organization-units
+         * @param {AccountsApiGetAccountOrganizationUnitsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountOrganizationUnits(
+            requestParameters: AccountsApiGetAccountOrganizationUnitsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<OrganizationUnitDTO>> {
+            return localVarFp
+                .getAccountOrganizationUnits(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Get account roles
          * @param {AccountsApiGetAccountRolesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2053,6 +2144,20 @@ export interface AccountsApiGetAccountByIdRequest {
      *
      * @type {string}
      * @memberof AccountsApiGetAccountById
+     */
+    readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAccountOrganizationUnits operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountOrganizationUnitsRequest
+ */
+export interface AccountsApiGetAccountOrganizationUnitsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountOrganizationUnits
      */
     readonly accountId: string;
 }
@@ -2272,6 +2377,23 @@ export class AccountsApi extends BaseAPI {
     ) {
         return AccountsApiFp(this.configuration)
             .getAccountById(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get account organization-units
+     * @param {AccountsApiGetAccountOrganizationUnitsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAccountOrganizationUnits(
+        requestParameters: AccountsApiGetAccountOrganizationUnitsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAccountOrganizationUnits(requestParameters.accountId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 

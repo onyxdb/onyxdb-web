@@ -6,7 +6,7 @@ import {Button, Modal} from '@gravity-ui/uikit';
 import {usePermissions} from '@/hooks/usePermissions';
 import {accountsApi} from '@/app/apis';
 import {AccountsTable} from '@/components/AccountsTable';
-import {AccountForm} from '@/components/forms/AccountForm';
+import {AccountForm, AccountFormDTO} from '@/components/forms/AccountForm';
 
 interface AccountsPageProps {}
 
@@ -14,7 +14,7 @@ interface AccountsPageProps {}
 export default function AccountsPage({}: AccountsPageProps) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState<AccountDTO | null>(null);
-    const {permissions} = usePermissions();
+    const {checkPermission} = usePermissions();
 
     const handleCreate = () => {
         setIsCreateModalOpen(true);
@@ -40,14 +40,16 @@ export default function AccountsPage({}: AccountsPageProps) {
             .deleteAccount({accountId})
             .then(() => {
                 console.log('Account deleted successfully');
-                // Перезагрузка таблицы
-                handleCreate(); // Просто чтобы закрыть модальное окно
+                // TODO: Сделать перезагрузку таблицы
             })
             .catch((error) => console.error('Error deleting account:', error));
     };
 
-    const handleSubmitCreate = async (values: AccountDTO) => {
+    const handleSubmitCreate = async (values: AccountFormDTO) => {
         try {
+            // @ts-ignore
+            // eslint-disable-next-line no-param-reassign
+            values.data = values.anyData;
             if (editingAccount) {
                 // Редактирование существующего аккаунта
                 await accountsApi.updateAccount({
@@ -75,7 +77,7 @@ export default function AccountsPage({}: AccountsPageProps) {
                 }}
             >
                 <h1>Аккаунты</h1>
-                {permissions['web-global-create'] && (
+                {checkPermission('web-global-account', 'create') && (
                     <Button view="action" size="l" onClick={handleCreate}>
                         Создать аккаунт
                     </Button>
@@ -83,15 +85,11 @@ export default function AccountsPage({}: AccountsPageProps) {
             </div>
             <AccountsTable onEdit={handleEdit} onDelete={handleDelete} />
             <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
-                <h2>{editingAccount ? 'Редактирование аккаунта' : 'Создание нового аккаунта'}</h2>
                 <AccountForm
                     initialValue={editingAccount ?? undefined}
                     onSubmit={handleSubmitCreate}
                     onClose={handleCloseCreateModal}
                 />
-                <Button view="normal" onClick={handleCloseCreateModal}>
-                    Закрыть
-                </Button>
             </Modal>
         </div>
     );

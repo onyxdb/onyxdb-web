@@ -23,6 +23,9 @@ export const usePermissions = () => {
             'web-global-business-roles-create': {},
             'web-global-business-roles-edit': {},
             'web-global-business-roles-delete': {},
+            'web-global-account-create': {},
+            'web-global-account-edit': {},
+            'web-global-account-delete': {},
             'web-product-123-edit': {},
             'web-product-123-view': {},
         });

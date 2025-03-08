@@ -66,7 +66,7 @@ export const App: React.FC<AppProps> = ({children}) => {
         {
             title: 'Оргструктура',
             icon: Persons,
-            link: '/dc',
+            link: '/structure',
         },
         {
             // id: 'access',
@@ -94,7 +94,13 @@ export const App: React.FC<AppProps> = ({children}) => {
 
     return (
         <ThemeProvider theme={theme ?? 'system'}>
-            <Suspense fallback={<Loader />}>
+            <Suspense
+                fallback={
+                    <div style={{margin: 'auto'}}>
+                        <Loader size="l" />
+                    </div>
+                }
+            >
                 <AsideHeader
                     headerDecoration={true}
                     compact={asideCollapsed ?? false}

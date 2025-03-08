@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Text, User} from '@gravity-ui/uikit';
+import {Button, Card, Icon, Text, User} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {AccountDTO, OrganizationUnitDTO} from '@/generated/api';
 import {Eye} from '@gravity-ui/icons';
@@ -11,7 +11,7 @@ import {Box} from '@/components/Layout/Box';
 
 interface OrganizationUnitSmallCardProps {
     orgUnit: OrganizationUnitDTO;
-    onSelect: (ouId: OrganizationUnitDTO) => void;
+    onSelect: (ou: OrganizationUnitDTO) => void;
 }
 
 export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps> = ({
@@ -67,7 +67,7 @@ export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps>
                     />
                 </Box>
                 <Button view="normal" size="m" onClick={handleViewDetails}>
-                    <Eye />
+                    <Icon data={Eye} />
                 </Button>
             </div>
         </Card>

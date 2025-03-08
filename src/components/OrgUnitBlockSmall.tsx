@@ -1,12 +1,13 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Card, Label, User} from '@gravity-ui/uikit';
+import {Card, Label} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {AccountDTO, OrganizationUnitDTO} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {accountsApi} from '@/app/apis';
+import {UserBlock} from '@/components/common/UserBlock';
 
 interface DomainComponentProps {
     data: OrganizationUnitDTO;
@@ -48,15 +49,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({data}) => {
                     <Box marginLeft="5px">
                         <HorizontalStack align="center">
                             <Label theme="utility">{data.name}</Label>
-                            <User
-                                avatar={{
-                                    text: `${owner?.firstName} ${owner?.lastName}`,
-                                    theme: 'brand',
-                                }}
-                                name={`${owner?.firstName} ${owner?.lastName}`}
-                                description={owner?.email}
-                                size="s"
-                            />
+                            {owner && <UserBlock account={owner} selectable={true} size="s" />}
                         </HorizontalStack>
                     </Box>
                 </HorizontalStack>

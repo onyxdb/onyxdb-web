@@ -59,13 +59,17 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                 </div>
                 <div style={{marginBottom: '8px'}}>
                     <strong>Владелец:</strong>
-                    {data.ownerId ? <UserBlockWithFetch accountId={data.ownerId} /> : 'Not stated'}
+                    {data.ownerId ? (
+                        <UserBlockWithFetch accountId={data.ownerId} selectable={true} size="l" />
+                    ) : (
+                        'Not stated'
+                    )}
                 </div>
                 <div style={{marginBottom: '8px'}}>
                     <strong>Сотрудники:</strong>
                     {dataAccounts.map((account) => (
                         <div key={account.id} style={{marginBottom: '4px'}}>
-                            <UserBlock account={account} />
+                            <UserBlock account={account} selectable={true} size="l" />
                         </div>
                     ))}
                 </div>

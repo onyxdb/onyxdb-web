@@ -1,15 +1,22 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {User} from '@gravity-ui/uikit';
 import {AccountDTO} from '@/generated/api';
 import {accountsApi} from '@/app/apis';
+import {UserBlock} from '@/components/common/UserBlock';
+import {Text} from '@gravity-ui/uikit';
 
 interface DomainComponentProps {
     accountId: string;
+    selectable?: boolean;
+    size?: 's' | 'm' | 'l';
 }
 
-export const UserBlockWithFetch: React.FC<DomainComponentProps> = ({accountId}) => {
+export const UserBlockWithFetch: React.FC<DomainComponentProps> = ({
+    accountId,
+    selectable,
+    size,
+}) => {
     const [owner, setOwner] = useState<AccountDTO | null>(null);
 
     useEffect(() => {
@@ -28,15 +35,9 @@ export const UserBlockWithFetch: React.FC<DomainComponentProps> = ({accountId}) 
         }
     }, [accountId]);
 
-    return (
-        <User
-            avatar={{
-                text: `${owner?.firstName} ${owner?.lastName}`,
-                theme: 'brand',
-            }}
-            name={`${owner?.firstName} ${owner?.lastName}`}
-            description={owner?.email}
-            size="s"
-        />
-    );
+    if (!owner) {
+        return <Text>???</Text>;
+    }
+
+    return <UserBlock account={owner} selectable={selectable} size={size} />;
 };

@@ -4,24 +4,39 @@ import React, {useEffect, useState} from 'react';
 import {accountsApi} from '@/app/apis';
 import {AccountDTO, BusinessRoleDTO, OrganizationUnitDTO, RoleDTO} from '@/generated/api';
 import {usePathname, useRouter} from 'next/navigation';
-import {Button, Card, Icon, Modal, Tab, TabList, TabProvider, Text, User} from '@gravity-ui/uikit';
+import {
+    Button,
+    Card,
+    Icon,
+    Loader,
+    Modal,
+    Tab,
+    TabList,
+    TabPanel,
+    TabProvider,
+    Text,
+} from '@gravity-ui/uikit';
 import {usePermissions} from '@/hooks/usePermissions';
 import {Box} from '@/components/Layout/Box';
 import {
     ArrowUpRightFromSquare,
     Briefcase,
     Calendar,
+    ChevronLeft,
     CircleInfoFill,
     Clock,
-    Envelope,
     FileText,
     Folder,
     Handset,
     MapPin,
+    Pencil,
     Person,
     Persons,
+    TrashBin,
 } from '@gravity-ui/icons';
 import {AccountForm} from '@/components/forms/AccountForm';
+import {UserBlock} from '@/components/common/UserBlock';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface AccountViewPageProps {}
 
@@ -33,10 +48,10 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const [accountOrgUnits, setAccountOrgUnits] = useState<OrganizationUnitDTO[]>([]);
     const [accountRoles, setAccountRoles] = useState<RoleDTO[]>([]);
     const [accountBusinessRoles, setAccountBusinessRoles] = useState<BusinessRoleDTO[]>([]);
-    const [activeTab, setActiveTab] = useState<string>('info');
+    const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
-    const {permissions} = usePermissions();
+    const {checkActions} = usePermissions();
 
     const accountId = pathname.split('/').pop() ?? '';
 
@@ -136,7 +151,11 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     };
 
     if (!account) {
-        return <div style={{padding: '20px'}}>Загрузка...</div>;
+        return (
+            <HorizontalStack align="center" justify="center">
+                <Loader size="l" />
+            </HorizontalStack>
+        );
     }
 
     // if (!permissions[`web-account-${accountId}-view`]) {
@@ -148,33 +167,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const renderInfoTab = () => {
         return (
             <div>
-                <div style={{marginBottom: '20px'}}>
-                    <Text variant="header-2">Основная информация</Text>
-                </div>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                        <Box marginRight="8px">
-                            <Icon data={Person} />
-                        </Box>
-                        <Text variant="caption-2" color="secondary">
-                            ФИО:
-                        </Text>
-                        <Text variant="body-1" color="primary">
-                            {`${account.firstName} ${account.lastName}`}
-                        </Text>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                        <Box marginRight="8px">
-                            <Icon data={Envelope} />
-                        </Box>
-                        <Text variant="caption-2" color="secondary">
-                            Email:
-                        </Text>
-                        <Text variant="body-1" color="link">
-                            {account.email}
-                        </Text>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={Handset} />
                         </Box>
@@ -184,8 +178,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <Text variant="body-1" color="primary">
                             {data.phoneNumber ?? '???'}
                         </Text>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    </HorizontalStack>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={Calendar} />
                         </Box>
@@ -195,7 +189,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <Text variant="body-1" color="primary">
                             {data.dateOfBirth ?? '???'}
                         </Text>
-                    </div>
+                    </HorizontalStack>
                 </div>
             </div>
         );
@@ -204,11 +198,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const renderAdditionalInfoTab = () => {
         return (
             <div>
-                <div style={{marginBottom: '20px'}}>
-                    <Text variant="header-2">Дополнительная информация</Text>
-                </div>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={Briefcase} />
                         </Box>
@@ -218,8 +209,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <Text variant="body-1" color="primary">
                             {data.jobTitle}
                         </Text>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    </HorizontalStack>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={Clock} />
                         </Box>
@@ -229,8 +220,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <Text variant="body-1" color="primary">
                             {data.workSchedule}
                         </Text>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    </HorizontalStack>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={MapPin} />
                         </Box>
@@ -240,8 +231,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <Text variant="body-1" color="primary">
                             {data.city}
                         </Text>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    </HorizontalStack>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={ArrowUpRightFromSquare} />
                         </Box>
@@ -270,8 +261,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                                 </div>
                             )}
                         </div>
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    </HorizontalStack>
+                    <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={CircleInfoFill} />
                         </Box>
@@ -281,7 +272,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <Text variant="body-1" color="primary">
                             {data.description}
                         </Text>
-                    </div>
+                    </HorizontalStack>
                 </div>
             </div>
         );
@@ -290,9 +281,6 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const renderOrgUnitsTab = () => {
         return (
             <div>
-                <div style={{marginBottom: '20px'}}>
-                    <Text variant="header-2">Информация об Organization Units</Text>
-                </div>
                 <div>
                     {accountOrgUnits.map((ou) => (
                         <div key={ou.id} style={{marginBottom: '10px'}}>
@@ -300,7 +288,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                                 <div
                                     style={{display: 'flex', flexDirection: 'column', gap: '10px'}}
                                 >
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <HorizontalStack align="center">
                                         <Box marginRight="8px">
                                             <Icon data={Folder} />
                                         </Box>
@@ -310,8 +298,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                                         <Text variant="body-1" color="primary">
                                             {ou.name}
                                         </Text>
-                                    </div>
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
+                                    </HorizontalStack>
+                                    <HorizontalStack align="center">
                                         <Box marginRight="8px">
                                             <Icon data={FileText} />
                                         </Box>
@@ -321,24 +309,23 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                                         <Text variant="body-1" color="primary">
                                             {ou.description}
                                         </Text>
-                                    </div>
+                                    </HorizontalStack>
                                     {teamLead?.id && teamLead?.id !== account.id && (
-                                        <div style={{display: 'flex', alignItems: 'center'}}>
+                                        <HorizontalStack align="center">
+                                            <Box marginRight="8px">
+                                                <Icon data={Person} />
+                                            </Box>
                                             <Text variant="caption-2" color="secondary">
                                                 Наставник:
                                             </Text>
-                                            <User
-                                                avatar={{
-                                                    text: `${teamLead.firstName} ${teamLead.lastName}`,
-                                                    theme: 'brand',
-                                                }}
-                                                name={`${teamLead.firstName} ${teamLead.lastName}`}
-                                                description={teamLead.email}
+                                            <UserBlock
+                                                account={teamLead}
+                                                selectable={true}
                                                 size="m"
                                             />
-                                        </div>
+                                        </HorizontalStack>
                                     )}
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <HorizontalStack align="center">
                                         <Box marginRight="8px">
                                             <Icon data={Clock} />
                                         </Box>
@@ -350,8 +337,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                                                 {new Date(ou.createdAt).toLocaleDateString()}
                                             </Text>
                                         )}
-                                    </div>
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
+                                    </HorizontalStack>
+                                    <HorizontalStack align="center">
                                         <Box marginRight="8px">
                                             <Icon data={Clock} />
                                         </Box>
@@ -363,7 +350,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                                                 {new Date(ou.updatedAt).toLocaleDateString()}
                                             </Text>
                                         )}
-                                    </div>
+                                    </HorizontalStack>
                                 </div>
                             </Card>
                         </div>
@@ -376,43 +363,36 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const renderRolesTab = () => {
         return (
             <div>
-                <div style={{marginBottom: '20px'}}>
-                    <Text variant="header-2">Роли</Text>
-                </div>
-                <div>
-                    {accountRoles.map((role) => (
-                        <div key={role.id} style={{marginBottom: '10px'}}>
-                            <Card style={{padding: '16px'}}>
-                                <div
-                                    style={{display: 'flex', flexDirection: 'column', gap: '10px'}}
-                                >
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <Box marginRight="8px">
-                                            <Icon data={Person} />
-                                        </Box>
-                                        <Text variant="caption-2" color="secondary">
-                                            Название роли:
-                                        </Text>
-                                        <Text variant="body-1" color="primary">
-                                            {role.name}
-                                        </Text>
-                                    </div>
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <Box marginRight="8px">
-                                            <Icon data={FileText} />
-                                        </Box>
-                                        <Text variant="caption-2" color="secondary">
-                                            Описание:
-                                        </Text>
-                                        <Text variant="body-1" color="primary">
-                                            {role.description}
-                                        </Text>
-                                    </div>
-                                </div>
-                            </Card>
-                        </div>
-                    ))}
-                </div>
+                {accountRoles.map((role) => (
+                    <div key={role.id} style={{marginBottom: '10px'}}>
+                        <Card style={{padding: '16px'}}>
+                            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                                <HorizontalStack align="center">
+                                    <Box marginRight="8px">
+                                        <Icon data={Person} />
+                                    </Box>
+                                    <Text variant="caption-2" color="secondary">
+                                        Название роли:
+                                    </Text>
+                                    <Text variant="body-1" color="primary">
+                                        {role.name}
+                                    </Text>
+                                </HorizontalStack>
+                                <HorizontalStack align="center">
+                                    <Box marginRight="8px">
+                                        <Icon data={FileText} />
+                                    </Box>
+                                    <Text variant="caption-2" color="secondary">
+                                        Описание:
+                                    </Text>
+                                    <Text variant="body-1" color="primary">
+                                        {role.description}
+                                    </Text>
+                                </HorizontalStack>
+                            </div>
+                        </Card>
+                    </div>
+                ))}
             </div>
         );
     };
@@ -420,111 +400,105 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const renderBusinessRolesTab = () => {
         return (
             <div>
-                <div style={{marginBottom: '20px'}}>
-                    <Text variant="header-2">Бизнес Роли</Text>
-                </div>
-                <div>
-                    {accountBusinessRoles.map((br) => (
-                        <div key={br.id} style={{marginBottom: '10px'}}>
-                            <Card style={{padding: '16px'}}>
-                                <div
-                                    style={{display: 'flex', flexDirection: 'column', gap: '10px'}}
-                                >
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <Box marginRight="8px">
-                                            <Icon data={Persons} />
-                                        </Box>
-                                        <Text variant="caption-2" color="secondary">
-                                            Название бизнес-роли:
-                                        </Text>
-                                        <Text variant="body-1" color="primary">
-                                            {br.name}
-                                        </Text>
-                                    </div>
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <Box marginRight="8px">
-                                            <Icon data={FileText} />
-                                        </Box>
-                                        <Text variant="caption-2" color="secondary">
-                                            Описание:
-                                        </Text>
-                                        <Text variant="body-1" color="primary">
-                                            {br.description}
-                                        </Text>
-                                    </div>
-                                </div>
-                            </Card>
-                        </div>
-                    ))}
-                </div>
+                {accountBusinessRoles.map((br) => (
+                    <div key={br.id} style={{marginBottom: '10px'}}>
+                        <Card style={{padding: '16px'}}>
+                            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                                <HorizontalStack align="center">
+                                    <Box marginRight="8px">
+                                        <Icon data={Persons} />
+                                    </Box>
+                                    <Text variant="caption-2" color="secondary">
+                                        Название бизнес-роли:
+                                    </Text>
+                                    <Text variant="body-1" color="primary">
+                                        {br.name}
+                                    </Text>
+                                </HorizontalStack>
+                                <HorizontalStack align="center">
+                                    <Box marginRight="8px">
+                                        <Icon data={FileText} />
+                                    </Box>
+                                    <Text variant="caption-2" color="secondary">
+                                        Описание:
+                                    </Text>
+                                    <Text variant="body-1" color="primary">
+                                        {br.description}
+                                    </Text>
+                                </HorizontalStack>
+                            </div>
+                        </Card>
+                    </div>
+                ))}
             </div>
         );
     };
 
-    const renderActiveTabContent = () => {
-        switch (activeTab) {
-            case 'info':
-                return renderInfoTab();
-            case 'additional-info':
-                return renderAdditionalInfoTab();
-            case 'org-units':
-                return renderOrgUnitsTab();
-            case 'roles':
-                return renderRolesTab();
-            case 'business-roles':
-                return renderBusinessRolesTab();
-            default:
-                return null;
-        }
-    };
-
     return (
         <div style={{padding: '20px', display: 'flex', flexDirection: 'column'}}>
-            <div style={{marginBottom: '20px'}}>
-                <User
-                    avatar={{text: `${account.firstName} ${account.lastName}`, theme: 'brand'}}
-                    name={`${account.firstName} ${account.lastName}`}
-                    description={account.email}
-                    size="l"
-                />
-            </div>
-            <div style={{marginBottom: '20px', display: 'flex', alignItems: 'center'}}>
-                {permissions[`web-account-${accountId}-edit`] && (
-                    <Button
-                        view="action"
-                        size="m"
-                        onClick={handleEdit}
-                        style={{marginRight: '10px'}}
-                    >
-                        Редактировать
-                    </Button>
-                )}
-                {permissions[`web-account-${accountId}-delete`] && (
-                    <Button view="action" size="m" onClick={handleDelete}>
-                        Удалить
-                    </Button>
-                )}
-            </div>
-            <TabProvider value={activeTab} onUpdate={setActiveTab}>
-                <TabList>
-                    <Tab value="info">Основная информация</Tab>
-                    <Tab value="additional-info">Дополнительная информация</Tab>
-                    <Tab value="org-units">Organization Units</Tab>
-                    <Tab value="roles">Роли</Tab>
-                    <Tab value="business-roles">Бизнес Роли</Tab>
-                </TabList>
-                <div style={{marginTop: '20px'}}>{renderActiveTabContent()}</div>
-            </TabProvider>
+            <Box marginBottom="8px">
+                <Button onClick={() => router.back()}>
+                    <Icon data={ChevronLeft} />
+                    Назад
+                </Button>
+            </Box>
+            <HorizontalStack align="center" justify="space-between">
+                <div>{account && <UserBlock account={account} selectable={true} size="l" />}</div>
+                <div>
+                    {checkActions([
+                        {name: 'web-global-account', action: 'edit'},
+                        {
+                            name: `web-account-${accountId}`,
+                            action: 'edit',
+                        },
+                    ]) && (
+                        <Button
+                            view="action"
+                            size="m"
+                            onClick={handleEdit}
+                            style={{marginRight: '10px'}}
+                        >
+                            <Icon data={Pencil} />
+                            Редактировать
+                        </Button>
+                    )}
+                    {checkActions([
+                        {name: 'web-global-account', action: 'delete'},
+                        {
+                            name: `web-account-${accountId}`,
+                            action: 'delete',
+                        },
+                    ]) && (
+                        <Button view="action" size="m" onClick={handleDelete}>
+                            <Icon data={TrashBin} />
+                            Удалить
+                        </Button>
+                    )}
+                </div>
+            </HorizontalStack>
+            <Box marginTop="20px">{renderInfoTab()}</Box>
+            <Box marginTop="10px" marginBottom="10px">
+                <TabProvider value={activeTab} onUpdate={setActiveTab}>
+                    <TabList>
+                        <Tab value="additional-info">Дополнительная информация</Tab>
+                        <Tab value="org-units">Organization Units</Tab>
+                        <Tab value="roles">Роли</Tab>
+                        <Tab value="business-roles">Бизнес Роли</Tab>
+                    </TabList>
+                    <Box marginTop="10px">
+                        <TabPanel value="additional-info">{renderAdditionalInfoTab()}</TabPanel>
+                        <TabPanel value="org-units">{renderOrgUnitsTab()}</TabPanel>
+                        <TabPanel value="roles">{renderRolesTab()}</TabPanel>
+                        <TabPanel value="business-roles">{renderBusinessRolesTab()}</TabPanel>
+                    </Box>
+                </TabProvider>
+            </Box>
             <Modal open={isEditModalOpen} onOpenChange={handleCloseEditModal}>
-                <h2>{account ? 'Редактирование аккаунта' : 'Создание нового аккаунта'}</h2>
                 <AccountForm
                     initialValue={account}
                     onSubmit={handleSubmitEdit}
                     onClose={handleCloseEditModal}
                 />
-                <Button view="normal" onClick={handleCloseEditModal}>
-                    Закрыть
-                </Button>
             </Modal>
         </div>
     );

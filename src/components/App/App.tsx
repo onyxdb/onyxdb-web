@@ -16,6 +16,7 @@ import {Loader, ThemeProvider} from '@gravity-ui/uikit';
 import useCookie, {booleanCookie, stringCookie} from '@/hooks/useCookie';
 import {LoginInfo} from '@/components/Login/LoginInfo';
 import {usePathname} from 'next/navigation';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface AppProps {
     children: React.ReactNode;
@@ -96,9 +97,9 @@ export const App: React.FC<AppProps> = ({children}) => {
         <ThemeProvider theme={theme ?? 'system'}>
             <Suspense
                 fallback={
-                    <div style={{margin: 'auto'}}>
+                    <HorizontalStack align="center" justify="center">
                         <Loader size="l" />
-                    </div>
+                    </HorizontalStack>
                 }
             >
                 <AsideHeader

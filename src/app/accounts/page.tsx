@@ -1,60 +1,67 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
-import {accountsApi} from '@/app/apis';
+import React, {useState} from 'react';
 import {AccountDTO} from '@/generated/api';
-import {Button, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
-import {useRouter} from 'next/navigation';
+import {Button, Modal} from '@gravity-ui/uikit';
+import {usePermissions} from '@/hooks/usePermissions';
+import {accountsApi} from '@/app/apis';
+import {AccountsTable} from '@/components/AccountsTable';
+import {AccountForm} from '@/components/forms/AccountForm';
 
-export default function About() {
-    const router = useRouter();
-    const [accounts, setAccounts] = useState<AccountDTO[]>([]);
-    const [searchQuery, setSearchQuery] = useState<string>('');
+interface AccountsPageProps {}
 
-    useEffect(() => {
+// eslint-disable-next-line no-empty-pattern
+export default function AccountsPage({}: AccountsPageProps) {
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [editingAccount, setEditingAccount] = useState<AccountDTO | null>(null);
+    const {permissions} = usePermissions();
+
+    const handleCreate = () => {
+        setIsCreateModalOpen(true);
+    };
+
+    const handleCloseCreateModal = () => {
+        setIsCreateModalOpen(false);
+        setEditingAccount(null);
+    };
+
+    const handleEdit = (accountId: string) => {
         accountsApi
-            .getAllAccounts()
-            .then((response) => setAccounts(response.data.data ?? []))
-            .catch((error) => console.error('Error fetching accounts:', error));
-    }, []);
+            .getAccountById({accountId})
+            .then((response) => {
+                setEditingAccount(response.data ?? null);
+                setIsCreateModalOpen(true);
+            })
+            .catch((error) => console.error('Error fetching account:', error));
+    };
 
-    const MyTable = withTableSorting(Table);
+    const handleDelete = (accountId: string) => {
+        accountsApi
+            .deleteAccount({accountId})
+            .then(() => {
+                console.log('Account deleted successfully');
+                // Перезагрузка таблицы
+                handleCreate(); // Просто чтобы закрыть модальное окно
+            })
+            .catch((error) => console.error('Error deleting account:', error));
+    };
 
-    const columns: TableColumnConfig<AccountDTO>[] = [
-        {
-            id: 'username',
-            name: 'Логин',
-            template: (account) => (
-                <span
-                    style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/accounts/${account.id}/info`)}
-                >
-                    {account.username}
-                </span>
-            ),
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'fio',
-            name: 'ФИО',
-            template: (account) => `${account.firstName} ${account.lastName}`,
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'createdAt',
-            name: 'Дата создания',
-            meta: {
-                sort: true,
-            },
-        },
-    ];
-
-    const handleCreateAccount = () => {
-        router.push('/accounts/create');
+    const handleSubmitCreate = async (values: AccountDTO) => {
+        try {
+            if (editingAccount) {
+                // Редактирование существующего аккаунта
+                await accountsApi.updateAccount({
+                    accountId: editingAccount.id ?? '???',
+                    accountDTO: values,
+                });
+            } else {
+                // Создание нового аккаунта
+                await accountsApi.createAccount({accountDTO: values});
+            }
+            handleCloseCreateModal();
+        } catch (error) {
+            console.error('Ошибка при создании/редактировании аккаунта:', error);
+        }
     };
 
     return (
@@ -68,23 +75,24 @@ export default function About() {
                 }}
             >
                 <h1>Аккаунты</h1>
-                <Button view="action" size="l" onClick={handleCreateAccount}>
-                    Создать аккаунт
-                </Button>
+                {permissions['web-global-create'] && (
+                    <Button view="action" size="l" onClick={handleCreate}>
+                        Создать аккаунт
+                    </Button>
+                )}
             </div>
-            <div style={{marginBottom: '20px'}}>
-                <TextInput
-                    placeholder="Поиск по названию"
-                    value={searchQuery}
-                    onUpdate={(value) => setSearchQuery(value)}
+            <AccountsTable onEdit={handleEdit} onDelete={handleDelete} />
+            <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
+                <h2>{editingAccount ? 'Редактирование аккаунта' : 'Создание нового аккаунта'}</h2>
+                <AccountForm
+                    initialValue={editingAccount ?? undefined}
+                    onSubmit={handleSubmitCreate}
+                    onClose={handleCloseCreateModal}
                 />
-            </div>
-            <MyTable
-                data={accounts}
-                columns={columns}
-                // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
-                // sortState={sorting}
-            />
+                <Button view="normal" onClick={handleCloseCreateModal}>
+                    Закрыть
+                </Button>
+            </Modal>
         </div>
     );
 }

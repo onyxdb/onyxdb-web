@@ -11,90 +11,60 @@ import {
     Persons,
     Sun,
 } from '@gravity-ui/icons';
-import {AsideHeader, FooterItem} from '@gravity-ui/navigation';
-import {Loader, ThemeProvider} from '@gravity-ui/uikit';
-import useCookie, {booleanCookie, stringCookie} from '@/hooks/useCookie';
+import {AsideFallback, AsideHeader, FooterItem} from '@gravity-ui/navigation';
+import {ThemeProvider} from '@gravity-ui/uikit';
 import {LoginInfo} from '@/components/Login/LoginInfo';
-import {usePathname} from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 
 interface AppProps {
     children: React.ReactNode;
 }
 
-function useIsSystemDark() {
-    const [isDark, setIsDark] = useState(false);
-
-    useEffect(() => {
-        if (window.matchMedia) {
-            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            setIsDark(mediaQuery.matches);
-
-            const handleChange = (event: MediaQueryListEvent) => {
-                setIsDark(event.matches);
-            };
-
-            mediaQuery.addEventListener('change', handleChange);
-
-            return () => {
-                mediaQuery.removeEventListener('change', handleChange);
-            };
-        }
-        return () => {};
-    }, []);
-
-    return isDark;
-}
-
 export const App: React.FC<AppProps> = ({children}) => {
-    const isSystemDark = useIsSystemDark();
-
-    const [theme, setTheme] = useCookie<'dark' | 'light'>(
-        'ambient_mode',
-        stringCookie<'dark' | 'light'>('dark'),
-    );
-    const [asideCollapsed, setAsideCollapsed] = useCookie('aside_collapsed', booleanCookie(false));
-
+    const [asideCollapsed, setAsideCollapsed] = useState<boolean>(false);
+    const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
+    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
     const isDarkMode = theme === 'dark';
+    const pathname = usePathname();
+    const router = useRouter();
 
     const menuItems = [
         {
-            // id: 'accounts',
             title: 'Аккаунты',
             icon: Persons,
-            link: '/accounts',
+            onItemClick: () => router.push('/accounts'),
+            myLink: '/accounts',
         },
         {
             title: 'Оргструктура',
             icon: Persons,
-            link: '/dc',
+            onItemClick: () => router.push('/structure'),
+            myLink: '/structure',
         },
         {
-            // id: 'access',
             title: 'Доступы',
             icon: ListCheck,
-            link: '/access',
+            onItemClick: () => router.push('/access'),
+            myLink: '/access',
         },
         {
-            // id: 'products',
             title: 'Продукты',
             icon: Cpu,
-            link: '/products',
+            onItemClick: () => router.push('/products'),
+            myLink: '/products',
         },
     ];
 
-    const pathname = usePathname();
-    const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
-
     useEffect(() => {
         if (pathname) {
-            const tab = menuItems.find((m) => m.link && pathname.startsWith(m.link))?.title;
+            const tab = menuItems.find((m) => m.myLink && pathname.startsWith(m.myLink))?.title;
             setActiveTab(tab);
         }
     }, [pathname, menuItems]);
 
     return (
-        <ThemeProvider theme={theme ?? 'system'}>
-            <Suspense fallback={<Loader />}>
+        <Suspense fallback={<AsideFallback />}>
+            <ThemeProvider theme={theme ?? 'system'}>
                 <AsideHeader
                     headerDecoration={true}
                     compact={asideCollapsed ?? false}
@@ -125,13 +95,9 @@ export const App: React.FC<AppProps> = ({children}) => {
                                         onItemClick: () => {
                                             switch (theme) {
                                                 case 'light':
-                                                    return setTheme(
-                                                        isSystemDark ? 'dark' : 'light',
-                                                    );
+                                                    return setTheme('dark');
                                                 case 'dark':
-                                                    return setTheme(
-                                                        isSystemDark ? 'dark' : 'light',
-                                                    );
+                                                    return setTheme('light');
                                                 default:
                                                     return setTheme(isDarkMode ? 'light' : 'dark');
                                             }
@@ -161,7 +127,7 @@ export const App: React.FC<AppProps> = ({children}) => {
                     }}
                     renderContent={() => children}
                 />
-            </Suspense>
-        </ThemeProvider>
+            </ThemeProvider>
+        </Suspense>
     );
 };

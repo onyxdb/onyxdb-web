@@ -1,17 +1,18 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Text, User} from '@gravity-ui/uikit';
+import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {AccountDTO, OrganizationUnitDTO} from '@/generated/api';
 import {Eye} from '@gravity-ui/icons';
 import {accountsApi} from '@/app/apis';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {Box} from '@/components/Layout/Box';
+import {UserBlock} from '@/components/common/UserBlock';
 
 interface OrganizationUnitSmallCardProps {
     orgUnit: OrganizationUnitDTO;
-    onSelect: (ouId: OrganizationUnitDTO) => void;
+    onSelect: (ou: OrganizationUnitDTO) => void;
 }
 
 export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps> = ({
@@ -56,18 +57,10 @@ export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps>
                     </Text>
                 </VerticalStack>
                 <Box marginLeft="10px" marginRight="10px">
-                    <User
-                        avatar={{
-                            text: `${owner?.firstName} ${owner?.lastName}`,
-                            theme: 'brand',
-                        }}
-                        name={`${owner?.firstName} ${owner?.lastName}`}
-                        description={owner?.email}
-                        size="s"
-                    />
+                    {owner && <UserBlock account={owner} size="s" />}
                 </Box>
                 <Button view="normal" size="m" onClick={handleViewDetails}>
-                    <Eye />
+                    <Icon data={Eye} />
                 </Button>
             </div>
         </Card>

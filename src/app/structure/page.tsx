@@ -37,7 +37,7 @@ export default function StructurePage({}: StructurePageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const {permissions} = usePermissions();
+    const {checkPermission} = usePermissions();
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -49,10 +49,18 @@ export default function StructurePage({}: StructurePageProps) {
         [searchParams],
     );
 
+    const handleDcSelect = (id: string) => {
+        setSelectedDcId(id);
+        router.push(pathname + '?' + createQueryString('dcId', id));
+    };
+
     const fetchDomainComponents = async () => {
         try {
             const response = await domainComponentsApi.getAllDomainComponents();
             setDomainComponents(response.data ?? []);
+            if (response.data && response.data.length > 0 && response.data[0].id) {
+                handleDcSelect(response.data[0].id);
+            }
         } catch (error) {
             console.error('Error fetching domain components:', error);
         }
@@ -67,11 +75,6 @@ export default function StructurePage({}: StructurePageProps) {
         if (dcIdFromPath && domainComponents.some((dc) => dc.id === dcIdFromPath)) {
             setSelectedDcId(dcIdFromPath);
         }
-
-        // const ouIdFromPath = searchParams.get('ouId');
-        // if (ouIdFromPath && odomainComponents.some((dc) => dc.id === dcIdFromPath)) {
-        //     setSelectedDcId(dcIdFromPath);
-        // }
     }, [pathname, domainComponents]);
 
     const fetchAccounts = async (ouId: string) => {
@@ -114,8 +117,8 @@ export default function StructurePage({}: StructurePageProps) {
         }
     }, [selectedOu?.id]);
 
-    const handleCreate = () => {
-        console.log('domainComponent handleCreate');
+    const handleCreateDC = () => {
+        console.log('domainComponent handleCreateDC');
         setIsCreateModalOpen(true);
     };
 
@@ -124,18 +127,22 @@ export default function StructurePage({}: StructurePageProps) {
         setEditingDomainComponent(undefined);
     };
 
-    const handleEdit = (id: string) => {
+    const handleCreateOU = () => {
+        router.push('/org/create');
+    };
+
+    const handleDcEdit = (id: string) => {
         const dc = domainComponents.find((dc2) => dc2.id === id);
-        console.log('domainComponent handleEdit id', id, 'dc', dc);
+        console.log('domainComponent handleDcEdit id', id, 'dc', dc);
         if (dc) {
             setEditingDomainComponent(dc);
             setIsCreateModalOpen(true);
         }
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDcDelete = async (id: string) => {
         const dc = domainComponents.find((dc2) => dc2.id === id);
-        console.log('domainComponent handleDelete id', id, 'dc', dc);
+        console.log('domainComponent handleDcDelete id', id, 'dc', dc);
         if (dc && dc.id) {
             await domainComponentsApi.deleteDomainComponent({dcId: dc.id});
             await fetchDomainComponents();
@@ -145,7 +152,7 @@ export default function StructurePage({}: StructurePageProps) {
         }
     };
 
-    const handleSubmitCreate = async (values: DomainComponentDTO) => {
+    const handleDcSubmitCreate = async (values: DomainComponentDTO) => {
         try {
             if (editingDomainComponent) {
                 // Редактирование существующего Domain Component
@@ -169,12 +176,27 @@ export default function StructurePage({}: StructurePageProps) {
         router.push(pathname + '?' + createQueryString('ouId', ou.id ?? '???'));
     };
 
+    const handleSelectedOuEdit = (ou: OrganizationUnitDTO) => {
+        router.push(`/org/edit/${ou.id}`);
+    };
+
+    const handleSelectedOuDelete = async (id: string) => {
+        console.log('handleOuDelete id', id);
+        if (id) {
+            await domainComponentsApi.deleteDomainComponent({dcId: id});
+            await fetchDomainComponents();
+            if (selectedOu?.id === id) {
+                setSelectedDcId(null);
+            }
+        }
+    };
+
     const renderDomainTree = (tree: DomainTreeDTO | null) => {
         if (!tree) return null;
 
         const renderItem = (item: OrganizationTreeDTO, level = 0) => {
             return (
-                <div key={item.unit.id} style={{marginLeft: `${level * 20}px`}}>
+                <div key={item.unit.id} style={{marginLeft: `${level * 30}px`}}>
                     <OrganizationUnitSmallCard orgUnit={item.unit} onSelect={handleOuSelect} />
                     {item.items && item.items.length > 0 && (
                         <div>{item.items.map((child) => renderItem(child, level + 1))}</div>
@@ -202,22 +224,15 @@ export default function StructurePage({}: StructurePageProps) {
                             <Box marginRight="20px" key={dc.id}>
                                 <DomainComponentBlock
                                     data={dc}
-                                    onEdit={handleEdit}
-                                    onDelete={handleDelete}
-                                    onClick={() => {
-                                        if (dc.id) {
-                                            setSelectedDcId(dc.id);
-                                            router.push(
-                                                pathname + '?' + createQueryString('dcId', dc.id),
-                                            );
-                                        }
-                                    }}
+                                    onEdit={handleDcEdit}
+                                    onDelete={handleDcDelete}
+                                    onClick={() => handleDcSelect(dc.id ?? '???')}
                                     isActive={dc.id === selectedDcId}
                                 />
                             </Box>
                         ))}
-                        {permissions['web-global-domain-components-create'] && (
-                            <Button view="action" size="l" onClick={handleCreate}>
+                        {checkPermission('web-global-domain-components', 'create') && (
+                            <Button view="action" size="l" onClick={handleCreateDC}>
                                 Создать Domain Component
                             </Button>
                         )}
@@ -225,20 +240,30 @@ export default function StructurePage({}: StructurePageProps) {
                 </div>
             </div>
             <div style={{flex: 1}}>
-                <h1>Organization Units Tree</h1>
+                <h1>Organization Units</h1>
                 <HorizontalStack>
                     {renderDomainTree(domainTree)}
                     <div style={{width: '400px', marginLeft: '20px'}}>
                         {selectedOu && (
-                            <OrgUnitBlock data={selectedOu} dataAccounts={selectedOuAccounts} />
+                            <OrgUnitBlock
+                                data={selectedOu}
+                                dataAccounts={selectedOuAccounts}
+                                onEdit={handleSelectedOuEdit}
+                                onDelete={handleSelectedOuDelete}
+                            />
                         )}
                     </div>
                 </HorizontalStack>
             </div>
+            <div>
+                <Button view="action" size="l" onClick={handleCreateOU}>
+                    Создать Organization Unit
+                </Button>
+            </div>
             <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                 <DomainComponentForm
                     initialValue={editingDomainComponent}
-                    onSubmit={handleSubmitCreate}
+                    onSubmit={handleDcSubmitCreate}
                     onClose={handleCloseCreateModal}
                 />
             </Modal>

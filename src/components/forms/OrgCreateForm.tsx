@@ -2,22 +2,43 @@
 
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
-import {Button, Modal, TextInput} from '@gravity-ui/uikit';
-import {DomainComponentDTO, OrganizationUnitDTO} from '@/generated/api';
-import {domainComponentsApi, organizationUnitsApi} from '@/app/apis';
+import {Button, Card, Modal, Text, TextInput} from '@gravity-ui/uikit';
+import {AccountDTO, DomainComponentDTO, OrganizationUnitDTO} from '@/generated/api';
+import {accountsApi, domainComponentsApi, organizationUnitsApi} from '@/app/apis';
 import {InputField} from '@/components/formik/InputField';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {Box} from '@/components/Layout/Box';
+import {TextAreaField} from '@/components/formik/TextAreaField';
 
 interface OrgCreateFormProps {
-    onSubmit: (values: OrganizationUnitDTO) => void;
+    onSubmit: (values: OrgUnitFormFields) => void;
+    onClose: () => void;
 }
 
-export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
+export interface OrgUnitFormFields {
+    name: string;
+    description: string;
+    domainComponent: string;
+    domainComponentId: string;
+    parentOrgUnit: string;
+    parentOrgUnitId: string;
+    ownerAccount: string;
+    ownerAccountId: string;
+}
+
+export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, onClose}) => {
     const [domainComponents, setDomainComponents] = useState<DomainComponentDTO[]>([]);
     const [parentOuOptions, setParentOuOptions] = useState<OrganizationUnitDTO[]>([]);
-    const [selectedParentOuId, setSelectedParentOuId] = useState<string | null>(null);
+    const [accountOptions, setAccountOptions] = useState<AccountDTO[]>([]);
     const [selectedDcId, setSelectedDcId] = useState<string | null>(null);
+    const [searchDc, setSearchDc] = useState<string | null>(null);
+    const [selectedParentOuId, setSelectedParentOuId] = useState<string | null>(null);
+    const [searchOu, setSearchOu] = useState<string | null>(null);
+    const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
+    const [searchAccount, setSearchAccount] = useState<string | null>(null);
     const [isParentModalOpen, setIsParentModalOpen] = useState(false);
     const [isDcModalOpen, setIsDcModalOpen] = useState(false);
+    const [isAccountsModalOpen, setIsAccountsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchDomainComponents = async () => {
@@ -37,7 +58,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
             if (selectedDcId) {
                 const response = await organizationUnitsApi.getAllOrganizationUnits({
                     dcId: selectedDcId,
-                    limit: 5,
+                    limit: 10,
                 });
                 setParentOuOptions(response.data.data ?? []);
             }
@@ -46,39 +67,88 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
         fetchParentOuOptions();
     }, [selectedDcId]);
 
-    const formik = useFormik<OrganizationUnitDTO>({
+    const fetchAccountOptions = async () => {
+        console.log('fetchAccountOptions searchAccount', searchAccount, Boolean(searchAccount));
+        if (searchAccount) {
+            const response = await accountsApi.getAllAccounts({
+                search: searchAccount,
+                limit: 10,
+            });
+            setAccountOptions(response.data.data ?? []);
+        }
+    };
+
+    const formik = useFormik<OrgUnitFormFields>({
         initialValues: {
-            id: '',
             name: '',
             description: '',
-            ownerId: '',
-            parentId: '',
+            domainComponent: '',
             domainComponentId: '',
+            parentOrgUnit: '',
+            parentOrgUnitId: '',
+            ownerAccount: '',
+            ownerAccountId: '',
         },
         validate: (values) => {
-            const errors: Partial<OrganizationUnitDTO> = {};
+            const errors: Partial<OrgUnitFormFields> = {};
             if (!values.name) {
                 errors.name = 'Название обязательно';
             }
-            if (!values.ownerId) {
-                errors.ownerId = 'Владелец обязателен';
+            if (!values.description) {
+                errors.description = 'Описание обязательно';
             }
-            if (!values.domainComponentId) {
-                errors.domainComponentId = 'Domain Component обязателен';
+            if (!values.ownerAccount || !values.ownerAccountId) {
+                errors.ownerAccount = 'Владелец обязателен';
+            }
+            if (!values.domainComponent || !values.domainComponentId) {
+                errors.domainComponent = 'Domain Component обязателен';
             }
             return errors;
         },
         onSubmit,
     });
 
-    const handleParentOuChange = (value: string) => {
-        setSelectedParentOuId(value);
-        formik.setFieldValue('parentOuId', value);
+    const handleDcChange = (value: string) => {
+        setSearchDc(value);
+        formik.setFieldValue('domainComponent', value);
     };
 
-    const handleDcChange = (value: string) => {
-        setSelectedDcId(value);
-        formik.setFieldValue('domainComponentId', value);
+    const handleDcSelect = (dc: DomainComponentDTO) => {
+        console.log('handleDcSelect dc', dc);
+        setIsDcModalOpen(false);
+        setSelectedDcId(dc.id ?? '???');
+        setSearchDc(dc.name);
+        formik.setFieldValue('domainComponent', dc.name);
+        formik.setFieldValue('domainComponentId', dc.id);
+    };
+
+    const handleParentOuChange = (value: string) => {
+        setSearchOu(value);
+        formik.setFieldValue('parentOrgUnit', value);
+    };
+
+    const handleParentOuSelect = (ou: OrganizationUnitDTO) => {
+        console.log('handleParentOuSelect ou', ou);
+        setIsParentModalOpen(false);
+        setSelectedParentOuId(ou.id ?? '???');
+        setSearchOu(ou.name);
+        formik.setFieldValue('parentOrgUnit', ou.name);
+        formik.setFieldValue('parentOrgUnitId', ou.id);
+    };
+
+    const handleAccountChange = (value: string) => {
+        console.log('handleAccountChange value', value);
+        setSearchAccount(value);
+        formik.setFieldValue('ownerAccount', value);
+    };
+
+    const handleAccountSelect = (data: AccountDTO) => {
+        console.log('handleAccountSelect data', data);
+        setIsAccountsModalOpen(false);
+        setSelectedAccountId(data.id ?? '???');
+        setSearchAccount(`${data.firstName} ${data.lastName} (${data.email})`);
+        formik.setFieldValue('ownerAccount', `${data.firstName} ${data.lastName} (${data.email})`);
+        formik.setFieldValue('ownerAccountId', data.id);
     };
 
     const handleOpenParentModal = () => {
@@ -97,44 +167,13 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
         setIsDcModalOpen(false);
     };
 
-    const renderParentOuSelector = () => {
-        return (
-            <div style={{marginBottom: '20px'}}>
-                <label style={{display: 'block', marginBottom: '8px'}}>Родительский OU</label>
-                <TextInput
-                    name="parentOuId"
-                    value={selectedParentOuId ?? ''}
-                    onUpdate={handleParentOuChange}
-                    onBlur={formik.handleBlur('parentOuId')}
-                    error={formik.touched.parentId ? formik.errors.parentId : undefined}
-                    placeholder="Введите или выберите родительский OU"
-                />
-                <Button view="normal" size="m" onClick={handleOpenParentModal}>
-                    Поиск OU
-                </Button>
-                {isParentModalOpen && (
-                    <Modal onOpenChange={handleCloseParentModal}>
-                        <h2>Поиск OU</h2>
-                        <div>
-                            {parentOuOptions.map((ou) => (
-                                <div
-                                    key={ou.id}
-                                    style={{marginBottom: '8px', cursor: 'pointer'}}
-                                    onClick={() => handleParentOuChange(ou.id ?? '???')}
-                                >
-                                    {ou.name} (Владелец: {ou.ownerId})
-                                </div>
-                            ))}
-                        </div>
-                        <div>
-                            <Button view="normal" onClick={handleCloseParentModal}>
-                                Закрыть
-                            </Button>
-                        </div>
-                    </Modal>
-                )}
-            </div>
-        );
+    const handleOpenAccountsModal = () => {
+        fetchAccountOptions();
+        setIsAccountsModalOpen(true);
+    };
+
+    const handleCloseAccountsModal = () => {
+        setIsAccountsModalOpen(false);
     };
 
     const renderDcSelector = () => {
@@ -142,48 +181,187 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
             <div style={{marginBottom: '20px'}}>
                 <label style={{display: 'block', marginBottom: '8px'}}>Domain Component</label>
                 <TextInput
-                    name="domainComponentId"
-                    value={selectedDcId ?? ''}
+                    name="domainComponent"
+                    value={searchDc ?? selectedDcId ?? ''}
                     onUpdate={handleDcChange}
-                    onBlur={formik.handleBlur('domainComponentId')}
+                    onBlur={formik.handleBlur('domainComponent')}
                     error={
-                        formik.touched.domainComponentId
-                            ? formik.errors.domainComponentId
-                            : undefined
+                        formik.touched.domainComponent ? formik.errors.domainComponent : undefined
                     }
-                    placeholder="Введите или выберите Domain Component"
+                    placeholder="Введите и выберите Domain Component"
                 />
-                <Button view="normal" size="m" onClick={handleOpenDcModal}>
+                <Button
+                    view="normal"
+                    size="m"
+                    onClick={handleOpenDcModal}
+                    style={{marginTop: '10px'}}
+                >
                     Поиск Domain Component
                 </Button>
-                {isDcModalOpen && (
-                    <Modal onOpenChange={handleCloseDcModal}>
-                        <h2>Поиск Domain Component</h2>
-                        <div>
-                            {domainComponents.map((dc) => (
-                                <div
-                                    key={dc.id}
-                                    style={{marginBottom: '8px', cursor: 'pointer'}}
-                                    onClick={() => handleDcChange(dc.id ?? '???')}
-                                >
-                                    {dc.name}
-                                </div>
-                            ))}
-                        </div>
+                <Modal open={isDcModalOpen} onOpenChange={handleCloseDcModal}>
+                    <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
+                        <Text variant="header-1">Поиск Domain Component</Text>
+                        <Box marginTop="10px">
+                            {domainComponents
+                                .filter((item) =>
+                                    `${item.name}|${item.description}`
+                                        .toLowerCase()
+                                        .includes(searchDc?.toLowerCase() ?? ''),
+                                )
+                                .map((dc) => (
+                                    <Card
+                                        key={dc.id}
+                                        type="selection"
+                                        onClick={() => handleDcSelect(dc)}
+                                        style={{marginBottom: '10px', padding: '16px'}}
+                                    >
+                                        <Text variant="header-1">{dc.name}</Text>
+                                        <Box>
+                                            <Text
+                                                variant="subheader-1"
+                                                color="secondary"
+                                                ellipsis={true}
+                                            >
+                                                {dc.description}
+                                            </Text>
+                                        </Box>
+                                    </Card>
+                                ))}
+                        </Box>
                         <div>
                             <Button view="normal" onClick={handleCloseDcModal}>
                                 Закрыть
                             </Button>
                         </div>
-                    </Modal>
-                )}
+                    </div>
+                </Modal>
+            </div>
+        );
+    };
+
+    const renderParentOuSelector = () => {
+        return (
+            <div style={{marginBottom: '20px'}}>
+                <label style={{display: 'block', marginBottom: '8px'}}>
+                    Родительский Organization Unit
+                </label>
+                <TextInput
+                    name="parentOuId"
+                    value={searchOu ?? selectedParentOuId ?? ''}
+                    onUpdate={handleParentOuChange}
+                    onBlur={formik.handleBlur('parentOu')}
+                    error={formik.touched.parentOrgUnit ? formik.errors.parentOrgUnit : undefined}
+                    placeholder="Введите или выберите родительский OU"
+                />
+                <Button
+                    view="normal"
+                    size="m"
+                    onClick={handleOpenParentModal}
+                    style={{marginTop: '10px'}}
+                >
+                    Поиск OU
+                </Button>
+                <Modal open={isParentModalOpen} onOpenChange={handleCloseParentModal}>
+                    <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
+                        <Text variant="header-1">Поиск Organization Unit</Text>
+                        <Box marginTop="10px">
+                            {parentOuOptions
+                                .filter((item) =>
+                                    `${item.name}|${item.description}`
+                                        .toLowerCase()
+                                        .includes(searchOu?.toLowerCase() ?? ''),
+                                )
+                                .map((ou) => (
+                                    <Card
+                                        key={ou.id}
+                                        type="selection"
+                                        onClick={() => handleParentOuSelect(ou)}
+                                        style={{marginBottom: '10px', padding: '16px'}}
+                                    >
+                                        <Text variant="header-1">{ou.name}</Text>
+                                        <Box>
+                                            <Text
+                                                variant="subheader-1"
+                                                color="secondary"
+                                                ellipsis={true}
+                                            >
+                                                {ou.description}
+                                            </Text>
+                                        </Box>
+                                    </Card>
+                                ))}
+                        </Box>
+                        <div>
+                            <Button view="normal" onClick={handleCloseParentModal}>
+                                Закрыть
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
+            </div>
+        );
+    };
+
+    const renderAccountsSelector = () => {
+        return (
+            <div style={{marginBottom: '20px'}}>
+                <label style={{display: 'block', marginBottom: '8px'}}>
+                    Владелец нового Organization Unit
+                </label>
+                <TextInput
+                    name="ownerAccountId"
+                    value={searchAccount ?? selectedAccountId ?? ''}
+                    onUpdate={handleAccountChange}
+                    onBlur={formik.handleBlur('ownerAccount')}
+                    error={formik.touched.ownerAccount ? formik.errors.ownerAccount : undefined}
+                    placeholder="Введите и выберите владельца"
+                />
+                <Button
+                    view="normal"
+                    size="m"
+                    onClick={handleOpenAccountsModal}
+                    style={{marginTop: '10px'}}
+                >
+                    Поиск аккаунта
+                </Button>
+                <Modal open={isAccountsModalOpen} onOpenChange={handleCloseAccountsModal}>
+                    <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
+                        <Text variant="header-1">Поиск аккаунта владельца</Text>
+                        <Box marginTop="10px">
+                            {accountOptions.map((item) => (
+                                <Card
+                                    key={item.id}
+                                    type="selection"
+                                    onClick={() => handleAccountSelect(item)}
+                                    style={{marginBottom: '10px', padding: '16px'}}
+                                >
+                                    <Text variant="header-1">{`${item.firstName} ${item.lastName}`}</Text>
+                                    <Box>
+                                        <Text
+                                            variant="subheader-1"
+                                            color="secondary"
+                                            ellipsis={true}
+                                        >
+                                            {item.email}
+                                        </Text>
+                                    </Box>
+                                </Card>
+                            ))}
+                        </Box>
+                        <div>
+                            <Button view="normal" onClick={handleCloseAccountsModal}>
+                                Закрыть
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         );
     };
 
     return (
         <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
-            <h1>Создание новой Organization Unit</h1>
+            <h1>Создание нового Organization Unit</h1>
             <form onSubmit={formik.handleSubmit}>
                 <InputField
                     label="Название"
@@ -194,16 +372,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
                     error={formik.touched.name ? formik.errors.name : undefined}
                     placeholder="Введите название"
                 />
-                <InputField
-                    label="Владелец"
-                    name="ownerId"
-                    value={formik.values.ownerId ?? ''}
-                    onChange={(value) => formik.setFieldValue('ownerId', value)}
-                    onBlur={formik.handleBlur('ownerId')}
-                    error={formik.touched.ownerId ? formik.errors.ownerId : undefined}
-                    placeholder="Введите владельца"
-                />
-                <InputField
+                <TextAreaField
                     label="Описание"
                     name="description"
                     value={formik.values.description}
@@ -212,11 +381,24 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit}) => {
                     error={formik.touched.description ? formik.errors.description : undefined}
                     placeholder="Введите описание"
                 />
+                {renderAccountsSelector()}
                 {renderDcSelector()}
                 {selectedDcId && renderParentOuSelector()}
-                <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
-                    {formik.isSubmitting ? 'Создание...' : 'Создать OU'}
-                </Button>
+                <HorizontalStack>
+                    <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
+                        {formik.isSubmitting ? 'Создание...' : 'Создать OU'}
+                    </Button>
+                    <Box marginLeft="20px">
+                        <Button
+                            view="normal"
+                            size="l"
+                            disabled={formik.isSubmitting}
+                            onClick={onClose}
+                        >
+                            {'Отменить'}
+                        </Button>
+                    </Box>
+                </HorizontalStack>
             </form>
         </div>
     );

@@ -13,6 +13,16 @@
           "supportsES6": true,
           "useSingleRequestParameter": true
         }
+      },
+      "mdb": {
+        "generatorName": "typescript-axios",
+        "output": "./src/generated/api-mdb",
+        "skipValidateSpec": false,
+        "inputSpec": "http://localhost:9001/internal/api-docs",
+        "additionalProperties": {
+          "supportsES6": true,
+          "useSingleRequestParameter": true
+        }
       }
     }
   }

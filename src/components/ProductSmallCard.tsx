@@ -1,15 +1,17 @@
 'use client';
 
 import React from 'react';
-import {Button, Card, Icon} from '@gravity-ui/uikit';
+import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {ProductDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {Eye} from '@gravity-ui/icons';
+import {VerticalStack} from '@/components/Layout/VerticalStack';
+import {Box} from '@/components/Layout/Box';
 
 interface ProductSmallCardProps {
     product: ProductDTO;
-    onSelect: (productId: string) => void;
+    onSelect: (product: ProductDTO) => void;
 }
 
 export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSelect}) => {
@@ -21,17 +23,20 @@ export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSe
 
     return (
         <Card
-            style={{marginBottom: '10px', padding: '10px', cursor: 'pointer'}}
-            onClick={() => onSelect(product.id ?? '???')}
+            type="selection"
+            style={{marginBottom: '10px', padding: '10px'}}
+            onClick={() => onSelect(product)}
         >
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                <div>
-                    <div style={{fontWeight: 'bold'}}>{product.name}</div>
-                    <div>{product.description?.split(' ').slice(0, 5).join(' ')}</div>
-                    <div>
-                        <UserBlockWithFetch accountId={product.ownerId ?? '???'} />
-                    </div>
-                </div>
+                <VerticalStack>
+                    <Text variant="subheader-3">{product.name}</Text>
+                    <Text variant="subheader-1" color="secondary">
+                        {product.description?.split(' ').slice(0, 5).join(' ')}
+                    </Text>
+                </VerticalStack>
+                <Box marginLeft="10px" marginRight="10px">
+                    {product.ownerId && <UserBlockWithFetch accountId={product.ownerId} size="s" />}
+                </Box>
                 <Button view="normal" size="m" onClick={handleViewDetails}>
                     <Icon data={Eye} />
                 </Button>

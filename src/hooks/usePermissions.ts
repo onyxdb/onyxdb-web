@@ -14,18 +14,21 @@ export const usePermissions = () => {
 
     useEffect(() => {
         setPermissions({
-            'web-global-domain-components-create': {},
-            'web-global-domain-components-edit': {},
-            'web-global-domain-components-delete': {},
+            'web-global-domain-component-create': {},
+            'web-global-domain-component-edit': {},
+            'web-global-domain-component-delete': {},
             'web-global-organization-unit-create': {},
             'web-global-organization-unit-edit': {},
             'web-global-organization-unit-delete': {},
-            'web-global-business-roles-create': {},
-            'web-global-business-roles-edit': {},
-            'web-global-business-roles-delete': {},
+            'web-global-business-role-create': {},
+            'web-global-business-role-edit': {},
+            'web-global-business-role-delete': {},
             'web-global-account-create': {},
             'web-global-account-edit': {},
             'web-global-account-delete': {},
+            'web-global-product-create': {},
+            'web-global-product-edit': {},
+            'web-global-product-delete': {},
             'web-product-123-edit': {},
             'web-product-123-view': {},
         });

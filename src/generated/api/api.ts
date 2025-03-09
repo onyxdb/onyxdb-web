@@ -13,25 +13,25 @@
  */
 
 import type {Configuration} from './configuration';
-import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
+import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-    assertParamExists,
-    createRequestFunction,
     DUMMY_BASE_URL,
-    serializeDataIfNeeded,
+    assertParamExists,
     setApiKeyToObject,
     setBasicAuthToObject,
     setBearerAuthToObject,
     setOAuthToObject,
     setSearchParams,
+    serializeDataIfNeeded,
     toPathString,
+    createRequestFunction,
 } from './common';
 import type {RequestArgs} from './base';
 // @ts-ignore
-import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
+import {BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap} from './base';
 
 /**
  *
@@ -94,7 +94,6 @@ export interface AccountDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -108,7 +107,6 @@ export interface BadRequestResponse {
      */
     message: string;
 }
-
 /**
  *
  * @export
@@ -164,7 +162,6 @@ export interface BusinessRoleDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -178,7 +175,6 @@ export interface CheckPermission200Response {
      */
     hasAccess?: boolean;
 }
-
 /**
  *
  * @export
@@ -216,7 +212,6 @@ export interface DomainComponentDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -236,7 +231,6 @@ export interface DomainTreeDTO {
      */
     children: Array<OrganizationTreeDTO>;
 }
-
 /**
  *
  * @export
@@ -268,7 +262,6 @@ export interface GetCurrentUser200Response {
      */
     roles: Array<string>;
 }
-
 /**
  *
  * @export
@@ -288,7 +281,6 @@ export interface Login200Response {
      */
     refreshToken: string;
 }
-
 /**
  *
  * @export
@@ -308,7 +300,6 @@ export interface LoginRequest {
      */
     password: string;
 }
-
 /**
  *
  * @export
@@ -322,7 +313,6 @@ export interface LogoutRequest {
      */
     refreshToken: string;
 }
-
 /**
  *
  * @export
@@ -336,7 +326,6 @@ export interface NotFoundResponse {
      */
     message: string;
 }
-
 /**
  *
  * @export
@@ -356,7 +345,6 @@ export interface OrganizationTreeDTO {
      */
     unit: OrganizationUnitDTO;
 }
-
 /**
  *
  * @export
@@ -412,7 +400,6 @@ export interface OrganizationUnitDTO {
      */
     ownerId?: string;
 }
-
 /**
  *
  * @export
@@ -444,7 +431,6 @@ export interface PaginatedAccountResponse {
      */
     data: Array<AccountDTO>;
 }
-
 /**
  *
  * @export
@@ -476,7 +462,6 @@ export interface PaginatedBusinessRoleResponse {
      */
     data: Array<BusinessRoleDTO>;
 }
-
 /**
  *
  * @export
@@ -508,7 +493,37 @@ export interface PaginatedOrganizationUnitResponse {
      */
     data: Array<OrganizationUnitDTO>;
 }
-
+/**
+ *
+ * @export
+ * @interface PaginatedProductResponse
+ */
+export interface PaginatedProductResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedProductResponse
+     */
+    totalCount: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedProductResponse
+     */
+    startPosition: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedProductResponse
+     */
+    endPosition: number;
+    /**
+     *
+     * @type {Array<ProductDTO>}
+     * @memberof PaginatedProductResponse
+     */
+    data: Array<ProductDTO>;
+}
 /**
  *
  * @export
@@ -540,7 +555,6 @@ export interface PaginatedRoleRequestResponse {
      */
     data: Array<RoleRequestDTO>;
 }
-
 /**
  *
  * @export
@@ -572,7 +586,6 @@ export interface PaginatedRoleResponse {
      */
     data: Array<RoleDTO>;
 }
-
 /**
  *
  * @export
@@ -616,7 +629,6 @@ export interface PermissionDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -672,7 +684,6 @@ export interface ProductDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -692,7 +703,6 @@ export interface ProductTreeDTO {
      */
     children?: Array<ProductTreeDTO>;
 }
-
 /**
  *
  * @export
@@ -706,7 +716,6 @@ export interface RefreshToken200Response {
      */
     accessToken: string;
 }
-
 /**
  *
  * @export
@@ -774,7 +783,6 @@ export interface RoleDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -859,7 +867,6 @@ export interface RoleWithPermissionsDTO {
      */
     permissions: Array<PermissionDTO>;
 }
-
 /**
  *
  * @export
@@ -7187,10 +7194,18 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          *
          * @summary Get all products
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProducts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllProducts: async (
+            search?: string,
+            limit?: number,
+            offset?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -7206,6 +7221,18 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -7550,13 +7577,26 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get all products
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getAllProducts(
+            search?: string,
+            limit?: number,
+            offset?: number,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductDTO>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(options);
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedProductResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(
+                search,
+                limit,
+                offset,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['ProductsApi.getAllProducts']?.[localVarOperationServerIndex]
@@ -7763,11 +7803,22 @@ export const ProductsApiFactory = function (
         /**
          *
          * @summary Get all products
+         * @param {ProductsApiGetAllProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProducts(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductDTO>> {
-            return localVarFp.getAllProducts(options).then((request) => request(axios, basePath));
+        getAllProducts(
+            requestParameters: ProductsApiGetAllProductsRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<PaginatedProductResponse> {
+            return localVarFp
+                .getAllProducts(
+                    requestParameters.search,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
         },
         /**
          *
@@ -7867,6 +7918,34 @@ export interface ProductsApiDeleteProductRequest {
      * @memberof ProductsApiDeleteProduct
      */
     readonly productId: string;
+}
+
+/**
+ * Request parameters for getAllProducts operation in ProductsApi.
+ * @export
+ * @interface ProductsApiGetAllProductsRequest
+ */
+export interface ProductsApiGetAllProductsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductsApiGetAllProducts
+     */
+    readonly search?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof ProductsApiGetAllProducts
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof ProductsApiGetAllProducts
+     */
+    readonly offset?: number;
 }
 
 /**
@@ -7996,13 +8075,22 @@ export class ProductsApi extends BaseAPI {
     /**
      *
      * @summary Get all products
+     * @param {ProductsApiGetAllProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductsApi
      */
-    public getAllProducts(options?: RawAxiosRequestConfig) {
+    public getAllProducts(
+        requestParameters: ProductsApiGetAllProductsRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
         return ProductsApiFp(this.configuration)
-            .getAllProducts(options)
+            .getAllProducts(
+                requestParameters.search,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 

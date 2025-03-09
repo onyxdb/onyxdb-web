@@ -10,7 +10,7 @@ import {
     OrganizationUnitDTO,
 } from '@/generated/api';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
-import {Button, Modal} from '@gravity-ui/uikit';
+import {Button, Modal, Text} from '@gravity-ui/uikit';
 import {usePermissions} from '@/hooks/usePermissions';
 import {OrganizationUnitSmallCard} from '@/components/OrganizationUnitSmallCard';
 import {DomainComponentBlock} from '@/components/DomainComponentBlock';
@@ -215,30 +215,28 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     return (
-        <div style={{padding: '20px'}}>
-            <div style={{width: '300px', marginRight: '20px'}}>
-                <div style={{marginBottom: '20px'}}>
-                    <h1>Domain Components</h1>
-                    <HorizontalStack align="center">
-                        {domainComponents.map((dc) => (
-                            <Box marginRight="20px" key={dc.id}>
-                                <DomainComponentBlock
-                                    data={dc}
-                                    onEdit={handleDcEdit}
-                                    onDelete={handleDcDelete}
-                                    onClick={() => handleDcSelect(dc.id ?? '???')}
-                                    isActive={dc.id === selectedDcId}
-                                />
-                            </Box>
-                        ))}
-                        {checkPermission('web-global-domain-components', 'create') && (
-                            <Button view="action" size="l" onClick={handleCreateDC}>
-                                Создать Domain Component
-                            </Button>
-                        )}
-                    </HorizontalStack>
-                </div>
-            </div>
+        <Box padding="20px">
+            <Box marginBottom="20px">
+                <Text variant="header-1">Domain Components</Text>
+                <HorizontalStack align="center">
+                    {domainComponents.map((dc) => (
+                        <Box marginRight="20px" key={dc.id}>
+                            <DomainComponentBlock
+                                data={dc}
+                                onEdit={handleDcEdit}
+                                onDelete={handleDcDelete}
+                                onClick={() => handleDcSelect(dc.id ?? '???')}
+                                isActive={dc.id === selectedDcId}
+                            />
+                        </Box>
+                    ))}
+                    {checkPermission('web-global-domain-component', 'create') && (
+                        <Button view="action" size="l" onClick={handleCreateDC}>
+                            Создать Domain Component
+                        </Button>
+                    )}
+                </HorizontalStack>
+            </Box>
             <div style={{flex: 1}}>
                 <h1>Organization Units</h1>
                 <HorizontalStack>
@@ -267,6 +265,6 @@ export default function StructurePage({}: StructurePageProps) {
                     onClose={handleCloseCreateModal}
                 />
             </Modal>
-        </div>
+        </Box>
     );
 }

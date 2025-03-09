@@ -2,32 +2,25 @@
 
 import React from 'react';
 import {Button, Card, Icon} from '@gravity-ui/uikit';
-import {AccountDTO, OrganizationUnitDTO} from '@/generated/api';
-import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
-import {UserBlock} from '@/components/common/UserBlock';
 import {useRouter} from 'next/navigation';
+import {ProductDTO} from '@/generated/api';
+import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePermissions} from '@/hooks/usePermissions';
 
-interface DomainComponentProps {
-    data: OrganizationUnitDTO;
-    dataAccounts: AccountDTO[];
-    onEdit: (ou: OrganizationUnitDTO) => void;
+interface ProductBlockProps {
+    data: ProductDTO;
+    onEdit: (product: ProductDTO) => void;
     onDelete: (id: string) => void;
 }
 
-export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
-    data,
-    dataAccounts,
-    onEdit,
-    onDelete,
-}) => {
+export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelete}) => {
     const router = useRouter();
     const {checkActions} = usePermissions();
-    const handleViewDetails = (ouId: string) => {
-        router.push(`/org/view/${ouId}`);
+    const handleViewDetails = (id: string) => {
+        router.push(`/products/view/${id}`);
     };
 
     return (
@@ -37,8 +30,8 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                     <h2>{data.name}</h2>
                     <div>
                         {checkActions([
-                            {name: 'web-global-organization-unit', action: 'edit'},
-                            {name: `web-organization-unit-${data.id}`, action: 'edit'},
+                            {name: 'web-global-product', action: 'edit'},
+                            {name: `web-product-${data.id}`, action: 'edit'},
                         ]) && (
                             <Box marginBottom="5px">
                                 <Button view="normal" size="m" onClick={() => onEdit(data)}>
@@ -47,8 +40,8 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                             </Box>
                         )}
                         {checkActions([
-                            {name: 'web-global-organization-unit', action: 'delete'},
-                            {name: `web-organization-unit-${data.id}`, action: 'delete'},
+                            {name: 'web-global-product', action: 'delete'},
+                            {name: `web-product-${data.id}`, action: 'delete'},
                         ]) && (
                             <Button
                                 view="outlined-danger"
@@ -60,25 +53,17 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                         )}
                     </div>
                 </HorizontalStack>
-                <div style={{marginBottom: '8px'}}>
+                <Box marginBottom="8px">
                     <strong>Описание:</strong> {data.description}
-                </div>
-                <div style={{marginBottom: '8px'}}>
+                </Box>
+                <Box marginBottom="8px">
                     <strong>Владелец:</strong>
                     {data.ownerId ? (
                         <UserBlockWithFetch accountId={data.ownerId} selectable={true} size="l" />
                     ) : (
                         'Not stated'
                     )}
-                </div>
-                <div style={{marginBottom: '8px'}}>
-                    <strong>Сотрудники:</strong>
-                    {dataAccounts.map((account) => (
-                        <div key={account.id} style={{marginBottom: '4px'}}>
-                            <UserBlock account={account} selectable={true} size="l" />
-                        </div>
-                    ))}
-                </div>
+                </Box>
                 <Button view="normal" size="l" onClick={() => handleViewDetails(data?.id ?? '???')}>
                     Подробнее
                 </Button>

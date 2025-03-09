@@ -13,7 +13,7 @@ interface DomainComponentProps {
     data: OrganizationUnitDTO;
 }
 
-export const OrgUnitBlock: React.FC<DomainComponentProps> = ({data}) => {
+export const OrgUnitBlockSmall: React.FC<DomainComponentProps> = ({data}) => {
     const router = useRouter();
 
     const [owner, setOwner] = useState<AccountDTO | null>(null);

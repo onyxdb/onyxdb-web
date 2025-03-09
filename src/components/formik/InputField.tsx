@@ -6,7 +6,7 @@ interface InputFieldProps {
     name: string;
     value: string;
     onChange: (value: string) => void;
-    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     error?: string;
     placeholder?: string;
 }

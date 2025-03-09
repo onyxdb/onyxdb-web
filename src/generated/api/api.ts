@@ -512,6 +512,38 @@ export interface PaginatedOrganizationUnitResponse {
 /**
  *
  * @export
+ * @interface PaginatedProductResponse
+ */
+export interface PaginatedProductResponse {
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedProductResponse
+     */
+    totalCount: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedProductResponse
+     */
+    startPosition: number;
+    /**
+     *
+     * @type {number}
+     * @memberof PaginatedProductResponse
+     */
+    endPosition: number;
+    /**
+     *
+     * @type {Array<ProductDTO>}
+     * @memberof PaginatedProductResponse
+     */
+    data: Array<ProductDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface PaginatedRoleRequestResponse
  */
 export interface PaginatedRoleRequestResponse {
@@ -7187,10 +7219,18 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          *
          * @summary Get all products
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProducts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllProducts: async (
+            search?: string,
+            limit?: number,
+            offset?: number,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -7206,6 +7246,18 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -7550,13 +7602,26 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get all products
+         * @param {string} [search]
+         * @param {number} [limit]
+         * @param {number} [offset]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getAllProducts(
+            search?: string,
+            limit?: number,
+            offset?: number,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductDTO>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(options);
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedProductResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProducts(
+                search,
+                limit,
+                offset,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['ProductsApi.getAllProducts']?.[localVarOperationServerIndex]
@@ -7763,11 +7828,22 @@ export const ProductsApiFactory = function (
         /**
          *
          * @summary Get all products
+         * @param {ProductsApiGetAllProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProducts(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductDTO>> {
-            return localVarFp.getAllProducts(options).then((request) => request(axios, basePath));
+        getAllProducts(
+            requestParameters: ProductsApiGetAllProductsRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<PaginatedProductResponse> {
+            return localVarFp
+                .getAllProducts(
+                    requestParameters.search,
+                    requestParameters.limit,
+                    requestParameters.offset,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
         },
         /**
          *
@@ -7867,6 +7943,34 @@ export interface ProductsApiDeleteProductRequest {
      * @memberof ProductsApiDeleteProduct
      */
     readonly productId: string;
+}
+
+/**
+ * Request parameters for getAllProducts operation in ProductsApi.
+ * @export
+ * @interface ProductsApiGetAllProductsRequest
+ */
+export interface ProductsApiGetAllProductsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductsApiGetAllProducts
+     */
+    readonly search?: string;
+
+    /**
+     *
+     * @type {number}
+     * @memberof ProductsApiGetAllProducts
+     */
+    readonly limit?: number;
+
+    /**
+     *
+     * @type {number}
+     * @memberof ProductsApiGetAllProducts
+     */
+    readonly offset?: number;
 }
 
 /**
@@ -7996,13 +8100,22 @@ export class ProductsApi extends BaseAPI {
     /**
      *
      * @summary Get all products
+     * @param {ProductsApiGetAllProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductsApi
      */
-    public getAllProducts(options?: RawAxiosRequestConfig) {
+    public getAllProducts(
+        requestParameters: ProductsApiGetAllProductsRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
         return ProductsApiFp(this.configuration)
-            .getAllProducts(options)
+            .getAllProducts(
+                requestParameters.search,
+                requestParameters.limit,
+                requestParameters.offset,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -9009,6 +9122,7 @@ export const RolesRequestsApiAxiosParamCreator = function (configuration?: Confi
          * @param {string} [ownerId]
          * @param {string} [status]
          * @param {string} [accountId]
+         * @param {string} [roleId]
          * @param {number} [limit]
          * @param {number} [offset]
          * @param {*} [options] Override http request option.
@@ -9018,6 +9132,7 @@ export const RolesRequestsApiAxiosParamCreator = function (configuration?: Confi
             ownerId?: string,
             status?: string,
             accountId?: string,
+            roleId?: string,
             limit?: number,
             offset?: number,
             options: RawAxiosRequestConfig = {},
@@ -9048,6 +9163,10 @@ export const RolesRequestsApiAxiosParamCreator = function (configuration?: Confi
 
             if (accountId !== undefined) {
                 localVarQueryParameter['accountId'] = accountId;
+            }
+
+            if (roleId !== undefined) {
+                localVarQueryParameter['roleId'] = roleId;
             }
 
             if (limit !== undefined) {
@@ -9273,6 +9392,7 @@ export const RolesRequestsApiFp = function (configuration?: Configuration) {
          * @param {string} [ownerId]
          * @param {string} [status]
          * @param {string} [accountId]
+         * @param {string} [roleId]
          * @param {number} [limit]
          * @param {number} [offset]
          * @param {*} [options] Override http request option.
@@ -9282,6 +9402,7 @@ export const RolesRequestsApiFp = function (configuration?: Configuration) {
             ownerId?: string,
             status?: string,
             accountId?: string,
+            roleId?: string,
             limit?: number,
             offset?: number,
             options?: RawAxiosRequestConfig,
@@ -9292,6 +9413,7 @@ export const RolesRequestsApiFp = function (configuration?: Configuration) {
                 ownerId,
                 status,
                 accountId,
+                roleId,
                 limit,
                 offset,
                 options,
@@ -9444,6 +9566,7 @@ export const RolesRequestsApiFactory = function (
                     requestParameters.ownerId,
                     requestParameters.status,
                     requestParameters.accountId,
+                    requestParameters.roleId,
                     requestParameters.limit,
                     requestParameters.offset,
                     options,
@@ -9546,6 +9669,13 @@ export interface RolesRequestsApiGetAllRolesRequestsRequest {
      * @memberof RolesRequestsApiGetAllRolesRequests
      */
     readonly accountId?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesRequestsApiGetAllRolesRequests
+     */
+    readonly roleId?: string;
 
     /**
      *
@@ -9659,6 +9789,7 @@ export class RolesRequestsApi extends BaseAPI {
                 requestParameters.ownerId,
                 requestParameters.status,
                 requestParameters.accountId,
+                requestParameters.roleId,
                 requestParameters.limit,
                 requestParameters.offset,
                 options,

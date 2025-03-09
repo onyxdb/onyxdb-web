@@ -5,3 +5,56 @@ body,
     min-width: 320px;
     margin: 0;
 }
+
+/*:root {*/
+/*    --page-header-y-offset: 10px;*/
+/*    --page-header-x-offset: 20px;*/
+/*    --page-header-height: 60px;*/
+/*}*/
+
+.page-header {
+    padding: 0 8px;
+    height: 40px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.page-header.top-aligned {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(12px);
+}
+
+.page-header.top-aligned:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+    z-index: -1;
+    background: var(--g-color-base-background);
+}
+
+.page-header + .page-header.top-aligned {
+    top: 40px;
+}
+
+.page-header__content {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1 1 0;
+    overflow: hidden;
+}
+
+.page-header__actions {
+    margin-left: auto;
+    display: flex;
+    flex-flow: row;
+    gap: 4px;
+}

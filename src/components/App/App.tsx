@@ -7,6 +7,7 @@ import {
     Cpu,
     Ghost,
     ListCheck,
+    ListUl,
     Moon,
     Persons,
     Sun,
@@ -43,9 +44,15 @@ export const App: React.FC<AppProps> = ({children}) => {
         },
         {
             title: 'Доступы',
-            icon: ListCheck,
+            icon: ListUl,
             onItemClick: () => router.push('/access'),
             myLink: '/access',
+        },
+        {
+            title: 'Запросы',
+            icon: ListCheck,
+            onItemClick: () => router.push('/requests'),
+            myLink: '/requests',
         },
         {
             title: 'Продукты',

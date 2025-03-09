@@ -25,7 +25,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
     onDelete,
 }) => {
     const router = useRouter();
-    const {checkPermission} = usePermissions();
+    const {checkActions} = usePermissions();
     const handleViewDetails = (ouId: string) => {
         router.push(`/org/view/${ouId}`);
     };
@@ -36,14 +36,20 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                 <HorizontalStack justify="space-between">
                     <h2>{data.name}</h2>
                     <div>
-                        {checkPermission('web-global-organization-unit', 'create') && (
+                        {checkActions([
+                            {name: 'web-global-organization-unit', action: 'edit'},
+                            {name: `web-organization-unit-${data.id}`, action: 'edit'},
+                        ]) && (
                             <Box marginBottom="5px">
                                 <Button view="normal" size="m" onClick={() => onEdit(data)}>
                                     <Icon data={Pencil} />
                                 </Button>
                             </Box>
                         )}
-                        {checkPermission('web-global-organization-unit', 'delete') && (
+                        {checkActions([
+                            {name: 'web-global-organization-unit', action: 'delete'},
+                            {name: `web-organization-unit-${data.id}`, action: 'delete'},
+                        ]) && (
                             <Button
                                 view="outlined-danger"
                                 size="m"

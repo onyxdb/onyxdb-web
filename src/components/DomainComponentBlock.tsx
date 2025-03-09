@@ -34,9 +34,11 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <div>
                     <Text variant="header-1">{data.name}</Text>
-                    <Text variant="subheader-1" color="secondary" ellipsis={true}>
-                        {data.description}
-                    </Text>
+                    <Box>
+                        <Text variant="subheader-1" color="secondary" ellipsis={true}>
+                            {data.description}
+                        </Text>
+                    </Box>
                 </div>
                 <Box marginLeft="10px">
                     {checkPermission('web-global-domain-components', 'create') && (

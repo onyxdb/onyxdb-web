@@ -15,7 +15,7 @@ export default function ProductsPage() {
     useEffect(() => {
         productsApi
             .getAllProducts()
-            .then((response) => setProducts(response.data))
+            .then((response) => setProducts(response.data.data))
             .catch((error) => console.error('Error fetching products:', error));
     }, []);
 
@@ -35,7 +35,7 @@ export default function ProductsPage() {
             template: (product) => (
                 <span
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/products/${product.id}/info`)}
+                    onClick={() => router.push(`/products/view/${product.id}`)}
                 >
                     {product.name}
                 </span>

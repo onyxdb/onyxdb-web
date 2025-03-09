@@ -48,6 +48,12 @@ export const App: React.FC<AppProps> = ({children}) => {
             myLink: '/access',
         },
         {
+            title: 'Запросы',
+            icon: ListCheck,
+            onItemClick: () => router.push('/requests'),
+            myLink: '/requests',
+        },
+        {
             title: 'Продукты',
             icon: Cpu,
             onItemClick: () => router.push('/products'),

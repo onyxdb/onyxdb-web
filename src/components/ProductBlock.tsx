@@ -1,14 +1,15 @@
 'use client';
 
 import React from 'react';
-import {Button, Card, Icon} from '@gravity-ui/uikit';
+import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {ProductDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {Pencil, TrashBin} from '@gravity-ui/icons';
+import {Eye, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePermissions} from '@/hooks/usePermissions';
+import {VerticalStack} from '@/components/Layout/VerticalStack';
 
 interface ProductBlockProps {
     data: ProductDTO;
@@ -25,10 +26,27 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
 
     return (
         <Card style={{padding: '16px'}}>
-            <div style={{marginBottom: '12px'}}>
+            <Box>
                 <HorizontalStack justify="space-between">
-                    <h2>{data.name}</h2>
-                    <div>
+                    <VerticalStack>
+                        <Text variant="subheader-3">{data.name}</Text>
+                        <Text variant="subheader-1" color="secondary">
+                            {data.description?.split(' ').slice(0, 5).join(' ')}
+                        </Text>
+                        <Box marginBottom="8px" marginTop="8px">
+                            <strong>Владелец:</strong>
+                            {data.ownerId ? (
+                                <UserBlockWithFetch
+                                    accountId={data.ownerId}
+                                    selectable={true}
+                                    size="l"
+                                />
+                            ) : (
+                                'Not stated'
+                            )}
+                        </Box>
+                    </VerticalStack>
+                    <div style={{flexDirection: 'row'}}>
                         {checkActions([
                             {name: 'web-global-product', action: 'edit'},
                             {name: `web-product-${data.id}`, action: 'edit'},
@@ -53,21 +71,11 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                         )}
                     </div>
                 </HorizontalStack>
-                <Box marginBottom="8px">
-                    <strong>Описание:</strong> {data.description}
-                </Box>
-                <Box marginBottom="8px">
-                    <strong>Владелец:</strong>
-                    {data.ownerId ? (
-                        <UserBlockWithFetch accountId={data.ownerId} selectable={true} size="l" />
-                    ) : (
-                        'Not stated'
-                    )}
-                </Box>
                 <Button view="normal" size="l" onClick={() => handleViewDetails(data?.id ?? '???')}>
+                    <Icon data={Eye} />
                     Подробнее
                 </Button>
-            </div>
+            </Box>
         </Card>
     );
 };

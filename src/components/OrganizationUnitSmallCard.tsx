@@ -5,9 +5,9 @@ import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {OrganizationUnitDTO} from '@/generated/api';
 import {Eye} from '@gravity-ui/icons';
+import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {Box} from '@/components/Layout/Box';
-import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 
 interface OrganizationUnitSmallCardProps {
     orgUnit: OrganizationUnitDTO;

@@ -1,11 +1,9 @@
 'use client';
 
 import React from 'react';
-import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
-import {useRouter} from 'next/navigation';
+import {Card, Text} from '@gravity-ui/uikit';
 import {ProductDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
-import {Eye} from '@gravity-ui/icons';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {Box} from '@/components/Layout/Box';
 
@@ -15,12 +13,6 @@ interface ProductSmallCardProps {
 }
 
 export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSelect}) => {
-    const router = useRouter();
-
-    const handleViewDetails = () => {
-        router.push(`/products/${product.id}`);
-    };
-
     return (
         <Card
             type="selection"
@@ -37,9 +29,6 @@ export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSe
                 <Box marginLeft="10px" marginRight="10px">
                     {product.ownerId && <UserBlockWithFetch accountId={product.ownerId} size="s" />}
                 </Box>
-                <Button view="normal" size="m" onClick={handleViewDetails}>
-                    <Icon data={Eye} />
-                </Button>
             </div>
         </Card>
     );

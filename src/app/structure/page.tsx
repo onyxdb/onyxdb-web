@@ -231,9 +231,11 @@ export default function StructurePage({}: StructurePageProps) {
                         </Box>
                     ))}
                     {checkPermission('web-global-domain-component', 'create') && (
-                        <Button view="action" size="l" onClick={handleCreateDC}>
-                            Создать Domain Component
-                        </Button>
+                        <Box marginBottom="10px">
+                            <Button view="action" size="l" onClick={handleCreateDC}>
+                                Создать Domain Component
+                            </Button>
+                        </Box>
                     )}
                 </HorizontalStack>
             </Box>

@@ -26,20 +26,11 @@ export interface ProductFormFields {
 }
 
 function mapDTOtoFormFields(dto: ProductDTO): ProductFormFields {
-    // const ownerAccount = dto.ownerId
-    //     ? await accountsApi.getAccountById({accountId: dto.ownerId})
-    //     : null;
-    // const parentProduct = dto.parentId
-    //     ? await productsApi.getProductById({productId: dto.parentId})
-    //     : null;
-
     return {
         name: dto.name,
         description: dto.description,
-        // ownerAccount: ownerAccount?.data?.email ?? '',
         ownerAccount: dto.ownerId ?? '',
         ownerAccountId: dto.ownerId ?? '',
-        // parentProduct: parentProduct?.data?.name ?? '',
         parentProduct: dto.parentId ?? '',
         parentProductId: dto.parentId ?? '',
     };
@@ -60,13 +51,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, onClose, init
 
     const [isAccountsModalOpen, setIsAccountsModalOpen] = useState(false);
     const [isParentProductModalOpen, setIsParentProductModalOpen] = useState(false);
-
-    useEffect(() => {
-        if (initialValue) {
-            setSelectedAccountId(initialValue.ownerId ?? '???');
-            setSelectedParentProductId(initialValue.parentId ?? '???');
-        }
-    }, [initialValue]);
 
     const formik = useFormik<ProductFormFields>({
         initialValues: initialValue
@@ -95,22 +79,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, onClose, init
         onSubmit,
     });
 
-    const fetchAccountOptions = async () => {
-        const response = await accountsApi.getAllAccounts({
-            search: searchAccount ?? '',
-            limit: 10,
-        });
-        setAccountOptions(response.data.data ?? []);
-    };
-
-    const fetchParentProductOptions = async () => {
-        const response = await productsApi.getAllProducts({
-            search: searchParentProduct ?? '',
-            limit: 10,
-        });
-        setParentProductOptions(response.data.data ?? []);
-    };
-
     const handleAccountChange = (value: string) => {
         setSearchAccount(value);
         formik.setFieldValue('ownerAccount', value);
@@ -134,6 +102,48 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, onClose, init
         setSearchParentProduct(product.name);
         formik.setFieldValue('parentProduct', product.name);
         formik.setFieldValue('parentProductId', product.id);
+    };
+
+    const fetchInitialValues = async (data: ProductDTO) => {
+        try {
+            const ownerAccount = data.ownerId
+                ? await accountsApi.getAccountById({accountId: data.ownerId})
+                : null;
+            const parentProduct = data.parentId
+                ? await productsApi.getProductById({productId: data.parentId})
+                : null;
+
+            if (ownerAccount?.data) {
+                handleAccountSelect(ownerAccount.data);
+            }
+            if (parentProduct?.data) {
+                handleParentProductSelect(parentProduct.data);
+            }
+        } catch (error) {
+            console.error('Error fetching products tree:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (initialValue) {
+            fetchInitialValues(initialValue);
+        }
+    }, [initialValue]);
+
+    const fetchAccountOptions = async () => {
+        const response = await accountsApi.getAllAccounts({
+            search: searchAccount ?? '',
+            limit: 10,
+        });
+        setAccountOptions(response.data.data ?? []);
+    };
+
+    const fetchParentProductOptions = async () => {
+        const response = await productsApi.getAllProducts({
+            search: searchParentProduct ?? '',
+            limit: 10,
+        });
+        setParentProductOptions(response.data.data ?? []);
     };
 
     const handleOpenAccountsModal = () => {

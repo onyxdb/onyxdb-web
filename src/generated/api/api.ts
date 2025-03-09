@@ -684,7 +684,7 @@ export interface ProductTreeDTO {
      * @type {ProductDTO}
      * @memberof ProductTreeDTO
      */
-    item?: ProductDTO;
+    item: ProductDTO;
     /**
      *
      * @type {Array<ProductTreeDTO>}
@@ -7149,6 +7149,43 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
+         * @summary Получение дочерних элементов всех продуктов деревом
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllProductTree: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/products-tree`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Get all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7488,6 +7525,30 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Получение дочерних элементов всех продуктов деревом
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllProductTree(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductTreeDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProductTree(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProductsApi.getAllProductTree']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7686,6 +7747,17 @@ export const ProductsApiFactory = function (
         ): AxiosPromise<void> {
             return localVarFp
                 .deleteProduct(requestParameters.productId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Получение дочерних элементов всех продуктов деревом
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllProductTree(options?: RawAxiosRequestConfig): AxiosPromise<Array<ProductTreeDTO>> {
+            return localVarFp
+                .getAllProductTree(options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -7905,6 +7977,19 @@ export class ProductsApi extends BaseAPI {
     ) {
         return ProductsApiFp(this.configuration)
             .deleteProduct(requestParameters.productId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Получение дочерних элементов всех продуктов деревом
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductsApi
+     */
+    public getAllProductTree(options?: RawAxiosRequestConfig) {
+        return ProductsApiFp(this.configuration)
+            .getAllProductTree(options)
             .then((request) => request(this.axios, this.basePath));
     }
 

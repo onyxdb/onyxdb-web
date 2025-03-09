@@ -14,34 +14,11 @@ import {
 import {AsideFallback, AsideHeader, FooterItem} from '@gravity-ui/navigation';
 import {ThemeProvider} from '@gravity-ui/uikit';
 import {LoginInfo} from '@/components/Login/LoginInfo';
-import {usePathname} from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 
 interface AppProps {
     children: React.ReactNode;
 }
-
-const menuItems = [
-    {
-        title: 'Аккаунты',
-        icon: Persons,
-        link: '/accounts',
-    },
-    {
-        title: 'Оргструктура',
-        icon: Persons,
-        link: '/structure',
-    },
-    {
-        title: 'Доступы',
-        icon: ListCheck,
-        link: '/access',
-    },
-    {
-        title: 'Продукты',
-        icon: Cpu,
-        link: '/products',
-    },
-];
 
 export const App: React.FC<AppProps> = ({children}) => {
     const [asideCollapsed, setAsideCollapsed] = useState<boolean>(false);
@@ -49,10 +26,38 @@ export const App: React.FC<AppProps> = ({children}) => {
     const [theme, setTheme] = useState<'dark' | 'light'>('dark');
     const isDarkMode = theme === 'dark';
     const pathname = usePathname();
+    const router = useRouter();
+
+    const menuItems = [
+        {
+            title: 'Аккаунты',
+            icon: Persons,
+            onItemClick: () => router.push('/accounts'),
+            myLink: '/accounts',
+        },
+        {
+            title: 'Оргструктура',
+            icon: Persons,
+            onItemClick: () => router.push('/structure'),
+            myLink: '/structure',
+        },
+        {
+            title: 'Доступы',
+            icon: ListCheck,
+            onItemClick: () => router.push('/access'),
+            myLink: '/access',
+        },
+        {
+            title: 'Продукты',
+            icon: Cpu,
+            onItemClick: () => router.push('/products'),
+            myLink: '/products',
+        },
+    ];
 
     useEffect(() => {
         if (pathname) {
-            const tab = menuItems.find((m) => m.link && pathname.startsWith(m.link))?.title;
+            const tab = menuItems.find((m) => m.myLink && pathname.startsWith(m.myLink))?.title;
             setActiveTab(tab);
         }
     }, [pathname, menuItems]);

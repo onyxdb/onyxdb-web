@@ -49,10 +49,18 @@ export default function StructurePage({}: StructurePageProps) {
         [searchParams],
     );
 
+    const handleDcSelect = (id: string) => {
+        setSelectedDcId(id);
+        router.push(pathname + '?' + createQueryString('dcId', id));
+    };
+
     const fetchDomainComponents = async () => {
         try {
             const response = await domainComponentsApi.getAllDomainComponents();
             setDomainComponents(response.data ?? []);
+            if (response.data && response.data.length > 0 && response.data[0].id) {
+                handleDcSelect(response.data[0].id);
+            }
         } catch (error) {
             console.error('Error fetching domain components:', error);
         }
@@ -67,11 +75,6 @@ export default function StructurePage({}: StructurePageProps) {
         if (dcIdFromPath && domainComponents.some((dc) => dc.id === dcIdFromPath)) {
             setSelectedDcId(dcIdFromPath);
         }
-
-        // const ouIdFromPath = searchParams.get('ouId');
-        // if (ouIdFromPath && odomainComponents.some((dc) => dc.id === dcIdFromPath)) {
-        //     setSelectedDcId(dcIdFromPath);
-        // }
     }, [pathname, domainComponents]);
 
     const fetchAccounts = async (ouId: string) => {
@@ -128,9 +131,9 @@ export default function StructurePage({}: StructurePageProps) {
         router.push('/org/create');
     };
 
-    const handleEdit = (id: string) => {
+    const handleDcEdit = (id: string) => {
         const dc = domainComponents.find((dc2) => dc2.id === id);
-        console.log('domainComponent handleEdit id', id, 'dc', dc);
+        console.log('domainComponent handleDcEdit id', id, 'dc', dc);
         if (dc) {
             setEditingDomainComponent(dc);
             setIsCreateModalOpen(true);
@@ -221,16 +224,9 @@ export default function StructurePage({}: StructurePageProps) {
                             <Box marginRight="20px" key={dc.id}>
                                 <DomainComponentBlock
                                     data={dc}
-                                    onEdit={handleEdit}
+                                    onEdit={handleDcEdit}
                                     onDelete={handleDcDelete}
-                                    onClick={() => {
-                                        if (dc.id) {
-                                            setSelectedDcId(dc.id);
-                                            router.push(
-                                                pathname + '?' + createQueryString('dcId', dc.id),
-                                            );
-                                        }
-                                    }}
+                                    onClick={() => handleDcSelect(dc.id ?? '???')}
                                     isActive={dc.id === selectedDcId}
                                 />
                             </Box>

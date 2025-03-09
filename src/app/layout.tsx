@@ -1,10 +1,10 @@
 import type {Metadata} from 'next';
-import {DEFAULT_BODY_CLASSNAME} from '../components/Wrapper';
-import {App} from '../components/App';
+import {DEFAULT_BODY_CLASSNAME} from '@/components/Wrapper';
+import {App} from '@/components/App';
 
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
-import '../styles/globals.scss';
+import '../styles/globals.css';
 import React from 'react';
 
 export const metadata: Metadata = {

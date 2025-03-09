@@ -34,7 +34,7 @@ import {
     Persons,
     TrashBin,
 } from '@gravity-ui/icons';
-import {AccountForm} from '@/components/forms/AccountForm';
+import {AccountForm, AccountFormDTO} from '@/components/forms/AccountForm';
 import {UserBlock} from '@/components/common/UserBlock';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
@@ -128,8 +128,11 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         setIsEditModalOpen(false);
     };
 
-    const handleSubmitEdit = async (values: AccountDTO) => {
+    const handleSubmitEdit = async (values: AccountFormDTO) => {
         try {
+            // @ts-ignore
+            // eslint-disable-next-line no-param-reassign
+            values.data = values.anyData;
             await accountsApi.updateAccount({accountId: values.id ?? '???', accountDTO: values});
             handleCloseEditModal();
             // Обновление данных об аккаунте

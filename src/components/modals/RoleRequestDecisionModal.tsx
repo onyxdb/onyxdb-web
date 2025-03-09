@@ -5,7 +5,7 @@
 import React, {useEffect, useState} from 'react';
 import {accountsApi, rolesApi, rolesRequestsApi} from '@/app/apis';
 import {AccountDTO, PermissionDTO, RoleDTO, RoleRequestDTO} from '@/generated/api';
-import {Button, Card, Text} from '@gravity-ui/uikit';
+import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
@@ -57,17 +57,20 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
 
     return (
         <div style={{padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
-            <h1>Принятие решения о заявке на роль: {role?.name}</h1>
-            <div style={{marginBottom: '20px'}}>
-                <Text variant="header-2">Информация о заявке</Text>
+            <Text variant="header-2">
+                Принятие решения о заявке на роль: <Label theme="info">{role?.name}</Label>
+            </Text>
+
+            <div style={{marginBottom: '20px', marginTop: '20px'}}>
+                <Text variant="header-1">Информация о заявке</Text>
                 <Card style={{padding: '16px', marginBottom: '10px'}}>
-                    <Text variant="header-2">Причина:</Text>
+                    <Text variant="subheader-2">Причина:</Text>
                     <Text variant="subheader-1" color="secondary">
                         {roleRequest.reason}
                     </Text>
                 </Card>
                 <Card style={{padding: '16px', marginBottom: '10px'}}>
-                    <Text variant="header-2">Аккаунт:</Text>
+                    <Text variant="subheader-2">Аккаунт:</Text>
                     <Text variant="subheader-1" color="secondary">
                         {account
                             ? `${account.firstName} ${account.lastName} (${account.email})`
@@ -75,13 +78,13 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
                     </Text>
                 </Card>
                 <Card style={{padding: '16px', marginBottom: '10px'}}>
-                    <Text variant="header-2">Роль:</Text>
+                    <Text variant="subheader-2">Роль:</Text>
                     <Text variant="subheader-1" color="secondary">
                         {role ? `${role.name} (${role.roleType})` : 'Не загружено'}
                     </Text>
                 </Card>
                 <Card style={{padding: '16px', marginBottom: '10px'}}>
-                    <Text variant="header-2">Разрешения:</Text>
+                    <Text variant="subheader-2">Разрешения:</Text>
                     <ul>
                         {permissions.map((permission) => (
                             <li key={permission.id}>

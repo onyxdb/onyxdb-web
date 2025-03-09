@@ -21,7 +21,7 @@ export default function RolesPage() {
     };
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{padding: '20px'}}>
             <h1>Роли</h1>
             <RoleTable onEdit={handleEdit} onDelete={handleDelete} />
         </div>

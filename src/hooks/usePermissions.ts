@@ -26,6 +26,7 @@ export const usePermissions = () => {
             'web-global-role-create': {},
             'web-global-role-edit': {},
             'web-global-role-delete': {},
+            'web-global-role-request-edit': {},
             'web-global-account-create': {},
             'web-global-account-edit': {},
             'web-global-account-delete': {},

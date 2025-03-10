@@ -9,6 +9,7 @@ interface InputFieldProps {
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     error?: string;
     placeholder?: string;
+    note?: React.ReactNode;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -19,6 +20,7 @@ export const InputField: React.FC<InputFieldProps> = ({
     onBlur,
     error,
     placeholder,
+    note,
 }) => {
     return (
         <div style={{marginBottom: '16px'}}>
@@ -33,6 +35,7 @@ export const InputField: React.FC<InputFieldProps> = ({
                 onBlur={onBlur}
                 placeholder={placeholder}
                 error={error}
+                note={note}
             />
             {/*{error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}*/}
         </div>

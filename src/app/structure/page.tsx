@@ -21,7 +21,8 @@ import {OrgUnitBlock} from '@/components/OrgUnitBlock';
 
 interface StructurePageProps {}
 
-export const StructurePage: React.FC<StructurePageProps> = () => {
+// eslint-disable-next-line no-empty-pattern
+export default function StructurePage({}: StructurePageProps) {
     const [domainComponents, setDomainComponents] = useState<DomainComponentDTO[]>([]);
     const [selectedDcId, setSelectedDcId] = useState<string | null>(null);
     const [domainTree, setDomainTree] = useState<DomainTreeDTO | null>(null);
@@ -268,4 +269,4 @@ export const StructurePage: React.FC<StructurePageProps> = () => {
             </Modal>
         </Box>
     );
-};
+}

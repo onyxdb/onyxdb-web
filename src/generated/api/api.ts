@@ -14,7 +14,8 @@
 
 import type {Configuration} from './configuration';
 import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
-import globalAxios from 'axios'; // Some imports not used depending on template conditions
+import globalAxios from 'axios';
+// Some imports not used depending on template conditions
 // @ts-ignore
 import {
     assertParamExists,
@@ -28,7 +29,8 @@ import {
     setSearchParams,
     toPathString,
 } from './common';
-import type {RequestArgs} from './base'; // @ts-ignore
+import type {RequestArgs} from './base';
+// @ts-ignore
 import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
 
 /**
@@ -5459,6 +5461,7 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
         /**
          *
          * @summary Get all organization units
+         * @param {string} [search]
          * @param {string} [parentOuId]
          * @param {string} [dcId]
          * @param {number} [limit]
@@ -5467,6 +5470,7 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
          * @throws {RequiredError}
          */
         getAllOrganizationUnits: async (
+            search?: string,
             parentOuId?: string,
             dcId?: string,
             limit?: number,
@@ -5488,6 +5492,10 @@ export const OrganizationUnitsApiAxiosParamCreator = function (configuration?: C
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
 
             if (parentOuId !== undefined) {
                 localVarQueryParameter['parentOuId'] = parentOuId;
@@ -5939,6 +5947,7 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Get all organization units
+         * @param {string} [search]
          * @param {string} [parentOuId]
          * @param {string} [dcId]
          * @param {number} [limit]
@@ -5947,6 +5956,7 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getAllOrganizationUnits(
+            search?: string,
             parentOuId?: string,
             dcId?: string,
             limit?: number,
@@ -5959,6 +5969,7 @@ export const OrganizationUnitsApiFp = function (configuration?: Configuration) {
             ) => AxiosPromise<PaginatedOrganizationUnitResponse>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllOrganizationUnits(
+                search,
                 parentOuId,
                 dcId,
                 limit,
@@ -6254,6 +6265,7 @@ export const OrganizationUnitsApiFactory = function (
         ): AxiosPromise<PaginatedOrganizationUnitResponse> {
             return localVarFp
                 .getAllOrganizationUnits(
+                    requestParameters.search,
                     requestParameters.parentOuId,
                     requestParameters.dcId,
                     requestParameters.limit,
@@ -6432,6 +6444,13 @@ export interface OrganizationUnitsApiGetAccountsByouIdRequest {
  * @interface OrganizationUnitsApiGetAllOrganizationUnitsRequest
  */
 export interface OrganizationUnitsApiGetAllOrganizationUnitsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OrganizationUnitsApiGetAllOrganizationUnits
+     */
+    readonly search?: string;
+
     /**
      *
      * @type {string}
@@ -6652,6 +6671,7 @@ export class OrganizationUnitsApi extends BaseAPI {
     ) {
         return OrganizationUnitsApiFp(this.configuration)
             .getAllOrganizationUnits(
+                requestParameters.search,
                 requestParameters.parentOuId,
                 requestParameters.dcId,
                 requestParameters.limit,

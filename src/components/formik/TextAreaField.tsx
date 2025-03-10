@@ -9,6 +9,7 @@ interface TextAreaFieldProps {
     onBlur: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
     error?: string;
     placeholder?: string;
+    note?: string;
 }
 
 export const TextAreaField: React.FC<TextAreaFieldProps> = ({
@@ -19,6 +20,7 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
     onBlur,
     error,
     placeholder,
+    note,
 }) => {
     return (
         <div style={{marginBottom: '16px'}}>
@@ -33,6 +35,7 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
                 onBlur={onBlur}
                 placeholder={placeholder}
                 error={error}
+                note={note}
             />
             {/*{error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}*/}
         </div>

@@ -8,7 +8,6 @@ import {
     Button,
     Card,
     Icon,
-    Loader,
     Modal,
     Tab,
     TabList,
@@ -37,6 +36,7 @@ import {
 import {AccountForm, AccountFormDTO} from '@/components/forms/AccountForm';
 import {UserBlock} from '@/components/common/UserBlock';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {MyLoader} from '@/components/Loader';
 
 interface AccountViewPageProps {}
 
@@ -154,11 +154,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     };
 
     if (!account) {
-        return (
-            <HorizontalStack align="center" justify="center">
-                <Loader size="l" />
-            </HorizontalStack>
-        );
+        return <MyLoader />;
     }
 
     // if (!permissions[`web-account-${accountId}-view`]) {

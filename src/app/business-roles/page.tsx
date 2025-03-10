@@ -61,7 +61,7 @@ export default function BusinessRolesPage() {
     ];
 
     const actions = [];
-    if (checkPermission('web-global-product', 'create')) {
+    if (checkPermission('web-global-business-role', 'create')) {
         actions.push({
             text: 'Создать бизнес-роль',
             action: handleCreateBusinessRoleModal,

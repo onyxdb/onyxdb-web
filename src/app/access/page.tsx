@@ -4,9 +4,15 @@ import React from 'react';
 import RoleTable from '@/components/tables/RoleTable';
 import {rolesApi} from '@/app/apis';
 import {useRouter} from 'next/navigation';
+import {AppHeader} from '@/components/AppHeader/AppHeader';
+import {CirclePlus} from '@gravity-ui/icons';
+import {usePermissions} from '@/hooks/usePermissions';
+import {Text} from '@gravity-ui/uikit';
+import {Box} from '@/components/Layout/Box';
 
 export default function RolesPage() {
     const router = useRouter();
+    const {checkPermission} = usePermissions();
 
     const handleEdit = (roleId: string) => {
         console.log('Edit role with ID:', roleId);
@@ -20,10 +26,33 @@ export default function RolesPage() {
         }
     };
 
+    const handleRoleCreate = () => {
+        router.push(`/access/create`);
+    };
+
+    const breadCrumps = [
+        {href: '/', text: 'Главная'},
+        {href: '/access', text: 'Доступы'},
+    ];
+
+    const actions = [];
+    if (checkPermission('web-global-role', 'create')) {
+        actions.push({
+            text: 'Создать роль',
+            action: handleRoleCreate,
+            icon: <CirclePlus />,
+        });
+    }
+
     return (
-        <div style={{padding: '20px'}}>
-            <h1>Роли</h1>
-            <RoleTable onEdit={handleEdit} onDelete={handleDelete} />
+        <div>
+            <AppHeader breadCrumps={breadCrumps} actions={actions} />
+            <div style={{padding: '20px'}}>
+                <Box marginBottom="20px">
+                    <Text variant="header-2">Роли</Text>
+                </Box>
+                <RoleTable onEdit={handleEdit} onDelete={handleDelete} />
+            </div>
         </div>
     );
 }

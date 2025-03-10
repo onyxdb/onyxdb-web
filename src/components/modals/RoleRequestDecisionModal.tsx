@@ -4,7 +4,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {accountsApi, rolesApi, rolesRequestsApi} from '@/app/apis';
-import {AccountDTO, PermissionDTO, RoleDTO, RoleRequestDTO} from '@/generated/api';
+import {AccountDTO, RoleDTO, RoleRequestDTO, RoleWithPermissionsDTO} from '@/generated/api';
 import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
@@ -20,7 +20,9 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
 }) => {
     const [account, setAccount] = useState<AccountDTO | null>(null);
     const [role, setRole] = useState<RoleDTO | null>(null);
-    const [permissions, setPermissions] = useState<PermissionDTO[]>([]);
+    const [roleWithPermissions, setRoleWithPermissions] = useState<RoleWithPermissionsDTO | null>(
+        null,
+    );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,7 +36,7 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
                 });
                 setAccount(accountResponse.data);
                 setRole(roleResponse.data);
-                setPermissions(permissionsResponse.data);
+                setRoleWithPermissions(permissionsResponse.data);
             } catch (error) {
                 console.error('Error fetching data for role request:', error);
             }
@@ -60,7 +62,6 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
             <Text variant="header-2">
                 Принятие решения о заявке на роль: <Label theme="info">{role?.name}</Label>
             </Text>
-
             <div style={{marginBottom: '20px', marginTop: '20px'}}>
                 <Text variant="header-1">Информация о заявке</Text>
                 <Card style={{padding: '16px', marginBottom: '10px'}}>
@@ -86,13 +87,14 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
                 <Card style={{padding: '16px', marginBottom: '10px'}}>
                     <Text variant="subheader-2">Разрешения:</Text>
                     <ul>
-                        {permissions.map((permission) => (
-                            <li key={permission.id}>
-                                <Text variant="subheader-1" color="secondary">
-                                    {permission.resourceType}: {permission.actionType}
-                                </Text>
-                            </li>
-                        ))}
+                        {roleWithPermissions?.permissions &&
+                            roleWithPermissions.permissions.map((permission) => (
+                                <li key={permission.id}>
+                                    <Text variant="subheader-1" color="secondary">
+                                        {permission.resourceType}: {permission.actionType}
+                                    </Text>
+                                </li>
+                            ))}
                     </ul>
                 </Card>
             </div>

@@ -292,6 +292,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
             </div>
             <MyTable
                 data={roleRequests}
+                // @ts-ignore
                 columns={columns}
                 // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
                 // sortState={sorting}

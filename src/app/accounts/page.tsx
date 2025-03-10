@@ -5,7 +5,7 @@ import {AccountDTO} from '@/generated/api';
 import {Button, Modal} from '@gravity-ui/uikit';
 import {usePermissions} from '@/hooks/usePermissions';
 import {accountsApi} from '@/app/apis';
-import {AccountsTable} from '@/components/AccountsTable';
+import {AccountsTable} from '@/components/tables/AccountsTable';
 import {AccountForm, AccountFormDTO} from '@/components/forms/AccountForm';
 
 interface AccountsPageProps {}

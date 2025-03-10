@@ -49,6 +49,12 @@ export const App: React.FC<AppProps> = ({children}) => {
             myLink: '/access',
         },
         {
+            title: 'Бизнес Роли',
+            icon: ListUl,
+            onItemClick: () => router.push('/business-roles'),
+            myLink: '/business-roles',
+        },
+        {
             title: 'Запросы',
             icon: ListCheck,
             onItemClick: () => router.push('/requests'),

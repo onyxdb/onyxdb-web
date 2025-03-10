@@ -14,8 +14,7 @@
 
 import type {Configuration} from './configuration';
 import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
-import globalAxios from 'axios';
-// Some imports not used depending on template conditions
+import globalAxios from 'axios'; // Some imports not used depending on template conditions
 // @ts-ignore
 import {
     assertParamExists,
@@ -29,8 +28,7 @@ import {
     setSearchParams,
     toPathString,
 } from './common';
-import type {RequestArgs} from './base';
-// @ts-ignore
+import type {RequestArgs} from './base'; // @ts-ignore
 import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
 
 /**
@@ -8633,7 +8631,7 @@ export const RolesApiFp = function (configuration?: Configuration) {
             roleId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PermissionDTO>>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleWithPermissionsDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPermissionsByRoleId(
                 roleId,
@@ -8782,7 +8780,7 @@ export const RolesApiFactory = function (
         getPermissionsByRoleId(
             requestParameters: RolesApiGetPermissionsByRoleIdRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<Array<PermissionDTO>> {
+        ): AxiosPromise<RoleWithPermissionsDTO> {
             return localVarFp
                 .getPermissionsByRoleId(requestParameters.roleId, options)
                 .then((request) => request(axios, basePath));

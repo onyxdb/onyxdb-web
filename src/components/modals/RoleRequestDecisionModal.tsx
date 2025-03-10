@@ -60,7 +60,6 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
             <Text variant="header-2">
                 Принятие решения о заявке на роль: <Label theme="info">{role?.name}</Label>
             </Text>
-
             <div style={{marginBottom: '20px', marginTop: '20px'}}>
                 <Text variant="header-1">Информация о заявке</Text>
                 <Card style={{padding: '16px', marginBottom: '10px'}}>

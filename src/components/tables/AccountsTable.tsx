@@ -111,6 +111,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) 
             </div>
             <MyTable
                 data={accounts}
+                // @ts-ignore
                 columns={columns}
                 // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
                 // sortState={sorting}

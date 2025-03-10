@@ -2,9 +2,10 @@
 
 import React, {useEffect, useState} from 'react';
 import {businessRolesApi, rolesApi} from '@/app/apis';
-import {BusinessRoleDTO, RoleDTO, RoleWithPermissionsDTO} from '@/generated/api';
+import {BusinessRoleDTO, RoleWithPermissionsDTO} from '@/generated/api';
 import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {getLinkedResource} from '@/utils/utils';
 
 export interface BusinessRoleViewModalProps {
     businessRole: BusinessRoleDTO;
@@ -37,28 +38,6 @@ export const BusinessRoleViewModal: React.FC<BusinessRoleViewModalProps> = ({
         fetchData();
     }, [businessRole]);
 
-    function getLinkedResource(role: RoleDTO) {
-        if (role.productId) {
-            return (
-                <Text variant="subheader-1">
-                    {role.shopName}: Продукт <Label theme="info">{role.productId}</Label>
-                </Text>
-            );
-        }
-        if (role.orgUnitId) {
-            return (
-                <Text variant="subheader-1">
-                    {role.shopName}: Организация <Label theme="info">{role.orgUnitId}</Label>
-                </Text>
-            );
-        }
-        return (
-            <Text variant="subheader-1">
-                {role.shopName}: <Label theme="info">Глобальная</Label>
-            </Text>
-        );
-    }
-
     return (
         <div style={{padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
             <Text variant="header-2">
@@ -90,20 +69,6 @@ export const BusinessRoleViewModal: React.FC<BusinessRoleViewModalProps> = ({
                         </Card>
                     ))}
                 </Card>
-                {/*<Card style={{padding: '16px', marginBottom: '10px'}}>*/}
-                {/*    <Text variant="subheader-2">Разрешения:</Text>*/}
-                {/*    <ul>*/}
-                {/*        {rolesWithPermissions.map((roleWP) => (*/}
-                {/*            roleWP.permissions.map((permission) => (*/}
-                {/*                <li key={permission.id}>*/}
-                {/*                    <Text variant="subheader-1" color="secondary">*/}
-                {/*                        {roleWP.role.}: {permission.resourceType}: {permission.actionType}*/}
-                {/*                    </Text>*/}
-                {/*                </li>*/}
-                {/*            )),*/}
-                {/*        ))}*/}
-                {/*    </ul>*/}
-                {/*</Card>*/}
             </div>
             <HorizontalStack>
                 <Button view="normal" size="l" onClick={onCancel}>

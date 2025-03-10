@@ -14,6 +14,7 @@ import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import CreateRoleRequestModal from '@/components/forms/CreateRoleRequestModal';
 import {usePermissions} from '@/hooks/usePermissions';
+import {getLinkedResource, getLinkedResourceLabel} from '@/utils/utils';
 
 export interface RoleTableProps {
     onEdit: (roleId: string) => void;
@@ -88,9 +89,11 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
             id: 'description',
             name: 'Description',
             template: (role) => role.description,
-            meta: {
-                sort: true,
-            },
+        },
+        {
+            id: 'resource',
+            name: 'Ресурс',
+            template: (role) => getLinkedResourceLabel(role),
         },
         {
             id: 'actions',
@@ -128,6 +131,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
             </div>
             <MyTable
                 data={roles}
+                // @ts-ignore
                 columns={columns}
                 // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
                 // sortState={sorting}

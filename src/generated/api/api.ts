@@ -130,7 +130,7 @@ export interface BusinessRoleDTO {
      * @type {string}
      * @memberof BusinessRoleDTO
      */
-    shopName?: string;
+    shopName: string;
     /**
      *
      * @type {string}

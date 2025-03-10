@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import {Text} from '@gravity-ui/uikit';
+import React, {useState} from 'react';
+import {Modal, Text} from '@gravity-ui/uikit';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Box} from '@/components/Layout/Box';
 import {usePermissions} from '@/hooks/usePermissions';
@@ -9,6 +9,7 @@ import {CirclePlus} from '@gravity-ui/icons';
 import {useRouter} from 'next/navigation';
 import {businessRolesApi} from '@/app/apis';
 import BusinessRolesTable from '@/components/tables/BusinessRolesTable';
+import BusinessRoleForm, {BusinessRoleFormFields} from '@/components/forms/BusinessRoleForm';
 
 export default function BusinessRolesPage() {
     const {checkPermission} = usePermissions();
@@ -26,9 +27,32 @@ export default function BusinessRolesPage() {
         }
     };
 
-    const handleBusinessRoleCreateModal = () => {
-        console.log('Create business role modal');
-        router.push(`/business-roles/create`);
+    const handleBusinessRoleCreate = async (values: BusinessRoleFormFields) => {
+        try {
+            const response = await businessRolesApi.createBusinessRole({
+                businessRoleDTO: {
+                    name: values.name,
+                    shopName: values.shopName,
+                    description: values.description,
+                    parentId: values.parentBusinessRoleId,
+                },
+            });
+            if (response.data.id) {
+                handleEdit(response.data.id);
+            }
+        } catch (error) {
+            console.error('Failed to create business role:', error);
+        }
+    };
+
+    const [isCreateModalVisible, setCreateModalVisible] = useState(false);
+
+    const handleCreateBusinessRoleModal = () => {
+        setCreateModalVisible(true);
+    };
+
+    const handleCreateModalCancel = () => {
+        setCreateModalVisible(false);
     };
 
     const breadCrumps = [
@@ -40,7 +64,7 @@ export default function BusinessRolesPage() {
     if (checkPermission('web-global-product', 'create')) {
         actions.push({
             text: 'Создать бизнес-роль',
-            action: handleBusinessRoleCreateModal,
+            action: handleCreateBusinessRoleModal,
             icon: <CirclePlus />,
         });
     }
@@ -54,6 +78,12 @@ export default function BusinessRolesPage() {
                 </Box>
                 <BusinessRolesTable onEdit={handleEdit} onDelete={handleDelete} />
             </div>
+            <Modal open={isCreateModalVisible} onOpenChange={handleCreateModalCancel}>
+                <BusinessRoleForm
+                    onSubmit={handleBusinessRoleCreate}
+                    onClose={handleCreateModalCancel}
+                />
+            </Modal>
         </div>
     );
 }

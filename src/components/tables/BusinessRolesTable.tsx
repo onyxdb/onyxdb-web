@@ -65,17 +65,8 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
         setOffset(0);
     };
 
-    const handleOpenAccountsModal = () => {
-        setSearchAccount('');
-        setIsAccountsModalOpen(true);
-    };
-
     const handleCloseAccountsModal = () => {
         setIsAccountsModalOpen(false);
-    };
-
-    const handleAccountChange = (value: string) => {
-        setSearchAccount(value);
     };
 
     const handleAccountSelect = (data: AccountDTO) => {
@@ -126,14 +117,6 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                 />
             ),
         },
-        // {
-        //     id: 'id',
-        //     name: 'ID',
-        //     template: (businessRole) => businessRole.id,
-        //     meta: {
-        //         sort: true,
-        //     },
-        // },
         {
             id: 'name',
             name: 'Название',
@@ -146,6 +129,19 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
             id: 'description',
             name: 'Описание',
             template: (businessRole) => businessRole.description,
+            meta: {
+                sort: true,
+            },
+        },
+        {
+            id: 'id',
+            name: 'Идентификатор',
+            template: (businessRole) => businessRole.id,
+        },
+        {
+            id: 'createdAt',
+            name: 'Дата создания',
+            template: (businessRole) => businessRole.createdAt,
             meta: {
                 sort: true,
             },
@@ -188,7 +184,11 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                     onUpdate={handleSearch}
                 />
             </div>
-            <MyTable data={businessRoles} columns={columns} />
+            <MyTable
+                data={businessRoles}
+                // @ts-ignore
+                columns={columns}
+            />
             <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
                 <Pagination
                     page={offset / limit + 1}

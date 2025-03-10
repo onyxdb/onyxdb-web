@@ -97,6 +97,7 @@ export default function ProductsPage() {
             {/*</div>*/}
             <MyTable
                 data={products}
+                // @ts-ignore
                 columns={columns}
                 // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
                 // sortState={sorting}

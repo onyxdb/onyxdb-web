@@ -63,7 +63,7 @@ export default function ProductsPage() {
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
                     onClick={() => router.push(`/accounts/${product.ownerId}/info`)}
                 >
-                    {accounts.find((x) => x.id == product.ownerId)?.username ?? 'not stated'}
+                    {accounts.find((x) => x.id === product.ownerId)?.username ?? 'not stated'}
                 </span>
             ),
         },

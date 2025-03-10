@@ -2,25 +2,24 @@
 
 import React, {useEffect, useState} from 'react';
 import {accountsApi, productsApi} from '@/app/apis';
-import {AccountDTO, OrganizationUnitDTO, ProductDTO, RoleDTO} from '@/generated/api';
+import {ProductDTO} from '@/generated/api';
 import {usePathname, useRouter} from 'next/navigation';
 import {Button, Icon, Loader, Modal, Tab, TabList, TabProvider} from '@gravity-ui/uikit';
 import {usePermissions} from '@/hooks/usePermissions';
 import {Box} from '@/components/Layout/Box';
 import {ChevronLeft, Pencil, TrashBin} from '@gravity-ui/icons';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
-import {V1GetClusterResponse} from '@/generated/api-mdb';
 
 interface ProductViewPageProps {}
 
 // eslint-disable-next-line no-empty-pattern
 export default function ProductViewPage({}: ProductViewPageProps) {
     const [product, setProduct] = useState<ProductDTO | null>(null);
-    const [owner, setOwner] = useState<AccountDTO | null>(null);
+    // const [owner, setOwner] = useState<AccountDTO | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [productMdbProject, setProductMdbProject] = useState<OrganizationUnitDTO[]>([]);
-    const [projectClusters, setProjectClusters] = useState<V1GetClusterResponse[]>([]);
-    const [productRoles, setProductRoles] = useState<RoleDTO[]>([]);
+    // const [productMdbProject, setProductMdbProject] = useState<OrganizationUnitDTO[]>([]);
+    // const [projectClusters, setProjectClusters] = useState<V1GetClusterResponse[]>([]);
+    // const [productRoles, setProductRoles] = useState<RoleDTO[]>([]);
     const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
@@ -70,8 +69,8 @@ export default function ProductViewPage({}: ProductViewPageProps) {
     useEffect(() => {
         const fetchAccountRoles = async () => {
             try {
-                const response = await accountsApi.getAccountRoles({accountId: productId});
-                setProductRoles(response.data ?? []);
+                // const response = await accountsApi.getAccountRoles({accountId: productId});
+                // setProductRoles(response.data ?? []);
             } catch (error) {
                 console.error('Error fetching account roles:', error);
             }

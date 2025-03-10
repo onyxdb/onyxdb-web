@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 
 interface Permissions {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 interface Action {

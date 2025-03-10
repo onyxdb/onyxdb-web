@@ -14,7 +14,7 @@ import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import CreateRoleRequestModal from '@/components/forms/CreateRoleRequestModal';
 import {usePermissions} from '@/hooks/usePermissions';
-import {getLinkedResource, getLinkedResourceLabel} from '@/utils/utils';
+import {getLinkedResourceLabel} from '@/utils/utils';
 
 export interface RoleTableProps {
     onEdit: (roleId: string) => void;

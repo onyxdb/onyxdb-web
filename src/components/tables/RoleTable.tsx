@@ -15,6 +15,7 @@ import {RoleDTO} from '@/generated/api';
 import CreateRoleRequestModal from '@/components/forms/CreateRoleRequestModal';
 import {usePermissions} from '@/hooks/usePermissions';
 import {getLinkedResourceLabel} from '@/utils/utils';
+import {Box} from '@/components/Layout/Box';
 
 export interface RoleTableProps {
     onEdit: (roleId: string) => void;
@@ -24,7 +25,7 @@ export interface RoleTableProps {
 export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
     const [roles, setRoles] = useState<RoleDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [limit] = useState<number>(10);
+    const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
@@ -56,6 +57,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
     };
 
     const handlePageChange = (page: number, pageSize: number) => {
+        setLimit(pageSize);
         setOffset((page - 1) * pageSize);
     };
 
@@ -129,20 +131,21 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
                     onUpdate={handleSearch}
                 />
             </div>
-            <MyTable
-                data={roles}
-                // @ts-ignore
-                columns={columns}
-                // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
-                // sortState={sorting}
-            />
-            <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
-                <Pagination
-                    page={offset / limit + 1}
-                    pageSize={limit}
-                    total={total}
-                    onUpdate={handlePageChange}
+            <div>
+                <MyTable
+                    data={roles}
+                    // @ts-ignore
+                    columns={columns}
                 />
+                <Box marginTop="20px">
+                    <Pagination
+                        page={offset / limit + 1}
+                        pageSize={limit}
+                        pageSizeOptions={[5, 10, 20, 100]}
+                        total={total}
+                        onUpdate={handlePageChange}
+                    />
+                </Box>
             </div>
             <Modal open={isModalVisible} onOpenChange={handleModalCancel}>
                 {selectedRole && (

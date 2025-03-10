@@ -13,7 +13,7 @@ interface HeaderActionsProps {
 // @ts-ignore
 function RouterLink({href, ...rest}) {
     return (
-        <Link href={href} passHref legacyBehavior>
+        <Link href={href} legacyBehavior>
             <BreadcrumbsItem {...rest} />
         </Link>
     );
@@ -22,8 +22,9 @@ function RouterLink({href, ...rest}) {
 export const AppHeader: React.FC<HeaderActionsProps> = ({breadCrumps, actions}) => {
     return (
         <header className="page-header top-aligned">
-            <div className="page-header__content">
-                <Breadcrumbs itemComponent={RouterLink}>
+            {/*<div className="page-header__content">*/}
+            <div style={{width: '100%', marginLeft: '10px'}}>
+                <Breadcrumbs itemComponent={RouterLink} showRoot maxItems={10}>
                     {breadCrumps.map((crumb, index) => (
                         <RouterLink key={index} href={crumb.href}>
                             {crumb.text}

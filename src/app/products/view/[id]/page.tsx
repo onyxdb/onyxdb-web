@@ -4,11 +4,12 @@ import React, {useEffect, useState} from 'react';
 import {accountsApi, productsApi} from '@/app/apis';
 import {ProductDTO} from '@/generated/api';
 import {usePathname, useRouter} from 'next/navigation';
-import {Button, Icon, Loader, Modal, Tab, TabList, TabProvider} from '@gravity-ui/uikit';
+import {Button, Icon, Modal, Tab, TabList, TabProvider} from '@gravity-ui/uikit';
 import {usePermissions} from '@/hooks/usePermissions';
 import {Box} from '@/components/Layout/Box';
 import {ChevronLeft, Pencil, TrashBin} from '@gravity-ui/icons';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {MyLoader} from '@/components/Loader';
 
 interface ProductViewPageProps {}
 
@@ -113,11 +114,7 @@ export default function ProductViewPage({}: ProductViewPageProps) {
     };
 
     if (!product) {
-        return (
-            <HorizontalStack align="center" justify="center">
-                <Loader size="l" />
-            </HorizontalStack>
-        );
+        return <MyLoader />;
     }
 
     // if (!permissions[`web-account-${accountId}-view`]) {

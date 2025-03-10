@@ -37,21 +37,20 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
     const [searchAccount, setSearchAccount] = useState<string | null>(null);
     const [isAccountsModalOpen, setIsAccountsModalOpen] = useState(false);
 
+    const fetchBusinessRoles = async () => {
+        try {
+            const response = await businessRolesApi.getAllBusinessRoles({
+                search: searchQuery,
+                limit,
+                offset,
+            });
+            setBusinessRoles(response.data.data ?? []);
+            setTotal(response.data.totalCount ?? 0);
+        } catch (error) {
+            console.error('Error fetching business roles:', error);
+        }
+    };
     useEffect(() => {
-        const fetchBusinessRoles = async () => {
-            try {
-                const response = await businessRolesApi.getAllBusinessRoles({
-                    search: searchQuery,
-                    limit,
-                    offset,
-                });
-                setBusinessRoles(response.data.data ?? []);
-                setTotal(response.data.totalCount ?? 0);
-            } catch (error) {
-                console.error('Error fetching business roles:', error);
-            }
-        };
-
         fetchBusinessRoles();
     }, [searchQuery, limit, offset]);
 
@@ -164,7 +163,11 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                     <Button
                         view="normal"
                         size="m"
-                        onClick={() => onDelete(businessRole.id ?? '???')}
+                        onClick={() => {
+                            onDelete(businessRole.id ?? '???');
+                            // TODO fetch не работает после удаления :(
+                            fetchBusinessRoles();
+                        }}
                     >
                         Удалить
                     </Button>

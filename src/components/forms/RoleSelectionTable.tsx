@@ -31,7 +31,7 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
         };
 
         fetchRoles();
-    }, []);
+    }, [searchQuery]);
 
     const handleSearch = (value: string) => {
         setSearchQuery(value);

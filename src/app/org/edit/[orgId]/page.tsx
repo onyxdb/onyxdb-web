@@ -58,7 +58,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
     //     }
     // };
 
-    if (!checkPermission('web-global-domain-components-create')) {
+    if (!checkPermission('web-global-organization-unit', 'edit')) {
         return (
             <div style={{padding: '20px'}}>У вас нет разрешения на создание Organization Unit.</div>
         );

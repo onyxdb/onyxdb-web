@@ -1,5 +1,6 @@
 import {
     AccountsApi,
+    AuthApi,
     BusinessRolesApi,
     Configuration,
     DomainComponentsApi,
@@ -12,9 +13,15 @@ import {
 import {V1ClustersApi, V1ProjectsApi} from '@/generated/api-mdb';
 
 const config = new Configuration({
-    basePath: '', // Оставить пустым, так как запросы будут идти через прокси
+    basePath: '', // Используем прокси в Next.js
+    baseOptions: {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    },
 });
 
+export const authApi = new AuthApi(config);
 export const accountsApi = new AccountsApi(config);
 export const businessRolesApi = new BusinessRolesApi(config);
 export const domainComponentsApi = new DomainComponentsApi(config);

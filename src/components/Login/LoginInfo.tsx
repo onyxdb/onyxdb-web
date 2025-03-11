@@ -1,6 +1,9 @@
 import {Button, Link, UserLabel} from '@gravity-ui/uikit';
+import {useAuth} from '@/auth/useAuth';
 
 export function LoginInfo() {
+    const { isAuthenticated, logout } = useAuth();
+
     const loggerUser = {
         data: {
             username: 'Artem Fedorov',

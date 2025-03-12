@@ -5,7 +5,7 @@ import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
 import {DomainComponentDTO} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 
 interface DomainComponentProps {
     data: DomainComponentDTO;
@@ -22,7 +22,7 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
     onClick,
     isActive,
 }) => {
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     return (
         <Card

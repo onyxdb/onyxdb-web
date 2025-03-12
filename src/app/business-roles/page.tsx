@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {Modal, Text} from '@gravity-ui/uikit';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Box} from '@/components/Layout/Box';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useRouter} from 'next/navigation';
 import {businessRolesApi} from '@/app/apis';
@@ -12,7 +12,7 @@ import BusinessRolesTable from '@/components/tables/BusinessRolesTable';
 import BusinessRoleForm, {BusinessRoleFormFields} from '@/components/forms/BusinessRoleForm';
 
 export default function BusinessRolesPage() {
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
     const router = useRouter();
 
     const handleEdit = (businessRoleId: string) => {

@@ -1,14 +1,13 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {getCurrentUser} from '@/auth/authService';
+import {AccountDTO} from '@/generated/api';
 
 interface Permissions {
-    [key: string]: string[];
+    [key: string]: {[key: string]: object} | null;
 }
 
 interface User {
-    account: {
-        username: string;
-    };
+    account: AccountDTO;
     permissions: Permissions;
 }
 
@@ -55,8 +54,14 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     }, []);
 
     function checkActions(actions: Action[]) {
+        if (permissions['global-any'] !== null || permissions['web-any'] !== null) {
+            return true;
+        }
         for (const action of actions) {
-            if (permissions[action.name] || permissions[`${action.name}-${action.action}`]) {
+            if (
+                permissions[action.name] !== null ||
+                permissions[`${action.name}-${action.action}`] !== null
+            ) {
                 return true;
             }
         }
@@ -64,7 +69,11 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     }
 
     function checkPermission(name: string, action?: string) {
-        return Boolean(permissions[name] || permissions[`${name}-${action}`]);
+        console.log('checkPermission', permissions, 'global-any', permissions['global-any']);
+        if (permissions['global-any'] !== null || permissions['web-any'] !== null) {
+            return true;
+        }
+        return Boolean(permissions[name] !== null || permissions[`${name}-${action}`] !== null);
     }
 
     return (

@@ -5,11 +5,11 @@ import {accountsApi, productsApi} from '@/app/apis';
 import {ProductDTO} from '@/generated/api';
 import {usePathname, useRouter} from 'next/navigation';
 import {Button, Icon, Modal, Tab, TabList, TabProvider} from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
 import {Box} from '@/components/Layout/Box';
 import {ChevronLeft, Pencil, TrashBin} from '@gravity-ui/icons';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {MyLoader} from '@/components/Loader';
+import {useAuth} from '@/context/AuthContext';
 
 interface ProductViewPageProps {}
 
@@ -24,7 +24,7 @@ export default function ProductViewPage({}: ProductViewPageProps) {
     const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
 
     const productId = pathname.split('/').pop() ?? '';
 

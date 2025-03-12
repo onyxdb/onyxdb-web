@@ -9,7 +9,7 @@ import {useRouter} from 'next/navigation';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 
 interface DomainComponentProps {
     data: OrganizationUnitDTO;
@@ -25,7 +25,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
     onDelete,
 }) => {
     const router = useRouter();
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
     const handleViewDetails = (ouId: string) => {
         router.push(`/org/view/${ouId}`);
     };

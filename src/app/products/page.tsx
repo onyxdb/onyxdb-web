@@ -5,7 +5,7 @@ import {productsApi} from '@/app/apis';
 import {ProductDTO, ProductTreeDTO} from '@/generated/api';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {Modal, Text} from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {ProductSmallCard} from '@/components/ProductSmallCard';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProductBlock} from '@/components/ProductBlock';
@@ -28,7 +28,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const createQueryString = useCallback(
         (name: string, value: string) => {

@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {organizationUnitsApi} from '@/app/apis';
 import {OrganizationUnitDTO} from '@/generated/api';
 
@@ -14,7 +14,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
 
     // const router = useRouter();
     const pathname = usePathname();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
     const orgId = pathname.split('/').pop() ?? '';
 
     useEffect(() => {

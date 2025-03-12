@@ -8,7 +8,7 @@ import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {Eye, Pencil, TrashBin} from '@gravity-ui/icons';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 
 interface ProductBlockProps {
@@ -19,7 +19,7 @@ interface ProductBlockProps {
 
 export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelete}) => {
     const router = useRouter();
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
     const handleViewDetails = (id: string) => {
         router.push(`/products/view/${id}`);
     };

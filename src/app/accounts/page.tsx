@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {AccountDTO} from '@/generated/api';
 import {Button, Modal} from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {AccountsTable} from '@/components/tables/AccountsTable';
 import {AccountForm, AccountFormDTO} from '@/components/forms/AccountForm';
@@ -14,7 +14,7 @@ interface AccountsPageProps {}
 export default function AccountsPage({}: AccountsPageProps) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState<AccountDTO | null>(null);
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const handleCreate = () => {
         setIsCreateModalOpen(true);

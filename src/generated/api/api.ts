@@ -347,10 +347,10 @@ export interface GetCurrentUser200Response {
     account: AccountDTO;
     /**
      *
-     * @type {{ [key: string]: Array<string>; }}
+     * @type {{ [key: string]: { [key: string]: object; }; }}
      * @memberof GetCurrentUser200Response
      */
-    permissions: {[key: string]: Array<string>};
+    permissions: {[key: string]: {[key: string]: object}};
 }
 
 /**

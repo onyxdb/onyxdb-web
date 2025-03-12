@@ -6,13 +6,13 @@ import {rolesApi} from '@/app/apis';
 import {useRouter} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 
 export default function RolesPage() {
     const router = useRouter();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const handleEdit = (roleId: string) => {
         console.log('Edit role with ID:', roleId);

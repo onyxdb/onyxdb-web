@@ -13,7 +13,7 @@ import {
 import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import CreateRoleRequestModal from '@/components/forms/CreateRoleRequestModal';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {getLinkedResourceLabel} from '@/utils/utils';
 import {Box} from '@/components/Layout/Box';
 
@@ -31,7 +31,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
 
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     useEffect(() => {
         const fetchRoles = async () => {

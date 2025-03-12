@@ -20,7 +20,7 @@ apiClient.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
         const originalRequest = error.config;
-        if (error.response?.status === 401 && originalRequest) {
+        if (error.response?.status === 403 && originalRequest) {
             try {
                 const newTokens = await refreshToken();
                 localStorage.setItem('accessToken', newTokens.accessToken);

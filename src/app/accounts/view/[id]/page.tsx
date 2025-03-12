@@ -15,7 +15,7 @@ import {
     TabProvider,
     Text,
 } from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {Box} from '@/components/Layout/Box';
 import {
     ArrowUpRightFromSquare,
@@ -51,7 +51,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
 
     const accountId = pathname.split('/').pop() ?? '';
 

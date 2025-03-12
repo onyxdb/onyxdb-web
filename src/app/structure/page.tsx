@@ -11,7 +11,7 @@ import {
 } from '@/generated/api';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {Button, Modal, Text} from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {OrganizationUnitSmallCard} from '@/components/OrganizationUnitSmallCard';
 import {DomainComponentBlock} from '@/components/DomainComponentBlock';
 import {DomainComponentForm} from '@/components/forms/DomainComponentForm';
@@ -37,7 +37,7 @@ export default function StructurePage({}: StructurePageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const createQueryString = useCallback(
         (name: string, value: string) => {

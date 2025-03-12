@@ -17,7 +17,7 @@ import {
 } from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 
 export interface RoleRequestsTableProps {}
 
@@ -44,7 +44,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
     const [searchRole, setSearchRole] = useState<string | null>(null);
     const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
 
     const fetchRoleRequests = async () => {
         try {

@@ -836,6 +836,12 @@ export interface RoleDTO {
      * @type {string}
      * @memberof RoleDTO
      */
+    entity?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleDTO
+     */
     productId?: string;
     /**
      *
@@ -1308,6 +1314,98 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // verify required parameter 'accountId' is not null or undefined
             assertParamExists('getAccountOrganizationUnits', 'accountId', accountId);
             const localVarPath = `/api/v1/accounts/{accountId}/organization-units`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get all account Permissions
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPermission: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountPermission', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/permissions`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get all account Permissions in bits
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPermissionBits: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountPermissionBits', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/permissions-bits`.replace(
                 `{${'accountId'}}`,
                 encodeURIComponent(String(accountId)),
             );
@@ -1889,6 +1987,74 @@ export const AccountsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get all account Permissions
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountPermission(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<Array<RoleWithPermissionsDTO>>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountPermission(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountPermission']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get all account Permissions in bits
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountPermissionBits(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<{
+                [key: string]: {[key: string]: object};
+            }>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountPermissionBits(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountPermissionBits']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get account roles
          * @param {string} accountId
          * @param {*} [options] Override http request option.
@@ -2214,6 +2380,38 @@ export const AccountsApiFactory = function (
         },
         /**
          *
+         * @summary Get all account Permissions
+         * @param {AccountsApiGetAccountPermissionRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPermission(
+            requestParameters: AccountsApiGetAccountPermissionRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<RoleWithPermissionsDTO>> {
+            return localVarFp
+                .getAccountPermission(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get all account Permissions in bits
+         * @param {AccountsApiGetAccountPermissionBitsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPermissionBits(
+            requestParameters: AccountsApiGetAccountPermissionBitsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<{
+            [key: string]: {[key: string]: object};
+        }> {
+            return localVarFp
+                .getAccountPermissionBits(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Get account roles
          * @param {AccountsApiGetAccountRolesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2440,6 +2638,34 @@ export interface AccountsApiGetAccountOrganizationUnitsRequest {
      *
      * @type {string}
      * @memberof AccountsApiGetAccountOrganizationUnits
+     */
+    readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAccountPermission operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountPermissionRequest
+ */
+export interface AccountsApiGetAccountPermissionRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountPermission
+     */
+    readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAccountPermissionBits operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountPermissionBitsRequest
+ */
+export interface AccountsApiGetAccountPermissionBitsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountPermissionBits
      */
     readonly accountId: string;
 }
@@ -2712,6 +2938,40 @@ export class AccountsApi extends BaseAPI {
 
     /**
      *
+     * @summary Get all account Permissions
+     * @param {AccountsApiGetAccountPermissionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAccountPermission(
+        requestParameters: AccountsApiGetAccountPermissionRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAccountPermission(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get all account Permissions in bits
+     * @param {AccountsApiGetAccountPermissionBitsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAccountPermissionBits(
+        requestParameters: AccountsApiGetAccountPermissionBitsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAccountPermissionBits(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @summary Get account roles
      * @param {AccountsApiGetAccountRolesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2828,6 +3088,56 @@ export class AccountsApi extends BaseAPI {
  */
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         *
+         * @summary Обновление access токена
+         * @param {AuthRequestDTO} authRequestDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        generateServiceToken: async (
+            authRequestDTO: AuthRequestDTO,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'authRequestDTO' is not null or undefined
+            assertParamExists('generateServiceToken', 'authRequestDTO', authRequestDTO);
+            const localVarPath = `/api/v1/auth/service-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                authRequestDTO,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          *
          * @summary Получение информации о текущем пользователе
@@ -3027,6 +3337,33 @@ export const AuthApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
+         * @summary Обновление access токена
+         * @param {AuthRequestDTO} authRequestDTO
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async generateServiceToken(
+            authRequestDTO: AuthRequestDTO,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtResponseDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.generateServiceToken(
+                authRequestDTO,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AuthApi.generateServiceToken']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Получение информации о текущем пользователе
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3142,6 +3479,21 @@ export const AuthApiFactory = function (
     return {
         /**
          *
+         * @summary Обновление access токена
+         * @param {AuthApiGenerateServiceTokenRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        generateServiceToken(
+            requestParameters: AuthApiGenerateServiceTokenRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<JwtResponseDTO> {
+            return localVarFp
+                .generateServiceToken(requestParameters.authRequestDTO, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Получение информации о текущем пользователе
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3198,6 +3550,20 @@ export const AuthApiFactory = function (
 };
 
 /**
+ * Request parameters for generateServiceToken operation in AuthApi.
+ * @export
+ * @interface AuthApiGenerateServiceTokenRequest
+ */
+export interface AuthApiGenerateServiceTokenRequest {
+    /**
+     *
+     * @type {AuthRequestDTO}
+     * @memberof AuthApiGenerateServiceToken
+     */
+    readonly authRequestDTO: AuthRequestDTO;
+}
+
+/**
  * Request parameters for login operation in AuthApi.
  * @export
  * @interface AuthApiLoginRequest
@@ -3246,6 +3612,23 @@ export interface AuthApiRefreshTokenRequest {
  * @extends {BaseAPI}
  */
 export class AuthApi extends BaseAPI {
+    /**
+     *
+     * @summary Обновление access токена
+     * @param {AuthApiGenerateServiceTokenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public generateServiceToken(
+        requestParameters: AuthApiGenerateServiceTokenRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AuthApiFp(this.configuration)
+            .generateServiceToken(requestParameters.authRequestDTO, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      *
      * @summary Получение информации о текущем пользователе

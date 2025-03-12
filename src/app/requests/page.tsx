@@ -235,7 +235,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
 
     return (
         <div style={{padding: '20px'}}>
-            <h1>Заявки на доступы</h1>
+            <Text variant="header-2">Заявки на доступы</Text>
             <div style={{marginBottom: '20px'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
                     <label style={{display: 'block', marginBottom: '8px'}}>Статус заявки</label>

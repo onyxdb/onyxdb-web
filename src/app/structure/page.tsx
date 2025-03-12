@@ -215,7 +215,7 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     return (
-        <Box padding="20px">
+        <div style={{padding: '20px'}}>
             <Box marginBottom="20px">
                 <Text variant="header-1">Domain Components</Text>
                 <HorizontalStack align="center">
@@ -267,6 +267,6 @@ export default function StructurePage({}: StructurePageProps) {
                     onClose={handleCloseCreateModal}
                 />
             </Modal>
-        </Box>
+        </div>
     );
 }

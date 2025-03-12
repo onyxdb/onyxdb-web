@@ -1,22 +1,20 @@
-import {Button, Link, UserLabel} from '@gravity-ui/uikit';
-import {useAuth} from '@/auth/useAuth';
+'use client';
+
+import {Card, Link, UserLabel} from '@gravity-ui/uikit';
+import {useAuth} from '@/context/AuthContext';
 
 export function LoginInfo() {
-    const { isAuthenticated, logout } = useAuth();
+    const {user} = useAuth();
 
-    const loggerUser = {
-        data: {
-            username: 'Artem Fedorov',
-        },
-    };
-
-    if (loggerUser.data && loggerUser.data) {
-        return <UserLabel text={loggerUser.data.username} />;
+    if (!user) {
+        return (
+            <Card>
+                <Link view="normal" href="/login">
+                    Login
+                </Link>
+            </Card>
+        );
     }
 
-    return (
-        <Link href="/oauth/login">
-            <Button>Login</Button>
-        </Link>
-    );
+    return <UserLabel text={user.account.username} />;
 }

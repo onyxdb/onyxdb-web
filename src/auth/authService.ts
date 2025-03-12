@@ -15,8 +15,10 @@ export const clearTokens = () => {
 };
 
 export const login = async (username: string, password: string) => {
+    console.log('b', getAccessToken(), getRefreshToken());
     const response = await authApi.login({authRequestDTO: {username, password}});
     setTokens(response.data.accessToken, response.data.refreshToken);
+    console.log('a', getAccessToken(), getRefreshToken());
     return response.data;
 };
 
@@ -29,14 +31,15 @@ export const logout = async () => {
 };
 export const refreshToken = async () => {
     const refreshTokenValue = localStorage.getItem('refreshToken');
-    if (refreshTokenValue) {
-        const response = await authApi.refreshToken({
-            refreshTokenDTO: {refreshToken: refreshTokenValue},
-        });
-        setTokens(response.data.accessToken, response.data.refreshToken);
-        return response.data;
+    if (!refreshTokenValue) {
+        throw new Error('No refresh token found');
     }
-    throw new Error('There is no Refresh token. You need to log in.');
+
+    const response = await authApi.refreshToken({
+        refreshTokenDTO: {refreshToken: refreshTokenValue},
+    });
+    setTokens(response.data.accessToken, response.data.refreshToken);
+    return response.data;
 };
 
 export const getCurrentUser = async () => {

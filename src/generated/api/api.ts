@@ -866,6 +866,38 @@ export interface RoleDTO {
 /**
  *
  * @export
+ * @interface RoleHistoryDTO
+ */
+export interface RoleHistoryDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof RoleHistoryDTO
+     */
+    record_id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleHistoryDTO
+     */
+    role_id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleHistoryDTO
+     */
+    difference: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleHistoryDTO
+     */
+    createdAt: string;
+}
+
+/**
+ *
+ * @export
  * @interface RoleRequestDTO
  */
 export interface RoleRequestDTO {
@@ -5243,7 +5275,7 @@ export const DomainComponentsApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          *
-         * @summary Получение корневых элементов organization-unit
+         * @summary Getting the root elements of the organization-unit
          * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5513,7 +5545,7 @@ export const DomainComponentsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Получение корневых элементов organization-unit
+         * @summary Getting the root elements of the organization-unit
          * @param {string} dcId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5675,7 +5707,7 @@ export const DomainComponentsApiFactory = function (
         },
         /**
          *
-         * @summary Получение корневых элементов organization-unit
+         * @summary Getting the root elements of the organization-unit
          * @param {DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5889,7 +5921,7 @@ export class DomainComponentsApi extends BaseAPI {
 
     /**
      *
-     * @summary Получение корневых элементов organization-unit
+     * @summary Getting the root elements of the organization-unit
      * @param {DomainComponentsApiGetDomainComponentRootsOrganizationUnitsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7482,7 +7514,7 @@ export const PermissionsApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          *
-         * @summary Проверка наличия доступа у текущего пользователя
+         * @summary Checking if the current user has access
          * @param {string} actionType
          * @param {string} [resourceId]
          * @param {*} [options] Override http request option.
@@ -7591,7 +7623,7 @@ export const PermissionsApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary Проверка наличия доступа у текущего пользователя
+         * @summary Checking if the current user has access
          * @param {string} actionType
          * @param {string} [resourceId]
          * @param {*} [options] Override http request option.
@@ -7665,7 +7697,7 @@ export const PermissionsApiFactory = function (
     return {
         /**
          *
-         * @summary Проверка наличия доступа у текущего пользователя
+         * @summary Checking if the current user has access
          * @param {PermissionsApiCheckPermissionRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7744,7 +7776,7 @@ export interface PermissionsApiGetPermissionByIdRequest {
 export class PermissionsApi extends BaseAPI {
     /**
      *
-     * @summary Проверка наличия доступа у текущего пользователя
+     * @summary Checking if the current user has access
      * @param {PermissionsApiCheckPermissionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7881,7 +7913,7 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Получение дочерних элементов всех продуктов деревом
+         * @summary Getting child elements of all products by a tree
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8021,7 +8053,7 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Получение дочерних элементов продукта
+         * @summary Getting child elements of a product
          * @param {string} productId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8067,7 +8099,53 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Получение дочерних элементов продукта деревом
+         * @summary Getting the parent elements of a product
+         * @param {string} productId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductParents: async (
+            productId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('getProductParents', 'productId', productId);
+            const localVarPath = `/api/v1/products/{productId}/parents`.replace(
+                `{${'productId'}}`,
+                encodeURIComponent(String(productId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Getting child elements of a product by a tree
          * @param {string} productId
          * @param {number} [depth]
          * @param {*} [options] Override http request option.
@@ -8119,7 +8197,7 @@ export const ProductsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          *
-         * @summary Получение корневых элементов продуктов
+         * @summary Obtaining the root elements of products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8277,7 +8355,7 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Получение дочерних элементов всех продуктов деревом
+         * @summary Getting child elements of all products by a tree
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8363,7 +8441,7 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Получение дочерних элементов продукта
+         * @summary Getting child elements of a product
          * @param {string} productId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8390,7 +8468,34 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Получение дочерних элементов продукта деревом
+         * @summary Getting the parent elements of a product
+         * @param {string} productId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProductParents(
+            productId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProductDTO>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductParents(
+                productId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProductsApi.getProductParents']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Getting child elements of a product by a tree
          * @param {string} productId
          * @param {number} [depth]
          * @param {*} [options] Override http request option.
@@ -8420,7 +8525,7 @@ export const ProductsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Получение корневых элементов продуктов
+         * @summary Obtaining the root elements of products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8516,7 +8621,7 @@ export const ProductsApiFactory = function (
         },
         /**
          *
-         * @summary Получение дочерних элементов всех продуктов деревом
+         * @summary Getting child elements of all products by a tree
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8562,7 +8667,7 @@ export const ProductsApiFactory = function (
         },
         /**
          *
-         * @summary Получение дочерних элементов продукта
+         * @summary Getting child elements of a product
          * @param {ProductsApiGetProductChildrenRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8577,7 +8682,22 @@ export const ProductsApiFactory = function (
         },
         /**
          *
-         * @summary Получение дочерних элементов продукта деревом
+         * @summary Getting the parent elements of a product
+         * @param {ProductsApiGetProductParentsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductParents(
+            requestParameters: ProductsApiGetProductParentsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<Array<ProductDTO>> {
+            return localVarFp
+                .getProductParents(requestParameters.productId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Getting child elements of a product by a tree
          * @param {ProductsApiGetProductTreeRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8592,7 +8712,7 @@ export const ProductsApiFactory = function (
         },
         /**
          *
-         * @summary Получение корневых элементов продуктов
+         * @summary Obtaining the root elements of products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -8702,6 +8822,20 @@ export interface ProductsApiGetProductChildrenRequest {
 }
 
 /**
+ * Request parameters for getProductParents operation in ProductsApi.
+ * @export
+ * @interface ProductsApiGetProductParentsRequest
+ */
+export interface ProductsApiGetProductParentsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductsApiGetProductParents
+     */
+    readonly productId: string;
+}
+
+/**
  * Request parameters for getProductTree operation in ProductsApi.
  * @export
  * @interface ProductsApiGetProductTreeRequest
@@ -8786,7 +8920,7 @@ export class ProductsApi extends BaseAPI {
 
     /**
      *
-     * @summary Получение дочерних элементов всех продуктов деревом
+     * @summary Getting child elements of all products by a tree
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductsApi
@@ -8838,7 +8972,7 @@ export class ProductsApi extends BaseAPI {
 
     /**
      *
-     * @summary Получение дочерних элементов продукта
+     * @summary Getting child elements of a product
      * @param {ProductsApiGetProductChildrenRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8855,7 +8989,24 @@ export class ProductsApi extends BaseAPI {
 
     /**
      *
-     * @summary Получение дочерних элементов продукта деревом
+     * @summary Getting the parent elements of a product
+     * @param {ProductsApiGetProductParentsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductsApi
+     */
+    public getProductParents(
+        requestParameters: ProductsApiGetProductParentsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProductsApiFp(this.configuration)
+            .getProductParents(requestParameters.productId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Getting child elements of a product by a tree
      * @param {ProductsApiGetProductTreeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8872,7 +9023,7 @@ export class ProductsApi extends BaseAPI {
 
     /**
      *
-     * @summary Получение корневых элементов продуктов
+     * @summary Obtaining the root elements of products
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductsApi
@@ -9166,6 +9317,52 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          *
+         * @summary Get role history
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoleHistory: async (
+            roleId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('getRoleHistory', 'roleId', roleId);
+            const localVarPath = `/api/v1/roles/{roleId}/history`.replace(
+                `{${'roleId'}}`,
+                encodeURIComponent(String(roleId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Update a role by ID
          * @param {string} roleId
          * @param {RoleWithPermissionsDTO} roleWithPermissionsDTO
@@ -9377,6 +9574,32 @@ export const RolesApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get role history
+         * @param {string} roleId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRoleHistory(
+            roleId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoleHistoryDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRoleHistory(
+                roleId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['RolesApi.getRoleHistory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Update a role by ID
          * @param {string} roleId
          * @param {RoleWithPermissionsDTO} roleWithPermissionsDTO
@@ -9504,6 +9727,21 @@ export const RolesApiFactory = function (
         },
         /**
          *
+         * @summary Get role history
+         * @param {RolesApiGetRoleHistoryRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoleHistory(
+            requestParameters: RolesApiGetRoleHistoryRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<RoleHistoryDTO> {
+            return localVarFp
+                .getRoleHistory(requestParameters.roleId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Update a role by ID
          * @param {RolesApiUpdateRoleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9618,6 +9856,20 @@ export interface RolesApiGetRoleByIdRequest {
      *
      * @type {string}
      * @memberof RolesApiGetRoleById
+     */
+    readonly roleId: string;
+}
+
+/**
+ * Request parameters for getRoleHistory operation in RolesApi.
+ * @export
+ * @interface RolesApiGetRoleHistoryRequest
+ */
+export interface RolesApiGetRoleHistoryRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetRoleHistory
      */
     readonly roleId: string;
 }
@@ -9739,6 +9991,23 @@ export class RolesApi extends BaseAPI {
     ) {
         return RolesApiFp(this.configuration)
             .getRoleById(requestParameters.roleId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get role history
+     * @param {RolesApiGetRoleHistoryRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public getRoleHistory(
+        requestParameters: RolesApiGetRoleHistoryRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return RolesApiFp(this.configuration)
+            .getRoleHistory(requestParameters.roleId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 

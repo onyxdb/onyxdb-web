@@ -36,13 +36,45 @@ import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredErro
 /**
  *
  * @export
- * @interface V1BadRequestResponse
+ * @interface V1ClusterResources
  */
-export interface V1BadRequestResponse {
+export interface V1ClusterResources {
     /**
      *
      * @type {string}
-     * @memberof V1BadRequestResponse
+     * @memberof V1ClusterResources
+     */
+    presetId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ClusterResources
+     */
+    storageClass: string;
+    /**
+     *
+     * @type {number}
+     * @memberof V1ClusterResources
+     */
+    storage: number;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ClusterStatusResponse
+ */
+export interface V1ClusterStatusResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ClusterStatusResponse
+     */
+    value: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ClusterStatusResponse
      */
     message: string;
 }
@@ -50,35 +82,47 @@ export interface V1BadRequestResponse {
 /**
  *
  * @export
- * @interface V1CreateClusterRequest
+ * @interface V1CreateMongoClusterRequest
  */
-export interface V1CreateClusterRequest {
+export interface V1CreateMongoClusterRequest {
     /**
      *
      * @type {string}
-     * @memberof V1CreateClusterRequest
+     * @memberof V1CreateMongoClusterRequest
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof V1CreateClusterRequest
+     * @memberof V1CreateMongoClusterRequest
+     */
+    description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1CreateMongoClusterRequest
      */
     projectId: string;
+    /**
+     *
+     * @type {V1MongoConfig}
+     * @memberof V1CreateMongoClusterRequest
+     */
+    config: V1MongoConfig;
 }
 
 /**
  *
  * @export
- * @interface V1CreateClusterResponse
+ * @interface V1CreateMongoClusterResponse
  */
-export interface V1CreateClusterResponse {
+export interface V1CreateMongoClusterResponse {
     /**
      *
      * @type {string}
-     * @memberof V1CreateClusterResponse
+     * @memberof V1CreateMongoClusterResponse
      */
-    clusterId: string;
+    id: string;
 }
 
 /**
@@ -98,106 +142,496 @@ export interface V1CreateProjectRequest {
      * @type {string}
      * @memberof V1CreateProjectRequest
      */
-    ownerId: string;
+    description: string;
 }
 
 /**
  *
  * @export
- * @interface V1CreateProjectResponse
+ * @interface V1CreateResourcePresetRequest
  */
-export interface V1CreateProjectResponse {
+export interface V1CreateResourcePresetRequest {
     /**
      *
      * @type {string}
-     * @memberof V1CreateProjectResponse
-     */
-    clusterId: string;
-}
-
-/**
- *
- * @export
- * @interface V1GetClusterResponse
- */
-export interface V1GetClusterResponse {
-    /**
-     *
-     * @type {string}
-     * @memberof V1GetClusterResponse
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1GetClusterResponse
+     * @memberof V1CreateResourcePresetRequest
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof V1GetClusterResponse
+     * @memberof V1CreateResourcePresetRequest
      */
-    projectId: string;
+    type: V1CreateResourcePresetRequestTypeEnum;
     /**
      *
-     * @type {string}
-     * @memberof V1GetClusterResponse
+     * @type {number}
+     * @memberof V1CreateResourcePresetRequest
      */
-    type: V1GetClusterResponseTypeEnum;
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof V1CreateResourcePresetRequest
+     */
+    ram: number;
 }
 
-export const V1GetClusterResponseTypeEnum = {
-    Mongodb: 'mongodb',
+export const V1CreateResourcePresetRequestTypeEnum = {
+    CpuOptimized: 'cpu_optimized',
+    Standard: 'standard',
+    RamOptimized: 'ram_optimized',
 } as const;
 
-export type V1GetClusterResponseTypeEnum =
-    (typeof V1GetClusterResponseTypeEnum)[keyof typeof V1GetClusterResponseTypeEnum];
+export type V1CreateResourcePresetRequestTypeEnum =
+    (typeof V1CreateResourcePresetRequestTypeEnum)[keyof typeof V1CreateResourcePresetRequestTypeEnum];
 
 /**
  *
  * @export
- * @interface V1UpdateClusterProjectRequest
+ * @interface V1CreateZoneRequest
  */
-export interface V1UpdateClusterProjectRequest {
+export interface V1CreateZoneRequest {
     /**
      *
      * @type {string}
-     * @memberof V1UpdateClusterProjectRequest
+     * @memberof V1CreateZoneRequest
      */
-    clusterId: string;
+    id: string;
     /**
      *
      * @type {string}
-     * @memberof V1UpdateClusterProjectRequest
+     * @memberof V1CreateZoneRequest
      */
-    projectId: string;
+    description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1CreateZoneRequest
+     */
+    selector: string;
 }
 
 /**
- * V1ClustersApi - axios parameter creator
+ *
+ * @export
+ * @interface V1DeleteMongoClusterResponse
+ */
+export interface V1DeleteMongoClusterResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1DeleteMongoClusterResponse
+     */
+    operationId: string;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ListMongoClustersResponse
+ */
+export interface V1ListMongoClustersResponse {
+    /**
+     *
+     * @type {Array<V1MongoClusterResponse>}
+     * @memberof V1ListMongoClustersResponse
+     */
+    clusters: Array<V1MongoClusterResponse>;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ListProjectsResponse
+ */
+export interface V1ListProjectsResponse {
+    /**
+     *
+     * @type {Array<V1ProjectResponse>}
+     * @memberof V1ListProjectsResponse
+     */
+    projects: Array<V1ProjectResponse>;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ListResourcePresetsResponse
+ */
+export interface V1ListResourcePresetsResponse {
+    /**
+     *
+     * @type {Array<V1ResourcePresetResponse>}
+     * @memberof V1ListResourcePresetsResponse
+     */
+    resourcePresets: Array<V1ResourcePresetResponse>;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ListZonesResponse
+ */
+export interface V1ListZonesResponse {
+    /**
+     *
+     * @type {Array<V1ZoneResponse>}
+     * @memberof V1ListZonesResponse
+     */
+    zones: Array<V1ZoneResponse>;
+}
+
+/**
+ *
+ * @export
+ * @interface V1MongoClusterResponse
+ */
+export interface V1MongoClusterResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1MongoClusterResponse
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1MongoClusterResponse
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1MongoClusterResponse
+     */
+    description: string;
+    /**
+     *
+     * @type {V1ClusterStatusResponse}
+     * @memberof V1MongoClusterResponse
+     */
+    status: V1ClusterStatusResponse;
+    /**
+     *
+     * @type {string}
+     * @memberof V1MongoClusterResponse
+     */
+    projectId: string;
+    /**
+     *
+     * @type {V1MongoConfig}
+     * @memberof V1MongoClusterResponse
+     */
+    config: V1MongoConfig;
+}
+
+/**
+ *
+ * @export
+ * @interface V1MongoConfig
+ */
+export interface V1MongoConfig {
+    /**
+     *
+     * @type {V1ClusterResources}
+     * @memberof V1MongoConfig
+     */
+    resources: V1ClusterResources;
+    /**
+     *
+     * @type {number}
+     * @memberof V1MongoConfig
+     */
+    replicas: number;
+}
+
+/**
+ *
+ * @export
+ * @interface V1MongoHost
+ */
+export interface V1MongoHost {
+    /**
+     *
+     * @type {string}
+     * @memberof V1MongoHost
+     */
+    name: string;
+}
+
+/**
+ *
+ * @export
+ * @interface V1MongoListHostsResponse
+ */
+export interface V1MongoListHostsResponse {
+    /**
+     *
+     * @type {Array<V1MongoHost>}
+     * @memberof V1MongoListHostsResponse
+     */
+    hosts: Array<V1MongoHost>;
+}
+
+/**
+ *
+ * @export
+ * @interface V1MongoScaleHostsRequest
+ */
+export interface V1MongoScaleHostsRequest {
+    /**
+     *
+     * @type {number}
+     * @memberof V1MongoScaleHostsRequest
+     */
+    replicas: number;
+}
+
+/**
+ *
+ * @export
+ * @interface V1MongoUpdateClusterRequest
+ */
+export interface V1MongoUpdateClusterRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1MongoUpdateClusterRequest
+     */
+    name: string;
+    /**
+     *
+     * @type {V1MongoConfig}
+     * @memberof V1MongoUpdateClusterRequest
+     */
+    config: V1MongoConfig;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ProjectResponse
+ */
+export interface V1ProjectResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectResponse
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectResponse
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectResponse
+     */
+    description: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof V1ProjectResponse
+     */
+    isArchived: boolean;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ResourcePresetResponse
+ */
+export interface V1ResourcePresetResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ResourcePresetResponse
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ResourcePresetResponse
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ResourcePresetResponse
+     */
+    type: V1ResourcePresetResponseTypeEnum;
+    /**
+     *
+     * @type {number}
+     * @memberof V1ResourcePresetResponse
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof V1ResourcePresetResponse
+     */
+    ram: number;
+}
+
+export const V1ResourcePresetResponseTypeEnum = {
+    CpuOptimized: 'cpu_optimized',
+    Standard: 'standard',
+    RamOptimized: 'ram_optimized',
+} as const;
+
+export type V1ResourcePresetResponseTypeEnum =
+    (typeof V1ResourcePresetResponseTypeEnum)[keyof typeof V1ResourcePresetResponseTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface V1ScheduledOperationResponse
+ */
+export interface V1ScheduledOperationResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ScheduledOperationResponse
+     */
+    id: string;
+}
+
+/**
+ *
+ * @export
+ * @interface V1UpdateProjectRequest
+ */
+export interface V1UpdateProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1UpdateProjectRequest
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1UpdateProjectRequest
+     */
+    description: string;
+}
+
+/**
+ *
+ * @export
+ * @interface V1UpdateResourcePresetRequest
+ */
+export interface V1UpdateResourcePresetRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1UpdateResourcePresetRequest
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1UpdateResourcePresetRequest
+     */
+    type: V1UpdateResourcePresetRequestTypeEnum;
+    /**
+     *
+     * @type {number}
+     * @memberof V1UpdateResourcePresetRequest
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof V1UpdateResourcePresetRequest
+     */
+    ram: number;
+}
+
+export const V1UpdateResourcePresetRequestTypeEnum = {
+    CpuOptimized: 'cpu_optimized',
+    Standard: 'standard',
+    RamOptimized: 'ram_optimized',
+} as const;
+
+export type V1UpdateResourcePresetRequestTypeEnum =
+    (typeof V1UpdateResourcePresetRequestTypeEnum)[keyof typeof V1UpdateResourcePresetRequestTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface V1UpdateZoneRequest
+ */
+export interface V1UpdateZoneRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1UpdateZoneRequest
+     */
+    description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1UpdateZoneRequest
+     */
+    selector: string;
+}
+
+/**
+ *
+ * @export
+ * @interface V1ZoneResponse
+ */
+export interface V1ZoneResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ZoneResponse
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ZoneResponse
+     */
+    description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ZoneResponse
+     */
+    selector: string;
+}
+
+/**
+ * V1ManagedMongoDbApi - axios parameter creator
  * @export
  */
-export const V1ClustersApiAxiosParamCreator = function (configuration?: Configuration) {
+export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary Create cluster.
-         * @param {V1CreateClusterRequest} v1CreateClusterRequest
+         * @summary Create MongoDB cluster
+         * @param {V1CreateMongoClusterRequest} v1CreateMongoClusterRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ClustersCreateCluster: async (
-            v1CreateClusterRequest: V1CreateClusterRequest,
+        createCluster: async (
+            v1CreateMongoClusterRequest: V1CreateMongoClusterRequest,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateClusterRequest' is not null or undefined
+            // verify required parameter 'v1CreateMongoClusterRequest' is not null or undefined
             assertParamExists(
-                'v1ClustersCreateCluster',
-                'v1CreateClusterRequest',
-                v1CreateClusterRequest,
+                'createCluster',
+                'v1CreateMongoClusterRequest',
+                v1CreateMongoClusterRequest,
             );
-            const localVarPath = `/api/v1/clusters`;
+            const localVarPath = `/api/v1/managed-mongodb/clusters`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -220,7 +654,7 @@ export const V1ClustersApiAxiosParamCreator = function (configuration?: Configur
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateClusterRequest,
+                v1CreateMongoClusterRequest,
                 localVarRequestOptions,
                 configuration,
             );
@@ -232,20 +666,62 @@ export const V1ClustersApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          *
-         * @summary Get cluster by id.
-         * @param {string} id
+         * @summary Delete MongoDB cluster
+         * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ClustersGetCluster: async (
-            id: string,
+        deleteCluster: async (
+            clusterId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('v1ClustersGetCluster', 'id', id);
-            const localVarPath = `/api/v1/clusters/{id}`.replace(
-                `{${'id'}}`,
-                encodeURIComponent(String(id)),
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('deleteCluster', 'clusterId', clusterId);
+            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get MongoDB cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCluster: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('getCluster', 'clusterId', clusterId);
+            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -274,22 +750,100 @@ export const V1ClustersApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          *
-         * @summary Update cluster project
-         * @param {V1UpdateClusterProjectRequest} v1UpdateClusterProjectRequest
+         * @summary Get MongoDB clusters
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ClustersUpdateProject: async (
-            v1UpdateClusterProjectRequest: V1UpdateClusterProjectRequest,
+        listClusters: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/managed-mongodb/clusters`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts: async (
+            clusterId: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'v1UpdateClusterProjectRequest' is not null or undefined
-            assertParamExists(
-                'v1ClustersUpdateProject',
-                'v1UpdateClusterProjectRequest',
-                v1UpdateClusterProjectRequest,
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listHosts', 'clusterId', clusterId);
+            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}/hosts`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
             );
-            const localVarPath = `/api/v1/clusters/update-project`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Scale MongoDB hosts
+         * @param {string} clusterId
+         * @param {V1MongoScaleHostsRequest} v1MongoScaleHostsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scaleHosts: async (
+            clusterId: string,
+            v1MongoScaleHostsRequest: V1MongoScaleHostsRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('scaleHosts', 'clusterId', clusterId);
+            // verify required parameter 'v1MongoScaleHostsRequest' is not null or undefined
+            assertParamExists('scaleHosts', 'v1MongoScaleHostsRequest', v1MongoScaleHostsRequest);
+            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}/hosts`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -312,7 +866,64 @@ export const V1ClustersApiAxiosParamCreator = function (configuration?: Configur
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateClusterProjectRequest,
+                v1MongoScaleHostsRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update MongoDB cluster
+         * @param {string} clusterId
+         * @param {V1MongoUpdateClusterRequest} v1MongoUpdateClusterRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateCluster: async (
+            clusterId: string,
+            v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('updateCluster', 'clusterId', clusterId);
+            // verify required parameter 'v1MongoUpdateClusterRequest' is not null or undefined
+            assertParamExists(
+                'updateCluster',
+                'v1MongoUpdateClusterRequest',
+                v1MongoUpdateClusterRequest,
+            );
+            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1MongoUpdateClusterRequest,
                 localVarRequestOptions,
                 configuration,
             );
@@ -326,32 +937,32 @@ export const V1ClustersApiAxiosParamCreator = function (configuration?: Configur
 };
 
 /**
- * V1ClustersApi - functional programming interface
+ * V1ManagedMongoDbApi - functional programming interface
  * @export
  */
-export const V1ClustersApiFp = function (configuration?: Configuration) {
-    const localVarAxiosParamCreator = V1ClustersApiAxiosParamCreator(configuration);
+export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = V1ManagedMongoDbApiAxiosParamCreator(configuration);
     return {
         /**
          *
-         * @summary Create cluster.
-         * @param {V1CreateClusterRequest} v1CreateClusterRequest
+         * @summary Create MongoDB cluster
+         * @param {V1CreateMongoClusterRequest} v1CreateMongoClusterRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1ClustersCreateCluster(
-            v1CreateClusterRequest: V1CreateClusterRequest,
+        async createCluster(
+            v1CreateMongoClusterRequest: V1CreateMongoClusterRequest,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1CreateClusterResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1CreateMongoClusterResponse>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1ClustersCreateCluster(
-                v1CreateClusterRequest,
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCluster(
+                v1CreateMongoClusterRequest,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['V1ClustersApi.v1ClustersCreateCluster']?.[
+                operationServerMap['V1ManagedMongoDbApi.createCluster']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -364,24 +975,24 @@ export const V1ClustersApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get cluster by id.
-         * @param {string} id
+         * @summary Delete MongoDB cluster
+         * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1ClustersGetCluster(
-            id: string,
+        async deleteCluster(
+            clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1GetClusterResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1DeleteMongoClusterResponse>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1ClustersGetCluster(
-                id,
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCluster(
+                clusterId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['V1ClustersApi.v1ClustersGetCluster']?.[
+                operationServerMap['V1ManagedMongoDbApi.deleteCluster']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -394,22 +1005,139 @@ export const V1ClustersApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Update cluster project
-         * @param {V1UpdateClusterProjectRequest} v1UpdateClusterProjectRequest
+         * @summary Get MongoDB cluster
+         * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1ClustersUpdateProject(
-            v1UpdateClusterProjectRequest: V1UpdateClusterProjectRequest,
+        async getCluster(
+            clusterId: string,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1ClustersUpdateProject(
-                v1UpdateClusterProjectRequest,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1MongoClusterResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCluster(
+                clusterId,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['V1ClustersApi.v1ClustersUpdateProject']?.[
+                operationServerMap['V1ManagedMongoDbApi.getCluster']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get MongoDB clusters
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listClusters(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ListMongoClustersResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listClusters(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ManagedMongoDbApi.listClusters']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listHosts(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1MongoListHostsResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listHosts(clusterId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ManagedMongoDbApi.listHosts']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Scale MongoDB hosts
+         * @param {string} clusterId
+         * @param {V1MongoScaleHostsRequest} v1MongoScaleHostsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async scaleHosts(
+            clusterId: string,
+            v1MongoScaleHostsRequest: V1MongoScaleHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.scaleHosts(
+                clusterId,
+                v1MongoScaleHostsRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ManagedMongoDbApi.scaleHosts']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update MongoDB cluster
+         * @param {string} clusterId
+         * @param {V1MongoUpdateClusterRequest} v1MongoUpdateClusterRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateCluster(
+            clusterId: string,
+            v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCluster(
+                clusterId,
+                v1MongoUpdateClusterRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ManagedMongoDbApi.updateCluster']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -424,161 +1152,351 @@ export const V1ClustersApiFp = function (configuration?: Configuration) {
 };
 
 /**
- * V1ClustersApi - factory interface
+ * V1ManagedMongoDbApi - factory interface
  * @export
  */
-export const V1ClustersApiFactory = function (
+export const V1ManagedMongoDbApiFactory = function (
     configuration?: Configuration,
     basePath?: string,
     axios?: AxiosInstance,
 ) {
-    const localVarFp = V1ClustersApiFp(configuration);
+    const localVarFp = V1ManagedMongoDbApiFp(configuration);
     return {
         /**
          *
-         * @summary Create cluster.
-         * @param {V1ClustersApiV1ClustersCreateClusterRequest} requestParameters Request parameters.
+         * @summary Create MongoDB cluster
+         * @param {V1ManagedMongoDbApiCreateClusterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ClustersCreateCluster(
-            requestParameters: V1ClustersApiV1ClustersCreateClusterRequest,
+        createCluster(
+            requestParameters: V1ManagedMongoDbApiCreateClusterRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1CreateClusterResponse> {
+        ): AxiosPromise<V1CreateMongoClusterResponse> {
             return localVarFp
-                .v1ClustersCreateCluster(requestParameters.v1CreateClusterRequest, options)
+                .createCluster(requestParameters.v1CreateMongoClusterRequest, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get cluster by id.
-         * @param {V1ClustersApiV1ClustersGetClusterRequest} requestParameters Request parameters.
+         * @summary Delete MongoDB cluster
+         * @param {V1ManagedMongoDbApiDeleteClusterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ClustersGetCluster(
-            requestParameters: V1ClustersApiV1ClustersGetClusterRequest,
+        deleteCluster(
+            requestParameters: V1ManagedMongoDbApiDeleteClusterRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1GetClusterResponse> {
+        ): AxiosPromise<V1DeleteMongoClusterResponse> {
             return localVarFp
-                .v1ClustersGetCluster(requestParameters.id, options)
+                .deleteCluster(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Update cluster project
-         * @param {V1ClustersApiV1ClustersUpdateProjectRequest} requestParameters Request parameters.
+         * @summary Get MongoDB cluster
+         * @param {V1ManagedMongoDbApiGetClusterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ClustersUpdateProject(
-            requestParameters: V1ClustersApiV1ClustersUpdateProjectRequest,
+        getCluster(
+            requestParameters: V1ManagedMongoDbApiGetClusterRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
+        ): AxiosPromise<V1MongoClusterResponse> {
             return localVarFp
-                .v1ClustersUpdateProject(requestParameters.v1UpdateClusterProjectRequest, options)
+                .getCluster(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get MongoDB clusters
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listClusters(options?: RawAxiosRequestConfig): AxiosPromise<V1ListMongoClustersResponse> {
+            return localVarFp.listClusters(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get MongoDB hosts
+         * @param {V1ManagedMongoDbApiListHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts(
+            requestParameters: V1ManagedMongoDbApiListHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1MongoListHostsResponse> {
+            return localVarFp
+                .listHosts(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Scale MongoDB hosts
+         * @param {V1ManagedMongoDbApiScaleHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scaleHosts(
+            requestParameters: V1ManagedMongoDbApiScaleHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .scaleHosts(
+                    requestParameters.clusterId,
+                    requestParameters.v1MongoScaleHostsRequest,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update MongoDB cluster
+         * @param {V1ManagedMongoDbApiUpdateClusterRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateCluster(
+            requestParameters: V1ManagedMongoDbApiUpdateClusterRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .updateCluster(
+                    requestParameters.clusterId,
+                    requestParameters.v1MongoUpdateClusterRequest,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * Request parameters for v1ClustersCreateCluster operation in V1ClustersApi.
+ * Request parameters for createCluster operation in V1ManagedMongoDbApi.
  * @export
- * @interface V1ClustersApiV1ClustersCreateClusterRequest
+ * @interface V1ManagedMongoDbApiCreateClusterRequest
  */
-export interface V1ClustersApiV1ClustersCreateClusterRequest {
+export interface V1ManagedMongoDbApiCreateClusterRequest {
     /**
      *
-     * @type {V1CreateClusterRequest}
-     * @memberof V1ClustersApiV1ClustersCreateCluster
+     * @type {V1CreateMongoClusterRequest}
+     * @memberof V1ManagedMongoDbApiCreateCluster
      */
-    readonly v1CreateClusterRequest: V1CreateClusterRequest;
+    readonly v1CreateMongoClusterRequest: V1CreateMongoClusterRequest;
 }
 
 /**
- * Request parameters for v1ClustersGetCluster operation in V1ClustersApi.
+ * Request parameters for deleteCluster operation in V1ManagedMongoDbApi.
  * @export
- * @interface V1ClustersApiV1ClustersGetClusterRequest
+ * @interface V1ManagedMongoDbApiDeleteClusterRequest
  */
-export interface V1ClustersApiV1ClustersGetClusterRequest {
+export interface V1ManagedMongoDbApiDeleteClusterRequest {
     /**
      *
      * @type {string}
-     * @memberof V1ClustersApiV1ClustersGetCluster
+     * @memberof V1ManagedMongoDbApiDeleteCluster
      */
-    readonly id: string;
+    readonly clusterId: string;
 }
 
 /**
- * Request parameters for v1ClustersUpdateProject operation in V1ClustersApi.
+ * Request parameters for getCluster operation in V1ManagedMongoDbApi.
  * @export
- * @interface V1ClustersApiV1ClustersUpdateProjectRequest
+ * @interface V1ManagedMongoDbApiGetClusterRequest
  */
-export interface V1ClustersApiV1ClustersUpdateProjectRequest {
+export interface V1ManagedMongoDbApiGetClusterRequest {
     /**
      *
-     * @type {V1UpdateClusterProjectRequest}
-     * @memberof V1ClustersApiV1ClustersUpdateProject
+     * @type {string}
+     * @memberof V1ManagedMongoDbApiGetCluster
      */
-    readonly v1UpdateClusterProjectRequest: V1UpdateClusterProjectRequest;
+    readonly clusterId: string;
 }
 
 /**
- * V1ClustersApi - object-oriented interface
+ * Request parameters for listHosts operation in V1ManagedMongoDbApi.
  * @export
- * @class V1ClustersApi
+ * @interface V1ManagedMongoDbApiListHostsRequest
+ */
+export interface V1ManagedMongoDbApiListHostsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ManagedMongoDbApiListHosts
+     */
+    readonly clusterId: string;
+}
+
+/**
+ * Request parameters for scaleHosts operation in V1ManagedMongoDbApi.
+ * @export
+ * @interface V1ManagedMongoDbApiScaleHostsRequest
+ */
+export interface V1ManagedMongoDbApiScaleHostsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ManagedMongoDbApiScaleHosts
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {V1MongoScaleHostsRequest}
+     * @memberof V1ManagedMongoDbApiScaleHosts
+     */
+    readonly v1MongoScaleHostsRequest: V1MongoScaleHostsRequest;
+}
+
+/**
+ * Request parameters for updateCluster operation in V1ManagedMongoDbApi.
+ * @export
+ * @interface V1ManagedMongoDbApiUpdateClusterRequest
+ */
+export interface V1ManagedMongoDbApiUpdateClusterRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ManagedMongoDbApiUpdateCluster
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {V1MongoUpdateClusterRequest}
+     * @memberof V1ManagedMongoDbApiUpdateCluster
+     */
+    readonly v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest;
+}
+
+/**
+ * V1ManagedMongoDbApi - object-oriented interface
+ * @export
+ * @class V1ManagedMongoDbApi
  * @extends {BaseAPI}
  */
-export class V1ClustersApi extends BaseAPI {
+export class V1ManagedMongoDbApi extends BaseAPI {
     /**
      *
-     * @summary Create cluster.
-     * @param {V1ClustersApiV1ClustersCreateClusterRequest} requestParameters Request parameters.
+     * @summary Create MongoDB cluster
+     * @param {V1ManagedMongoDbApiCreateClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof V1ClustersApi
+     * @memberof V1ManagedMongoDbApi
      */
-    public v1ClustersCreateCluster(
-        requestParameters: V1ClustersApiV1ClustersCreateClusterRequest,
+    public createCluster(
+        requestParameters: V1ManagedMongoDbApiCreateClusterRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return V1ClustersApiFp(this.configuration)
-            .v1ClustersCreateCluster(requestParameters.v1CreateClusterRequest, options)
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .createCluster(requestParameters.v1CreateMongoClusterRequest, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Get cluster by id.
-     * @param {V1ClustersApiV1ClustersGetClusterRequest} requestParameters Request parameters.
+     * @summary Delete MongoDB cluster
+     * @param {V1ManagedMongoDbApiDeleteClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof V1ClustersApi
+     * @memberof V1ManagedMongoDbApi
      */
-    public v1ClustersGetCluster(
-        requestParameters: V1ClustersApiV1ClustersGetClusterRequest,
+    public deleteCluster(
+        requestParameters: V1ManagedMongoDbApiDeleteClusterRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return V1ClustersApiFp(this.configuration)
-            .v1ClustersGetCluster(requestParameters.id, options)
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .deleteCluster(requestParameters.clusterId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Update cluster project
-     * @param {V1ClustersApiV1ClustersUpdateProjectRequest} requestParameters Request parameters.
+     * @summary Get MongoDB cluster
+     * @param {V1ManagedMongoDbApiGetClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof V1ClustersApi
+     * @memberof V1ManagedMongoDbApi
      */
-    public v1ClustersUpdateProject(
-        requestParameters: V1ClustersApiV1ClustersUpdateProjectRequest,
+    public getCluster(
+        requestParameters: V1ManagedMongoDbApiGetClusterRequest,
         options?: RawAxiosRequestConfig,
     ) {
-        return V1ClustersApiFp(this.configuration)
-            .v1ClustersUpdateProject(requestParameters.v1UpdateClusterProjectRequest, options)
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .getCluster(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get MongoDB clusters
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ManagedMongoDbApi
+     */
+    public listClusters(options?: RawAxiosRequestConfig) {
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .listClusters(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get MongoDB hosts
+     * @param {V1ManagedMongoDbApiListHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ManagedMongoDbApi
+     */
+    public listHosts(
+        requestParameters: V1ManagedMongoDbApiListHostsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .listHosts(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Scale MongoDB hosts
+     * @param {V1ManagedMongoDbApiScaleHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ManagedMongoDbApi
+     */
+    public scaleHosts(
+        requestParameters: V1ManagedMongoDbApiScaleHostsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .scaleHosts(
+                requestParameters.clusterId,
+                requestParameters.v1MongoScaleHostsRequest,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update MongoDB cluster
+     * @param {V1ManagedMongoDbApiUpdateClusterRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ManagedMongoDbApi
+     */
+    public updateCluster(
+        requestParameters: V1ManagedMongoDbApiUpdateClusterRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .updateCluster(
+                requestParameters.clusterId,
+                requestParameters.v1MongoUpdateClusterRequest,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -591,21 +1509,59 @@ export const V1ProjectsApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          *
+         * @summary Archive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        archiveProject: async (
+            projectId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('archiveProject', 'projectId', projectId);
+            const localVarPath = `/api/v1/projects/{projectId}/archive`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Create project
          * @param {V1CreateProjectRequest} v1CreateProjectRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ProjectsCreateProject: async (
+        createProject: async (
             v1CreateProjectRequest: V1CreateProjectRequest,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'v1CreateProjectRequest' is not null or undefined
-            assertParamExists(
-                'v1ProjectsCreateProject',
-                'v1CreateProjectRequest',
-                v1CreateProjectRequest,
-            );
+            assertParamExists('createProject', 'v1CreateProjectRequest', v1CreateProjectRequest);
             const localVarPath = `/api/v1/projects`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -639,6 +1595,176 @@ export const V1ProjectsApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         *
+         * @summary Get project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProject: async (
+            projectId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('getProject', 'projectId', projectId);
+            const localVarPath = `/api/v1/projects/{projectId}`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get projects
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProjects: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/projects`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Unarchive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unarchiveProject: async (
+            projectId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('unarchiveProject', 'projectId', projectId);
+            const localVarPath = `/api/v1/projects/{projectId}/unarchive`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update project
+         * @param {string} projectId
+         * @param {V1UpdateProjectRequest} v1UpdateProjectRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProject: async (
+            projectId: string,
+            v1UpdateProjectRequest: V1UpdateProjectRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('updateProject', 'projectId', projectId);
+            // verify required parameter 'v1UpdateProjectRequest' is not null or undefined
+            assertParamExists('updateProject', 'v1UpdateProjectRequest', v1UpdateProjectRequest);
+            const localVarPath = `/api/v1/projects/{projectId}`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1UpdateProjectRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     };
 };
 
@@ -651,26 +1777,157 @@ export const V1ProjectsApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
+         * @summary Archive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async archiveProject(
+            projectId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.archiveProject(
+                projectId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ProjectsApi.archiveProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Create project
          * @param {V1CreateProjectRequest} v1CreateProjectRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1ProjectsCreateProject(
+        async createProject(
             v1CreateProjectRequest: V1CreateProjectRequest,
             options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1CreateProjectResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1ProjectsCreateProject(
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProject(
                 v1CreateProjectRequest,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.v1ProjectsCreateProject']?.[
-                    localVarOperationServerIndex
-                ]?.url;
+                operationServerMap['V1ProjectsApi.createProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProject(
+            projectId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ProjectResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProject(
+                projectId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ProjectsApi.getProject']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get projects
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listProjects(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ListProjectsResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listProjects(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ProjectsApi.listProjects']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Unarchive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unarchiveProject(
+            projectId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unarchiveProject(
+                projectId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ProjectsApi.unarchiveProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update project
+         * @param {string} projectId
+         * @param {V1UpdateProjectRequest} v1UpdateProjectRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateProject(
+            projectId: string,
+            v1UpdateProjectRequest: V1UpdateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProject(
+                projectId,
+                v1UpdateProjectRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ProjectsApi.updateProject']?.[localVarOperationServerIndex]
+                    ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -695,34 +1952,170 @@ export const V1ProjectsApiFactory = function (
     return {
         /**
          *
-         * @summary Create project
-         * @param {V1ProjectsApiV1ProjectsCreateProjectRequest} requestParameters Request parameters.
+         * @summary Archive project
+         * @param {V1ProjectsApiArchiveProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1ProjectsCreateProject(
-            requestParameters: V1ProjectsApiV1ProjectsCreateProjectRequest,
+        archiveProject(
+            requestParameters: V1ProjectsApiArchiveProjectRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1CreateProjectResponse> {
+        ): AxiosPromise<void> {
             return localVarFp
-                .v1ProjectsCreateProject(requestParameters.v1CreateProjectRequest, options)
+                .archiveProject(requestParameters.projectId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Create project
+         * @param {V1ProjectsApiCreateProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProject(
+            requestParameters: V1ProjectsApiCreateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .createProject(requestParameters.v1CreateProjectRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get project
+         * @param {V1ProjectsApiGetProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProject(
+            requestParameters: V1ProjectsApiGetProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ProjectResponse> {
+            return localVarFp
+                .getProject(requestParameters.projectId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get projects
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProjects(options?: RawAxiosRequestConfig): AxiosPromise<V1ListProjectsResponse> {
+            return localVarFp.listProjects(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Unarchive project
+         * @param {V1ProjectsApiUnarchiveProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unarchiveProject(
+            requestParameters: V1ProjectsApiUnarchiveProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .unarchiveProject(requestParameters.projectId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update project
+         * @param {V1ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProject(
+            requestParameters: V1ProjectsApiUpdateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .updateProject(
+                    requestParameters.projectId,
+                    requestParameters.v1UpdateProjectRequest,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * Request parameters for v1ProjectsCreateProject operation in V1ProjectsApi.
+ * Request parameters for archiveProject operation in V1ProjectsApi.
  * @export
- * @interface V1ProjectsApiV1ProjectsCreateProjectRequest
+ * @interface V1ProjectsApiArchiveProjectRequest
  */
-export interface V1ProjectsApiV1ProjectsCreateProjectRequest {
+export interface V1ProjectsApiArchiveProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectsApiArchiveProject
+     */
+    readonly projectId: string;
+}
+
+/**
+ * Request parameters for createProject operation in V1ProjectsApi.
+ * @export
+ * @interface V1ProjectsApiCreateProjectRequest
+ */
+export interface V1ProjectsApiCreateProjectRequest {
     /**
      *
      * @type {V1CreateProjectRequest}
-     * @memberof V1ProjectsApiV1ProjectsCreateProject
+     * @memberof V1ProjectsApiCreateProject
      */
     readonly v1CreateProjectRequest: V1CreateProjectRequest;
+}
+
+/**
+ * Request parameters for getProject operation in V1ProjectsApi.
+ * @export
+ * @interface V1ProjectsApiGetProjectRequest
+ */
+export interface V1ProjectsApiGetProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectsApiGetProject
+     */
+    readonly projectId: string;
+}
+
+/**
+ * Request parameters for unarchiveProject operation in V1ProjectsApi.
+ * @export
+ * @interface V1ProjectsApiUnarchiveProjectRequest
+ */
+export interface V1ProjectsApiUnarchiveProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectsApiUnarchiveProject
+     */
+    readonly projectId: string;
+}
+
+/**
+ * Request parameters for updateProject operation in V1ProjectsApi.
+ * @export
+ * @interface V1ProjectsApiUpdateProjectRequest
+ */
+export interface V1ProjectsApiUpdateProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectsApiUpdateProject
+     */
+    readonly projectId: string;
+
+    /**
+     *
+     * @type {V1UpdateProjectRequest}
+     * @memberof V1ProjectsApiUpdateProject
+     */
+    readonly v1UpdateProjectRequest: V1UpdateProjectRequest;
 }
 
 /**
@@ -734,18 +2127,1333 @@ export interface V1ProjectsApiV1ProjectsCreateProjectRequest {
 export class V1ProjectsApi extends BaseAPI {
     /**
      *
-     * @summary Create project
-     * @param {V1ProjectsApiV1ProjectsCreateProjectRequest} requestParameters Request parameters.
+     * @summary Archive project
+     * @param {V1ProjectsApiArchiveProjectRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof V1ProjectsApi
      */
-    public v1ProjectsCreateProject(
-        requestParameters: V1ProjectsApiV1ProjectsCreateProjectRequest,
+    public archiveProject(
+        requestParameters: V1ProjectsApiArchiveProjectRequest,
         options?: RawAxiosRequestConfig,
     ) {
         return V1ProjectsApiFp(this.configuration)
-            .v1ProjectsCreateProject(requestParameters.v1CreateProjectRequest, options)
+            .archiveProject(requestParameters.projectId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Create project
+     * @param {V1ProjectsApiCreateProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ProjectsApi
+     */
+    public createProject(
+        requestParameters: V1ProjectsApiCreateProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ProjectsApiFp(this.configuration)
+            .createProject(requestParameters.v1CreateProjectRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get project
+     * @param {V1ProjectsApiGetProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ProjectsApi
+     */
+    public getProject(
+        requestParameters: V1ProjectsApiGetProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ProjectsApiFp(this.configuration)
+            .getProject(requestParameters.projectId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get projects
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ProjectsApi
+     */
+    public listProjects(options?: RawAxiosRequestConfig) {
+        return V1ProjectsApiFp(this.configuration)
+            .listProjects(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Unarchive project
+     * @param {V1ProjectsApiUnarchiveProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ProjectsApi
+     */
+    public unarchiveProject(
+        requestParameters: V1ProjectsApiUnarchiveProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ProjectsApiFp(this.configuration)
+            .unarchiveProject(requestParameters.projectId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update project
+     * @param {V1ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ProjectsApi
+     */
+    public updateProject(
+        requestParameters: V1ProjectsApiUpdateProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ProjectsApiFp(this.configuration)
+            .updateProject(
+                requestParameters.projectId,
+                requestParameters.v1UpdateProjectRequest,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * V1ResourcePresetsApi - axios parameter creator
+ * @export
+ */
+export const V1ResourcePresetsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Create resource preset
+         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createResourcePreset: async (
+            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'v1CreateResourcePresetRequest' is not null or undefined
+            assertParamExists(
+                'createResourcePreset',
+                'v1CreateResourcePresetRequest',
+                v1CreateResourcePresetRequest,
+            );
+            const localVarPath = `/api/v1/resource-presets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1CreateResourcePresetRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Delete resource preset
+         * @param {string} resourcePresetId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteResourcePreset: async (
+            resourcePresetId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'resourcePresetId' is not null or undefined
+            assertParamExists('deleteResourcePreset', 'resourcePresetId', resourcePresetId);
+            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+                `{${'resourcePresetId'}}`,
+                encodeURIComponent(String(resourcePresetId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get resource preset
+         * @param {string} resourcePresetId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getResourcePreset: async (
+            resourcePresetId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'resourcePresetId' is not null or undefined
+            assertParamExists('getResourcePreset', 'resourcePresetId', resourcePresetId);
+            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+                `{${'resourcePresetId'}}`,
+                encodeURIComponent(String(resourcePresetId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get resource presets
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listResourcePresets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/resource-presets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update resource preset
+         * @param {string} resourcePresetId
+         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateResourcePreset: async (
+            resourcePresetId: string,
+            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'resourcePresetId' is not null or undefined
+            assertParamExists('updateResourcePreset', 'resourcePresetId', resourcePresetId);
+            // verify required parameter 'v1UpdateResourcePresetRequest' is not null or undefined
+            assertParamExists(
+                'updateResourcePreset',
+                'v1UpdateResourcePresetRequest',
+                v1UpdateResourcePresetRequest,
+            );
+            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+                `{${'resourcePresetId'}}`,
+                encodeURIComponent(String(resourcePresetId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1UpdateResourcePresetRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * V1ResourcePresetsApi - functional programming interface
+ * @export
+ */
+export const V1ResourcePresetsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = V1ResourcePresetsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create resource preset
+         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createResourcePreset(
+            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createResourcePreset(
+                v1CreateResourcePresetRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ResourcePresetsApi.createResourcePreset']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Delete resource preset
+         * @param {string} resourcePresetId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteResourcePreset(
+            resourcePresetId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteResourcePreset(
+                resourcePresetId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ResourcePresetsApi.deleteResourcePreset']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get resource preset
+         * @param {string} resourcePresetId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getResourcePreset(
+            resourcePresetId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ResourcePresetResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getResourcePreset(
+                resourcePresetId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ResourcePresetsApi.getResourcePreset']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get resource presets
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listResourcePresets(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<V1ListResourcePresetsResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listResourcePresets(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ResourcePresetsApi.listResourcePresets']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update resource preset
+         * @param {string} resourcePresetId
+         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateResourcePreset(
+            resourcePresetId: string,
+            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateResourcePreset(
+                resourcePresetId,
+                v1UpdateResourcePresetRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ResourcePresetsApi.updateResourcePreset']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * V1ResourcePresetsApi - factory interface
+ * @export
+ */
+export const V1ResourcePresetsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = V1ResourcePresetsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create resource preset
+         * @param {V1ResourcePresetsApiCreateResourcePresetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createResourcePreset(
+            requestParameters: V1ResourcePresetsApiCreateResourcePresetRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete resource preset
+         * @param {V1ResourcePresetsApiDeleteResourcePresetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteResourcePreset(
+            requestParameters: V1ResourcePresetsApiDeleteResourcePresetRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .deleteResourcePreset(requestParameters.resourcePresetId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get resource preset
+         * @param {V1ResourcePresetsApiGetResourcePresetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getResourcePreset(
+            requestParameters: V1ResourcePresetsApiGetResourcePresetRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ResourcePresetResponse> {
+            return localVarFp
+                .getResourcePreset(requestParameters.resourcePresetId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get resource presets
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listResourcePresets(
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ListResourcePresetsResponse> {
+            return localVarFp
+                .listResourcePresets(options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update resource preset
+         * @param {V1ResourcePresetsApiUpdateResourcePresetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateResourcePreset(
+            requestParameters: V1ResourcePresetsApiUpdateResourcePresetRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .updateResourcePreset(
+                    requestParameters.resourcePresetId,
+                    requestParameters.v1UpdateResourcePresetRequest,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createResourcePreset operation in V1ResourcePresetsApi.
+ * @export
+ * @interface V1ResourcePresetsApiCreateResourcePresetRequest
+ */
+export interface V1ResourcePresetsApiCreateResourcePresetRequest {
+    /**
+     *
+     * @type {V1CreateResourcePresetRequest}
+     * @memberof V1ResourcePresetsApiCreateResourcePreset
+     */
+    readonly v1CreateResourcePresetRequest: V1CreateResourcePresetRequest;
+}
+
+/**
+ * Request parameters for deleteResourcePreset operation in V1ResourcePresetsApi.
+ * @export
+ * @interface V1ResourcePresetsApiDeleteResourcePresetRequest
+ */
+export interface V1ResourcePresetsApiDeleteResourcePresetRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ResourcePresetsApiDeleteResourcePreset
+     */
+    readonly resourcePresetId: string;
+}
+
+/**
+ * Request parameters for getResourcePreset operation in V1ResourcePresetsApi.
+ * @export
+ * @interface V1ResourcePresetsApiGetResourcePresetRequest
+ */
+export interface V1ResourcePresetsApiGetResourcePresetRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ResourcePresetsApiGetResourcePreset
+     */
+    readonly resourcePresetId: string;
+}
+
+/**
+ * Request parameters for updateResourcePreset operation in V1ResourcePresetsApi.
+ * @export
+ * @interface V1ResourcePresetsApiUpdateResourcePresetRequest
+ */
+export interface V1ResourcePresetsApiUpdateResourcePresetRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ResourcePresetsApiUpdateResourcePreset
+     */
+    readonly resourcePresetId: string;
+
+    /**
+     *
+     * @type {V1UpdateResourcePresetRequest}
+     * @memberof V1ResourcePresetsApiUpdateResourcePreset
+     */
+    readonly v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest;
+}
+
+/**
+ * V1ResourcePresetsApi - object-oriented interface
+ * @export
+ * @class V1ResourcePresetsApi
+ * @extends {BaseAPI}
+ */
+export class V1ResourcePresetsApi extends BaseAPI {
+    /**
+     *
+     * @summary Create resource preset
+     * @param {V1ResourcePresetsApiCreateResourcePresetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ResourcePresetsApi
+     */
+    public createResourcePreset(
+        requestParameters: V1ResourcePresetsApiCreateResourcePresetRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ResourcePresetsApiFp(this.configuration)
+            .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Delete resource preset
+     * @param {V1ResourcePresetsApiDeleteResourcePresetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ResourcePresetsApi
+     */
+    public deleteResourcePreset(
+        requestParameters: V1ResourcePresetsApiDeleteResourcePresetRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ResourcePresetsApiFp(this.configuration)
+            .deleteResourcePreset(requestParameters.resourcePresetId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get resource preset
+     * @param {V1ResourcePresetsApiGetResourcePresetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ResourcePresetsApi
+     */
+    public getResourcePreset(
+        requestParameters: V1ResourcePresetsApiGetResourcePresetRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ResourcePresetsApiFp(this.configuration)
+            .getResourcePreset(requestParameters.resourcePresetId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get resource presets
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ResourcePresetsApi
+     */
+    public listResourcePresets(options?: RawAxiosRequestConfig) {
+        return V1ResourcePresetsApiFp(this.configuration)
+            .listResourcePresets(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update resource preset
+     * @param {V1ResourcePresetsApiUpdateResourcePresetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ResourcePresetsApi
+     */
+    public updateResourcePreset(
+        requestParameters: V1ResourcePresetsApiUpdateResourcePresetRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ResourcePresetsApiFp(this.configuration)
+            .updateResourcePreset(
+                requestParameters.resourcePresetId,
+                requestParameters.v1UpdateResourcePresetRequest,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * V1ZonesApi - axios parameter creator
+ * @export
+ */
+export const V1ZonesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Create zone
+         * @param {V1CreateZoneRequest} v1CreateZoneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createZone: async (
+            v1CreateZoneRequest: V1CreateZoneRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'v1CreateZoneRequest' is not null or undefined
+            assertParamExists('createZone', 'v1CreateZoneRequest', v1CreateZoneRequest);
+            const localVarPath = `/api/v1/zones`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1CreateZoneRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Delete zone
+         * @param {string} zoneId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteZone: async (
+            zoneId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'zoneId' is not null or undefined
+            assertParamExists('deleteZone', 'zoneId', zoneId);
+            const localVarPath = `/api/v1/zones/{zoneId}`.replace(
+                `{${'zoneId'}}`,
+                encodeURIComponent(String(zoneId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get zone
+         * @param {string} zoneId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getZone: async (
+            zoneId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'zoneId' is not null or undefined
+            assertParamExists('getZone', 'zoneId', zoneId);
+            const localVarPath = `/api/v1/zones/{zoneId}`.replace(
+                `{${'zoneId'}}`,
+                encodeURIComponent(String(zoneId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get zones
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listZones: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/zones`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update zone
+         * @param {string} zoneId
+         * @param {V1UpdateZoneRequest} v1UpdateZoneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateZone: async (
+            zoneId: string,
+            v1UpdateZoneRequest: V1UpdateZoneRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'zoneId' is not null or undefined
+            assertParamExists('updateZone', 'zoneId', zoneId);
+            // verify required parameter 'v1UpdateZoneRequest' is not null or undefined
+            assertParamExists('updateZone', 'v1UpdateZoneRequest', v1UpdateZoneRequest);
+            const localVarPath = `/api/v1/zones/{zoneId}`.replace(
+                `{${'zoneId'}}`,
+                encodeURIComponent(String(zoneId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1UpdateZoneRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * V1ZonesApi - functional programming interface
+ * @export
+ */
+export const V1ZonesApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = V1ZonesApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create zone
+         * @param {V1CreateZoneRequest} v1CreateZoneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createZone(
+            v1CreateZoneRequest: V1CreateZoneRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createZone(
+                v1CreateZoneRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ZonesApi.createZone']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Delete zone
+         * @param {string} zoneId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteZone(
+            zoneId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteZone(zoneId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ZonesApi.deleteZone']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get zone
+         * @param {string} zoneId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getZone(
+            zoneId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ZoneResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getZone(zoneId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ZonesApi.getZone']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get zones
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listZones(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ListZonesResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listZones(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ZonesApi.listZones']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update zone
+         * @param {string} zoneId
+         * @param {V1UpdateZoneRequest} v1UpdateZoneRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateZone(
+            zoneId: string,
+            v1UpdateZoneRequest: V1UpdateZoneRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateZone(
+                zoneId,
+                v1UpdateZoneRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ZonesApi.updateZone']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * V1ZonesApi - factory interface
+ * @export
+ */
+export const V1ZonesApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = V1ZonesApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create zone
+         * @param {V1ZonesApiCreateZoneRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createZone(
+            requestParameters: V1ZonesApiCreateZoneRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .createZone(requestParameters.v1CreateZoneRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete zone
+         * @param {V1ZonesApiDeleteZoneRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteZone(
+            requestParameters: V1ZonesApiDeleteZoneRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .deleteZone(requestParameters.zoneId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get zone
+         * @param {V1ZonesApiGetZoneRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getZone(
+            requestParameters: V1ZonesApiGetZoneRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ZoneResponse> {
+            return localVarFp
+                .getZone(requestParameters.zoneId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get zones
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listZones(options?: RawAxiosRequestConfig): AxiosPromise<V1ListZonesResponse> {
+            return localVarFp.listZones(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update zone
+         * @param {V1ZonesApiUpdateZoneRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateZone(
+            requestParameters: V1ZonesApiUpdateZoneRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .updateZone(
+                    requestParameters.zoneId,
+                    requestParameters.v1UpdateZoneRequest,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createZone operation in V1ZonesApi.
+ * @export
+ * @interface V1ZonesApiCreateZoneRequest
+ */
+export interface V1ZonesApiCreateZoneRequest {
+    /**
+     *
+     * @type {V1CreateZoneRequest}
+     * @memberof V1ZonesApiCreateZone
+     */
+    readonly v1CreateZoneRequest: V1CreateZoneRequest;
+}
+
+/**
+ * Request parameters for deleteZone operation in V1ZonesApi.
+ * @export
+ * @interface V1ZonesApiDeleteZoneRequest
+ */
+export interface V1ZonesApiDeleteZoneRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ZonesApiDeleteZone
+     */
+    readonly zoneId: string;
+}
+
+/**
+ * Request parameters for getZone operation in V1ZonesApi.
+ * @export
+ * @interface V1ZonesApiGetZoneRequest
+ */
+export interface V1ZonesApiGetZoneRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ZonesApiGetZone
+     */
+    readonly zoneId: string;
+}
+
+/**
+ * Request parameters for updateZone operation in V1ZonesApi.
+ * @export
+ * @interface V1ZonesApiUpdateZoneRequest
+ */
+export interface V1ZonesApiUpdateZoneRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ZonesApiUpdateZone
+     */
+    readonly zoneId: string;
+
+    /**
+     *
+     * @type {V1UpdateZoneRequest}
+     * @memberof V1ZonesApiUpdateZone
+     */
+    readonly v1UpdateZoneRequest: V1UpdateZoneRequest;
+}
+
+/**
+ * V1ZonesApi - object-oriented interface
+ * @export
+ * @class V1ZonesApi
+ * @extends {BaseAPI}
+ */
+export class V1ZonesApi extends BaseAPI {
+    /**
+     *
+     * @summary Create zone
+     * @param {V1ZonesApiCreateZoneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ZonesApi
+     */
+    public createZone(
+        requestParameters: V1ZonesApiCreateZoneRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ZonesApiFp(this.configuration)
+            .createZone(requestParameters.v1CreateZoneRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Delete zone
+     * @param {V1ZonesApiDeleteZoneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ZonesApi
+     */
+    public deleteZone(
+        requestParameters: V1ZonesApiDeleteZoneRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ZonesApiFp(this.configuration)
+            .deleteZone(requestParameters.zoneId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get zone
+     * @param {V1ZonesApiGetZoneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ZonesApi
+     */
+    public getZone(requestParameters: V1ZonesApiGetZoneRequest, options?: RawAxiosRequestConfig) {
+        return V1ZonesApiFp(this.configuration)
+            .getZone(requestParameters.zoneId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get zones
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ZonesApi
+     */
+    public listZones(options?: RawAxiosRequestConfig) {
+        return V1ZonesApiFp(this.configuration)
+            .listZones(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update zone
+     * @param {V1ZonesApiUpdateZoneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ZonesApi
+     */
+    public updateZone(
+        requestParameters: V1ZonesApiUpdateZoneRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ZonesApiFp(this.configuration)
+            .updateZone(requestParameters.zoneId, requestParameters.v1UpdateZoneRequest, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }

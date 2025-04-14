@@ -15,7 +15,9 @@ export const clearTokens = () => {
 };
 
 export const login = async (username: string, password: string) => {
+    // console.log('username, password', username, password);
     const response = await authApi.login({authRequestDTO: {username, password}});
+    // console.log('login response', response);
     setTokens(response.data.accessToken, response.data.refreshToken);
     return response.data;
 };

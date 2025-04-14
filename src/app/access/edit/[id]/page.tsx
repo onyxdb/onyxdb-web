@@ -54,14 +54,14 @@ export default function EditRolePage() {
                     permissions: values.permissions.map((p) => mapPermissionFormToDTO(p)),
                 },
             });
-            router.push('/roles');
+            router.push('/access');
         } catch (error) {
             console.error('Failed to update role:', error);
         }
     };
 
     const handleEditModalCancel = () => {
-        router.push('/roles');
+        router.push('/access');
     };
 
     return (

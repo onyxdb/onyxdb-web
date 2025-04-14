@@ -51,6 +51,7 @@ export default function StructurePage({}: StructurePageProps) {
 
     const handleDcSelect = (id: string) => {
         setSelectedDcId(id);
+        setSelectedOu(null);
         router.push(pathname + '?' + createQueryString('dcId', id));
     };
 
@@ -183,7 +184,7 @@ export default function StructurePage({}: StructurePageProps) {
     const handleSelectedOuDelete = async (id: string) => {
         console.log('handleOuDelete id', id);
         if (id) {
-            await domainComponentsApi.deleteDomainComponent({dcId: id});
+            await organizationUnitsApi.deleteOrganizationUnit({ouId: id});
             await fetchDomainComponents();
             if (selectedOu?.id === id) {
                 setSelectedDcId(null);
@@ -256,9 +257,11 @@ export default function StructurePage({}: StructurePageProps) {
                 </HorizontalStack>
             </div>
             <div>
-                <Button view="action" size="l" onClick={handleCreateOU}>
-                    Создать Organization Unit
-                </Button>
+                {checkPermission('web-global-organization-unit', 'create') && (
+                    <Button view="action" size="l" onClick={handleCreateOU}>
+                        Создать Organization Unit
+                    </Button>
+                )}
             </div>
             <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                 <DomainComponentForm

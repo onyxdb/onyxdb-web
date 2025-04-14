@@ -10,6 +10,7 @@ interface InputFieldProps {
     error?: string;
     placeholder?: string;
     note?: React.ReactNode;
+    type?: 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'url';
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -21,6 +22,7 @@ export const InputField: React.FC<InputFieldProps> = ({
     error,
     placeholder,
     note,
+    type,
 }) => {
     return (
         <div style={{marginBottom: '16px'}}>
@@ -36,6 +38,7 @@ export const InputField: React.FC<InputFieldProps> = ({
                 placeholder={placeholder}
                 error={error}
                 note={note}
+                type={type}
             />
             {/*{error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}*/}
         </div>

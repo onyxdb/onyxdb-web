@@ -133,7 +133,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
             // @ts-ignore
             // eslint-disable-next-line no-param-reassign
             values.data = values.anyData;
-            await accountsApi.updateAccount({accountId: values.id ?? '???', accountDTO: values});
+            const {anyData: _, ...newValues} = values;
+            await accountsApi.updateAccount({accountId: values.id ?? '???', accountDTO: newValues});
             handleCloseEditModal();
             // Обновление данных об аккаунте
             const response = await accountsApi.getAccountById({accountId: values.id ?? '???'});

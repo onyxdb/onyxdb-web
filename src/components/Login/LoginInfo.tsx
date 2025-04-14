@@ -4,10 +4,12 @@ import {Button, Card, Modal} from '@gravity-ui/uikit';
 import {useAuth} from '@/context/AuthContext';
 import React, {useState} from 'react';
 import {UserBlock} from '@/components/common/UserBlock';
+import {useRouter} from 'next/navigation';
 
 export function LoginInfo() {
     const {user} = useAuth();
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+    const router = useRouter();
 
     if (!user) {
         return (
@@ -32,10 +34,26 @@ export function LoginInfo() {
     return (
         <div onClick={() => setIsInfoModalOpen(true)}>
             <UserBlock account={user.account} />
-            <Modal open={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
+            <Modal open={isInfoModalOpen} onOpenChange={() => setIsInfoModalOpen(false)}>
                 <div style={{padding: '20px', whiteSpace: 'pre-wrap', fontFamily: 'monospace'}}>
                     <h3>Permissions:</h3>
                     <pre>{formatPermissions(user.permissions)}</pre>
+                    <Button
+                        size="l"
+                        view="action"
+                        onClick={() => {
+                            setIsInfoModalOpen(false);
+                            router.push('/logout');
+                        }}
+                        style={{
+                            width: '100%',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            marginBottom: '5px',
+                        }}
+                    >
+                        Logout
+                    </Button>
                     <Button
                         size="l"
                         view="action"

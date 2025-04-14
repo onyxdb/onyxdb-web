@@ -50,15 +50,16 @@ export default function AccountsPage({}: AccountsPageProps) {
             // @ts-ignore
             // eslint-disable-next-line no-param-reassign
             values.data = values.anyData;
+            const {anyData: _, ...newValues} = values;
             if (editingAccount) {
                 // Редактирование существующего аккаунта
                 await accountsApi.updateAccount({
                     accountId: editingAccount.id ?? '???',
-                    accountDTO: values,
+                    accountDTO: newValues,
                 });
             } else {
                 // Создание нового аккаунта
-                await accountsApi.createAccount({accountDTO: values});
+                await accountsApi.createAccount({accountDTO: newValues});
             }
             handleCloseCreateModal();
         } catch (error) {

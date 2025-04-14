@@ -18,6 +18,7 @@ import {Box} from '@/components/Layout/Box';
 import {Eye} from '@gravity-ui/icons';
 import BusinessRoleViewModal from '@/components/modals/BusinessRoleViewModal';
 import BusinessRoleAssignModal from '@/components/modals/BusinessRoleAssignModal';
+import {useAuth} from '@/context/AuthContext';
 
 export interface BusinessRolesTableProps {
     onEdit: (businessRoleId: string) => void;
@@ -36,6 +37,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
     const [accountOptions, setAccountOptions] = useState<AccountDTO[]>([]);
     const [searchAccount, setSearchAccount] = useState<string | null>(null);
     const [isAccountsModalOpen, setIsAccountsModalOpen] = useState(false);
+    const {checkPermission} = useAuth();
 
     const fetchBusinessRoles = async () => {
         try {
@@ -150,27 +152,37 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
             name: 'Действия',
             template: (businessRole) => (
                 <div style={{display: 'flex', gap: '10px'}}>
-                    <Button
-                        view="normal"
-                        size="m"
-                        onClick={() => handleAssignBusinessRole(businessRole)}
-                    >
-                        Выдать роль
-                    </Button>
-                    <Button view="normal" size="m" onClick={() => onEdit(businessRole.id ?? '???')}>
-                        Редактировать
-                    </Button>
-                    <Button
-                        view="normal"
-                        size="m"
-                        onClick={() => {
-                            onDelete(businessRole.id ?? '???');
-                            // TODO fetch не работает после удаления :(
-                            fetchBusinessRoles();
-                        }}
-                    >
-                        Удалить
-                    </Button>
+                    {checkPermission('web-global-business-roles', 'assign') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => handleAssignBusinessRole(businessRole)}
+                        >
+                            Выдать роль
+                        </Button>
+                    )}
+                    {checkPermission('web-global-business-roles', 'edit') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => onEdit(businessRole.id ?? '???')}
+                        >
+                            Редактировать
+                        </Button>
+                    )}
+                    {checkPermission('web-global-business-roles', 'delete') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => {
+                                onDelete(businessRole.id ?? '???');
+                                // TODO fetch не работает после удаления :(
+                                fetchBusinessRoles();
+                            }}
+                        >
+                            Удалить
+                        </Button>
+                    )}
                 </div>
             ),
         },

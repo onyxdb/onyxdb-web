@@ -54,13 +54,21 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     }, []);
 
     function checkActions(actions: Action[]) {
-        if (permissions['global-any'] !== null || permissions['web-any'] !== null) {
+        // console.log(
+        //     'checkActions',
+        //     permissions,
+        //     'res 1',
+        //     permissions['global-any'] !== undefined || permissions['web-any'] !== undefined,
+        //     'res 2',
+        //     Boolean(permissions[name] !== undefined || permissions[`${name}-${action}`] !== undefined),
+        // );
+        if (permissions['global-any'] !== undefined || permissions['web-any'] !== undefined) {
             return true;
         }
         for (const action of actions) {
             if (
-                permissions[action.name] !== null ||
-                permissions[`${action.name}-${action.action}`] !== null
+                permissions[action.name] !== undefined ||
+                permissions[`${action.name}-${action.action}`] !== undefined
             ) {
                 return true;
             }
@@ -69,11 +77,20 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     }
 
     function checkPermission(name: string, action?: string) {
-        console.log('checkPermission', permissions, 'global-any', permissions['global-any']);
-        if (permissions['global-any'] !== null || permissions['web-any'] !== null) {
+        // console.log(
+        //     'checkPermission',
+        //     permissions,
+        //     'res 1',
+        //     permissions['global-any'] !== undefined || permissions['web-any'] !== undefined,
+        //     'res 2',
+        //     Boolean(permissions[name] !== undefined || permissions[`${name}-${action}`] !== undefined),
+        // );
+        if (permissions['global-any'] !== undefined || permissions['web-any'] !== undefined) {
             return true;
         }
-        return Boolean(permissions[name] !== null || permissions[`${name}-${action}`] !== null);
+        return Boolean(
+            permissions[name] !== undefined || permissions[`${name}-${action}`] !== undefined,
+        );
     }
 
     return (

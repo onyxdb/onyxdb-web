@@ -11,7 +11,7 @@ export default function CreateRolePage() {
     const pathname = usePathname();
     const breadCrumps = [
         {href: '/', text: 'Главная'},
-        {href: '/roles', text: 'Роли'},
+        {href: '/access', text: 'Роли'},
         {href: `${pathname}`, text: 'Создать роль'},
     ];
 
@@ -31,14 +31,14 @@ export default function CreateRolePage() {
                     permissions: values.permissions.map((p) => mapPermissionFormToDTO(p)),
                 },
             });
-            router.push(`/roles/edit/${response.data.role.id}`);
+            router.push(`/access/edit/${response.data.role.id}`);
         } catch (error) {
             console.error('Failed to create role:', error);
         }
     };
 
     const handleCreateModalCancel = () => {
-        router.push('/roles');
+        router.push('/access');
     };
 
     return (

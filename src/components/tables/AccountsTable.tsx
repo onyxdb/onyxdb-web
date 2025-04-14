@@ -5,10 +5,12 @@ import {accountsApi} from '@/app/apis';
 import {AccountDTO} from '@/generated/api';
 import {Button, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
+import {useAuth} from '@/context/AuthContext';
 
 interface AccountsTableProps {
-    onEdit: (accountId: string) => void;
-    onDelete: (accountId: string) => void;
+    // search: '';
+    onEdit?: (accountId: string) => void;
+    onDelete?: (accountId: string) => void;
 }
 
 export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) => {
@@ -18,6 +20,8 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) 
     const [offset, setOffset] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
     const router = useRouter();
+
+    const {checkPermission, user} = useAuth();
 
     useEffect(() => {
         const fetchAccounts = async () => {
@@ -82,21 +86,33 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) 
                 sort: true,
             },
         },
-        {
+    ];
+
+    if (onEdit || onDelete) {
+        columns.push({
             id: 'actions',
             name: 'Действия',
             template: (account) => (
                 <div style={{display: 'flex', gap: '10px'}}>
-                    <Button view="normal" size="m" onClick={() => onEdit(account.id ?? '???')}>
-                        Редактировать
-                    </Button>
-                    <Button view="normal" size="m" onClick={() => onDelete(account.id ?? '???')}>
-                        Удалить
-                    </Button>
+                    {onEdit &&
+                    (checkPermission('account', 'edit') || user?.account.id === account.id) ? (
+                        <Button view="normal" size="m" onClick={() => onEdit(account.id ?? '???')}>
+                            Редактировать
+                        </Button>
+                    ) : null}
+                    {onDelete && checkPermission('account', 'delete') ? (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => onDelete(account.id ?? '???')}
+                        >
+                            Удалить
+                        </Button>
+                    ) : null}
                 </div>
             ),
-        },
-    ];
+        });
+    }
 
     const MyTable = withTableSorting(Table);
 

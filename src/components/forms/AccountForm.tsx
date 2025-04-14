@@ -129,11 +129,12 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialValue, onSubmit,
                         <InputField
                             label="Пароль"
                             name="password"
-                            value={formik.values.password ?? '???'}
+                            value={formik.values.password ?? ''}
                             onChange={(value) => formik.setFieldValue('password', value)}
                             onBlur={formik.handleBlur('password')}
                             error={formik.touched.password ? formik.errors.password : undefined}
                             placeholder="Введите пароль"
+                            type="password"
                         />
                         <InputField
                             label="Фамилия"

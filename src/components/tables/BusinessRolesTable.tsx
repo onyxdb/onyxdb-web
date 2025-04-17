@@ -152,7 +152,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
             name: 'Действия',
             template: (businessRole) => (
                 <div style={{display: 'flex', gap: '10px'}}>
-                    {checkPermission('web-global-business-roles', 'assign') && (
+                    {checkPermission('business-roles', 'assign') && (
                         <Button
                             view="normal"
                             size="m"
@@ -161,7 +161,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                             Выдать роль
                         </Button>
                     )}
-                    {checkPermission('web-global-business-roles', 'edit') && (
+                    {checkPermission('business-roles', 'edit') && (
                         <Button
                             view="normal"
                             size="m"
@@ -170,7 +170,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                             Редактировать
                         </Button>
                     )}
-                    {checkPermission('web-global-business-roles', 'delete') && (
+                    {checkPermission('business-roles', 'delete') && (
                         <Button
                             view="normal"
                             size="m"
@@ -200,6 +200,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                 />
             </div>
             <MyTable
+                width="max"
                 data={businessRoles}
                 // @ts-ignore
                 columns={columns}

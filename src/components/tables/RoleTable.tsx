@@ -105,12 +105,12 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
                     <Button view="normal" size="m" onClick={() => handleOrderRole(role)}>
                         Заказать
                     </Button>
-                    {checkPermission('web-global-role', 'edit') && (
+                    {checkPermission('role', 'edit') && (
                         <Button view="normal" size="m" onClick={() => onEdit(role.id ?? '???')}>
                             Редактировать
                         </Button>
                     )}
-                    {checkPermission('web-global-role', 'delete') && (
+                    {checkPermission('role', 'delete') && (
                         <Button view="normal" size="m" onClick={() => onDelete(role.id ?? '???')}>
                             Удалить
                         </Button>
@@ -133,6 +133,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
             </div>
             <div>
                 <MyTable
+                    width="max"
                     data={roles}
                     // @ts-ignore
                     columns={columns}

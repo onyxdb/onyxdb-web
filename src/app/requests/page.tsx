@@ -219,7 +219,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
                 roleRequest.status === 'WAITING' &&
                 checkActions([
                     {name: 'admin', action: ''},
-                    {name: 'web-global-role-request', action: 'edit'},
+                    {name: 'role-request', action: 'edit'},
                     //     TODO: Либо текущий человек овнер
                 ]) && (
                     <div style={{display: 'flex', gap: '10px'}}>
@@ -291,6 +291,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
                 </div>
             </div>
             <MyTable
+                width="max"
                 data={roleRequests}
                 // @ts-ignore
                 columns={columns}

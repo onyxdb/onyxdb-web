@@ -174,7 +174,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     ];
 
     const actions = [];
-    if (checkPermission('web-global-product', 'create')) {
+    if (checkPermission('product', 'create')) {
         actions.push({
             text: 'Создать продукт',
             action: handleProductCreateModal,

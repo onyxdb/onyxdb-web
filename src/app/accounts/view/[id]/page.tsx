@@ -446,7 +446,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                 <div>{account && <UserBlock account={account} selectable={true} size="l" />}</div>
                 <div>
                     {checkActions([
-                        {name: 'web-global-account', action: 'edit'},
+                        {name: 'account', action: 'edit'},
                         {
                             name: `web-account-${accountId}`,
                             action: 'edit',
@@ -463,7 +463,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         </Button>
                     )}
                     {checkActions([
-                        {name: 'web-global-account', action: 'delete'},
+                        {name: 'account', action: 'delete'},
                         {
                             name: `web-account-${accountId}`,
                             action: 'delete',

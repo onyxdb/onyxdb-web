@@ -48,7 +48,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                     </VerticalStack>
                     <div style={{flexDirection: 'row'}}>
                         {checkActions([
-                            {name: 'web-global-product', action: 'edit'},
+                            {name: 'product', action: 'edit'},
                             {name: `web-product-${data.id}`, action: 'edit'},
                         ]) && (
                             <Box marginBottom="5px">
@@ -58,7 +58,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                             </Box>
                         )}
                         {checkActions([
-                            {name: 'web-global-product', action: 'delete'},
+                            {name: 'product', action: 'delete'},
                             {name: `web-product-${data.id}`, action: 'delete'},
                         ]) && (
                             <Button

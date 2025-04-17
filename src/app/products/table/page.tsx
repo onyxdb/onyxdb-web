@@ -88,19 +88,11 @@ export default function ProductsPage() {
                     Создать проект
                 </Button>
             </div>
-            {/*<div style={{marginBottom: '20px'}}>*/}
-            {/*    <TextInput*/}
-            {/*        placeholder="Поиск по названию"*/}
-            {/*        value={searchQuery}*/}
-            {/*        onUpdate={(value) => setSearchQuery(value)}*/}
-            {/*    />*/}
-            {/*</div>*/}
             <MyTable
+                width="max"
                 data={products}
                 // @ts-ignore
                 columns={columns}
-                // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
-                // sortState={sorting}
             />
         </div>
     );

@@ -13,7 +13,7 @@ interface HeaderActionsProps {
 // @ts-ignore
 function RouterLink({href, ...rest}) {
     return (
-        <Link href={href} legacyBehavior>
+        <Link href={href} passHref className="page-header breadcrumbs">
             <BreadcrumbsItem {...rest} />
         </Link>
     );

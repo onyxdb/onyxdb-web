@@ -58,3 +58,8 @@ body,
     flex-flow: row;
     gap: 4px;
 }
+
+.page-header.breadcrumbs {
+    text-decoration: none;
+    color: var(--g-color-text-primary);
+}

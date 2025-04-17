@@ -13,8 +13,12 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                source: '/api/:path*', // Все запросы, начинающиеся с /api
+                source: '/idm/api/:path*', // Все запросы, начинающиеся с /idm/api
                 destination: 'http://localhost:9003/api/:path*', // Перенаправлять на бекенд
+            },
+            {
+                source: '/mdb/api/:path*', // Все запросы, начинающиеся с /mdb/api
+                destination: 'http://localhost:9001/api/:path*', // Перенаправлять на бекенд
             },
         ];
     },

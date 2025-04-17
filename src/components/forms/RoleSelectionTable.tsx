@@ -63,6 +63,7 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
                 />
             </div>
             <MyTable
+                width="max"
                 data={roles}
                 // @ts-ignore
                 columns={columns}

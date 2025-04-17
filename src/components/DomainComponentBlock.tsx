@@ -41,14 +41,14 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                     </Box>
                 </div>
                 <Box marginLeft="10px">
-                    {checkPermission('web-global-domain-components', 'create') && (
+                    {checkPermission('domain-components', 'create') && (
                         <Box marginBottom="5px">
                             <Button view="normal" size="m" onClick={() => onEdit(data.id ?? '???')}>
                                 <Icon data={Pencil} />
                             </Button>
                         </Box>
                     )}
-                    {checkPermission('web-global-domain-components', 'delete') && (
+                    {checkPermission('domain-components', 'delete') && (
                         <Button
                             view="outlined-danger"
                             size="m"

@@ -231,7 +231,7 @@ export default function StructurePage({}: StructurePageProps) {
                             />
                         </Box>
                     ))}
-                    {checkPermission('web-global-domain-component', 'create') && (
+                    {checkPermission('domain-component', 'create') && (
                         <Box marginBottom="10px">
                             <Button view="action" size="l" onClick={handleCreateDC}>
                                 Создать Domain Component
@@ -257,7 +257,7 @@ export default function StructurePage({}: StructurePageProps) {
                 </HorizontalStack>
             </div>
             <div>
-                {checkPermission('web-global-organization-unit', 'create') && (
+                {checkPermission('organization-unit', 'create') && (
                     <Button view="action" size="l" onClick={handleCreateOU}>
                         Создать Organization Unit
                     </Button>

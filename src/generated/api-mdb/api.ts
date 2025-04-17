@@ -36,6 +36,93 @@ import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredErro
 /**
  *
  * @export
+ * @interface MongoHost
+ */
+export interface MongoHost {
+    /**
+     *
+     * @type {string}
+     * @memberof MongoHost
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoHost
+     */
+    clusterId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoHost
+     */
+    type: MongoHostTypeEnum;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoHost
+     */
+    status: MongoHostStatusEnum;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoHost
+     */
+    role: MongoHostRoleEnum;
+}
+
+export const MongoHostTypeEnum = {
+    Unknown: 'unknown',
+    Mongod: 'mongod',
+} as const;
+
+export type MongoHostTypeEnum = (typeof MongoHostTypeEnum)[keyof typeof MongoHostTypeEnum];
+export const MongoHostStatusEnum = {
+    Unknown: 'unknown',
+    Alive: 'alive',
+    Dead: 'dead',
+} as const;
+
+export type MongoHostStatusEnum = (typeof MongoHostStatusEnum)[keyof typeof MongoHostStatusEnum];
+export const MongoHostRoleEnum = {
+    Unknown: 'unknown',
+    Primary: 'primary',
+    Secondary: 'secondary',
+} as const;
+
+export type MongoHostRoleEnum = (typeof MongoHostRoleEnum)[keyof typeof MongoHostRoleEnum];
+
+/**
+ *
+ * @export
+ * @interface MongoListHostsResponse
+ */
+export interface MongoListHostsResponse {
+    /**
+     *
+     * @type {Array<MongoHost>}
+     * @memberof MongoListHostsResponse
+     */
+    hosts: Array<MongoHost>;
+}
+
+/**
+ *
+ * @export
+ * @interface UpdateMongoHostsRequest
+ */
+export interface UpdateMongoHostsRequest {
+    /**
+     *
+     * @type {Array<MongoHost>}
+     * @memberof UpdateMongoHostsRequest
+     */
+    hosts?: Array<MongoHost>;
+}
+
+/**
+ *
+ * @export
  * @interface V1ClusterResources
  */
 export interface V1ClusterResources {
@@ -143,6 +230,12 @@ export interface V1CreateProjectRequest {
      * @memberof V1CreateProjectRequest
      */
     description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1CreateProjectRequest
+     */
+    productId: string;
 }
 
 /**
@@ -349,48 +442,6 @@ export interface V1MongoConfig {
 /**
  *
  * @export
- * @interface V1MongoHost
- */
-export interface V1MongoHost {
-    /**
-     *
-     * @type {string}
-     * @memberof V1MongoHost
-     */
-    name: string;
-}
-
-/**
- *
- * @export
- * @interface V1MongoListHostsResponse
- */
-export interface V1MongoListHostsResponse {
-    /**
-     *
-     * @type {Array<V1MongoHost>}
-     * @memberof V1MongoListHostsResponse
-     */
-    hosts: Array<V1MongoHost>;
-}
-
-/**
- *
- * @export
- * @interface V1MongoScaleHostsRequest
- */
-export interface V1MongoScaleHostsRequest {
-    /**
-     *
-     * @type {number}
-     * @memberof V1MongoScaleHostsRequest
-     */
-    replicas: number;
-}
-
-/**
- *
- * @export
  * @interface V1MongoUpdateClusterRequest
  */
 export interface V1MongoUpdateClusterRequest {
@@ -432,6 +483,12 @@ export interface V1ProjectResponse {
      * @memberof V1ProjectResponse
      */
     description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof V1ProjectResponse
+     */
+    productId: string;
     /**
      *
      * @type {boolean}
@@ -794,7 +851,7 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listHosts', 'clusterId', clusterId);
-            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}/hosts`.replace(
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/hosts`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -817,59 +874,6 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
                 ...headersFromBaseOptions,
                 ...options.headers,
             };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Scale MongoDB hosts
-         * @param {string} clusterId
-         * @param {V1MongoScaleHostsRequest} v1MongoScaleHostsRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        scaleHosts: async (
-            clusterId: string,
-            v1MongoScaleHostsRequest: V1MongoScaleHostsRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('scaleHosts', 'clusterId', clusterId);
-            // verify required parameter 'v1MongoScaleHostsRequest' is not null or undefined
-            assertParamExists('scaleHosts', 'v1MongoScaleHostsRequest', v1MongoScaleHostsRequest);
-            const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}/hosts`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                v1MongoScaleHostsRequest,
-                localVarRequestOptions,
-                configuration,
-            );
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -924,6 +928,52 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
                 v1MongoUpdateClusterRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update MongoDB hosts
+         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateHosts: async (
+            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
+            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
+            const localVarPath = `/api/internal/managed-mongodb/v1/clusters/hosts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                updateMongoHostsRequest,
                 localVarRequestOptions,
                 configuration,
             );
@@ -1068,44 +1118,12 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1MongoListHostsResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<MongoListHostsResponse>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listHosts(clusterId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['V1ManagedMongoDbApi.listHosts']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Scale MongoDB hosts
-         * @param {string} clusterId
-         * @param {V1MongoScaleHostsRequest} v1MongoScaleHostsRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async scaleHosts(
-            clusterId: string,
-            v1MongoScaleHostsRequest: V1MongoScaleHostsRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.scaleHosts(
-                clusterId,
-                v1MongoScaleHostsRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.scaleHosts']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -1138,6 +1156,34 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['V1ManagedMongoDbApi.updateCluster']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update MongoDB hosts
+         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateHosts(
+            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
+                updateMongoHostsRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['V1ManagedMongoDbApi.updateHosts']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -1226,28 +1272,9 @@ export const V1ManagedMongoDbApiFactory = function (
         listHosts(
             requestParameters: V1ManagedMongoDbApiListHostsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1MongoListHostsResponse> {
+        ): AxiosPromise<MongoListHostsResponse> {
             return localVarFp
                 .listHosts(requestParameters.clusterId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Scale MongoDB hosts
-         * @param {V1ManagedMongoDbApiScaleHostsRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        scaleHosts(
-            requestParameters: V1ManagedMongoDbApiScaleHostsRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
-            return localVarFp
-                .scaleHosts(
-                    requestParameters.clusterId,
-                    requestParameters.v1MongoScaleHostsRequest,
-                    options,
-                )
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -1267,6 +1294,21 @@ export const V1ManagedMongoDbApiFactory = function (
                     requestParameters.v1MongoUpdateClusterRequest,
                     options,
                 )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update MongoDB hosts
+         * @param {V1ManagedMongoDbApiUpdateHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateHosts(
+            requestParameters: V1ManagedMongoDbApiUpdateHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .updateHosts(requestParameters.updateMongoHostsRequest, options)
                 .then((request) => request(axios, basePath));
         },
     };
@@ -1329,27 +1371,6 @@ export interface V1ManagedMongoDbApiListHostsRequest {
 }
 
 /**
- * Request parameters for scaleHosts operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiScaleHostsRequest
- */
-export interface V1ManagedMongoDbApiScaleHostsRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiScaleHosts
-     */
-    readonly clusterId: string;
-
-    /**
-     *
-     * @type {V1MongoScaleHostsRequest}
-     * @memberof V1ManagedMongoDbApiScaleHosts
-     */
-    readonly v1MongoScaleHostsRequest: V1MongoScaleHostsRequest;
-}
-
-/**
  * Request parameters for updateCluster operation in V1ManagedMongoDbApi.
  * @export
  * @interface V1ManagedMongoDbApiUpdateClusterRequest
@@ -1368,6 +1389,20 @@ export interface V1ManagedMongoDbApiUpdateClusterRequest {
      * @memberof V1ManagedMongoDbApiUpdateCluster
      */
     readonly v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest;
+}
+
+/**
+ * Request parameters for updateHosts operation in V1ManagedMongoDbApi.
+ * @export
+ * @interface V1ManagedMongoDbApiUpdateHostsRequest
+ */
+export interface V1ManagedMongoDbApiUpdateHostsRequest {
+    /**
+     *
+     * @type {UpdateMongoHostsRequest}
+     * @memberof V1ManagedMongoDbApiUpdateHosts
+     */
+    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
 }
 
 /**
@@ -1460,27 +1495,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
 
     /**
      *
-     * @summary Scale MongoDB hosts
-     * @param {V1ManagedMongoDbApiScaleHostsRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public scaleHosts(
-        requestParameters: V1ManagedMongoDbApiScaleHostsRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .scaleHosts(
-                requestParameters.clusterId,
-                requestParameters.v1MongoScaleHostsRequest,
-                options,
-            )
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
      * @summary Update MongoDB cluster
      * @param {V1ManagedMongoDbApiUpdateClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -1497,6 +1511,23 @@ export class V1ManagedMongoDbApi extends BaseAPI {
                 requestParameters.v1MongoUpdateClusterRequest,
                 options,
             )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update MongoDB hosts
+     * @param {V1ManagedMongoDbApiUpdateHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof V1ManagedMongoDbApi
+     */
+    public updateHosts(
+        requestParameters: V1ManagedMongoDbApiUpdateHostsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return V1ManagedMongoDbApiFp(this.configuration)
+            .updateHosts(requestParameters.updateMongoHostsRequest, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }

@@ -36,7 +36,7 @@ export default function RolesPage() {
     ];
 
     const actions = [];
-    if (checkPermission('web-global-role', 'create')) {
+    if (checkPermission('role', 'create')) {
         actions.push({
             text: 'Создать роль',
             action: handleRoleCreate,

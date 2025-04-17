@@ -67,6 +67,18 @@ export const App: React.FC<AppProps> = ({children}) => {
             onItemClick: () => router.push('/products'),
             myLink: '/products',
         },
+        {
+            title: 'Проекты',
+            icon: Cpu,
+            onItemClick: () => router.push('/projects'),
+            myLink: '/projects',
+        },
+        {
+            title: 'Кластеры',
+            icon: Cpu,
+            onItemClick: () => router.push('/clusters'),
+            myLink: '/clusters',
+        },
     ];
 
     useEffect(() => {

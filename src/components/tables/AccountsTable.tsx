@@ -126,6 +126,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) 
                 />
             </div>
             <MyTable
+                width="max"
                 data={accounts}
                 // @ts-ignore
                 columns={columns}

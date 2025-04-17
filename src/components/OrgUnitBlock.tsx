@@ -37,7 +37,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                     <h2>{data.name}</h2>
                     <div>
                         {checkActions([
-                            {name: 'web-global-organization-unit', action: 'edit'},
+                            {name: 'organization-unit', action: 'edit'},
                             {name: `web-organization-unit-${data.id}`, action: 'edit'},
                         ]) && (
                             <Box marginBottom="5px">
@@ -47,7 +47,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                             </Box>
                         )}
                         {checkActions([
-                            {name: 'web-global-organization-unit', action: 'delete'},
+                            {name: 'organization-unit', action: 'delete'},
                             {name: `web-organization-unit-${data.id}`, action: 'delete'},
                         ]) && (
                             <Button

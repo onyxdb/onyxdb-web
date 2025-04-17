@@ -1,127 +1,109 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {useRouter} from 'next/navigation';
-import {Box} from '@/components/Layout/Box';
-
-interface ClusterDTO {
-    name: string;
-    type: string;
-    id: string;
-    author: string;
-    createdAt: string;
-    availability: string;
-}
+import {mdbManagedMongoDbApi} from '@/app/apis';
+import {Pagination, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
+import {Eye} from '@gravity-ui/icons';
+import {V1MongoClusterResponse} from '@/generated/api-mdb';
+import {StatusLabel} from '@/components/common/StatusLabel';
 
 export interface ClustersTableProps {
-    projectId: string;
+    viewAction: (clusterId: string) => void;
 }
 
-export const ClustersTable: React.FC<ClustersTableProps> = ({projectId}) => {
-    const [clusters, setClusters] = useState<ClusterDTO[]>([]);
-    const router = useRouter();
+export const ClustersTable: React.FC<ClustersTableProps> = ({viewAction}) => {
+    const [clustersAll, setClustersAll] = useState<V1MongoClusterResponse[]>([]);
+    const [clustersFiltered, setClustersFiltered] = useState<V1MongoClusterResponse[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [limit, setLimit] = useState<number>(10);
+    const [offset, setOffset] = useState<number>(0);
+    const [total, setTotal] = useState<number>(0);
+    // const {checkPermission} = useAuth();
+
+    const fetchClusters = async () => {
+        try {
+            const response = await mdbManagedMongoDbApi.listClusters();
+            console.log('listClusters', response.data.clusters);
+            setClustersAll(response.data.clusters);
+            setTotal(response.data.clusters.length);
+        } catch (error) {
+            console.error('Error fetching clusters:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchClusters = async () => {
-            try {
-                // const clustersResponse = await mdbProjectsApi.getClustersByProjectId({
-                //     projectId: projectId,
-                // });
-                const clustersResponse = {
-                    data: {
-                        clusters: [
-                            {
-                                name: 'mongo1',
-                                type: 'MongoDB',
-                                id: '16ee82fe-e6e6-4d91-81f8-15edbae94826',
-                                author: 'ao.fedorov',
-                                createdAt: '2025-02-02',
-                                availability: 'good',
-                            },
-                            {
-                                name: 'postgres1',
-                                type: 'PostgreSQL',
-                                id: 'e1c74ac3-d0c5-4ebf-8402-a23b44016f92',
-                                author: 'sa.mokhov',
-                                createdAt: '2024-12-31',
-                                availability: 'down',
-                            },
-                        ],
-                    },
-                };
-                setClusters(clustersResponse.data.clusters ?? []);
-            } catch (error) {
-                console.error('Error fetching clusters:', error);
-            }
-        };
-
         fetchClusters();
-    }, [projectId]);
+    }, []);
 
-    const columns: TableColumnConfig<ClusterDTO>[] = [
+    const filterClusters = async () => {
+        console.log(limit, offset, total);
+        console.log(clustersAll);
+        const filteredClusters = clustersAll
+            .slice(offset, offset + limit)
+            .filter(
+                (p) =>
+                    searchQuery.length === 0 ||
+                    p.id === searchQuery ||
+                    p.name.includes(searchQuery) ||
+                    p.description.includes(searchQuery),
+            );
+        console.log(filteredClusters);
+        setClustersFiltered(filteredClusters);
+    };
+
+    useEffect(() => {
+        filterClusters();
+    }, [clustersAll.length, searchQuery, limit, offset]);
+
+    const handlePageChange = (page: number, pageSize: number) => {
+        setLimit(pageSize);
+        setOffset((page - 1) * pageSize);
+    };
+
+    const handleSearch = (value: string) => {
+        setSearchQuery(value);
+        setOffset(0);
+    };
+
+    const columns: TableColumnConfig<V1MongoClusterResponse>[] = [
         {
-            id: 'name',
-            name: 'Имя',
-            template: (cluster) => cluster.name,
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'type',
-            name: 'Тип',
-            template: (cluster) => cluster.type,
-            meta: {
-                sort: true,
-            },
+            id: 'view',
+            name: '',
+            template: (item) => (
+                <Eye
+                    style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
+                    onClick={() => viewAction(item.id ?? '')}
+                />
+            ),
         },
         {
             id: 'id',
-            name: 'Идентификатор',
-            template: (cluster) => cluster.id,
+            name: 'Id',
+            template: (item) => item.id,
             meta: {
                 sort: true,
             },
         },
         {
-            id: 'author',
-            name: 'Автор',
-            template: (cluster) => cluster.author,
+            id: 'name',
+            name: 'Название',
+            template: (item) => item.name,
             meta: {
                 sort: true,
             },
         },
         {
-            id: 'createdAt',
-            name: 'Дата создания',
-            template: (cluster) => cluster.createdAt,
+            id: 'status',
+            name: 'Статус',
+            template: (item) => <StatusLabel status={item.status.value} />,
             meta: {
                 sort: true,
             },
         },
         {
-            id: 'availability',
-            name: 'Доступность',
-            template: (cluster) => (cluster.availability ? 'Доступен' : 'Не доступен'),
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'actions',
-            name: 'Действия',
-            template: (cluster) => (
-                <div style={{display: 'flex', gap: '10px'}}>
-                    <Button
-                        view="normal"
-                        size="m"
-                        onClick={() => router.push(`/clusters/view/${cluster.id}`)}
-                    >
-                        Просмотр
-                    </Button>
-                </div>
-            ),
+            id: 'projectId',
+            name: 'Проект',
+            template: (item) => item.projectId,
         },
     ];
 
@@ -129,20 +111,28 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({projectId}) => {
 
     return (
         <div>
-            <Box marginBottom="20px" marginTop="20px">
-                <Button
-                    view="action"
-                    size="l"
-                    onClick={() => router.push(`/clusters/create?prId=${projectId}`)}
-                >
-                    Создать новый кластер
-                </Button>
-            </Box>
+            <div style={{marginBottom: '20px'}}>
+                <TextInput
+                    placeholder="Поиск по кластерам"
+                    value={searchQuery}
+                    onUpdate={handleSearch}
+                />
+            </div>
             <MyTable
-                data={clusters}
+                width="max"
+                data={clustersFiltered}
                 // @ts-ignore
                 columns={columns}
             />
+            <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
+                <Pagination
+                    page={offset / limit + 1}
+                    pageSize={limit}
+                    pageSizeOptions={[5, 10, 20, 100]}
+                    total={total}
+                    onUpdate={handlePageChange}
+                />
+            </div>
         </div>
     );
 };

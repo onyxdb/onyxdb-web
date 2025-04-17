@@ -2,7 +2,7 @@ import React from 'react';
 import {TextInput} from '@gravity-ui/uikit';
 
 interface InputFieldProps {
-    label: string;
+    label?: string;
     name: string;
     value: string;
     onChange: (value: string) => void;
@@ -11,6 +11,7 @@ interface InputFieldProps {
     placeholder?: string;
     note?: React.ReactNode;
     type?: 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'url';
+    [key: string]: unknown;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -23,12 +24,15 @@ export const InputField: React.FC<InputFieldProps> = ({
     placeholder,
     note,
     type,
+    ...props
 }) => {
     return (
         <div style={{marginBottom: '16px'}}>
-            <label htmlFor={name} style={{display: 'block', marginBottom: '8px'}}>
-                {label}
-            </label>
+            {label && (
+                <label htmlFor={name} style={{display: 'block', marginBottom: '8px'}}>
+                    {label}
+                </label>
+            )}
             <TextInput
                 id={name}
                 name={name}
@@ -39,6 +43,7 @@ export const InputField: React.FC<InputFieldProps> = ({
                 error={error}
                 note={note}
                 type={type}
+                {...props}
             />
             {/*{error && <div style={{color: 'red', marginTop: '4px'}}>{error}</div>}*/}
         </div>

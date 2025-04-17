@@ -78,7 +78,7 @@ export default function AccountsPage({}: AccountsPageProps) {
                 }}
             >
                 <h1>Аккаунты</h1>
-                {checkPermission('web-global-account', 'create') && (
+                {checkPermission('account', 'create') && (
                     <Button view="action" size="l" onClick={handleCreate}>
                         Создать аккаунт
                     </Button>

@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import {Button, Icon, Text} from '@gravity-ui/uikit';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
-import {Box} from '@/components/Layout/Box';
 import {useAuth} from '@/context/AuthContext';
 import {CirclePlus, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePathname, useRouter} from 'next/navigation';
@@ -14,8 +12,14 @@ export default function ClusterViewPage() {
     const router = useRouter();
     const pathname = usePathname();
 
-    const handleDelete = (projectId: string) => {
+    const clusterId = pathname.split('/').pop() ?? '';
 
+    const handleEdit = () => {
+        console.log(clusterId);
+    };
+
+    const handleDelete = () => {
+        console.log(clusterId);
     };
 
     const handleCreate = () => {
@@ -37,39 +41,25 @@ export default function ClusterViewPage() {
     }
 
     if (checkPermission('cluster', 'edit')) {
-        actions.push(
-            <Button
-                view="action"
-                size="m"
-                // onClick={handleEdit}
-                style={{marginRight: '10px'}}
-            >
-                <Icon data={Pencil} />
-                Редактировать
-            </Button>,
-        );
+        actions.push({
+            text: 'Редактировать кластер',
+            action: handleEdit,
+            icon: <Pencil />,
+        });
     }
 
     if (checkPermission('cluster', 'delete')) {
-        actions.push(
-            <Button view="action" size="m" onClick={handleDelete}>
-                <Icon data={TrashBin} />
-                Удалить
-            </Button>,
-        );
+        actions.push({
+            text: 'Удалить кластер',
+            action: handleDelete,
+            icon: <TrashBin />,
+        });
     }
-
-    const clusterId = pathname.split('/').pop() ?? '';
 
     return (
         <div>
             <AppHeader breadCrumps={breadCrumbs} actions={actions} />
-            <div style={{padding: '20px'}}>
-                <Box marginBottom="20px">
-                    <Text variant="header-2">Кластер</Text>
-                </Box>
-                <ClusterView clusterId={clusterId} />
-            </div>
+            <ClusterView clusterId={clusterId} />
         </div>
     );
 }

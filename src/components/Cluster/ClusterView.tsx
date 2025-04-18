@@ -1,103 +1,61 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {mdbManagedMongoDbApi, mdbResourcePresetsApi} from '@/app/apis';
-import {Icon, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
+import {Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-import {Briefcase, Calendar, Handset} from '@gravity-ui/icons';
-import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {MongoHost, V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
+import InfoTab from '@/components/Cluster/tabs/InfoTab';
+import HostsTab from '@/components/Cluster/tabs/HostsTab';
 
 interface ClusterViewPageProps {
     clusterId: string;
 }
 
 // eslint-disable-next-line no-empty-pattern
-export default async function ClusterView({clusterId}: ClusterViewPageProps) {
-    const [activeTab, setActiveTab] = useState<string>('additional-info');
+export default function ClusterView({clusterId}: ClusterViewPageProps) {
+    const [activeTab, setActiveTab] = useState<string>('info');
+    const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
+    const [clusterHosts, setClusterHosts] = useState<MongoHost[]>([]);
+    const [clusterPreset, setClusterPreset] = useState<V1ResourcePresetResponse | null>(null);
 
-    const responseCluster = await mdbManagedMongoDbApi.getCluster({clusterId: clusterId});
-    const cluster = responseCluster.data;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const clusterResponse = await mdbManagedMongoDbApi.getCluster({clusterId});
+                setCluster(clusterResponse.data);
 
-    const responseHosts = await mdbManagedMongoDbApi.listHosts({clusterId: clusterId});
-    const clusterHosts = responseHosts.data;
+                const hostsResponse = await mdbManagedMongoDbApi.listHosts({clusterId});
+                setClusterHosts(hostsResponse.data.hosts);
 
-    const responsePreset = await mdbResourcePresetsApi.getResourcePreset({
-        resourcePresetId: cluster?.config.resources.presetId,
-    });
-    const clusterPreset = responsePreset.data;
+                if (clusterResponse.data?.config?.resources?.presetId) {
+                    console.log('preset', clusterResponse);
+                    const presetResponse = await mdbResourcePresetsApi.getResourcePreset({
+                        resourcePresetId: clusterResponse.data.config.resources.presetId,
+                    });
+                    setClusterPreset(presetResponse.data);
+                }
+            } catch (error) {
+                console.error('Error fetching cluster:', error);
+            }
+        };
 
-    const renderInfoTab = () => {
-        return (
-            <div>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <HorizontalStack align="center">
-                        <Box marginRight="8px">
-                            <Icon data={Handset} />
-                        </Box>
-                        <Text variant="caption-2" color="secondary">
-                            Название:
-                        </Text>
-                        <Text variant="body-1" color="primary">
-                            {cluster.name ?? '???'}
-                        </Text>
-                    </HorizontalStack>
-                    <HorizontalStack align="center">
-                        <Box marginRight="8px">
-                            <Icon data={Calendar} />
-                        </Box>
-                        <Text variant="caption-2" color="secondary">
-                            Описание:
-                        </Text>
-                        <Text variant="body-1" color="primary">
-                            {cluster.description ?? '???'}
-                        </Text>
-                    </HorizontalStack>
-                    <HorizontalStack align="center">
-                        <Box marginRight="8px">
-                            <Icon data={Calendar} />
-                        </Box>
-                        <Text variant="caption-2" color="secondary">
-                            Конфиг:
-                        </Text>
-                        <Text variant="body-1" color="primary">
-                            {clusterPreset.name}
-                        </Text>
-                    </HorizontalStack>
-                </div>
-            </div>
-        );
-    };
+        fetchData();
+    }, [clusterId]);
 
-    const renderHostsTab = () => {
-        return (
-            <div>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <HorizontalStack align="center">
-                        <Box marginRight="8px">
-                            <Icon data={Briefcase} />
-                        </Box>
-                        <Text variant="caption-2" color="secondary">
-                            Hosts:
-                        </Text>
-                        {clusterHosts.hosts.map((host) => (
-                            <Text variant="body-1" color="primary">
-                                {host.name}
-                            </Text>
-                        ))}
-                    </HorizontalStack>
-                </div>
-            </div>
-        );
-    };
+    if (!cluster || !clusterPreset) {
+        return <div>No data</div>;
+    }
 
     return (
         <div style={{padding: '20px', display: 'flex', flexDirection: 'column'}}>
-            <HorizontalStack align="center" justify="space-between">
-                <div>{cluster.name}</div>
-                <div>{cluster.description}</div>
-            </HorizontalStack>
-            <Box marginTop="20px">{renderInfoTab()}</Box>
-            <Box marginTop="10px" marginBottom="10px">
+            <Text variant="header-1">{cluster.name}</Text>
+            <Box>
+                <Text variant="subheader-1" color="secondary" ellipsis={true}>
+                    {cluster.description}
+                </Text>
+            </Box>
+            <Box marginTop="20px">
                 <TabProvider value={activeTab} onUpdate={setActiveTab}>
                     <TabList>
                         <Tab value="info">Обзор</Tab>
@@ -111,15 +69,40 @@ export default async function ClusterView({clusterId}: ClusterViewPageProps) {
                         <Tab value="alerts">Алерты</Tab>
                     </TabList>
                     <Box marginTop="10px">
-                        <TabPanel value="info">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="hosts">{renderHostsTab()}</TabPanel>
-                        <TabPanel value="db">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="users">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="logs">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="monitoring">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="operation">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="backups">{renderInfoTab()}</TabPanel>
-                        <TabPanel value="alerts">{renderInfoTab()}</TabPanel>
+                        <TabPanel value="info">
+                            <InfoTab cluster={cluster} clusterPreset={clusterPreset} />
+                        </TabPanel>
+                        <TabPanel value="hosts">
+                            <HostsTab hosts={clusterHosts} />
+                        </TabPanel>
+                        <TabPanel value="db">
+                            {/* Содержимое вкладки баз данных */}
+                            <Text>Данные о базах данных будут здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="users">
+                            {/* Содержимое вкладки пользователей */}
+                            <Text>Данные о пользователях будут здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="logs">
+                            {/* Содержимое вкладки логов */}
+                            <Text>Логи кластера будут здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="monitoring">
+                            {/* Содержимое вкладки мониторинга */}
+                            <Text>Мониторинг кластера будет здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="operation">
+                            {/* Содержимое вкладки операций */}
+                            <Text>Операции кластера будут здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="backups">
+                            {/* Содержимое вкладки резервных копий */}
+                            <Text>Резервные копии кластера будут здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="alerts">
+                            {/* Содержимое вкладки алертов */}
+                            <Text>Алерты кластера будут здесь</Text>
+                        </TabPanel>
                     </Box>
                 </TabProvider>
             </Box>

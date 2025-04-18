@@ -12,11 +12,12 @@ import {
     Persons,
     Sun,
 } from '@gravity-ui/icons';
-import {AsideFallback, AsideHeader, FooterItem} from '@gravity-ui/navigation';
+import {AsideHeader, FooterItem} from '@gravity-ui/navigation';
 import {ThemeProvider} from '@gravity-ui/uikit';
 import {LoginInfo} from '@/components/Login/LoginInfo';
 import {usePathname, useRouter} from 'next/navigation';
 import {AuthProvider} from '@/context/AuthContext';
+import {MyLoader} from '@/components/Loader';
 
 interface AppProps {
     children: React.ReactNode;
@@ -89,9 +90,10 @@ export const App: React.FC<AppProps> = ({children}) => {
     }, [pathname, menuItems]);
 
     return (
-        <Suspense fallback={<AsideFallback />}>
-            <ThemeProvider theme={theme ?? 'system'}>
-                <AuthProvider>
+        <ThemeProvider theme={theme ?? 'system'}>
+            <AuthProvider>
+                {/*<Suspense fallback={<AsideFallback />}>*/}
+                <Suspense fallback={<MyLoader />}>
                     <AsideHeader
                         headerDecoration={true}
                         compact={asideCollapsed ?? false}
@@ -156,8 +158,8 @@ export const App: React.FC<AppProps> = ({children}) => {
                         }}
                         renderContent={() => children}
                     />
-                </AuthProvider>
-            </ThemeProvider>
-        </Suspense>
+                </Suspense>
+            </AuthProvider>
+        </ThemeProvider>
     );
 };

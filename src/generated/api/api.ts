@@ -13,25 +13,25 @@
  */
 
 import type {Configuration} from './configuration';
-import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
+import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-    assertParamExists,
-    createRequestFunction,
     DUMMY_BASE_URL,
-    serializeDataIfNeeded,
+    assertParamExists,
     setApiKeyToObject,
     setBasicAuthToObject,
     setBearerAuthToObject,
     setOAuthToObject,
     setSearchParams,
+    serializeDataIfNeeded,
     toPathString,
+    createRequestFunction,
 } from './common';
 import type {RequestArgs} from './base';
 // @ts-ignore
-import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
+import {BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap} from './base';
 
 /**
  *
@@ -70,7 +70,6 @@ export interface AccountBusinessRolesHistoryDTO {
      */
     createdAt: string;
 }
-
 /**
  *
  * @export
@@ -132,7 +131,6 @@ export interface AccountDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -170,7 +168,6 @@ export interface AccountRolesHistoryDTO {
      */
     createdAt: string;
 }
-
 /**
  *
  * @export
@@ -190,7 +187,6 @@ export interface AuthRequestDTO {
      */
     password: string;
 }
-
 /**
  *
  * @export
@@ -204,7 +200,6 @@ export interface BadRequestResponse {
      */
     message: string;
 }
-
 /**
  *
  * @export
@@ -260,7 +255,6 @@ export interface BusinessRoleDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -274,7 +268,6 @@ export interface CheckPermission200Response {
      */
     hasAccess?: boolean;
 }
-
 /**
  *
  * @export
@@ -312,7 +305,6 @@ export interface DomainComponentDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -332,7 +324,6 @@ export interface DomainTreeDTO {
      */
     children: Array<OrganizationTreeDTO>;
 }
-
 /**
  *
  * @export
@@ -352,7 +343,6 @@ export interface GetCurrentUser200Response {
      */
     permissions: {[key: string]: {[key: string]: object}};
 }
-
 /**
  *
  * @export
@@ -372,7 +362,6 @@ export interface JwtResponseDTO {
      */
     refreshToken: string;
 }
-
 /**
  *
  * @export
@@ -386,7 +375,6 @@ export interface NotFoundResponse {
      */
     message: string;
 }
-
 /**
  *
  * @export
@@ -406,7 +394,6 @@ export interface OrganizationTreeDTO {
      */
     unit: OrganizationUnitDTO;
 }
-
 /**
  *
  * @export
@@ -462,7 +449,6 @@ export interface OrganizationUnitDTO {
      */
     ownerId?: string;
 }
-
 /**
  *
  * @export
@@ -494,7 +480,6 @@ export interface PaginatedAccountResponse {
      */
     data: Array<AccountDTO>;
 }
-
 /**
  *
  * @export
@@ -526,7 +511,6 @@ export interface PaginatedBusinessRoleResponse {
      */
     data: Array<BusinessRoleDTO>;
 }
-
 /**
  *
  * @export
@@ -558,7 +542,6 @@ export interface PaginatedOrganizationUnitResponse {
      */
     data: Array<OrganizationUnitDTO>;
 }
-
 /**
  *
  * @export
@@ -590,7 +573,6 @@ export interface PaginatedProductResponse {
      */
     data: Array<ProductDTO>;
 }
-
 /**
  *
  * @export
@@ -622,7 +604,6 @@ export interface PaginatedRoleRequestResponse {
      */
     data: Array<RoleRequestDTO>;
 }
-
 /**
  *
  * @export
@@ -654,7 +635,6 @@ export interface PaginatedRoleResponse {
      */
     data: Array<RoleDTO>;
 }
-
 /**
  *
  * @export
@@ -698,7 +678,6 @@ export interface PermissionDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -754,7 +733,6 @@ export interface ProductDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -774,7 +752,6 @@ export interface ProductTreeDTO {
      */
     children?: Array<ProductTreeDTO>;
 }
-
 /**
  *
  * @export
@@ -788,7 +765,6 @@ export interface RefreshTokenDTO {
      */
     refreshToken: string;
 }
-
 /**
  *
  * @export
@@ -862,7 +838,6 @@ export interface RoleDTO {
      */
     updatedAt?: string;
 }
-
 /**
  *
  * @export
@@ -894,7 +869,6 @@ export interface RoleHistoryDTO {
      */
     createdAt: string;
 }
-
 /**
  *
  * @export
@@ -979,7 +953,6 @@ export interface RoleWithPermissionsDTO {
      */
     permissions: Array<PermissionDTO>;
 }
-
 /**
  *
  * @export
@@ -2064,9 +2037,7 @@ export const AccountsApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<{
-                [key: string]: {[key: string]: object};
-            }>
+            ) => AxiosPromise<{[key: string]: {[key: string]: object}}>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountPermissionBits(
                 accountId,
@@ -2435,9 +2406,7 @@ export const AccountsApiFactory = function (
         getAccountPermissionBits(
             requestParameters: AccountsApiGetAccountPermissionBitsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<{
-            [key: string]: {[key: string]: object};
-        }> {
+        ): AxiosPromise<{[key: string]: {[key: string]: object}}> {
             return localVarFp
                 .getAccountPermissionBits(requestParameters.accountId, options)
                 .then((request) => request(axios, basePath));

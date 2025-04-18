@@ -50,10 +50,10 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
 
                 const filteredPermissions: Permissions = {};
                 for (const item in userData.permissions) {
-                    if (item.startsWith('global')) {
-                        filteredPermissions[item.substring('global'.length)] = null;
-                    } else if (item.startsWith('web')) {
-                        filteredPermissions[item.substring('web'.length)] = null;
+                    if (item.startsWith('global-')) {
+                        filteredPermissions[item.substring('global-'.length)] = null;
+                    } else if (item.startsWith('web-')) {
+                        filteredPermissions[item.substring('web-'.length)] = null;
                     }
                 }
 
@@ -92,8 +92,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
             `${name}-${id}-any`,
             `${name}-${id}-${action}`,
         ];
-
-        for (const permission in suitablePermission) {
+        for (const permission of suitablePermission) {
             if (permissions[permission] !== undefined) {
                 return true;
             }

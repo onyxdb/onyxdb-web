@@ -13,25 +13,25 @@
  */
 
 import type {Configuration} from './configuration';
-import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
+import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-    assertParamExists,
-    createRequestFunction,
     DUMMY_BASE_URL,
-    serializeDataIfNeeded,
+    assertParamExists,
     setApiKeyToObject,
     setBasicAuthToObject,
     setBearerAuthToObject,
     setOAuthToObject,
     setSearchParams,
+    serializeDataIfNeeded,
     toPathString,
+    createRequestFunction,
 } from './common';
 import type {RequestArgs} from './base';
 // @ts-ignore
-import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
+import {BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap} from './base';
 
 /**
  *
@@ -105,7 +105,6 @@ export interface MongoListHostsResponse {
      */
     hosts: Array<MongoHost>;
 }
-
 /**
  *
  * @export
@@ -119,7 +118,6 @@ export interface UpdateMongoHostsRequest {
      */
     hosts?: Array<MongoHost>;
 }
-
 /**
  *
  * @export
@@ -145,7 +143,6 @@ export interface V1ClusterResources {
      */
     storage: number;
 }
-
 /**
  *
  * @export
@@ -165,7 +162,6 @@ export interface V1ClusterStatusResponse {
      */
     message: string;
 }
-
 /**
  *
  * @export
@@ -197,7 +193,6 @@ export interface V1CreateMongoClusterRequest {
      */
     config: V1MongoConfig;
 }
-
 /**
  *
  * @export
@@ -211,7 +206,6 @@ export interface V1CreateMongoClusterResponse {
      */
     id: string;
 }
-
 /**
  *
  * @export
@@ -237,7 +231,6 @@ export interface V1CreateProjectRequest {
      */
     productId: string;
 }
-
 /**
  *
  * @export
@@ -304,7 +297,6 @@ export interface V1CreateZoneRequest {
      */
     selector: string;
 }
-
 /**
  *
  * @export
@@ -318,7 +310,6 @@ export interface V1DeleteMongoClusterResponse {
      */
     operationId: string;
 }
-
 /**
  *
  * @export
@@ -332,7 +323,6 @@ export interface V1ListMongoClustersResponse {
      */
     clusters: Array<V1MongoClusterResponse>;
 }
-
 /**
  *
  * @export
@@ -346,7 +336,6 @@ export interface V1ListProjectsResponse {
      */
     projects: Array<V1ProjectResponse>;
 }
-
 /**
  *
  * @export
@@ -360,7 +349,6 @@ export interface V1ListResourcePresetsResponse {
      */
     resourcePresets: Array<V1ResourcePresetResponse>;
 }
-
 /**
  *
  * @export
@@ -374,7 +362,6 @@ export interface V1ListZonesResponse {
      */
     zones: Array<V1ZoneResponse>;
 }
-
 /**
  *
  * @export
@@ -418,7 +405,6 @@ export interface V1MongoClusterResponse {
      */
     config: V1MongoConfig;
 }
-
 /**
  *
  * @export
@@ -438,7 +424,6 @@ export interface V1MongoConfig {
      */
     replicas: number;
 }
-
 /**
  *
  * @export
@@ -458,7 +443,6 @@ export interface V1MongoUpdateClusterRequest {
      */
     config: V1MongoConfig;
 }
-
 /**
  *
  * @export
@@ -496,7 +480,6 @@ export interface V1ProjectResponse {
      */
     isArchived: boolean;
 }
-
 /**
  *
  * @export
@@ -557,7 +540,6 @@ export interface V1ScheduledOperationResponse {
      */
     id: string;
 }
-
 /**
  *
  * @export
@@ -577,7 +559,6 @@ export interface V1UpdateProjectRequest {
      */
     description: string;
 }
-
 /**
  *
  * @export
@@ -638,7 +619,6 @@ export interface V1UpdateZoneRequest {
      */
     selector: string;
 }
-
 /**
  *
  * @export

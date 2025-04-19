@@ -1,8 +1,8 @@
-// src/components/tabs/InfoTab.tsx
 'use client';
+
 import React from 'react';
 import {Icon, Text} from '@gravity-ui/uikit';
-import {Calendar, Handset} from '@gravity-ui/icons';
+import {Calendar} from '@gravity-ui/icons';
 import {
     V1ClusterResources,
     V1MongoClusterResponse,
@@ -21,41 +21,6 @@ const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
 
     return (
         <div>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                <HorizontalStack align="center">
-                    <Box marginRight="8px">
-                        <Icon data={Handset} />
-                    </Box>
-                    <Text variant="caption-2" color="secondary">
-                        Название:
-                    </Text>
-                    <Text variant="body-1" color="primary">
-                        {cluster.name ?? '???'}
-                    </Text>
-                </HorizontalStack>
-                <HorizontalStack align="center">
-                    <Box marginRight="8px">
-                        <Icon data={Calendar} />
-                    </Box>
-                    <Text variant="caption-2" color="secondary">
-                        Описание:
-                    </Text>
-                    <Text variant="body-1" color="primary">
-                        {cluster.description ?? '???'}
-                    </Text>
-                </HorizontalStack>
-                <HorizontalStack align="center">
-                    <Box marginRight="8px">
-                        <Icon data={Calendar} />
-                    </Box>
-                    <Text variant="caption-2" color="secondary">
-                        Конфиг:
-                    </Text>
-                    <Text variant="body-1" color="primary">
-                        {clusterPreset.name}
-                    </Text>
-                </HorizontalStack>
-            </div>
             <Box marginTop="20px">
                 <Text variant="subheader-1">Конфигурация кластера</Text>
                 <div
@@ -66,6 +31,17 @@ const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
                         marginTop: '10px',
                     }}
                 >
+                    <HorizontalStack align="center">
+                        <Box marginRight="8px">
+                            <Icon data={Calendar} />
+                        </Box>
+                        <Text variant="caption-2" color="secondary">
+                            Конфиг:
+                        </Text>
+                        <Text variant="body-1" color="primary">
+                            {clusterPreset.name}
+                        </Text>
+                    </HorizontalStack>
                     <HorizontalStack align="center">
                         <Box marginRight="8px">
                             <Icon data={Calendar} />

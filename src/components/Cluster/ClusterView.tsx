@@ -1,13 +1,14 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {mdbManagedMongoDbApi, mdbResourcePresetsApi} from '@/app/apis';
+import {mdbMongoDbApi, mdbResourcePresetsApi} from '@/app/apis';
 import {Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
 import InfoTab from '@/components/Cluster/tabs/InfoTab';
 import HostsTab from '@/components/Cluster/tabs/HostsTab';
 import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
+import UsersTab from '@/components/Cluster/tabs/UsersTab';
 
 interface ClusterViewPageProps {
     clusterId: string;
@@ -22,7 +23,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const clusterResponse = await mdbManagedMongoDbApi.getCluster({clusterId});
+                const clusterResponse = await mdbMongoDbApi.getCluster({clusterId});
                 setCluster(clusterResponse.data);
 
                 if (clusterResponse.data?.config?.resources?.presetId) {
@@ -76,8 +77,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                             <DatabasesTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="users">
-                            {/* Содержимое вкладки пользователей */}
-                            <Text>Данные о пользователях будут здесь</Text>
+                            <UsersTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="logs">
                             {/* Содержимое вкладки логов */}

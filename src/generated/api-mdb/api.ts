@@ -14,8 +14,7 @@
 
 import type {Configuration} from './configuration';
 import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
-import globalAxios from 'axios';
-// Some imports not used depending on template conditions
+import globalAxios from 'axios'; // Some imports not used depending on template conditions
 // @ts-ignore
 import {
     assertParamExists,
@@ -29,8 +28,7 @@ import {
     setSearchParams,
     toPathString,
 } from './common';
-import type {RequestArgs} from './base';
-// @ts-ignore
+import type {RequestArgs} from './base'; // @ts-ignore
 import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
 
 /**
@@ -45,6 +43,20 @@ export interface CreateMongoDatabaseRequest {
      * @memberof CreateMongoDatabaseRequest
      */
     name: string;
+}
+
+/**
+ *
+ * @export
+ * @interface ListMongoBackupsResponse
+ */
+export interface ListMongoBackupsResponse {
+    /**
+     *
+     * @type {Array<MongoBackup>}
+     * @memberof ListMongoBackupsResponse
+     */
+    backups: Array<MongoBackup>;
 }
 
 /**
@@ -74,6 +86,51 @@ export interface ListMongoUsersResponse {
      */
     users: Array<MongoUser>;
 }
+
+/**
+ *
+ * @export
+ * @interface MongoBackup
+ */
+export interface MongoBackup {
+    /**
+     *
+     * @type {string}
+     * @memberof MongoBackup
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoBackup
+     */
+    clusterId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoBackup
+     */
+    type: MongoBackupTypeEnum;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoBackup
+     */
+    startedAt: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoBackup
+     */
+    finishedAt: string;
+}
+
+export const MongoBackupTypeEnum = {
+    Automated: 'automated',
+    Manual: 'manual',
+} as const;
+
+export type MongoBackupTypeEnum = (typeof MongoBackupTypeEnum)[keyof typeof MongoBackupTypeEnum];
 
 /**
  *
@@ -544,32 +601,6 @@ export type V1CreateResourcePresetRequestTypeEnum =
 /**
  *
  * @export
- * @interface V1CreateZoneRequest
- */
-export interface V1CreateZoneRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1CreateZoneRequest
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1CreateZoneRequest
-     */
-    description: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1CreateZoneRequest
-     */
-    selector: string;
-}
-
-/**
- *
- * @export
  * @interface V1DeleteMongoClusterResponse
  */
 export interface V1DeleteMongoClusterResponse {
@@ -621,20 +652,6 @@ export interface V1ListResourcePresetsResponse {
      * @memberof V1ListResourcePresetsResponse
      */
     resourcePresets: Array<V1ResourcePresetResponse>;
-}
-
-/**
- *
- * @export
- * @interface V1ListZonesResponse
- */
-export interface V1ListZonesResponse {
-    /**
-     *
-     * @type {Array<V1ZoneResponse>}
-     * @memberof V1ListZonesResponse
-     */
-    zones: Array<V1ZoneResponse>;
 }
 
 /**
@@ -882,49 +899,2406 @@ export type V1UpdateResourcePresetRequestTypeEnum =
     (typeof V1UpdateResourcePresetRequestTypeEnum)[keyof typeof V1UpdateResourcePresetRequestTypeEnum];
 
 /**
- *
+ * ManagedMongoDBBackupsApi - axios parameter creator
  * @export
- * @interface V1UpdateZoneRequest
  */
-export interface V1UpdateZoneRequest {
+export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Create backup of MongoDB cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createBackup: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('createBackup', 'clusterId', clusterId);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Delete backup of MongoDB cluster
+         * @param {string} clusterId
+         * @param {string} backupName
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteBackup: async (
+            clusterId: string,
+            backupName: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('deleteBackup', 'clusterId', clusterId);
+            // verify required parameter 'backupName' is not null or undefined
+            assertParamExists('deleteBackup', 'backupName', backupName);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups/{backupName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary List backups of MongoDB cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listBackups: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listBackups', 'clusterId', clusterId);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Restore MongoDB cluster from backup
+         * @param {string} clusterId
+         * @param {string} backupName
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreFromBackup: async (
+            clusterId: string,
+            backupName: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('restoreFromBackup', 'clusterId', clusterId);
+            // verify required parameter 'backupName' is not null or undefined
+            assertParamExists('restoreFromBackup', 'backupName', backupName);
+            const localVarPath =
+                `/api/managed-mongodb/v1/clusters/{clusterId}/backups/{backupName}/restore`
+                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                    .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBBackupsApi - functional programming interface
+ * @export
+ */
+export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ManagedMongoDBBackupsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create backup of MongoDB cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createBackup(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createBackup(
+                clusterId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBBackupsApi.createBackup']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Delete backup of MongoDB cluster
+         * @param {string} clusterId
+         * @param {string} backupName
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteBackup(
+            clusterId: string,
+            backupName: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteBackup(
+                clusterId,
+                backupName,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBBackupsApi.deleteBackup']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary List backups of MongoDB cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listBackups(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoBackupsResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listBackups(
+                clusterId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBBackupsApi.listBackups']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Restore MongoDB cluster from backup
+         * @param {string} clusterId
+         * @param {string} backupName
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async restoreFromBackup(
+            clusterId: string,
+            backupName: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreFromBackup(
+                clusterId,
+                backupName,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBBackupsApi.restoreFromBackup']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBBackupsApi - factory interface
+ * @export
+ */
+export const ManagedMongoDBBackupsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ManagedMongoDBBackupsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create backup of MongoDB cluster
+         * @param {ManagedMongoDBBackupsApiCreateBackupRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createBackup(
+            requestParameters: ManagedMongoDBBackupsApiCreateBackupRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .createBackup(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete backup of MongoDB cluster
+         * @param {ManagedMongoDBBackupsApiDeleteBackupRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteBackup(
+            requestParameters: ManagedMongoDBBackupsApiDeleteBackupRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .deleteBackup(requestParameters.clusterId, requestParameters.backupName, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List backups of MongoDB cluster
+         * @param {ManagedMongoDBBackupsApiListBackupsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listBackups(
+            requestParameters: ManagedMongoDBBackupsApiListBackupsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoBackupsResponse> {
+            return localVarFp
+                .listBackups(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Restore MongoDB cluster from backup
+         * @param {ManagedMongoDBBackupsApiRestoreFromBackupRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreFromBackup(
+            requestParameters: ManagedMongoDBBackupsApiRestoreFromBackupRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .restoreFromBackup(
+                    requestParameters.clusterId,
+                    requestParameters.backupName,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createBackup operation in ManagedMongoDBBackupsApi.
+ * @export
+ * @interface ManagedMongoDBBackupsApiCreateBackupRequest
+ */
+export interface ManagedMongoDBBackupsApiCreateBackupRequest {
     /**
      *
      * @type {string}
-     * @memberof V1UpdateZoneRequest
+     * @memberof ManagedMongoDBBackupsApiCreateBackup
      */
-    description: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1UpdateZoneRequest
-     */
-    selector: string;
+    readonly clusterId: string;
 }
 
 /**
- *
+ * Request parameters for deleteBackup operation in ManagedMongoDBBackupsApi.
  * @export
- * @interface V1ZoneResponse
+ * @interface ManagedMongoDBBackupsApiDeleteBackupRequest
  */
-export interface V1ZoneResponse {
+export interface ManagedMongoDBBackupsApiDeleteBackupRequest {
     /**
      *
      * @type {string}
-     * @memberof V1ZoneResponse
+     * @memberof ManagedMongoDBBackupsApiDeleteBackup
      */
-    id: string;
+    readonly clusterId: string;
+
     /**
      *
      * @type {string}
-     * @memberof V1ZoneResponse
+     * @memberof ManagedMongoDBBackupsApiDeleteBackup
      */
-    description: string;
+    readonly backupName: string;
+}
+
+/**
+ * Request parameters for listBackups operation in ManagedMongoDBBackupsApi.
+ * @export
+ * @interface ManagedMongoDBBackupsApiListBackupsRequest
+ */
+export interface ManagedMongoDBBackupsApiListBackupsRequest {
     /**
      *
      * @type {string}
-     * @memberof V1ZoneResponse
+     * @memberof ManagedMongoDBBackupsApiListBackups
      */
-    selector: string;
+    readonly clusterId: string;
+}
+
+/**
+ * Request parameters for restoreFromBackup operation in ManagedMongoDBBackupsApi.
+ * @export
+ * @interface ManagedMongoDBBackupsApiRestoreFromBackupRequest
+ */
+export interface ManagedMongoDBBackupsApiRestoreFromBackupRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBBackupsApiRestoreFromBackup
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBBackupsApiRestoreFromBackup
+     */
+    readonly backupName: string;
+}
+
+/**
+ * ManagedMongoDBBackupsApi - object-oriented interface
+ * @export
+ * @class ManagedMongoDBBackupsApi
+ * @extends {BaseAPI}
+ */
+export class ManagedMongoDBBackupsApi extends BaseAPI {
+    /**
+     *
+     * @summary Create backup of MongoDB cluster
+     * @param {ManagedMongoDBBackupsApiCreateBackupRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBBackupsApi
+     */
+    public createBackup(
+        requestParameters: ManagedMongoDBBackupsApiCreateBackupRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBBackupsApiFp(this.configuration)
+            .createBackup(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Delete backup of MongoDB cluster
+     * @param {ManagedMongoDBBackupsApiDeleteBackupRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBBackupsApi
+     */
+    public deleteBackup(
+        requestParameters: ManagedMongoDBBackupsApiDeleteBackupRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBBackupsApiFp(this.configuration)
+            .deleteBackup(requestParameters.clusterId, requestParameters.backupName, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary List backups of MongoDB cluster
+     * @param {ManagedMongoDBBackupsApiListBackupsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBBackupsApi
+     */
+    public listBackups(
+        requestParameters: ManagedMongoDBBackupsApiListBackupsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBBackupsApiFp(this.configuration)
+            .listBackups(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Restore MongoDB cluster from backup
+     * @param {ManagedMongoDBBackupsApiRestoreFromBackupRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBBackupsApi
+     */
+    public restoreFromBackup(
+        requestParameters: ManagedMongoDBBackupsApiRestoreFromBackupRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBBackupsApiFp(this.configuration)
+            .restoreFromBackup(requestParameters.clusterId, requestParameters.backupName, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * ManagedMongoDBDatabasesApi - axios parameter creator
+ * @export
+ */
+export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
+    configuration?: Configuration,
+) {
+    return {
+        /**
+         *
+         * @summary Create MongoDB database
+         * @param {string} clusterId
+         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDatabase: async (
+            clusterId: string,
+            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('createDatabase', 'clusterId', clusterId);
+            // verify required parameter 'createMongoDatabaseRequest' is not null or undefined
+            assertParamExists(
+                'createDatabase',
+                'createMongoDatabaseRequest',
+                createMongoDatabaseRequest,
+            );
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                createMongoDatabaseRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Delete MongoDB database
+         * @param {string} clusterId
+         * @param {string} databaseId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDatabase: async (
+            clusterId: string,
+            databaseId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('deleteDatabase', 'clusterId', clusterId);
+            // verify required parameter 'databaseId' is not null or undefined
+            assertParamExists('deleteDatabase', 'databaseId', databaseId);
+            const localVarPath =
+                `/api/managed-mongodb/v1/clusters/{clusterId}/databases/{databaseId}`
+                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                    .replace(`{${'databaseId'}}`, encodeURIComponent(String(databaseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary List MongoDB databases
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDatabases: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listDatabases', 'clusterId', clusterId);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBDatabasesApi - functional programming interface
+ * @export
+ */
+export const ManagedMongoDBDatabasesApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ManagedMongoDBDatabasesApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create MongoDB database
+         * @param {string} clusterId
+         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createDatabase(
+            clusterId: string,
+            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDatabase(
+                clusterId,
+                createMongoDatabaseRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBDatabasesApi.createDatabase']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Delete MongoDB database
+         * @param {string} clusterId
+         * @param {string} databaseId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteDatabase(
+            clusterId: string,
+            databaseId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDatabase(
+                clusterId,
+                databaseId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBDatabasesApi.deleteDatabase']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary List MongoDB databases
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listDatabases(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoDatabasesResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDatabases(
+                clusterId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBDatabasesApi.listDatabases']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBDatabasesApi - factory interface
+ * @export
+ */
+export const ManagedMongoDBDatabasesApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ManagedMongoDBDatabasesApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create MongoDB database
+         * @param {ManagedMongoDBDatabasesApiCreateDatabaseRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDatabase(
+            requestParameters: ManagedMongoDBDatabasesApiCreateDatabaseRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .createDatabase(
+                    requestParameters.clusterId,
+                    requestParameters.createMongoDatabaseRequest,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete MongoDB database
+         * @param {ManagedMongoDBDatabasesApiDeleteDatabaseRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDatabase(
+            requestParameters: ManagedMongoDBDatabasesApiDeleteDatabaseRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List MongoDB databases
+         * @param {ManagedMongoDBDatabasesApiListDatabasesRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDatabases(
+            requestParameters: ManagedMongoDBDatabasesApiListDatabasesRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoDatabasesResponse> {
+            return localVarFp
+                .listDatabases(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createDatabase operation in ManagedMongoDBDatabasesApi.
+ * @export
+ * @interface ManagedMongoDBDatabasesApiCreateDatabaseRequest
+ */
+export interface ManagedMongoDBDatabasesApiCreateDatabaseRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBDatabasesApiCreateDatabase
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {CreateMongoDatabaseRequest}
+     * @memberof ManagedMongoDBDatabasesApiCreateDatabase
+     */
+    readonly createMongoDatabaseRequest: CreateMongoDatabaseRequest;
+}
+
+/**
+ * Request parameters for deleteDatabase operation in ManagedMongoDBDatabasesApi.
+ * @export
+ * @interface ManagedMongoDBDatabasesApiDeleteDatabaseRequest
+ */
+export interface ManagedMongoDBDatabasesApiDeleteDatabaseRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBDatabasesApiDeleteDatabase
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBDatabasesApiDeleteDatabase
+     */
+    readonly databaseId: string;
+}
+
+/**
+ * Request parameters for listDatabases operation in ManagedMongoDBDatabasesApi.
+ * @export
+ * @interface ManagedMongoDBDatabasesApiListDatabasesRequest
+ */
+export interface ManagedMongoDBDatabasesApiListDatabasesRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBDatabasesApiListDatabases
+     */
+    readonly clusterId: string;
+}
+
+/**
+ * ManagedMongoDBDatabasesApi - object-oriented interface
+ * @export
+ * @class ManagedMongoDBDatabasesApi
+ * @extends {BaseAPI}
+ */
+export class ManagedMongoDBDatabasesApi extends BaseAPI {
+    /**
+     *
+     * @summary Create MongoDB database
+     * @param {ManagedMongoDBDatabasesApiCreateDatabaseRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBDatabasesApi
+     */
+    public createDatabase(
+        requestParameters: ManagedMongoDBDatabasesApiCreateDatabaseRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBDatabasesApiFp(this.configuration)
+            .createDatabase(
+                requestParameters.clusterId,
+                requestParameters.createMongoDatabaseRequest,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Delete MongoDB database
+     * @param {ManagedMongoDBDatabasesApiDeleteDatabaseRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBDatabasesApi
+     */
+    public deleteDatabase(
+        requestParameters: ManagedMongoDBDatabasesApiDeleteDatabaseRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBDatabasesApiFp(this.configuration)
+            .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary List MongoDB databases
+     * @param {ManagedMongoDBDatabasesApiListDatabasesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBDatabasesApi
+     */
+    public listDatabases(
+        requestParameters: ManagedMongoDBDatabasesApiListDatabasesRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBDatabasesApiFp(this.configuration)
+            .listDatabases(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * ManagedMongoDBInternalsApi - axios parameter creator
+ * @export
+ */
+export const ManagedMongoDBInternalsApiAxiosParamCreator = function (
+    configuration?: Configuration,
+) {
+    return {
+        /**
+         *
+         * @summary Update MongoDB hosts
+         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateHosts: async (
+            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
+            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
+            const localVarPath = `/api/managed-mongodb/v1/internal/hosts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                updateMongoHostsRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBInternalsApi - functional programming interface
+ * @export
+ */
+export const ManagedMongoDBInternalsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ManagedMongoDBInternalsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Update MongoDB hosts
+         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateHosts(
+            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
+                updateMongoHostsRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBInternalsApi.updateHosts']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBInternalsApi - factory interface
+ * @export
+ */
+export const ManagedMongoDBInternalsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ManagedMongoDBInternalsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Update MongoDB hosts
+         * @param {ManagedMongoDBInternalsApiUpdateHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateHosts(
+            requestParameters: ManagedMongoDBInternalsApiUpdateHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .updateHosts(requestParameters.updateMongoHostsRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for updateHosts operation in ManagedMongoDBInternalsApi.
+ * @export
+ * @interface ManagedMongoDBInternalsApiUpdateHostsRequest
+ */
+export interface ManagedMongoDBInternalsApiUpdateHostsRequest {
+    /**
+     *
+     * @type {UpdateMongoHostsRequest}
+     * @memberof ManagedMongoDBInternalsApiUpdateHosts
+     */
+    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
+}
+
+/**
+ * ManagedMongoDBInternalsApi - object-oriented interface
+ * @export
+ * @class ManagedMongoDBInternalsApi
+ * @extends {BaseAPI}
+ */
+export class ManagedMongoDBInternalsApi extends BaseAPI {
+    /**
+     *
+     * @summary Update MongoDB hosts
+     * @param {ManagedMongoDBInternalsApiUpdateHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBInternalsApi
+     */
+    public updateHosts(
+        requestParameters: ManagedMongoDBInternalsApiUpdateHostsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBInternalsApiFp(this.configuration)
+            .updateHosts(requestParameters.updateMongoHostsRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * ManagedMongoDBUsersApi - axios parameter creator
+ * @export
+ */
+export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Create MongoDB user in cluster
+         * @param {string} clusterId
+         * @param {MongoUserToCreate} mongoUserToCreate
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUser: async (
+            clusterId: string,
+            mongoUserToCreate: MongoUserToCreate,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('createUser', 'clusterId', clusterId);
+            // verify required parameter 'mongoUserToCreate' is not null or undefined
+            assertParamExists('createUser', 'mongoUserToCreate', mongoUserToCreate);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                mongoUserToCreate,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Delete MongoDB user
+         * @param {string} userId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUser: async (
+            userId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('deleteUser', 'userId', userId);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
+                `{${'userId'}}`,
+                encodeURIComponent(String(userId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get MongoDB user
+         * @param {string} userId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUser: async (
+            userId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('getUser', 'userId', userId);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
+                `{${'userId'}}`,
+                encodeURIComponent(String(userId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary List MongoDB users in cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUsers: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listUsers', 'clusterId', clusterId);
+            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBUsersApi - functional programming interface
+ * @export
+ */
+export const ManagedMongoDBUsersApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ManagedMongoDBUsersApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Create MongoDB user in cluster
+         * @param {string} clusterId
+         * @param {MongoUserToCreate} mongoUserToCreate
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createUser(
+            clusterId: string,
+            mongoUserToCreate: MongoUserToCreate,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(
+                clusterId,
+                mongoUserToCreate,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBUsersApi.createUser']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Delete MongoDB user
+         * @param {string} userId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteUser(
+            userId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBUsersApi.deleteUser']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get MongoDB user
+         * @param {string} userId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUser(
+            userId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MongoUser>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUser(userId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBUsersApi.getUser']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary List MongoDB users in cluster
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listUsers(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoUsersResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(clusterId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBUsersApi.listUsers']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBUsersApi - factory interface
+ * @export
+ */
+export const ManagedMongoDBUsersApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ManagedMongoDBUsersApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Create MongoDB user in cluster
+         * @param {ManagedMongoDBUsersApiCreateUserRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUser(
+            requestParameters: ManagedMongoDBUsersApiCreateUserRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .createUser(
+                    requestParameters.clusterId,
+                    requestParameters.mongoUserToCreate,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Delete MongoDB user
+         * @param {ManagedMongoDBUsersApiDeleteUserRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUser(
+            requestParameters: ManagedMongoDBUsersApiDeleteUserRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ScheduledOperationResponse> {
+            return localVarFp
+                .deleteUser(requestParameters.userId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get MongoDB user
+         * @param {ManagedMongoDBUsersApiGetUserRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUser(
+            requestParameters: ManagedMongoDBUsersApiGetUserRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<MongoUser> {
+            return localVarFp
+                .getUser(requestParameters.userId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List MongoDB users in cluster
+         * @param {ManagedMongoDBUsersApiListUsersRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUsers(
+            requestParameters: ManagedMongoDBUsersApiListUsersRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoUsersResponse> {
+            return localVarFp
+                .listUsers(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createUser operation in ManagedMongoDBUsersApi.
+ * @export
+ * @interface ManagedMongoDBUsersApiCreateUserRequest
+ */
+export interface ManagedMongoDBUsersApiCreateUserRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBUsersApiCreateUser
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {MongoUserToCreate}
+     * @memberof ManagedMongoDBUsersApiCreateUser
+     */
+    readonly mongoUserToCreate: MongoUserToCreate;
+}
+
+/**
+ * Request parameters for deleteUser operation in ManagedMongoDBUsersApi.
+ * @export
+ * @interface ManagedMongoDBUsersApiDeleteUserRequest
+ */
+export interface ManagedMongoDBUsersApiDeleteUserRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBUsersApiDeleteUser
+     */
+    readonly userId: string;
+}
+
+/**
+ * Request parameters for getUser operation in ManagedMongoDBUsersApi.
+ * @export
+ * @interface ManagedMongoDBUsersApiGetUserRequest
+ */
+export interface ManagedMongoDBUsersApiGetUserRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBUsersApiGetUser
+     */
+    readonly userId: string;
+}
+
+/**
+ * Request parameters for listUsers operation in ManagedMongoDBUsersApi.
+ * @export
+ * @interface ManagedMongoDBUsersApiListUsersRequest
+ */
+export interface ManagedMongoDBUsersApiListUsersRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBUsersApiListUsers
+     */
+    readonly clusterId: string;
+}
+
+/**
+ * ManagedMongoDBUsersApi - object-oriented interface
+ * @export
+ * @class ManagedMongoDBUsersApi
+ * @extends {BaseAPI}
+ */
+export class ManagedMongoDBUsersApi extends BaseAPI {
+    /**
+     *
+     * @summary Create MongoDB user in cluster
+     * @param {ManagedMongoDBUsersApiCreateUserRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBUsersApi
+     */
+    public createUser(
+        requestParameters: ManagedMongoDBUsersApiCreateUserRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBUsersApiFp(this.configuration)
+            .createUser(requestParameters.clusterId, requestParameters.mongoUserToCreate, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Delete MongoDB user
+     * @param {ManagedMongoDBUsersApiDeleteUserRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBUsersApi
+     */
+    public deleteUser(
+        requestParameters: ManagedMongoDBUsersApiDeleteUserRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBUsersApiFp(this.configuration)
+            .deleteUser(requestParameters.userId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get MongoDB user
+     * @param {ManagedMongoDBUsersApiGetUserRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBUsersApi
+     */
+    public getUser(
+        requestParameters: ManagedMongoDBUsersApiGetUserRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBUsersApiFp(this.configuration)
+            .getUser(requestParameters.userId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary List MongoDB users in cluster
+     * @param {ManagedMongoDBUsersApiListUsersRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBUsersApi
+     */
+    public listUsers(
+        requestParameters: ManagedMongoDBUsersApiListUsersRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBUsersApiFp(this.configuration)
+            .listUsers(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * ProjectsApi - axios parameter creator
+ * @export
+ */
+export const ProjectsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Archive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        archiveProject: async (
+            projectId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('archiveProject', 'projectId', projectId);
+            const localVarPath = `/api/projects/v1/{projectId}/archive`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Create project
+         * @param {V1CreateProjectRequest} v1CreateProjectRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProject: async (
+            v1CreateProjectRequest: V1CreateProjectRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'v1CreateProjectRequest' is not null or undefined
+            assertParamExists('createProject', 'v1CreateProjectRequest', v1CreateProjectRequest);
+            const localVarPath = `/api/projects/v1`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1CreateProjectRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProject: async (
+            projectId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('getProject', 'projectId', projectId);
+            const localVarPath = `/api/projects/v1/{projectId}`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary List projects
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProjects: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/projects/v1`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Unarchive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unarchiveProject: async (
+            projectId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('unarchiveProject', 'projectId', projectId);
+            const localVarPath = `/api/projects/v1/{projectId}/unarchive`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Update project
+         * @param {string} projectId
+         * @param {V1UpdateProjectRequest} v1UpdateProjectRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProject: async (
+            projectId: string,
+            v1UpdateProjectRequest: V1UpdateProjectRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('updateProject', 'projectId', projectId);
+            // verify required parameter 'v1UpdateProjectRequest' is not null or undefined
+            assertParamExists('updateProject', 'v1UpdateProjectRequest', v1UpdateProjectRequest);
+            const localVarPath = `/api/projects/v1/{projectId}`.replace(
+                `{${'projectId'}}`,
+                encodeURIComponent(String(projectId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                v1UpdateProjectRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ProjectsApi - functional programming interface
+ * @export
+ */
+export const ProjectsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ProjectsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Archive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async archiveProject(
+            projectId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.archiveProject(
+                projectId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProjectsApi.archiveProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Create project
+         * @param {V1CreateProjectRequest} v1CreateProjectRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createProject(
+            v1CreateProjectRequest: V1CreateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProject(
+                v1CreateProjectRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProjectsApi.createProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Get project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProject(
+            projectId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ProjectResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProject(
+                projectId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProjectsApi.getProject']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary List projects
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listProjects(
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ListProjectsResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listProjects(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProjectsApi.listProjects']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Unarchive project
+         * @param {string} projectId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unarchiveProject(
+            projectId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unarchiveProject(
+                projectId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProjectsApi.unarchiveProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Update project
+         * @param {string} projectId
+         * @param {V1UpdateProjectRequest} v1UpdateProjectRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateProject(
+            projectId: string,
+            v1UpdateProjectRequest: V1UpdateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProject(
+                projectId,
+                v1UpdateProjectRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ProjectsApi.updateProject']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ProjectsApi - factory interface
+ * @export
+ */
+export const ProjectsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ProjectsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Archive project
+         * @param {ProjectsApiArchiveProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        archiveProject(
+            requestParameters: ProjectsApiArchiveProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .archiveProject(requestParameters.projectId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Create project
+         * @param {ProjectsApiCreateProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProject(
+            requestParameters: ProjectsApiCreateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .createProject(requestParameters.v1CreateProjectRequest, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Get project
+         * @param {ProjectsApiGetProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProject(
+            requestParameters: ProjectsApiGetProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<V1ProjectResponse> {
+            return localVarFp
+                .getProject(requestParameters.projectId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List projects
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProjects(options?: RawAxiosRequestConfig): AxiosPromise<V1ListProjectsResponse> {
+            return localVarFp.listProjects(options).then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Unarchive project
+         * @param {ProjectsApiUnarchiveProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unarchiveProject(
+            requestParameters: ProjectsApiUnarchiveProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .unarchiveProject(requestParameters.projectId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Update project
+         * @param {ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProject(
+            requestParameters: ProjectsApiUpdateProjectRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .updateProject(
+                    requestParameters.projectId,
+                    requestParameters.v1UpdateProjectRequest,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for archiveProject operation in ProjectsApi.
+ * @export
+ * @interface ProjectsApiArchiveProjectRequest
+ */
+export interface ProjectsApiArchiveProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProjectsApiArchiveProject
+     */
+    readonly projectId: string;
+}
+
+/**
+ * Request parameters for createProject operation in ProjectsApi.
+ * @export
+ * @interface ProjectsApiCreateProjectRequest
+ */
+export interface ProjectsApiCreateProjectRequest {
+    /**
+     *
+     * @type {V1CreateProjectRequest}
+     * @memberof ProjectsApiCreateProject
+     */
+    readonly v1CreateProjectRequest: V1CreateProjectRequest;
+}
+
+/**
+ * Request parameters for getProject operation in ProjectsApi.
+ * @export
+ * @interface ProjectsApiGetProjectRequest
+ */
+export interface ProjectsApiGetProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProjectsApiGetProject
+     */
+    readonly projectId: string;
+}
+
+/**
+ * Request parameters for unarchiveProject operation in ProjectsApi.
+ * @export
+ * @interface ProjectsApiUnarchiveProjectRequest
+ */
+export interface ProjectsApiUnarchiveProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProjectsApiUnarchiveProject
+     */
+    readonly projectId: string;
+}
+
+/**
+ * Request parameters for updateProject operation in ProjectsApi.
+ * @export
+ * @interface ProjectsApiUpdateProjectRequest
+ */
+export interface ProjectsApiUpdateProjectRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ProjectsApiUpdateProject
+     */
+    readonly projectId: string;
+
+    /**
+     *
+     * @type {V1UpdateProjectRequest}
+     * @memberof ProjectsApiUpdateProject
+     */
+    readonly v1UpdateProjectRequest: V1UpdateProjectRequest;
+}
+
+/**
+ * ProjectsApi - object-oriented interface
+ * @export
+ * @class ProjectsApi
+ * @extends {BaseAPI}
+ */
+export class ProjectsApi extends BaseAPI {
+    /**
+     *
+     * @summary Archive project
+     * @param {ProjectsApiArchiveProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApi
+     */
+    public archiveProject(
+        requestParameters: ProjectsApiArchiveProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProjectsApiFp(this.configuration)
+            .archiveProject(requestParameters.projectId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Create project
+     * @param {ProjectsApiCreateProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApi
+     */
+    public createProject(
+        requestParameters: ProjectsApiCreateProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProjectsApiFp(this.configuration)
+            .createProject(requestParameters.v1CreateProjectRequest, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get project
+     * @param {ProjectsApiGetProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApi
+     */
+    public getProject(
+        requestParameters: ProjectsApiGetProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProjectsApiFp(this.configuration)
+            .getProject(requestParameters.projectId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary List projects
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApi
+     */
+    public listProjects(options?: RawAxiosRequestConfig) {
+        return ProjectsApiFp(this.configuration)
+            .listProjects(options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Unarchive project
+     * @param {ProjectsApiUnarchiveProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApi
+     */
+    public unarchiveProject(
+        requestParameters: ProjectsApiUnarchiveProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProjectsApiFp(this.configuration)
+            .unarchiveProject(requestParameters.projectId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Update project
+     * @param {ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApi
+     */
+    public updateProject(
+        requestParameters: ProjectsApiUpdateProjectRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ProjectsApiFp(this.configuration)
+            .updateProject(
+                requestParameters.projectId,
+                requestParameters.v1UpdateProjectRequest,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
 }
 
 /**
@@ -985,116 +3359,6 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          *
-         * @summary Create MongoDB database
-         * @param {string} clusterId
-         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createDatabase: async (
-            clusterId: string,
-            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('createDatabase', 'clusterId', clusterId);
-            // verify required parameter 'createMongoDatabaseRequest' is not null or undefined
-            assertParamExists(
-                'createDatabase',
-                'createMongoDatabaseRequest',
-                createMongoDatabaseRequest,
-            );
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                createMongoDatabaseRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Create MongoDB user
-         * @param {string} clusterId
-         * @param {MongoUserToCreate} mongoUserToCreate
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createUser: async (
-            clusterId: string,
-            mongoUserToCreate: MongoUserToCreate,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('createUser', 'clusterId', clusterId);
-            // verify required parameter 'mongoUserToCreate' is not null or undefined
-            assertParamExists('createUser', 'mongoUserToCreate', mongoUserToCreate);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                mongoUserToCreate,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
          * @summary Delete MongoDB cluster
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
@@ -1109,94 +3373,6 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
             const localVarPath = `/api/v1/managed-mongodb/clusters/{clusterId}`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Delete MongoDB database
-         * @param {string} clusterId
-         * @param {string} databaseId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteDatabase: async (
-            clusterId: string,
-            databaseId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('deleteDatabase', 'clusterId', clusterId);
-            // verify required parameter 'databaseId' is not null or undefined
-            assertParamExists('deleteDatabase', 'databaseId', databaseId);
-            const localVarPath =
-                `/api/managed-mongodb/v1/clusters/{clusterId}/databases/{databaseId}`
-                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
-                    .replace(`{${'databaseId'}}`, encodeURIComponent(String(databaseId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Delete MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteUser: async (
-            userId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('deleteUser', 'userId', userId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
-                `{${'userId'}}`,
-                encodeURIComponent(String(userId)),
             );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1267,96 +3443,12 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUser: async (
-            userId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('getUser', 'userId', userId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
-                `{${'userId'}}`,
-                encodeURIComponent(String(userId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
          * @summary Get MongoDB clusters
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listClusters: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/managed-mongodb/clusters`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary List MongoDB databases
-         * @param {string} clusterId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listDatabases: async (
-            clusterId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('listDatabases', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1396,48 +3488,6 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listHosts', 'clusterId', clusterId);
             const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/hosts`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary List MongoDB users
-         * @param {string} clusterId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listUsers: async (
-            clusterId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('listUsers', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -1523,52 +3573,6 @@ export const V1ManagedMongoDbApiAxiosParamCreator = function (configuration?: Co
                 options: localVarRequestOptions,
             };
         },
-        /**
-         *
-         * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateHosts: async (
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
-            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
-            const localVarPath = `/api/internal/managed-mongodb/v1/clusters/hosts`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                updateMongoHostsRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     };
 };
 
@@ -1611,71 +3615,6 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Create MongoDB database
-         * @param {string} clusterId
-         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createDatabase(
-            clusterId: string,
-            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createDatabase(
-                clusterId,
-                createMongoDatabaseRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.createDatabase']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Create MongoDB user
-         * @param {string} clusterId
-         * @param {MongoUserToCreate} mongoUserToCreate
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createUser(
-            clusterId: string,
-            mongoUserToCreate: MongoUserToCreate,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(
-                clusterId,
-                mongoUserToCreate,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.createUser']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
          * @summary Delete MongoDB cluster
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
@@ -1696,65 +3635,6 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
                 operationServerMap['V1ManagedMongoDbApi.deleteCluster']?.[
                     localVarOperationServerIndex
                 ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Delete MongoDB database
-         * @param {string} clusterId
-         * @param {string} databaseId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteDatabase(
-            clusterId: string,
-            databaseId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDatabase(
-                clusterId,
-                databaseId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.deleteDatabase']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Delete MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteUser(
-            userId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.deleteUser']?.[localVarOperationServerIndex]
-                    ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -1794,30 +3674,6 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getUser(
-            userId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MongoUser>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUser(userId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.getUser']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
          * @summary Get MongoDB clusters
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1831,36 +3687,6 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['V1ManagedMongoDbApi.listClusters']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary List MongoDB databases
-         * @param {string} clusterId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listDatabases(
-            clusterId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoDatabasesResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listDatabases(
-                clusterId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.listDatabases']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -1888,32 +3714,6 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['V1ManagedMongoDbApi.listHosts']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary List MongoDB users
-         * @param {string} clusterId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listUsers(
-            clusterId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoUsersResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(clusterId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.listUsers']?.[localVarOperationServerIndex]
                     ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
@@ -1956,34 +3756,6 @@ export const V1ManagedMongoDbApiFp = function (configuration?: Configuration) {
                     configuration,
                 )(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         *
-         * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateHosts(
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
-                updateMongoHostsRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ManagedMongoDbApi.updateHosts']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
     };
 };
 
@@ -2015,44 +3787,6 @@ export const V1ManagedMongoDbApiFactory = function (
         },
         /**
          *
-         * @summary Create MongoDB database
-         * @param {V1ManagedMongoDbApiCreateDatabaseRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createDatabase(
-            requestParameters: V1ManagedMongoDbApiCreateDatabaseRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
-            return localVarFp
-                .createDatabase(
-                    requestParameters.clusterId,
-                    requestParameters.createMongoDatabaseRequest,
-                    options,
-                )
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Create MongoDB user
-         * @param {V1ManagedMongoDbApiCreateUserRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createUser(
-            requestParameters: V1ManagedMongoDbApiCreateUserRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
-            return localVarFp
-                .createUser(
-                    requestParameters.clusterId,
-                    requestParameters.mongoUserToCreate,
-                    options,
-                )
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
          * @summary Delete MongoDB cluster
          * @param {V1ManagedMongoDbApiDeleteClusterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2064,36 +3798,6 @@ export const V1ManagedMongoDbApiFactory = function (
         ): AxiosPromise<V1DeleteMongoClusterResponse> {
             return localVarFp
                 .deleteCluster(requestParameters.clusterId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete MongoDB database
-         * @param {V1ManagedMongoDbApiDeleteDatabaseRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteDatabase(
-            requestParameters: V1ManagedMongoDbApiDeleteDatabaseRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
-            return localVarFp
-                .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete MongoDB user
-         * @param {V1ManagedMongoDbApiDeleteUserRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteUser(
-            requestParameters: V1ManagedMongoDbApiDeleteUserRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
-            return localVarFp
-                .deleteUser(requestParameters.userId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -2113,42 +3817,12 @@ export const V1ManagedMongoDbApiFactory = function (
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {V1ManagedMongoDbApiGetUserRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUser(
-            requestParameters: V1ManagedMongoDbApiGetUserRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<MongoUser> {
-            return localVarFp
-                .getUser(requestParameters.userId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
          * @summary Get MongoDB clusters
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listClusters(options?: RawAxiosRequestConfig): AxiosPromise<V1ListMongoClustersResponse> {
             return localVarFp.listClusters(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary List MongoDB databases
-         * @param {V1ManagedMongoDbApiListDatabasesRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listDatabases(
-            requestParameters: V1ManagedMongoDbApiListDatabasesRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoDatabasesResponse> {
-            return localVarFp
-                .listDatabases(requestParameters.clusterId, options)
-                .then((request) => request(axios, basePath));
         },
         /**
          *
@@ -2163,21 +3837,6 @@ export const V1ManagedMongoDbApiFactory = function (
         ): AxiosPromise<MongoListHostsResponse> {
             return localVarFp
                 .listHosts(requestParameters.clusterId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary List MongoDB users
-         * @param {V1ManagedMongoDbApiListUsersRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listUsers(
-            requestParameters: V1ManagedMongoDbApiListUsersRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoUsersResponse> {
-            return localVarFp
-                .listUsers(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -2199,21 +3858,6 @@ export const V1ManagedMongoDbApiFactory = function (
                 )
                 .then((request) => request(axios, basePath));
         },
-        /**
-         *
-         * @summary Update MongoDB hosts
-         * @param {V1ManagedMongoDbApiUpdateHostsRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateHosts(
-            requestParameters: V1ManagedMongoDbApiUpdateHostsRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .updateHosts(requestParameters.updateMongoHostsRequest, options)
-                .then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -2232,48 +3876,6 @@ export interface V1ManagedMongoDbApiCreateClusterRequest {
 }
 
 /**
- * Request parameters for createDatabase operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiCreateDatabaseRequest
- */
-export interface V1ManagedMongoDbApiCreateDatabaseRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiCreateDatabase
-     */
-    readonly clusterId: string;
-
-    /**
-     *
-     * @type {CreateMongoDatabaseRequest}
-     * @memberof V1ManagedMongoDbApiCreateDatabase
-     */
-    readonly createMongoDatabaseRequest: CreateMongoDatabaseRequest;
-}
-
-/**
- * Request parameters for createUser operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiCreateUserRequest
- */
-export interface V1ManagedMongoDbApiCreateUserRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiCreateUser
-     */
-    readonly clusterId: string;
-
-    /**
-     *
-     * @type {MongoUserToCreate}
-     * @memberof V1ManagedMongoDbApiCreateUser
-     */
-    readonly mongoUserToCreate: MongoUserToCreate;
-}
-
-/**
  * Request parameters for deleteCluster operation in V1ManagedMongoDbApi.
  * @export
  * @interface V1ManagedMongoDbApiDeleteClusterRequest
@@ -2285,41 +3887,6 @@ export interface V1ManagedMongoDbApiDeleteClusterRequest {
      * @memberof V1ManagedMongoDbApiDeleteCluster
      */
     readonly clusterId: string;
-}
-
-/**
- * Request parameters for deleteDatabase operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiDeleteDatabaseRequest
- */
-export interface V1ManagedMongoDbApiDeleteDatabaseRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiDeleteDatabase
-     */
-    readonly clusterId: string;
-
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiDeleteDatabase
-     */
-    readonly databaseId: string;
-}
-
-/**
- * Request parameters for deleteUser operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiDeleteUserRequest
- */
-export interface V1ManagedMongoDbApiDeleteUserRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiDeleteUser
-     */
-    readonly userId: string;
 }
 
 /**
@@ -2337,34 +3904,6 @@ export interface V1ManagedMongoDbApiGetClusterRequest {
 }
 
 /**
- * Request parameters for getUser operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiGetUserRequest
- */
-export interface V1ManagedMongoDbApiGetUserRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiGetUser
-     */
-    readonly userId: string;
-}
-
-/**
- * Request parameters for listDatabases operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiListDatabasesRequest
- */
-export interface V1ManagedMongoDbApiListDatabasesRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiListDatabases
-     */
-    readonly clusterId: string;
-}
-
-/**
  * Request parameters for listHosts operation in V1ManagedMongoDbApi.
  * @export
  * @interface V1ManagedMongoDbApiListHostsRequest
@@ -2374,20 +3913,6 @@ export interface V1ManagedMongoDbApiListHostsRequest {
      *
      * @type {string}
      * @memberof V1ManagedMongoDbApiListHosts
-     */
-    readonly clusterId: string;
-}
-
-/**
- * Request parameters for listUsers operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiListUsersRequest
- */
-export interface V1ManagedMongoDbApiListUsersRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiListUsers
      */
     readonly clusterId: string;
 }
@@ -2411,20 +3936,6 @@ export interface V1ManagedMongoDbApiUpdateClusterRequest {
      * @memberof V1ManagedMongoDbApiUpdateCluster
      */
     readonly v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest;
-}
-
-/**
- * Request parameters for updateHosts operation in V1ManagedMongoDbApi.
- * @export
- * @interface V1ManagedMongoDbApiUpdateHostsRequest
- */
-export interface V1ManagedMongoDbApiUpdateHostsRequest {
-    /**
-     *
-     * @type {UpdateMongoHostsRequest}
-     * @memberof V1ManagedMongoDbApiUpdateHosts
-     */
-    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
 }
 
 /**
@@ -2453,44 +3964,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
 
     /**
      *
-     * @summary Create MongoDB database
-     * @param {V1ManagedMongoDbApiCreateDatabaseRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public createDatabase(
-        requestParameters: V1ManagedMongoDbApiCreateDatabaseRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .createDatabase(
-                requestParameters.clusterId,
-                requestParameters.createMongoDatabaseRequest,
-                options,
-            )
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Create MongoDB user
-     * @param {V1ManagedMongoDbApiCreateUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public createUser(
-        requestParameters: V1ManagedMongoDbApiCreateUserRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .createUser(requestParameters.clusterId, requestParameters.mongoUserToCreate, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
      * @summary Delete MongoDB cluster
      * @param {V1ManagedMongoDbApiDeleteClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2503,40 +3976,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
     ) {
         return V1ManagedMongoDbApiFp(this.configuration)
             .deleteCluster(requestParameters.clusterId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Delete MongoDB database
-     * @param {V1ManagedMongoDbApiDeleteDatabaseRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public deleteDatabase(
-        requestParameters: V1ManagedMongoDbApiDeleteDatabaseRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Delete MongoDB user
-     * @param {V1ManagedMongoDbApiDeleteUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public deleteUser(
-        requestParameters: V1ManagedMongoDbApiDeleteUserRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .deleteUser(requestParameters.userId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -2559,23 +3998,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
 
     /**
      *
-     * @summary Get MongoDB user
-     * @param {V1ManagedMongoDbApiGetUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public getUser(
-        requestParameters: V1ManagedMongoDbApiGetUserRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .getUser(requestParameters.userId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
      * @summary Get MongoDB clusters
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2584,23 +4006,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
     public listClusters(options?: RawAxiosRequestConfig) {
         return V1ManagedMongoDbApiFp(this.configuration)
             .listClusters(options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary List MongoDB databases
-     * @param {V1ManagedMongoDbApiListDatabasesRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public listDatabases(
-        requestParameters: V1ManagedMongoDbApiListDatabasesRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .listDatabases(requestParameters.clusterId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -2623,23 +4028,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
 
     /**
      *
-     * @summary List MongoDB users
-     * @param {V1ManagedMongoDbApiListUsersRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public listUsers(
-        requestParameters: V1ManagedMongoDbApiListUsersRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .listUsers(requestParameters.clusterId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
      * @summary Update MongoDB cluster
      * @param {V1ManagedMongoDbApiUpdateClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2654,750 +4042,6 @@ export class V1ManagedMongoDbApi extends BaseAPI {
             .updateCluster(
                 requestParameters.clusterId,
                 requestParameters.v1MongoUpdateClusterRequest,
-                options,
-            )
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Update MongoDB hosts
-     * @param {V1ManagedMongoDbApiUpdateHostsRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ManagedMongoDbApi
-     */
-    public updateHosts(
-        requestParameters: V1ManagedMongoDbApiUpdateHostsRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ManagedMongoDbApiFp(this.configuration)
-            .updateHosts(requestParameters.updateMongoHostsRequest, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-}
-
-/**
- * V1ProjectsApi - axios parameter creator
- * @export
- */
-export const V1ProjectsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         *
-         * @summary Archive project
-         * @param {string} projectId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        archiveProject: async (
-            projectId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('archiveProject', 'projectId', projectId);
-            const localVarPath = `/api/v1/projects/{projectId}/archive`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Create project
-         * @param {V1CreateProjectRequest} v1CreateProjectRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createProject: async (
-            v1CreateProjectRequest: V1CreateProjectRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateProjectRequest' is not null or undefined
-            assertParamExists('createProject', 'v1CreateProjectRequest', v1CreateProjectRequest);
-            const localVarPath = `/api/v1/projects`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateProjectRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Get project
-         * @param {string} projectId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProject: async (
-            projectId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('getProject', 'projectId', projectId);
-            const localVarPath = `/api/v1/projects/{projectId}`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Get projects
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listProjects: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/projects`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Unarchive project
-         * @param {string} projectId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        unarchiveProject: async (
-            projectId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('unarchiveProject', 'projectId', projectId);
-            const localVarPath = `/api/v1/projects/{projectId}/unarchive`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Update project
-         * @param {string} projectId
-         * @param {V1UpdateProjectRequest} v1UpdateProjectRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateProject: async (
-            projectId: string,
-            v1UpdateProjectRequest: V1UpdateProjectRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('updateProject', 'projectId', projectId);
-            // verify required parameter 'v1UpdateProjectRequest' is not null or undefined
-            assertParamExists('updateProject', 'v1UpdateProjectRequest', v1UpdateProjectRequest);
-            const localVarPath = `/api/v1/projects/{projectId}`.replace(
-                `{${'projectId'}}`,
-                encodeURIComponent(String(projectId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateProjectRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    };
-};
-
-/**
- * V1ProjectsApi - functional programming interface
- * @export
- */
-export const V1ProjectsApiFp = function (configuration?: Configuration) {
-    const localVarAxiosParamCreator = V1ProjectsApiAxiosParamCreator(configuration);
-    return {
-        /**
-         *
-         * @summary Archive project
-         * @param {string} projectId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async archiveProject(
-            projectId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.archiveProject(
-                projectId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.archiveProject']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Create project
-         * @param {V1CreateProjectRequest} v1CreateProjectRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createProject(
-            v1CreateProjectRequest: V1CreateProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createProject(
-                v1CreateProjectRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.createProject']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Get project
-         * @param {string} projectId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getProject(
-            projectId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ProjectResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProject(
-                projectId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.getProject']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Get projects
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listProjects(
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ListProjectsResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listProjects(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.listProjects']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Unarchive project
-         * @param {string} projectId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async unarchiveProject(
-            projectId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.unarchiveProject(
-                projectId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.unarchiveProject']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Update project
-         * @param {string} projectId
-         * @param {V1UpdateProjectRequest} v1UpdateProjectRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateProject(
-            projectId: string,
-            v1UpdateProjectRequest: V1UpdateProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProject(
-                projectId,
-                v1UpdateProjectRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ProjectsApi.updateProject']?.[localVarOperationServerIndex]
-                    ?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-    };
-};
-
-/**
- * V1ProjectsApi - factory interface
- * @export
- */
-export const V1ProjectsApiFactory = function (
-    configuration?: Configuration,
-    basePath?: string,
-    axios?: AxiosInstance,
-) {
-    const localVarFp = V1ProjectsApiFp(configuration);
-    return {
-        /**
-         *
-         * @summary Archive project
-         * @param {V1ProjectsApiArchiveProjectRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        archiveProject(
-            requestParameters: V1ProjectsApiArchiveProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .archiveProject(requestParameters.projectId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Create project
-         * @param {V1ProjectsApiCreateProjectRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createProject(
-            requestParameters: V1ProjectsApiCreateProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .createProject(requestParameters.v1CreateProjectRequest, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get project
-         * @param {V1ProjectsApiGetProjectRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProject(
-            requestParameters: V1ProjectsApiGetProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ProjectResponse> {
-            return localVarFp
-                .getProject(requestParameters.projectId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get projects
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listProjects(options?: RawAxiosRequestConfig): AxiosPromise<V1ListProjectsResponse> {
-            return localVarFp.listProjects(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Unarchive project
-         * @param {V1ProjectsApiUnarchiveProjectRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        unarchiveProject(
-            requestParameters: V1ProjectsApiUnarchiveProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .unarchiveProject(requestParameters.projectId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Update project
-         * @param {V1ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateProject(
-            requestParameters: V1ProjectsApiUpdateProjectRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .updateProject(
-                    requestParameters.projectId,
-                    requestParameters.v1UpdateProjectRequest,
-                    options,
-                )
-                .then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * Request parameters for archiveProject operation in V1ProjectsApi.
- * @export
- * @interface V1ProjectsApiArchiveProjectRequest
- */
-export interface V1ProjectsApiArchiveProjectRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ProjectsApiArchiveProject
-     */
-    readonly projectId: string;
-}
-
-/**
- * Request parameters for createProject operation in V1ProjectsApi.
- * @export
- * @interface V1ProjectsApiCreateProjectRequest
- */
-export interface V1ProjectsApiCreateProjectRequest {
-    /**
-     *
-     * @type {V1CreateProjectRequest}
-     * @memberof V1ProjectsApiCreateProject
-     */
-    readonly v1CreateProjectRequest: V1CreateProjectRequest;
-}
-
-/**
- * Request parameters for getProject operation in V1ProjectsApi.
- * @export
- * @interface V1ProjectsApiGetProjectRequest
- */
-export interface V1ProjectsApiGetProjectRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ProjectsApiGetProject
-     */
-    readonly projectId: string;
-}
-
-/**
- * Request parameters for unarchiveProject operation in V1ProjectsApi.
- * @export
- * @interface V1ProjectsApiUnarchiveProjectRequest
- */
-export interface V1ProjectsApiUnarchiveProjectRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ProjectsApiUnarchiveProject
-     */
-    readonly projectId: string;
-}
-
-/**
- * Request parameters for updateProject operation in V1ProjectsApi.
- * @export
- * @interface V1ProjectsApiUpdateProjectRequest
- */
-export interface V1ProjectsApiUpdateProjectRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ProjectsApiUpdateProject
-     */
-    readonly projectId: string;
-
-    /**
-     *
-     * @type {V1UpdateProjectRequest}
-     * @memberof V1ProjectsApiUpdateProject
-     */
-    readonly v1UpdateProjectRequest: V1UpdateProjectRequest;
-}
-
-/**
- * V1ProjectsApi - object-oriented interface
- * @export
- * @class V1ProjectsApi
- * @extends {BaseAPI}
- */
-export class V1ProjectsApi extends BaseAPI {
-    /**
-     *
-     * @summary Archive project
-     * @param {V1ProjectsApiArchiveProjectRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ProjectsApi
-     */
-    public archiveProject(
-        requestParameters: V1ProjectsApiArchiveProjectRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ProjectsApiFp(this.configuration)
-            .archiveProject(requestParameters.projectId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Create project
-     * @param {V1ProjectsApiCreateProjectRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ProjectsApi
-     */
-    public createProject(
-        requestParameters: V1ProjectsApiCreateProjectRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ProjectsApiFp(this.configuration)
-            .createProject(requestParameters.v1CreateProjectRequest, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Get project
-     * @param {V1ProjectsApiGetProjectRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ProjectsApi
-     */
-    public getProject(
-        requestParameters: V1ProjectsApiGetProjectRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ProjectsApiFp(this.configuration)
-            .getProject(requestParameters.projectId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Get projects
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ProjectsApi
-     */
-    public listProjects(options?: RawAxiosRequestConfig) {
-        return V1ProjectsApiFp(this.configuration)
-            .listProjects(options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Unarchive project
-     * @param {V1ProjectsApiUnarchiveProjectRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ProjectsApi
-     */
-    public unarchiveProject(
-        requestParameters: V1ProjectsApiUnarchiveProjectRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ProjectsApiFp(this.configuration)
-            .unarchiveProject(requestParameters.projectId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Update project
-     * @param {V1ProjectsApiUpdateProjectRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ProjectsApi
-     */
-    public updateProject(
-        requestParameters: V1ProjectsApiUpdateProjectRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ProjectsApiFp(this.configuration)
-            .updateProject(
-                requestParameters.projectId,
-                requestParameters.v1UpdateProjectRequest,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -4035,601 +4679,6 @@ export class V1ResourcePresetsApi extends BaseAPI {
                 requestParameters.v1UpdateResourcePresetRequest,
                 options,
             )
-            .then((request) => request(this.axios, this.basePath));
-    }
-}
-
-/**
- * V1ZonesApi - axios parameter creator
- * @export
- */
-export const V1ZonesApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         *
-         * @summary Create zone
-         * @param {V1CreateZoneRequest} v1CreateZoneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createZone: async (
-            v1CreateZoneRequest: V1CreateZoneRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateZoneRequest' is not null or undefined
-            assertParamExists('createZone', 'v1CreateZoneRequest', v1CreateZoneRequest);
-            const localVarPath = `/api/v1/zones`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateZoneRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Delete zone
-         * @param {string} zoneId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteZone: async (
-            zoneId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'zoneId' is not null or undefined
-            assertParamExists('deleteZone', 'zoneId', zoneId);
-            const localVarPath = `/api/v1/zones/{zoneId}`.replace(
-                `{${'zoneId'}}`,
-                encodeURIComponent(String(zoneId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Get zone
-         * @param {string} zoneId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getZone: async (
-            zoneId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'zoneId' is not null or undefined
-            assertParamExists('getZone', 'zoneId', zoneId);
-            const localVarPath = `/api/v1/zones/{zoneId}`.replace(
-                `{${'zoneId'}}`,
-                encodeURIComponent(String(zoneId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Get zones
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listZones: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/zones`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Update zone
-         * @param {string} zoneId
-         * @param {V1UpdateZoneRequest} v1UpdateZoneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateZone: async (
-            zoneId: string,
-            v1UpdateZoneRequest: V1UpdateZoneRequest,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'zoneId' is not null or undefined
-            assertParamExists('updateZone', 'zoneId', zoneId);
-            // verify required parameter 'v1UpdateZoneRequest' is not null or undefined
-            assertParamExists('updateZone', 'v1UpdateZoneRequest', v1UpdateZoneRequest);
-            const localVarPath = `/api/v1/zones/{zoneId}`.replace(
-                `{${'zoneId'}}`,
-                encodeURIComponent(String(zoneId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateZoneRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    };
-};
-
-/**
- * V1ZonesApi - functional programming interface
- * @export
- */
-export const V1ZonesApiFp = function (configuration?: Configuration) {
-    const localVarAxiosParamCreator = V1ZonesApiAxiosParamCreator(configuration);
-    return {
-        /**
-         *
-         * @summary Create zone
-         * @param {V1CreateZoneRequest} v1CreateZoneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createZone(
-            v1CreateZoneRequest: V1CreateZoneRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createZone(
-                v1CreateZoneRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ZonesApi.createZone']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Delete zone
-         * @param {string} zoneId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteZone(
-            zoneId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteZone(zoneId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ZonesApi.deleteZone']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Get zone
-         * @param {string} zoneId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getZone(
-            zoneId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ZoneResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getZone(zoneId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ZonesApi.getZone']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Get zones
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listZones(
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ListZonesResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listZones(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ZonesApi.listZones']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Update zone
-         * @param {string} zoneId
-         * @param {V1UpdateZoneRequest} v1UpdateZoneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateZone(
-            zoneId: string,
-            v1UpdateZoneRequest: V1UpdateZoneRequest,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateZone(
-                zoneId,
-                v1UpdateZoneRequest,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['V1ZonesApi.updateZone']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-    };
-};
-
-/**
- * V1ZonesApi - factory interface
- * @export
- */
-export const V1ZonesApiFactory = function (
-    configuration?: Configuration,
-    basePath?: string,
-    axios?: AxiosInstance,
-) {
-    const localVarFp = V1ZonesApiFp(configuration);
-    return {
-        /**
-         *
-         * @summary Create zone
-         * @param {V1ZonesApiCreateZoneRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createZone(
-            requestParameters: V1ZonesApiCreateZoneRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .createZone(requestParameters.v1CreateZoneRequest, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete zone
-         * @param {V1ZonesApiDeleteZoneRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteZone(
-            requestParameters: V1ZonesApiDeleteZoneRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .deleteZone(requestParameters.zoneId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get zone
-         * @param {V1ZonesApiGetZoneRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getZone(
-            requestParameters: V1ZonesApiGetZoneRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ZoneResponse> {
-            return localVarFp
-                .getZone(requestParameters.zoneId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get zones
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listZones(options?: RawAxiosRequestConfig): AxiosPromise<V1ListZonesResponse> {
-            return localVarFp.listZones(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Update zone
-         * @param {V1ZonesApiUpdateZoneRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateZone(
-            requestParameters: V1ZonesApiUpdateZoneRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
-            return localVarFp
-                .updateZone(
-                    requestParameters.zoneId,
-                    requestParameters.v1UpdateZoneRequest,
-                    options,
-                )
-                .then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * Request parameters for createZone operation in V1ZonesApi.
- * @export
- * @interface V1ZonesApiCreateZoneRequest
- */
-export interface V1ZonesApiCreateZoneRequest {
-    /**
-     *
-     * @type {V1CreateZoneRequest}
-     * @memberof V1ZonesApiCreateZone
-     */
-    readonly v1CreateZoneRequest: V1CreateZoneRequest;
-}
-
-/**
- * Request parameters for deleteZone operation in V1ZonesApi.
- * @export
- * @interface V1ZonesApiDeleteZoneRequest
- */
-export interface V1ZonesApiDeleteZoneRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ZonesApiDeleteZone
-     */
-    readonly zoneId: string;
-}
-
-/**
- * Request parameters for getZone operation in V1ZonesApi.
- * @export
- * @interface V1ZonesApiGetZoneRequest
- */
-export interface V1ZonesApiGetZoneRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ZonesApiGetZone
-     */
-    readonly zoneId: string;
-}
-
-/**
- * Request parameters for updateZone operation in V1ZonesApi.
- * @export
- * @interface V1ZonesApiUpdateZoneRequest
- */
-export interface V1ZonesApiUpdateZoneRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ZonesApiUpdateZone
-     */
-    readonly zoneId: string;
-
-    /**
-     *
-     * @type {V1UpdateZoneRequest}
-     * @memberof V1ZonesApiUpdateZone
-     */
-    readonly v1UpdateZoneRequest: V1UpdateZoneRequest;
-}
-
-/**
- * V1ZonesApi - object-oriented interface
- * @export
- * @class V1ZonesApi
- * @extends {BaseAPI}
- */
-export class V1ZonesApi extends BaseAPI {
-    /**
-     *
-     * @summary Create zone
-     * @param {V1ZonesApiCreateZoneRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ZonesApi
-     */
-    public createZone(
-        requestParameters: V1ZonesApiCreateZoneRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ZonesApiFp(this.configuration)
-            .createZone(requestParameters.v1CreateZoneRequest, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Delete zone
-     * @param {V1ZonesApiDeleteZoneRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ZonesApi
-     */
-    public deleteZone(
-        requestParameters: V1ZonesApiDeleteZoneRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ZonesApiFp(this.configuration)
-            .deleteZone(requestParameters.zoneId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Get zone
-     * @param {V1ZonesApiGetZoneRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ZonesApi
-     */
-    public getZone(requestParameters: V1ZonesApiGetZoneRequest, options?: RawAxiosRequestConfig) {
-        return V1ZonesApiFp(this.configuration)
-            .getZone(requestParameters.zoneId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Get zones
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ZonesApi
-     */
-    public listZones(options?: RawAxiosRequestConfig) {
-        return V1ZonesApiFp(this.configuration)
-            .listZones(options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Update zone
-     * @param {V1ZonesApiUpdateZoneRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof V1ZonesApi
-     */
-    public updateZone(
-        requestParameters: V1ZonesApiUpdateZoneRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return V1ZonesApiFp(this.configuration)
-            .updateZone(requestParameters.zoneId, requestParameters.v1UpdateZoneRequest, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }

@@ -11,10 +11,11 @@ import {
     RolesRequestsApi,
 } from '@/generated/api';
 import {
+    ManagedMongoDBDatabasesApi,
+    ManagedMongoDBUsersApi,
+    ProjectsApi,
     V1ManagedMongoDbApi,
-    V1ProjectsApi,
     V1ResourcePresetsApi,
-    V1ZonesApi,
 } from '@/generated/api-mdb';
 import apiClient from '@/auth/apiClient';
 
@@ -46,7 +47,8 @@ export const productsApi = new ProductsApi(configIDM, '', apiClient);
 export const rolesApi = new RolesApi(configIDM, '', apiClient);
 export const rolesRequestsApi = new RolesRequestsApi(configIDM, '', apiClient);
 
-export const mdbProjectsApi = new V1ProjectsApi(configMDB, '', apiClient);
+export const mdbProjectsApi = new ProjectsApi(configMDB, '', apiClient);
 export const mdbResourcePresetsApi = new V1ResourcePresetsApi(configMDB, '', apiClient);
-export const mdbZonesApi = new V1ZonesApi(configMDB, '', apiClient);
-export const mdbManagedMongoDbApi = new V1ManagedMongoDbApi(configMDB, '', apiClient);
+export const mdbMongoDbApi = new V1ManagedMongoDbApi(configMDB, '', apiClient);
+export const mdbMongoDbUserApi = new ManagedMongoDBUsersApi(configMDB, '', apiClient);
+export const mdbMongoDbDatabasesApi = new ManagedMongoDBDatabasesApi(configMDB, '', apiClient);

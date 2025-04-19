@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
 import {CreateMongoDatabaseRequest, MongoDatabase} from '@/generated/api-mdb';
-import {mdbManagedMongoDbApi} from '@/app/apis';
+import {mdbMongoDbDatabasesApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {DatabasesTable} from '@/components/tables/DatabasesTable';
 import {DatabaseForm} from '@/components/forms/DatabaseForm';
@@ -18,7 +18,7 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
 
     const fetchData = async () => {
         try {
-            const databasesResponse = await mdbManagedMongoDbApi.listDatabases({clusterId});
+            const databasesResponse = await mdbMongoDbDatabasesApi.listDatabases({clusterId});
             setDatabases(databasesResponse.data.databases);
         } catch (error) {
             console.error('Error fetching databases:', error);
@@ -30,7 +30,7 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
     }, [clusterId]);
 
     const handleCreateDatabase = (database: CreateMongoDatabaseRequest) => {
-        mdbManagedMongoDbApi
+        mdbMongoDbDatabasesApi
             .createDatabase({clusterId, createMongoDatabaseRequest: database})
             .then(() => {
                 fetchData();
@@ -40,7 +40,7 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
     };
 
     const handleDeleteDatabase = (databaseId: string) => {
-        mdbManagedMongoDbApi
+        mdbMongoDbDatabasesApi
             .deleteDatabase({clusterId, databaseId})
             .then(() => {
                 fetchData();

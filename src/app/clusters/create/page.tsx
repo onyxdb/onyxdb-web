@@ -5,7 +5,7 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {useRouter} from 'next/navigation';
 import {ClusterCreateForm, ClusterFormValues} from '@/components/forms/ClusterCreateForm';
-import {mdbManagedMongoDbApi} from '@/app/apis';
+import {mdbMongoDbApi} from '@/app/apis';
 import {V1CreateMongoClusterRequest} from '@/generated/api-mdb';
 
 export default function ClusterCreatePage() {
@@ -28,7 +28,7 @@ export default function ClusterCreatePage() {
                 },
             };
             console.log('Cluster create request values', request);
-            await mdbManagedMongoDbApi.createCluster({v1CreateMongoClusterRequest: request});
+            await mdbMongoDbApi.createCluster({v1CreateMongoClusterRequest: request});
             router.push('/clusters');
         } catch (error) {
             console.error('Ошибка при создании кластера:', error);

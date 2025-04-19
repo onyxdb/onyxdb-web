@@ -7,6 +7,7 @@ import {Box} from '@/components/Layout/Box';
 import {V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
 import InfoTab from '@/components/Cluster/tabs/InfoTab';
 import HostsTab from '@/components/Cluster/tabs/HostsTab';
+import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
 
 interface ClusterViewPageProps {
     clusterId: string;
@@ -72,8 +73,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                             <HostsTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="db">
-                            {/* Содержимое вкладки баз данных */}
-                            <Text>Данные о базах данных будут здесь</Text>
+                            <DatabasesTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="users">
                             {/* Содержимое вкладки пользователей */}

@@ -13,13 +13,14 @@
     "lint": "npm run lint:js && npm run lint:styles && npm run lint:prettier"
   },
   "dependencies": {
+    "@bem-react/classname": "^1.6.0",
+    "@gravity-ui/components": "^4.0.1",
     "@gravity-ui/icons": "2.13",
     "@gravity-ui/navigation": "3.3",
     "@gravity-ui/uikit": "7.9",
-    "@bem-react/classname": "^1.6.0",
-    "@gravity-ui/components": "^4.0.1",
     "axios": "1.8.4",
     "bem-cn-lite": "4.1.0",
+    "date-fns": "^4.1.0",
     "formik": "2.4.6",
     "next": "15.3",
     "react": "^18.3.1",

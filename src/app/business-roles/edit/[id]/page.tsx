@@ -60,7 +60,7 @@ export default function BusinessRoleEditPage() {
         return <div>Загрузка...</div>;
     }
 
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/business-roles', text: 'Бизнес-роли'},
         {href: `/business-roles/edit/${brId}`, text: 'Редактирование бизнес-роли'},
@@ -68,7 +68,7 @@ export default function BusinessRoleEditPage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={[]} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <BusinessRoleEditForm
                 onSubmit={handleBusinessRoleEdit}
                 onClose={handleModalCancel}

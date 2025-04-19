@@ -9,7 +9,7 @@ import {RoleForm, RoleFormFields, mapPermissionFormToDTO} from '@/components/for
 export default function CreateRolePage() {
     const router = useRouter();
     const pathname = usePathname();
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/access', text: 'Роли'},
         {href: `${pathname}`, text: 'Создать роль'},
@@ -43,7 +43,7 @@ export default function CreateRolePage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={[]} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleCreate}
                 onClose={handleCreateModalCancel}

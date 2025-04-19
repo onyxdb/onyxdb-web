@@ -30,7 +30,7 @@ export default function RolesPage() {
         router.push(`/access/create`);
     };
 
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/access', text: 'Доступы'},
     ];
@@ -46,7 +46,7 @@ export default function RolesPage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
                     <Text variant="header-2">Роли</Text>

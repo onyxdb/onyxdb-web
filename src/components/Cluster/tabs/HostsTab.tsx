@@ -1,15 +1,31 @@
 'use client';
 
-import React from 'react';
-import {Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
+import React, {useEffect, useState} from 'react';
+import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {MongoHost} from '@/generated/api-mdb';
+import {mdbManagedMongoDbApi} from '@/app/apis';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface HostsTabProps {
-    hosts: MongoHost[];
+    clusterId: string;
 }
 
-const HostsTab: React.FC<HostsTabProps> = ({hosts}) => {
+const HostsTab: React.FC<HostsTabProps> = ({clusterId}) => {
+    const [clusterHosts, setClusterHosts] = useState<MongoHost[]>([]);
+
+    const fetchData = async () => {
+        try {
+            const hostsResponse = await mdbManagedMongoDbApi.listHosts({clusterId});
+            setClusterHosts(hostsResponse.data.hosts);
+        } catch (error) {
+            console.error('Error fetching cluster:', error);
+        }
+    };
+    useEffect(() => {
+        fetchData();
+    }, [clusterId]);
+
     const MyTable = withTableSorting(Table);
 
     const columns: TableColumnConfig<MongoHost>[] = [
@@ -45,11 +61,13 @@ const HostsTab: React.FC<HostsTabProps> = ({hosts}) => {
 
     return (
         <div>
-            <Text variant="header-2">Хосты кластера</Text>
-            <Box marginTop="10px">
+            <HorizontalStack gap={10}>
+                <Button></Button>
+            </HorizontalStack>
+            <Box marginTop="20px">
                 <MyTable
                     width="max"
-                    data={hosts}
+                    data={clusterHosts}
                     // @ts-ignore
                     columns={columns}
                 />

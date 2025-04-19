@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {mdbManagedMongoDbApi, mdbResourcePresetsApi} from '@/app/apis';
 import {Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-import {MongoHost, V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
+import {V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
 import InfoTab from '@/components/Cluster/tabs/InfoTab';
 import HostsTab from '@/components/Cluster/tabs/HostsTab';
 
@@ -16,7 +16,6 @@ interface ClusterViewPageProps {
 export default function ClusterView({clusterId}: ClusterViewPageProps) {
     const [activeTab, setActiveTab] = useState<string>('info');
     const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
-    const [clusterHosts, setClusterHosts] = useState<MongoHost[]>([]);
     const [clusterPreset, setClusterPreset] = useState<V1ResourcePresetResponse | null>(null);
 
     useEffect(() => {
@@ -24,9 +23,6 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
             try {
                 const clusterResponse = await mdbManagedMongoDbApi.getCluster({clusterId});
                 setCluster(clusterResponse.data);
-
-                const hostsResponse = await mdbManagedMongoDbApi.listHosts({clusterId});
-                setClusterHosts(hostsResponse.data.hosts);
 
                 if (clusterResponse.data?.config?.resources?.presetId) {
                     console.log('preset', clusterResponse);
@@ -73,7 +69,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                             <InfoTab cluster={cluster} clusterPreset={clusterPreset} />
                         </TabPanel>
                         <TabPanel value="hosts">
-                            <HostsTab hosts={clusterHosts} />
+                            <HostsTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="db">
                             {/* Содержимое вкладки баз данных */}

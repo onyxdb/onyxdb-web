@@ -12,7 +12,7 @@ export default function EditRolePage() {
     const pathname = usePathname();
     const roleId = pathname.split('/').pop() ?? '';
     const [role, setRole] = useState<RoleDTO | null>(null);
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/access', text: 'Роли'},
         {href: `${pathname}`, text: 'Редактирование роли'},
@@ -66,7 +66,7 @@ export default function EditRolePage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={[]} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleEdit}
                 onClose={handleEditModalCancel}

@@ -55,7 +55,7 @@ export default function BusinessRolesPage() {
         setCreateModalVisible(false);
     };
 
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/business-roles', text: 'Бизнес-роли'},
     ];
@@ -71,7 +71,7 @@ export default function BusinessRolesPage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
                     <Text variant="header-2">Бизнес-роли</Text>

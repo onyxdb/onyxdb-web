@@ -1,18 +1,18 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {usePathname, useRouter} from 'next/navigation';
+import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {mdbProjectsApi, productsApi} from '@/app/apis';
 import {ProductDTO} from '@/generated/api';
-import ProductInfoTab from '@/components/ProductInfoTab';
 import {ProductSmallCard} from '@/components/ProductSmallCard';
-import ClustersTable from '@/components/tables/ClustersTable';
-import {AccountsTable} from '@/components/tables/AccountsTable';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {V1ProjectResponse} from '@/generated/api-mdb';
 import {Box} from '@/components/Layout/Box';
+import {ClustersTable} from '@/components/tables/ClustersTable';
+import {AccountsTable} from '@/components/tables/AccountsTable';
+import ProductInfoTab from '@/components/ProductInfoTab';
 
 interface ProductTreeDTO {
     item: ProductDTO;
@@ -20,20 +20,18 @@ interface ProductTreeDTO {
 }
 
 export default function ProductDetailPage() {
-    const [activeTab, setActiveTab] = useState('info');
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get('tab') || 'info';
+    const productId = pathname.split('/').pop() ?? '';
+
+    const [activeTab, setActiveTab] = useState(tab);
     const [product, setProduct] = useState<ProductDTO | null>(null);
     const [productParents, setProductParents] = useState<ProductDTO[]>([]);
     const [productTree, setProductTree] = useState<ProductTreeDTO | null>(null);
     const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
     const [showArchived, setShowArchived] = useState<boolean>(true);
-    const router = useRouter();
-    const pathname = usePathname();
-
-    const productId = pathname.split('/').pop() ?? '';
-
-    const handleProductSelect = (productDTO: ProductDTO) => {
-        router.push('/products/view/' + productDTO.id);
-    };
 
     const fetchProductParents = async (currentProductId: string) => {
         try {
@@ -55,22 +53,18 @@ export default function ProductDetailPage() {
         }
     };
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await productsApi.getProductById({productId: productId});
-                setProduct(response.data);
-                if (response.data.id) {
-                    fetchProductParents(response.data.id);
-                    fetchProductsTree(response.data.id);
-                }
-            } catch (error) {
-                console.error('Error fetching product:', error);
+    const fetchProduct = async () => {
+        try {
+            const response = await productsApi.getProductById({productId: productId});
+            setProduct(response.data);
+            if (response.data.id) {
+                fetchProductParents(response.data.id);
+                fetchProductsTree(response.data.id);
             }
-        };
-
-        fetchProduct();
-    }, [productId]);
+        } catch (error) {
+            console.error('Error fetching product:', error);
+        }
+    };
 
     const fetchProjects = async () => {
         try {
@@ -81,17 +75,35 @@ export default function ProductDetailPage() {
                     .filter((p) => productId === null || p.productId === productId),
             );
         } catch (error) {
-            console.error('Error fetching clusters:', error);
+            console.error('Error fetching projects:', error);
         }
     };
 
     useEffect(() => {
-        fetchProjects();
+        setActiveTab(tab);
+    }, [tab]);
+
+    useEffect(() => {
+        fetchProduct();
     }, [productId]);
 
-    if (!product) {
-        return <div>Продукт не найден</div>;
-    }
+    useEffect(() => {
+        fetchProjects();
+    }, [productId, showArchived]);
+
+    const handleProductSelect = (productDTO: ProductDTO) => {
+        router.push('/products/view/' + productDTO.id);
+    };
+
+    const handleTabChange = (value: string) => {
+        const createQueryString = (name: string, val: string) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set(name, val);
+            return params.toString();
+        };
+        setActiveTab(value);
+        router.push(pathname + '?' + createQueryString('tab', value));
+    };
 
     const renderProductTree = (tree: ProductTreeDTO[]) => {
         if (!tree) return null;
@@ -113,7 +125,11 @@ export default function ProductDetailPage() {
         fetchProjects();
     };
 
-    const breadCrumps = [
+    if (!product) {
+        return <div>Продукт не найден</div>;
+    }
+
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/products', text: 'Продукты'},
         ...productParents.map((parent) => ({
@@ -124,7 +140,7 @@ export default function ProductDetailPage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={[]} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <div style={{padding: '20px'}}>
                 <Text variant="header-1">{product.name}</Text>
                 <Box>
@@ -132,7 +148,7 @@ export default function ProductDetailPage() {
                         {product.description}
                     </Text>
                 </Box>
-                <TabProvider value={activeTab} onUpdate={setActiveTab}>
+                <TabProvider value={activeTab} onUpdate={handleTabChange}>
                     <TabList>
                         <Tab value="info">Информация</Tab>
                         <Tab value="children">Дочерние продукты</Tab>

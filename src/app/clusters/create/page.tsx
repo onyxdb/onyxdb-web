@@ -50,7 +50,7 @@ export default function ClusterCreatePage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumbs} />
+            <AppHeader breadCrumbs={breadCrumbs} />
             <div style={{padding: '20px'}}>
                 <ClusterCreateForm createAction={handleCreate} cancelAction={handleCancel} />
             </div>

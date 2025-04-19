@@ -153,7 +153,7 @@ export default function ProjectsPage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumbs} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
                     <Text variant="header-2">Каталог проектов</Text>

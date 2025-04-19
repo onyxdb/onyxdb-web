@@ -168,7 +168,7 @@ export default function ProductsPage({}: ProductsPageProps) {
         }
     };
 
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/products', text: 'Продукты'},
     ];
@@ -183,7 +183,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     }
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
                     <Text variant="header-2">Иерархия продуктов</Text>

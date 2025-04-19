@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import {AppHeader} from '@/components/AppHeader/AppHeader';
+import {AppHeader, ButtonView} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {CirclePlus, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePathname, useRouter} from 'next/navigation';
@@ -53,12 +53,13 @@ export default function ClusterViewPage() {
             text: 'Удалить кластер',
             action: handleDelete,
             icon: <TrashBin />,
+            view: ButtonView.OutlinedDanger,
         });
     }
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumbs} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <ClusterView clusterId={clusterId} />
         </div>
     );

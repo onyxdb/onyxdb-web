@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
@@ -13,6 +13,12 @@ import {Box} from '@/components/Layout/Box';
 import {ClustersTable} from '@/components/tables/ClustersTable';
 import {AccountsTable} from '@/components/tables/AccountsTable';
 import ProductInfoTab from '@/components/ProductInfoTab';
+import ChartKit, {settings} from '@gravity-ui/chartkit';
+import type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
+import {MyLoader} from '@/components/Loader';
+
+settings.set({plugins: [YagrPlugin]});
 
 interface ProductTreeDTO {
     item: ProductDTO;
@@ -138,6 +144,39 @@ export default function ProductDetailPage() {
         })),
     ];
 
+    const data: YagrWidgetData = {
+        data: {
+            timeline: [
+                1636838612441, 1636925012441, 1637011412441, 1637097812441, 1637184212441,
+                1637270612441, 1637357012441, 1637443412441, 1637529812441, 1637616212441,
+            ],
+            graphs: [
+                {
+                    id: '1',
+                    name: 'Serie 2',
+                    color: '#6e8188',
+                    data: [37, 6, 51, 10, 65, 35, 72, 0, 94, 54],
+                },
+                {
+                    id: '0',
+                    name: 'Serie 1',
+                    color: '#6c59c2',
+                    data: [25, 52, 89, 72, 39, 49, 82, 59, 36, 5],
+                },
+            ],
+        },
+        libraryConfig: {
+            chart: {
+                series: {
+                    type: 'area',
+                },
+            },
+            title: {
+                text: 'line: random 10 pts',
+            },
+        },
+    };
+
     return (
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
@@ -155,6 +194,8 @@ export default function ProductDetailPage() {
                         <Tab value="projects">Проекты</Tab>
                         <Tab value="clusters">Кластеры</Tab>
                         <Tab value="users">Пользователи</Tab>
+                        <Tab value="cwots">Квоты</Tab>
+                        <Tab value="billing">Биллинг</Tab>
                     </TabList>
                     <TabPanel value="info">
                         {product && <ProductInfoTab product={product} />}
@@ -188,6 +229,11 @@ export default function ProductDetailPage() {
                             <Text variant="header-2">Пользователи</Text>
                         </div>
                         <AccountsTable />
+                    </TabPanel>
+                    <TabPanel value="billing">
+                        <Suspense fallback={<MyLoader />}>
+                            <ChartKit type="yagr" data={data} />
+                        </Suspense>
                     </TabPanel>
                 </TabProvider>
             </div>

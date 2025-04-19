@@ -69,7 +69,7 @@ const HostsTab: React.FC<HostsTabProps> = ({clusterId}) => {
                         size="m"
                         onClick={handleToggleMonitoring}
                     >
-                        {isMonitoring ? 'Слежка запущена' : 'Старт'}
+                        {isMonitoring ? 'Автозагрузка запущена' : 'Начать автозагрузку'}
                     </Button>
                     <Select
                         size="m"

@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
+    "@gravity-ui/chartkit": "^6.1.1",
     "@gravity-ui/components": "^4.0.1",
     "@gravity-ui/icons": "2.13",
     "@gravity-ui/navigation": "3.3",

@@ -58,7 +58,7 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
 
     return (
         <div>
-            <Box marginTop="20px">
+            <Box marginTop="20px" marginBottom="20px">
                 <Button view="action" size="m" onClick={handleOpenCreateModal}>
                     Создать базу данных
                 </Button>

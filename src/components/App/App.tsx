@@ -26,7 +26,8 @@ interface AppProps {
 export const App: React.FC<AppProps> = ({children}) => {
     const [asideCollapsed, setAsideCollapsed] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
-    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+    const [theme, setTheme] = useState<'dark' | 'light'>('light');
+    // const theme = localStorage.getItem('theme') || 'dark';
     const isDarkMode = theme === 'dark';
     const pathname = usePathname();
     const router = useRouter();

@@ -194,8 +194,8 @@ export default function ProductsPage({}: ProductsPageProps) {
                         {selectedProduct && (
                             <ProductBlock
                                 data={selectedProduct}
-                                onEdit={handleProductEditModal}
-                                onDelete={handleProductDelete}
+                                editAction={handleProductEditModal}
+                                deleteAction={handleProductDelete}
                             />
                         )}
                     </div>

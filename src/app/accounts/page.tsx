@@ -84,7 +84,7 @@ export default function AccountsPage({}: AccountsPageProps) {
                     </Button>
                 )}
             </div>
-            <AccountsTable onEdit={handleEdit} onDelete={handleDelete} />
+            <AccountsTable editAction={handleEdit} deleteAction={handleDelete} />
             <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                 <AccountForm
                     initialValue={editingAccount ?? undefined}

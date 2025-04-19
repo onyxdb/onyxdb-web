@@ -51,7 +51,7 @@ export default function RolesPage() {
                 <Box marginBottom="20px">
                     <Text variant="header-2">Роли</Text>
                 </Box>
-                <RoleTable onEdit={handleEdit} onDelete={handleDelete} />
+                <RoleTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
         </div>
     );

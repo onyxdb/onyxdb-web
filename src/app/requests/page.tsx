@@ -19,9 +19,7 @@ import {Box} from '@/components/Layout/Box';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
 import {useAuth} from '@/context/AuthContext';
 
-export interface RoleRequestsTableProps {}
-
-export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
+export default function RoleRequestsTable() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestDTO[]>([]);
 
     const [statusFilter, setStatusFilter] = useState<string>('');
@@ -295,8 +293,6 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
                 data={roleRequests}
                 // @ts-ignore
                 columns={columns}
-                // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
-                // sortState={sorting}
             />
             <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
                 <Pagination
@@ -398,6 +394,4 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
             </Modal>
         </div>
     );
-};
-
-export default RoleRequestsTable;
+}

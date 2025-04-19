@@ -224,8 +224,8 @@ export default function StructurePage({}: StructurePageProps) {
                         <Box marginRight="20px" key={dc.id}>
                             <DomainComponentBlock
                                 data={dc}
-                                onEdit={handleDcEdit}
-                                onDelete={handleDcDelete}
+                                editAction={handleDcEdit}
+                                deleteAction={handleDcDelete}
                                 onClick={() => handleDcSelect(dc.id ?? '???')}
                                 isActive={dc.id === selectedDcId}
                             />
@@ -249,8 +249,8 @@ export default function StructurePage({}: StructurePageProps) {
                             <OrgUnitBlock
                                 data={selectedOu}
                                 dataAccounts={selectedOuAccounts}
-                                onEdit={handleSelectedOuEdit}
-                                onDelete={handleSelectedOuDelete}
+                                editAction={handleSelectedOuEdit}
+                                deleteAction={handleSelectedOuDelete}
                             />
                         )}
                     </div>

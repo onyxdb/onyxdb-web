@@ -21,11 +21,14 @@ import BusinessRoleAssignModal from '@/components/modals/BusinessRoleAssignModal
 import {useAuth} from '@/context/AuthContext';
 
 export interface BusinessRolesTableProps {
-    onEdit: (businessRoleId: string) => void;
-    onDelete: (businessRoleId: string) => void;
+    editAction: (businessRoleId: string) => void;
+    deleteAction: (businessRoleId: string) => void;
 }
 
-export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, onDelete}) => {
+export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
+    editAction,
+    deleteAction,
+}) => {
     const [businessRoles, setBusinessRoles] = useState<BusinessRoleDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit, setLimit] = useState<number>(10);
@@ -165,7 +168,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                         <Button
                             view="normal"
                             size="m"
-                            onClick={() => onEdit(businessRole.id ?? '???')}
+                            onClick={() => editAction(businessRole.id ?? '???')}
                         >
                             Редактировать
                         </Button>
@@ -175,7 +178,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                             view="normal"
                             size="m"
                             onClick={() => {
-                                onDelete(businessRole.id ?? '???');
+                                deleteAction(businessRole.id ?? '???');
                                 // TODO fetch не работает после удаления :(
                                 fetchBusinessRoles();
                             }}

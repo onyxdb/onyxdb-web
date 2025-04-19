@@ -14,15 +14,15 @@ import {useAuth} from '@/context/AuthContext';
 interface DomainComponentProps {
     data: OrganizationUnitDTO;
     dataAccounts: AccountDTO[];
-    onEdit: (ou: OrganizationUnitDTO) => void;
-    onDelete: (id: string) => void;
+    editAction: (ou: OrganizationUnitDTO) => void;
+    deleteAction: (id: string) => void;
 }
 
 export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
     data,
     dataAccounts,
-    onEdit,
-    onDelete,
+    editAction,
+    deleteAction,
 }) => {
     const router = useRouter();
     const {checkActions} = useAuth();
@@ -41,7 +41,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                             {name: `web-organization-unit-${data.id}`, action: 'edit'},
                         ]) && (
                             <Box marginBottom="5px">
-                                <Button view="normal" size="m" onClick={() => onEdit(data)}>
+                                <Button view="normal" size="m" onClick={() => editAction(data)}>
                                     <Icon data={Pencil} />
                                 </Button>
                             </Box>
@@ -53,7 +53,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                             <Button
                                 view="outlined-danger"
                                 size="m"
-                                onClick={() => onDelete(data.id ?? '???')}
+                                onClick={() => deleteAction(data.id ?? '???')}
                             >
                                 <Icon data={TrashBin} />
                             </Button>

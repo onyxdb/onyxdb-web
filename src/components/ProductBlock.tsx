@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {ProductDTO} from '@/generated/api';
@@ -10,16 +10,35 @@ import {Box} from '@/components/Layout/Box';
 import {Eye, Pencil, TrashBin} from '@gravity-ui/icons';
 import {useAuth} from '@/context/AuthContext';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
+import {V1ProjectResponse} from '@/generated/api-mdb';
+import {mdbProjectsApi} from '@/app/apis';
 
 interface ProductBlockProps {
     data: ProductDTO;
-    onEdit: (product: ProductDTO) => void;
-    onDelete: (id: string) => void;
+    editAction: (product: ProductDTO) => void;
+    deleteAction: (id: string) => void;
 }
 
-export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelete}) => {
+export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, deleteAction}) => {
+    const [projectsAll, setProjectsAll] = useState<V1ProjectResponse[]>([]);
     const router = useRouter();
     const {checkActions} = useAuth();
+
+    const fetchProductProjects = async (productId: string) => {
+        try {
+            const response = await mdbProjectsApi.listProjects();
+            setProjectsAll(response.data.projects.filter((p) => p.productId === productId) ?? []);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (data.id) {
+            fetchProductProjects(data.id);
+        }
+    }, [data.id]);
+
     const handleViewDetails = (id: string) => {
         router.push(`/products/view/${id}`);
     };
@@ -33,7 +52,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                         <Text variant="subheader-1" color="secondary">
                             {data.description?.split(' ').slice(0, 5).join(' ')}
                         </Text>
-                        <Box marginBottom="8px" marginTop="8px">
+                        <Box marginBottom="16px" marginTop="16px">
                             <strong>Владелец:</strong>
                             {data.ownerId ? (
                                 <UserBlockWithFetch
@@ -45,6 +64,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                                 'Not stated'
                             )}
                         </Box>
+                        <div>{projectsAll.map((project) => project.name)}</div>
                     </VerticalStack>
                     <div style={{flexDirection: 'row'}}>
                         {checkActions([
@@ -52,7 +72,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                             {name: `web-product-${data.id}`, action: 'edit'},
                         ]) && (
                             <Box marginBottom="5px">
-                                <Button view="normal" size="m" onClick={() => onEdit(data)}>
+                                <Button view="normal" size="m" onClick={() => editAction(data)}>
                                     <Icon data={Pencil} />
                                 </Button>
                             </Box>
@@ -64,7 +84,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, onEdit, onDelet
                             <Button
                                 view="outlined-danger"
                                 size="m"
-                                onClick={() => onDelete(data.id ?? '???')}
+                                onClick={() => deleteAction(data.id ?? '???')}
                             >
                                 <Icon data={TrashBin} />
                             </Button>

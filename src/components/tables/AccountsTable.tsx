@@ -9,11 +9,11 @@ import {useAuth} from '@/context/AuthContext';
 
 interface AccountsTableProps {
     // search: '';
-    onEdit?: (accountId: string) => void;
-    onDelete?: (accountId: string) => void;
+    editAction?: (accountId: string) => void;
+    deleteAction?: (accountId: string) => void;
 }
 
-export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) => {
+export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteAction}) => {
     const [accounts, setAccounts] = useState<AccountDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit] = useState<number>(8);
@@ -88,23 +88,27 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({onEdit, onDelete}) 
         },
     ];
 
-    if (onEdit || onDelete) {
+    if (editAction || deleteAction) {
         columns.push({
             id: 'actions',
             name: 'Действия',
             template: (account) => (
                 <div style={{display: 'flex', gap: '10px'}}>
-                    {onEdit &&
+                    {editAction &&
                     (checkPermission('account', 'edit') || user?.account.id === account.id) ? (
-                        <Button view="normal" size="m" onClick={() => onEdit(account.id ?? '???')}>
-                            Редактировать
-                        </Button>
-                    ) : null}
-                    {onDelete && checkPermission('account', 'delete') ? (
                         <Button
                             view="normal"
                             size="m"
-                            onClick={() => onDelete(account.id ?? '???')}
+                            onClick={() => editAction(account.id ?? '???')}
+                        >
+                            Редактировать
+                        </Button>
+                    ) : null}
+                    {deleteAction && checkPermission('account', 'delete') ? (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => deleteAction(account.id ?? '???')}
                         >
                             Удалить
                         </Button>

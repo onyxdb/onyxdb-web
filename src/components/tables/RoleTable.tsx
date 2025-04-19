@@ -18,11 +18,11 @@ import {getLinkedResourceLabel} from '@/utils/utils';
 import {Box} from '@/components/Layout/Box';
 
 export interface RoleTableProps {
-    onEdit: (roleId: string) => void;
-    onDelete: (roleId: string) => void;
+    editAction: (roleId: string) => void;
+    deleteAction: (roleId: string) => void;
 }
 
-export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
+export const RoleTable: React.FC<RoleTableProps> = ({editAction, deleteAction}) => {
     const [roles, setRoles] = useState<RoleDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit, setLimit] = useState<number>(10);
@@ -106,12 +106,16 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
                         Заказать
                     </Button>
                     {checkPermission('role', 'edit') && (
-                        <Button view="normal" size="m" onClick={() => onEdit(role.id ?? '???')}>
+                        <Button view="normal" size="m" onClick={() => editAction(role.id ?? '???')}>
                             Редактировать
                         </Button>
                     )}
                     {checkPermission('role', 'delete') && (
-                        <Button view="normal" size="m" onClick={() => onDelete(role.id ?? '???')}>
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => deleteAction(role.id ?? '???')}
+                        >
                             Удалить
                         </Button>
                     )}

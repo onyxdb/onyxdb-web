@@ -51,8 +51,6 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
     const [resourcePresets, setResourcePresets] = useState<V1ResourcePresetResponse[]>([]);
     const [filteredPresets, setFilteredPresets] = useState<V1ResourcePresetResponse[]>([]);
     const [selectedPreset, setSelectedPreset] = useState<V1ResourcePresetResponse | null>(null);
-    // const [selectedProject, setSelectedProject] = useState<V1ProjectResponse | null>(null);
-    // const [selectedOwner, setSelectedOwner] = useState<AccountDTO | null>(null);
 
     useEffect(() => {
         mdbResourcePresetsApi

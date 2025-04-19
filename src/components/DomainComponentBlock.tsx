@@ -9,16 +9,16 @@ import {useAuth} from '@/context/AuthContext';
 
 interface DomainComponentProps {
     data: DomainComponentDTO;
-    onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
+    editAction: (id: string) => void;
+    deleteAction: (id: string) => void;
     onClick: () => void;
     isActive: boolean;
 }
 
 export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
     data,
-    onEdit,
-    onDelete,
+    editAction,
+    deleteAction,
     onClick,
     isActive,
 }) => {
@@ -43,7 +43,11 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                 <Box marginLeft="10px">
                     {checkPermission('domain-components', 'create') && (
                         <Box marginBottom="5px">
-                            <Button view="normal" size="m" onClick={() => onEdit(data.id ?? '???')}>
+                            <Button
+                                view="normal"
+                                size="m"
+                                onClick={() => editAction(data.id ?? '???')}
+                            >
                                 <Icon data={Pencil} />
                             </Button>
                         </Box>
@@ -52,7 +56,7 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() => onDelete(data.id ?? '???')}
+                            onClick={() => deleteAction(data.id ?? '???')}
                         >
                             <Icon data={TrashBin} />
                         </Button>

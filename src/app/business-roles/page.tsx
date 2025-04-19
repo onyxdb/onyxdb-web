@@ -76,7 +76,7 @@ export default function BusinessRolesPage() {
                 <Box marginBottom="20px">
                     <Text variant="header-2">Бизнес-роли</Text>
                 </Box>
-                <BusinessRolesTable onEdit={handleEdit} onDelete={handleDelete} />
+                <BusinessRolesTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
             <Modal open={isCreateModalVisible} onOpenChange={handleCreateModalCancel}>
                 <BusinessRoleForm

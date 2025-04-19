@@ -102,7 +102,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     {!initialValue && (
                         <ProductSelector
                             selectProductAction={handleProductSelect}
-                            initialValue={initialProduct}
+                            initialValue={initialProduct ?? undefined}
                             label="В каком продукте создать проект?"
                             header="Поиск продукта"
                         />

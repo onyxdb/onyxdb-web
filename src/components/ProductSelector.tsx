@@ -9,7 +9,7 @@ import {Box} from '@/components/Layout/Box';
 
 interface ProductSelectorProps {
     selectProductAction: (product: ProductDTO) => void;
-    initialValue: ProductDTO | null;
+    initialValue?: ProductDTO;
     header?: string;
     label?: string;
     placeholder?: string;

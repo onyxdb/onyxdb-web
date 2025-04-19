@@ -3,13 +3,16 @@
 import React, {useEffect, useState} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
-import {Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
-import {productsApi} from '@/app/apis';
+import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
+import {mdbProjectsApi, productsApi} from '@/app/apis';
 import {ProductDTO} from '@/generated/api';
 import ProductInfoTab from '@/components/ProductInfoTab';
 import {ProductSmallCard} from '@/components/ProductSmallCard';
 import ClustersTable from '@/components/tables/ClustersTable';
 import {AccountsTable} from '@/components/tables/AccountsTable';
+import {ProjectsTable} from '@/components/tables/ProjectsTable';
+import {V1ProjectResponse} from '@/generated/api-mdb';
+import {Box} from '@/components/Layout/Box';
 
 interface ProductTreeDTO {
     item: ProductDTO;
@@ -17,13 +20,16 @@ interface ProductTreeDTO {
 }
 
 export default function ProductDetailPage() {
-    const router = useRouter();
-    const pathname = usePathname();
-    const productId = pathname.split('/').pop() ?? '';
     const [activeTab, setActiveTab] = useState('info');
     const [product, setProduct] = useState<ProductDTO | null>(null);
     const [productParents, setProductParents] = useState<ProductDTO[]>([]);
     const [productTree, setProductTree] = useState<ProductTreeDTO | null>(null);
+    const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
+    const [showArchived, setShowArchived] = useState<boolean>(true);
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const productId = pathname.split('/').pop() ?? '';
 
     const handleProductSelect = (productDTO: ProductDTO) => {
         router.push('/products/view/' + productDTO.id);
@@ -32,7 +38,8 @@ export default function ProductDetailPage() {
     const fetchProductParents = async (currentProductId: string) => {
         try {
             const response = await productsApi.getProductParents({productId: currentProductId});
-            setProductParents(response.data);
+            const reversedData = response.data.reverse();
+            setProductParents(reversedData);
         } catch (error) {
             console.error('Error fetching product parents:', error);
         }
@@ -65,6 +72,23 @@ export default function ProductDetailPage() {
         fetchProduct();
     }, [productId]);
 
+    const fetchProjects = async () => {
+        try {
+            const response = await mdbProjectsApi.listProjects();
+            setProjects(
+                response.data.projects
+                    .filter((p) => showArchived || !p.isArchived)
+                    .filter((p) => productId === null || p.productId === productId),
+            );
+        } catch (error) {
+            console.error('Error fetching clusters:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, [productId]);
+
     if (!product) {
         return <div>Продукт не найден</div>;
     }
@@ -84,6 +108,11 @@ export default function ProductDetailPage() {
         return <div>{tree.map((item) => renderItem(item))}</div>;
     };
 
+    const handleShowArchivedChange = (checked: boolean) => {
+        setShowArchived(checked);
+        fetchProjects();
+    };
+
     const breadCrumps = [
         {href: '/', text: 'Главная'},
         {href: '/products', text: 'Продукты'},
@@ -97,10 +126,17 @@ export default function ProductDetailPage() {
         <div>
             <AppHeader breadCrumps={breadCrumps} actions={[]} />
             <div style={{padding: '20px'}}>
+                <Text variant="header-1">{product.name}</Text>
+                <Box>
+                    <Text variant="subheader-1" color="secondary" ellipsis={true}>
+                        {product.description}
+                    </Text>
+                </Box>
                 <TabProvider value={activeTab} onUpdate={setActiveTab}>
                     <TabList>
                         <Tab value="info">Информация</Tab>
                         <Tab value="children">Дочерние продукты</Tab>
+                        <Tab value="projects">Проекты</Tab>
                         <Tab value="clusters">Кластеры</Tab>
                         <Tab value="users">Пользователи</Tab>
                     </TabList>
@@ -109,14 +145,27 @@ export default function ProductDetailPage() {
                     </TabPanel>
                     <TabPanel value="children">
                         <div style={{marginTop: '20px'}}>
-                            <Text variant="header-2">Дочерние продукты</Text>
-                        </div>
-                        <div style={{marginTop: '20px'}}>
                             {productTree && renderProductTree([productTree])}
                         </div>
                     </TabPanel>
+                    <TabPanel value="projects">
+                        <Box marginTop={20} marginBottom={16}>
+                            <Checkbox
+                                size="l"
+                                checked={showArchived}
+                                onUpdate={handleShowArchivedChange}
+                            >
+                                Показывать архивные проекты
+                            </Checkbox>
+                        </Box>
+                        <ProjectsTable projects={projects} />
+                    </TabPanel>
                     <TabPanel value="clusters">
-                        {product?.id && <ClustersTable projectId={product.id} />}
+                        <div style={{marginTop: '20px'}}>
+                            {product?.id && (
+                                <ClustersTable projectsIds={projects.map((p) => p.id)} />
+                            )}
+                        </div>
                     </TabPanel>
                     <TabPanel value="users">
                         <div style={{marginTop: '20px'}}>

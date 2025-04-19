@@ -6,26 +6,30 @@ import {Pagination, Table, TableColumnConfig, TextInput, withTableSorting} from 
 import {Eye} from '@gravity-ui/icons';
 import {V1MongoClusterResponse} from '@/generated/api-mdb';
 import {StatusLabel} from '@/components/common/StatusLabel';
+import {useRouter} from 'next/navigation';
 
 export interface ClustersTableProps {
-    viewAction: (clusterId: string) => void;
+    projectsIds?: string[];
 }
 
-export const ClustersTable: React.FC<ClustersTableProps> = ({viewAction}) => {
+export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
     const [clustersAll, setClustersAll] = useState<V1MongoClusterResponse[]>([]);
     const [clustersFiltered, setClustersFiltered] = useState<V1MongoClusterResponse[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
+    const router = useRouter();
     // const {checkPermission} = useAuth();
 
     const fetchClusters = async () => {
         try {
             const response = await mdbManagedMongoDbApi.listClusters();
-            console.log('listClusters', response.data.clusters);
-            setClustersAll(response.data.clusters);
-            setTotal(response.data.clusters.length);
+            const filteredClusters = projectsIds
+                ? response.data.clusters.filter((p) => projectsIds.includes(p.projectId))
+                : response.data.clusters;
+            setClustersAll(filteredClusters);
+            setTotal(filteredClusters.length);
         } catch (error) {
             console.error('Error fetching clusters:', error);
         }
@@ -36,8 +40,6 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({viewAction}) => {
     }, []);
 
     const filterClusters = async () => {
-        console.log(limit, offset, total);
-        console.log(clustersAll);
         const filteredClusters = clustersAll
             .slice(offset, offset + limit)
             .filter(
@@ -47,7 +49,6 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({viewAction}) => {
                     p.name.includes(searchQuery) ||
                     p.description.includes(searchQuery),
             );
-        console.log(filteredClusters);
         setClustersFiltered(filteredClusters);
     };
 
@@ -65,6 +66,10 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({viewAction}) => {
         setOffset(0);
     };
 
+    const handleView = (clusterId: string) => {
+        router.push(`/clusters/view/${clusterId}`);
+    };
+
     const columns: TableColumnConfig<V1MongoClusterResponse>[] = [
         {
             id: 'view',
@@ -72,7 +77,7 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({viewAction}) => {
             template: (item) => (
                 <Eye
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => viewAction(item.id ?? '')}
+                    onClick={() => handleView(item.id)}
                 />
             ),
         },

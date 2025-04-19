@@ -1,8 +1,7 @@
 // pages/projects/index.tsx
 'use client';
 import React, {useEffect, useState} from 'react';
-import {Button, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
-import {useRouter} from 'next/navigation';
+import {Button, Checkbox, Text, TextInput} from '@gravity-ui/uikit';
 import {
     V1CreateProjectRequest,
     V1ProjectResponse,
@@ -14,20 +13,27 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useAuth} from '@/context/AuthContext';
 import {Box} from '@/components/Layout/Box';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {ProjectsTable} from '@/components/tables/ProjectsTable';
+import {ProductSelector} from '@/components/ProductSelector';
+import {ProductDTO} from '@/generated/api';
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
+    const [filteredProjects, setFilteredProjects] = useState<V1ProjectResponse[]>([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [editingProject, setEditingProject] = useState<V1ProjectResponse | null>(null);
-    const router = useRouter();
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [showArchived, setShowArchived] = useState<boolean>(false);
+    const [productId, setProductId] = useState<string | null>(null);
     const {checkPermission} = useAuth();
 
     const fetchProjects = async () => {
         try {
             const response = await mdbProjectsApi.listProjects();
-            console.log('listProjects', response.data.projects);
             setProjects(response.data.projects);
+            setFilteredProjects(response.data.projects);
         } catch (error) {
             console.error('Error fetching clusters:', error);
         }
@@ -79,44 +85,57 @@ export default function ProjectsPage() {
         setEditingProject(null);
     };
 
-    const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<V1ProjectResponse>[] = [
-        {
-            id: 'name',
-            name: 'Название',
-            template: (project) => (
-                <span
-                    style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/projects/view/${project.id}`)}
-                >
-                    {project.name}
-                </span>
-            ),
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'description',
-            name: 'Описание',
-        },
-        {
-            id: 'productId',
-            name: 'Проект',
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'actions',
-            name: 'Действия',
-            template: (project) => (
-                <Button view="normal" size="m" onClick={() => handleOpenEditModal(project)}>
-                    Редактировать
-                </Button>
-            ),
-        },
-    ];
+    const handleArchive = async (id: string) => {
+        try {
+            await mdbProjectsApi.archiveProject({projectId: id});
+            await fetchProjects();
+        } catch (error) {
+            console.error('Error Archiving projects:', error);
+        }
+    };
+
+    const handleUnArchive = async (id: string) => {
+        try {
+            await mdbProjectsApi.unarchiveProject({projectId: id});
+            await fetchProjects();
+        } catch (error) {
+            console.error('Error unArchiving projects:', error);
+        }
+    };
+
+    const handleProductSearchChange = (value: string) => {
+        setSearchQuery(value);
+    };
+
+    const fetchFilteredProjects = () => {
+        const filtered = projects
+            .filter(
+                (p) =>
+                    searchQuery.length === 0 ||
+                    p.id === searchQuery ||
+                    p.name.includes(searchQuery) ||
+                    p.description.includes(searchQuery),
+            )
+            .filter((p) => showArchived || !p.isArchived)
+            .filter((p) => productId === null || p.productId === productId);
+        setFilteredProjects(filtered);
+    };
+
+    useEffect(() => {
+        fetchFilteredProjects();
+    }, [searchQuery, showArchived, productId]);
+
+    const handleProductSelect = (data: ProductDTO) => {
+        if (data.id) {
+            setProductId(data.id);
+            fetchFilteredProjects();
+        }
+    };
+
+    const handleShowArchivedChange = (checked: boolean) => {
+        setShowArchived(checked);
+        fetchFilteredProjects();
+    };
 
     const breadCrumbs = [
         {href: '/', text: 'Главная'},
@@ -139,11 +158,28 @@ export default function ProjectsPage() {
                 <Box marginBottom="20px">
                     <Text variant="header-2">Каталог проектов</Text>
                 </Box>
-                <MyTable
-                    width="max"
-                    data={projects}
-                    // @ts-ignore
-                    columns={columns}
+                <HorizontalStack align="center" gap={10}>
+                    <TextInput
+                        name="product"
+                        value={searchQuery}
+                        placeholder="Введите и выберите продукт"
+                        onUpdate={handleProductSearchChange}
+                    />
+                    <Button view="action" size="m" onClick={fetchFilteredProjects}>
+                        Поиск
+                    </Button>
+                </HorizontalStack>
+                <Box marginTop={16} marginBottom={16}>
+                    <Checkbox size="l" checked={showArchived} onUpdate={handleShowArchivedChange}>
+                        Показывать архивные проекты
+                    </Checkbox>
+                </Box>
+                <ProductSelector selectProductAction={handleProductSelect} />
+                <ProjectsTable
+                    projects={filteredProjects}
+                    onEdit={handleOpenEditModal}
+                    onArchive={handleArchive}
+                    onUnarchive={handleUnArchive}
                 />
                 {isCreateModalOpen && (
                     <ProjectForm

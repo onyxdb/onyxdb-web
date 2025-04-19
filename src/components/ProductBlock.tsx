@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
+import {Button, Card, Icon, Label, Link, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {ProductDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
@@ -39,21 +39,29 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
         }
     }, [data.id]);
 
-    const handleViewDetails = (id: string) => {
+    const handleViewProductDetails = (id: string) => {
         router.push(`/products/view/${id}`);
+    };
+
+    const handleViewProjectDetails = (id: string) => {
+        router.push(`/projects/${id}`);
     };
 
     return (
         <Card style={{padding: '16px'}}>
             <Box>
                 <HorizontalStack justify="space-between">
-                    <VerticalStack>
-                        <Text variant="subheader-3">{data.name}</Text>
-                        <Text variant="subheader-1" color="secondary">
-                            {data.description?.split(' ').slice(0, 5).join(' ')}
-                        </Text>
-                        <Box marginBottom="16px" marginTop="16px">
-                            <strong>Владелец:</strong>
+                    <VerticalStack gap={16}>
+                        <div>
+                            <div>
+                                <Text variant="subheader-3">{data.name}</Text>
+                            </div>
+                            <Text variant="subheader-1" color="secondary">
+                                {data.description?.split(' ').slice(0, 5).join(' ')}
+                            </Text>
+                        </div>
+                        <Box>
+                            <Text variant="subheader-2">Владелец:</Text>
                             {data.ownerId ? (
                                 <UserBlockWithFetch
                                     accountId={data.ownerId}
@@ -64,7 +72,49 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                                 'Not stated'
                             )}
                         </Box>
-                        <div>{projectsAll.map((project) => project.name)}</div>
+                        {projectsAll.length > 0 && (
+                            <VerticalStack gap={10}>
+                                <Text variant="subheader-2">Проекты:</Text>
+                                {projectsAll.map((project) => (
+                                    <Link
+                                        key={project.id}
+                                        view="normal"
+                                        href={`/projects/${project.id}`}
+                                    >
+                                        <Card
+                                            key={project.id}
+                                            style={{padding: '16px'}}
+                                            type="selection"
+                                            onClick={() => handleViewProjectDetails(project.id)}
+                                        >
+                                            <HorizontalStack justify="space-between">
+                                                <div>
+                                                    <div>
+                                                        <Text variant="subheader-3">
+                                                            {project.name}
+                                                        </Text>
+                                                    </div>
+                                                    <Text variant="subheader-1" color="secondary">
+                                                        {project.description}
+                                                    </Text>
+                                                </div>
+                                                {project.isArchived && (
+                                                    <Label theme="warning">Архив</Label>
+                                                )}
+                                            </HorizontalStack>
+                                        </Card>
+                                    </Link>
+                                ))}
+                            </VerticalStack>
+                        )}
+                        <Button
+                            view="normal"
+                            size="l"
+                            onClick={() => handleViewProductDetails(data?.id ?? '???')}
+                        >
+                            <Icon data={Eye} />
+                            Подробнее
+                        </Button>
                     </VerticalStack>
                     <div style={{flexDirection: 'row'}}>
                         {checkActions([
@@ -91,10 +141,6 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                         )}
                     </div>
                 </HorizontalStack>
-                <Button view="normal" size="l" onClick={() => handleViewDetails(data?.id ?? '???')}>
-                    <Icon data={Eye} />
-                    Подробнее
-                </Button>
             </Box>
         </Card>
     );

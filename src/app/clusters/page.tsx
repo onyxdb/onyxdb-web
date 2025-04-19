@@ -13,10 +13,6 @@ export default function ClustersPage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
 
-    const handleView = (projectId: string) => {
-        router.push(`/clusters/view/${projectId}`);
-    };
-
     const handleCreate = () => {
         router.push(`/clusters/create`);
     };
@@ -42,7 +38,7 @@ export default function ClustersPage() {
                 <Box marginBottom="20px">
                     <Text variant="header-2">Кластер</Text>
                 </Box>
-                <ClusterTable viewAction={handleView} />
+                <ClusterTable />
             </div>
         </div>
     );

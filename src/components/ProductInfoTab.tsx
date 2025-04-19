@@ -1,8 +1,11 @@
 'use client';
 
 import React from 'react';
-import {Text} from '@gravity-ui/uikit';
+import {Icon, Text} from '@gravity-ui/uikit';
 import {ProductDTO} from '@/generated/api';
+import {Box} from '@/components/Layout/Box';
+import {Clock, ClockArrowRotateLeft, Handset} from '@gravity-ui/icons';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface ProductInfoTabProps {
     product: ProductDTO;
@@ -11,27 +14,39 @@ interface ProductInfoTabProps {
 export const ProductInfoTab: React.FC<ProductInfoTabProps> = ({product}) => {
     return (
         <div style={{padding: '20px'}}>
-            <Text variant="header-2">Информация о продукте</Text>
-            <div style={{marginTop: '20px'}}>
-                <Text variant="subheader-1">Название:</Text>
-                <Text variant="body-1">{product.name}</Text>
-            </div>
-            <div style={{marginTop: '20px'}}>
-                <Text variant="subheader-1">Описание:</Text>
-                <Text variant="body-1">{product.description}</Text>
-            </div>
-            <div style={{marginTop: '20px'}}>
-                <Text variant="subheader-1">ID:</Text>
-                <Text variant="body-1">{product.id}</Text>
-            </div>
-            <div style={{marginTop: '20px'}}>
-                <Text variant="subheader-1">Дата создания:</Text>
-                <Text variant="body-1">{product.createdAt}</Text>
-            </div>
-            <div style={{marginTop: '20px'}}>
-                <Text variant="subheader-1">Дата обновления:</Text>
-                <Text variant="body-1">{product.updatedAt}</Text>
-            </div>
+            <HorizontalStack align="center">
+                <Box marginRight="8px">
+                    <Icon data={Handset} />
+                </Box>
+                <Text variant="caption-2" color="secondary">
+                    ID:
+                </Text>
+                <Text variant="body-1" color="primary">
+                    {product.id ?? '???'}
+                </Text>
+            </HorizontalStack>
+            <HorizontalStack align="center">
+                <Box marginRight="8px">
+                    <Icon data={Clock} />
+                </Box>
+                <Text variant="caption-2" color="secondary">
+                    Дата создания:
+                </Text>
+                <Text variant="body-1" color="primary">
+                    {product.createdAt ?? '???'}
+                </Text>
+            </HorizontalStack>
+            <HorizontalStack align="center">
+                <Box marginRight="8px">
+                    <Icon data={ClockArrowRotateLeft} />
+                </Box>
+                <Text variant="caption-2" color="secondary">
+                    Дата обновления:
+                </Text>
+                <Text variant="body-1" color="primary">
+                    {product.updatedAt ?? '???'}
+                </Text>
+            </HorizontalStack>
         </div>
     );
 };

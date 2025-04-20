@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button} from '@gravity-ui/uikit';
+import {Button, Modal} from '@gravity-ui/uikit';
 import {MongoUser, MongoUserToCreate} from '@/generated/api-mdb';
 import {Box} from '@/components/Layout/Box';
 import {DBUsersTable} from '@/components/tables/DBUsers';
@@ -67,13 +67,15 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
             <Box marginTop="20px">
                 <DBUsersTable users={users} deleteAction={handleDeleteUser} />
             </Box>
-            {isCreateModalOpen && (
-                <DBUserForm
-                    clusterId={clusterId}
-                    closeAction={handleCloseCreateModal}
-                    submitAction={handleCreateUser}
-                />
-            )}
+            <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
+                <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
+                    <DBUserForm
+                        clusterId={clusterId}
+                        closeAction={handleCloseCreateModal}
+                        submitAction={handleCreateUser}
+                    />
+                </div>
+            </Modal>
         </div>
     );
 };

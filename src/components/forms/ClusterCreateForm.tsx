@@ -6,6 +6,8 @@ import {Button, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
 import {mdbResourcePresetsApi} from '@/app/apis';
 import {
+    InitMongoDatabase,
+    InitMongoUser,
     V1ProjectResponse,
     V1ResourcePresetResponse,
     V1ResourcePresetResponseTypeEnum,
@@ -28,12 +30,14 @@ export interface ClusterFormValues {
     storage: number;
     replicas: number;
     ownerId: string;
+    database: InitMongoDatabase;
+    user: InitMongoUser;
 }
 
 const V1StorageClassTypeEnum = {
     HDD: 'HDD',
-    SSD: 'ssd',
-    NVME: 'nvme',
+    SSD: 'SSD',
+    NVME: 'NVME',
 } as const;
 
 const DEFAULT_PRESET = V1ResourcePresetResponseTypeEnum.Standard;
@@ -76,6 +80,8 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
             storage: 0,
             replicas: 1,
             ownerId: user?.account.id ?? '',
+            database: {name: ''},
+            user: {name: '', password: ''},
         },
         validate: (values) => {
             const errors: Partial<ClusterFormValues> = {};
@@ -95,6 +101,19 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
             }
             if (!values.ownerId) {
                 errors.ownerId = 'Владелец кластера обязателен';
+            }
+            if (!values.replicas || values.replicas <= 0) {
+                errors.replicas = 1;
+            }
+            if (!values.database) {
+                errors.database = {name: 'Первая база данных обязательна'};
+            }
+            if (!values.user.name && !values.user.password) {
+                errors.user = {name: 'Имя обязательно', password: 'Пароль обязателен'};
+            } else if (!values.user.name) {
+                errors.user = {name: 'Имя обязательно', password: ''};
+            } else if (!values.user.password) {
+                errors.user = {name: '', password: 'Пароль обязателен'};
             }
             return errors;
         },
@@ -136,28 +155,41 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
 
     return (
         <div style={{maxWidth: '600px'}}>
-            <h1>Создание нового кластера</h1>
+            <Text variant="header-1">Создание нового кластера</Text>
             <form onSubmit={formik.handleSubmit}>
-                <InputField
-                    label="Название"
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange('name')}
-                    onBlur={formik.handleBlur('name')}
-                    error={formik.touched.name ? formik.errors.name : undefined}
-                    placeholder="Введите название кластера"
-                />
-                <TextAreaField
-                    label="Описание"
-                    name="description"
-                    value={formik.values.description}
-                    onChange={formik.handleChange('description')}
-                    onBlur={formik.handleBlur('description')}
-                    error={formik.touched.description ? formik.errors.description : undefined}
-                    placeholder="Введите описание кластера"
-                />
+                <div style={{marginTop: '16px', marginBottom: '16px'}}>
+                    <Text variant="subheader-2">Метаданные</Text>
+                    <InputField
+                        label="Название"
+                        name="name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange('name')}
+                        onBlur={formik.handleBlur('name')}
+                        error={formik.touched.name ? formik.errors.name : undefined}
+                        placeholder="Введите название кластера"
+                    />
+                    <TextAreaField
+                        label="Описание"
+                        name="description"
+                        value={formik.values.description}
+                        onChange={formik.handleChange('description')}
+                        onBlur={formik.handleBlur('description')}
+                        error={formik.touched.description ? formik.errors.description : undefined}
+                        placeholder="Введите описание кластера"
+                    />
+                    <ProjectSelector
+                        onProjectSelect={handleProjectSelect}
+                        label="В каком проекте создать кластер?"
+                        header="Поиск проекта для создания кластера"
+                    />
+                    <AccountSelector
+                        onAccountSelect={handleOwnerSelect}
+                        label="Кто владелец кластера?"
+                        header="Поиск владельца кластера"
+                    />
+                </div>
                 <div style={{marginBottom: '16px'}}>
-                    <Text variant="header-1">Класс хоста</Text>
+                    <Text variant="subheader-2">Класс хоста</Text>
                     <Box marginTop={8} marginBottom={8}>
                         <HorizontalStack align="center" gap={10}>
                             <Text variant="body-1">Тип</Text>
@@ -181,14 +213,14 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
                             />
                         ))}
                     </div>
-                    {formik.errors.presetId && (
+                    {formik.touched.presetId && formik.errors.presetId && (
                         <Text variant="body-1" color="danger" style={{marginTop: '4px'}}>
                             {formik.errors.presetId}
                         </Text>
                     )}
                 </div>
                 <div style={{marginBottom: '16px'}}>
-                    <Text variant="header-1">Настройка хранилища</Text>
+                    <Text variant="subheader-2">Настройка хранилища</Text>
                     <Box marginTop={8} marginBottom={8}>
                         <HorizontalStack align="center" gap={10}>
                             <Text variant="body-1">Класс хранилища</Text>
@@ -228,20 +260,36 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
                         type="number"
                     />
                 </div>
-                <Text variant="header-1">Метаданные</Text>
-                <Box marginTop={8} marginBottom={8}>
-                    <ProjectSelector
-                        onProjectSelect={handleProjectSelect}
-                        label="В каком проекте создать кластер?"
-                        header="Поиск проекта для создания кластера"
-                    />
-                    <AccountSelector
-                        onAccountSelect={handleOwnerSelect}
-                        label="Кто владелец кластера?"
-                        header="Поиск владельца кластера"
-                    />
-                </Box>
-
+                <Text variant="subheader-2">Создание новой базы данных</Text>
+                <InputField
+                    label="Название"
+                    name="name"
+                    value={formik.values.database.name}
+                    onChange={formik.handleChange('database.name')}
+                    onBlur={formik.handleBlur('database.name')}
+                    error={formik.touched.database?.name ? formik.errors.database?.name : undefined}
+                    placeholder="Введите название базы данных"
+                />
+                <Text variant="subheader-2">Создание нового пользователя</Text>
+                <InputField
+                    label="Имя пользователя"
+                    name="name"
+                    value={formik.values.user.name}
+                    onChange={formik.handleChange('user.name')}
+                    onBlur={formik.handleBlur('user.name')}
+                    error={formik.touched.user?.name ? formik.errors.user?.name : undefined}
+                    placeholder="Введите имя пользователя"
+                />
+                <InputField
+                    label="Пароль"
+                    name="password"
+                    value={formik.values.user.password}
+                    onChange={formik.handleChange('user.password')}
+                    onBlur={formik.handleBlur('user.password')}
+                    error={formik.touched.user?.password ? formik.errors.user?.password : undefined}
+                    placeholder="Введите пароль"
+                    type="password"
+                />
                 <HorizontalStack gap={20}>
                     <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
                         {formik.isSubmitting ? 'Создание...' : 'Создать кластер'}

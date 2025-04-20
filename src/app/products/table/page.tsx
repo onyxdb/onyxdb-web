@@ -5,6 +5,7 @@ import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/ui
 import {useRouter} from 'next/navigation';
 import {AccountDTO, ProductDTO} from '@/generated/api';
 import {accountsApi, productsApi} from '@/app/apis';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export default function ProductsPage() {
     const router = useRouter();
@@ -29,6 +30,11 @@ export default function ProductsPage() {
     const MyTable = withTableSorting(Table);
 
     const columns: TableColumnConfig<ProductDTO>[] = [
+        {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
         {
             id: 'name',
             name: 'Название',

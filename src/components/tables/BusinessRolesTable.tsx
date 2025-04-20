@@ -19,6 +19,7 @@ import {Eye} from '@gravity-ui/icons';
 import BusinessRoleViewModal from '@/components/modals/BusinessRoleViewModal';
 import BusinessRoleAssignModal from '@/components/modals/BusinessRoleAssignModal';
 import {useAuth} from '@/context/AuthContext';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export interface BusinessRolesTableProps {
     editAction: (businessRoleId: string) => void;
@@ -121,6 +122,11 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                     onClick={() => handleViewBusinessRole(businessRole)}
                 />
             ),
+        },
+        {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
         },
         {
             id: 'name',

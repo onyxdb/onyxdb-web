@@ -26,6 +26,8 @@ export default function ClusterCreatePage() {
                     },
                     replicas: values.replicas,
                 },
+                database: values.database,
+                user: values.user,
             };
             console.log('Cluster create request values', request);
             await mdbMongoDbApi.createCluster({v1CreateMongoClusterRequest: request});

@@ -5,6 +5,7 @@ import {Button, Label, Table, TableColumnConfig, withTableSorting} from '@gravit
 import {V1ProjectResponse} from '@/generated/api-mdb';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '../Layout/HorizontalStack';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 interface ProjectsTableProps {
     projects: V1ProjectResponse[];
@@ -25,6 +26,11 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
 
     const MyTable = withTableSorting(Table);
     const columns: TableColumnConfig<V1ProjectResponse>[] = [
+        {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
+        },
         {
             id: 'name',
             name: 'Название',

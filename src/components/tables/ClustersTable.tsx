@@ -7,6 +7,7 @@ import {Eye} from '@gravity-ui/icons';
 import {V1MongoClusterResponse} from '@/generated/api-mdb';
 import {StatusLabel} from '@/components/common/StatusLabel';
 import {useRouter} from 'next/navigation';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export interface ClustersTableProps {
     projectsIds?: string[];
@@ -20,7 +21,6 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
     const [offset, setOffset] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
     const router = useRouter();
-    // const {checkPermission} = useAuth();
 
     const fetchClusters = async () => {
         try {
@@ -84,10 +84,7 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
         {
             id: 'id',
             name: 'Id',
-            template: (item) => item.id,
-            meta: {
-                sort: true,
-            },
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'name',

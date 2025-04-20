@@ -12,7 +12,7 @@ import {Box} from '@/components/Layout/Box';
 interface AccountFormProps {
     initialValue?: AccountDTO;
     onSubmit: (values: AccountFormDTO) => void;
-    onClose: () => void;
+    closeAction: () => void;
 }
 
 export interface AccountData {
@@ -52,7 +52,7 @@ function mapDTOtoForm(data?: AccountDTO): AccountFormDTO {
 }
 
 // eslint-disable-next-line complexity
-export const AccountForm: React.FC<AccountFormProps> = ({initialValue, onSubmit, onClose}) => {
+export const AccountForm: React.FC<AccountFormProps> = ({initialValue, onSubmit, closeAction}) => {
     // const [selectedAccountId, setSelectedAccountId] = useState<string | null>(
     //     initialValue?.id ?? null,
     // );
@@ -260,7 +260,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialValue, onSubmit,
                             view="normal"
                             size="l"
                             disabled={formik.isSubmitting}
-                            onClick={onClose}
+                            onClick={closeAction}
                         >
                             Отменить
                         </Button>

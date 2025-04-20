@@ -11,6 +11,8 @@ import {
     RolesRequestsApi,
 } from '@/generated/api';
 import {
+    MDBQuotasApi,
+    ManagedMongoDBBackupsApi,
     ManagedMongoDBDatabasesApi,
     ManagedMongoDBUsersApi,
     ProjectsApi,
@@ -52,3 +54,5 @@ export const mdbResourcePresetsApi = new V1ResourcePresetsApi(configMDB, '', api
 export const mdbMongoDbApi = new V1ManagedMongoDbApi(configMDB, '', apiClient);
 export const mdbMongoDbUserApi = new ManagedMongoDBUsersApi(configMDB, '', apiClient);
 export const mdbMongoDbDatabasesApi = new ManagedMongoDBDatabasesApi(configMDB, '', apiClient);
+export const mdbMongoDbBackupsApi = new ManagedMongoDBBackupsApi(configMDB, '', apiClient);
+export const mdbMongoDbQuotasApi = new MDBQuotasApi(configMDB, '', apiClient);

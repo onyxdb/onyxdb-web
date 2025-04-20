@@ -46,7 +46,7 @@ export default function CreateRolePage() {
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleCreate}
-                onClose={handleCreateModalCancel}
+                closeAction={handleCreateModalCancel}
                 initialValue={undefined}
             />
         </div>

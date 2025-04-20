@@ -69,7 +69,7 @@ export default function EditRolePage() {
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleEdit}
-                onClose={handleEditModalCancel}
+                closeAction={handleEditModalCancel}
                 initialValue={role}
             />
         </div>

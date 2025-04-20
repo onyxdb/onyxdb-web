@@ -89,7 +89,7 @@ export default function AccountsPage({}: AccountsPageProps) {
                 <AccountForm
                     initialValue={editingAccount ?? undefined}
                     onSubmit={handleSubmitCreate}
-                    onClose={handleCloseCreateModal}
+                    closeAction={handleCloseCreateModal}
                 />
             </Modal>
         </div>

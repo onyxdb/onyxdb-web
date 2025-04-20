@@ -266,8 +266,8 @@ export default function StructurePage({}: StructurePageProps) {
             <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                 <DomainComponentForm
                     initialValue={editingDomainComponent}
-                    onSubmit={handleDcSubmitCreate}
-                    onClose={handleCloseCreateModal}
+                    submitAction={handleDcSubmitCreate}
+                    closeAction={handleCloseCreateModal}
                 />
             </Modal>
         </div>

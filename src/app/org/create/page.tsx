@@ -47,7 +47,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
 
     return (
         <div style={{padding: '20px'}}>
-            <OrgCreateForm onSubmit={handleSubmitCreate} onClose={handleClose} />
+            <OrgCreateForm onSubmit={handleSubmitCreate} closeAction={handleClose} />
         </div>
     );
 }

@@ -12,7 +12,7 @@ import {TextAreaField} from '@/components/formik/TextAreaField';
 
 interface OrgCreateFormProps {
     onSubmit: (values: OrgUnitFormFields) => void;
-    onClose: () => void;
+    closeAction: () => void;
 }
 
 export interface OrgUnitFormFields {
@@ -26,7 +26,7 @@ export interface OrgUnitFormFields {
     ownerAccountId: string;
 }
 
-export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, onClose}) => {
+export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeAction}) => {
     const [domainComponents, setDomainComponents] = useState<DomainComponentDTO[]>([]);
     const [parentOuOptions, setParentOuOptions] = useState<OrganizationUnitDTO[]>([]);
     const [accountOptions, setAccountOptions] = useState<AccountDTO[]>([]);
@@ -393,7 +393,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, onClose})
                             view="normal"
                             size="l"
                             disabled={formik.isSubmitting}
-                            onClick={onClose}
+                            onClick={closeAction}
                         >
                             {'Отменить'}
                         </Button>

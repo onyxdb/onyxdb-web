@@ -70,8 +70,8 @@ export default function BusinessRoleEditPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <BusinessRoleEditForm
-                onSubmit={handleBusinessRoleEdit}
-                onClose={handleModalCancel}
+                submitAction={handleBusinessRoleEdit}
+                closeAction={handleModalCancel}
                 initialValue={businessRole}
             />
         </div>

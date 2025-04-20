@@ -497,7 +497,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                 <AccountForm
                     initialValue={account}
                     onSubmit={handleSubmitEdit}
-                    onClose={handleCloseEditModal}
+                    closeAction={handleCloseEditModal}
                 />
             </Modal>
         </div>

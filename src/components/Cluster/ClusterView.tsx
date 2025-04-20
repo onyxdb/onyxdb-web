@@ -11,6 +11,7 @@ import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
 import UsersTab from '@/components/Cluster/tabs/UsersTab';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import GrafanaFrame from '@/components/GrafanaFrame';
+import BackupsTab from '@/components/Cluster/tabs/BackupsTab';
 
 interface ClusterViewPageProps {
     clusterId: string;
@@ -106,8 +107,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                             <GrafanaFrame dashboardId="bdpzp3w3jkt8ga" />
                         </TabPanel>
                         <TabPanel value="backups">
-                            {/* Содержимое вкладки резервных копий */}
-                            <Text>Резервные копии кластера будут здесь</Text>
+                            <BackupsTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="operation">
                             {/* Содержимое вкладки операций */}

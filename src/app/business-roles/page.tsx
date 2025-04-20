@@ -80,8 +80,8 @@ export default function BusinessRolesPage() {
             </div>
             <Modal open={isCreateModalVisible} onOpenChange={handleCreateModalCancel}>
                 <BusinessRoleForm
-                    onSubmit={handleBusinessRoleCreate}
-                    onClose={handleCreateModalCancel}
+                    submitAction={handleBusinessRoleCreate}
+                    closeAction={handleCreateModalCancel}
                 />
             </Modal>
         </div>

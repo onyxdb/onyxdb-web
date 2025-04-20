@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
-import {Button, Modal, Text} from '@gravity-ui/uikit';
+import {Button, Text} from '@gravity-ui/uikit';
 import {V1CreateProjectRequest, V1ProjectResponse} from '@/generated/api-mdb';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
@@ -75,55 +75,53 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     }, [initialValue]);
 
     return (
-        <Modal open={true} onOpenChange={closeAction}>
-            <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
-                <Text variant="header-1">
-                    {initialValue ? 'Редактирование проекта' : 'Создание нового проекта'}
-                </Text>
-                <form onSubmit={formik.handleSubmit} style={{marginTop: '20px'}}>
-                    <InputField
-                        label="Название"
-                        name="name"
-                        value={formik.values.name}
-                        onChange={formik.handleChange('name')}
-                        onBlur={formik.handleBlur('name')}
-                        error={formik.touched.name ? formik.errors.name : undefined}
-                        placeholder="Введите название проекта"
+        <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
+            <Text variant="header-1">
+                {initialValue ? 'Редактирование проекта' : 'Создание нового проекта'}
+            </Text>
+            <form onSubmit={formik.handleSubmit} style={{marginTop: '20px'}}>
+                <InputField
+                    label="Название"
+                    name="name"
+                    value={formik.values.name}
+                    onChange={formik.handleChange('name')}
+                    onBlur={formik.handleBlur('name')}
+                    error={formik.touched.name ? formik.errors.name : undefined}
+                    placeholder="Введите название проекта"
+                />
+                <TextAreaField
+                    label="Описание"
+                    name="description"
+                    value={formik.values.description}
+                    onChange={formik.handleChange('description')}
+                    onBlur={formik.handleBlur('description')}
+                    error={formik.touched.description ? formik.errors.description : undefined}
+                    placeholder="Введите описание проекта"
+                />
+                {!initialValue && (
+                    <ProductSelector
+                        selectProductAction={handleProductSelect}
+                        initialValue={initialProduct ?? undefined}
+                        label="В каком продукте создать проект?"
+                        header="Поиск продукта"
                     />
-                    <TextAreaField
-                        label="Описание"
-                        name="description"
-                        value={formik.values.description}
-                        onChange={formik.handleChange('description')}
-                        onBlur={formik.handleBlur('description')}
-                        error={formik.touched.description ? formik.errors.description : undefined}
-                        placeholder="Введите описание проекта"
-                    />
-                    {!initialValue && (
-                        <ProductSelector
-                            selectProductAction={handleProductSelect}
-                            initialValue={initialProduct ?? undefined}
-                            label="В каком продукте создать проект?"
-                            header="Поиск продукта"
-                        />
-                    )}
-                    <HorizontalStack>
-                        <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
-                            {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                )}
+                <HorizontalStack>
+                    <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
+                        {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                    </Button>
+                    <Box marginLeft="20px">
+                        <Button
+                            view="normal"
+                            size="l"
+                            onClick={closeAction}
+                            disabled={formik.isSubmitting}
+                        >
+                            Отмена
                         </Button>
-                        <Box marginLeft="20px">
-                            <Button
-                                view="normal"
-                                size="l"
-                                onClick={closeAction}
-                                disabled={formik.isSubmitting}
-                            >
-                                Отмена
-                            </Button>
-                        </Box>
-                    </HorizontalStack>
-                </form>
-            </div>
-        </Modal>
+                    </Box>
+                </HorizontalStack>
+            </form>
+        </div>
     );
 };

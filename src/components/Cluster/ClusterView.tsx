@@ -10,6 +10,7 @@ import HostsTab from '@/components/Cluster/tabs/HostsTab';
 import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
 import UsersTab from '@/components/Cluster/tabs/UsersTab';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
+import GrafanaFrame from '@/components/GrafanaFrame';
 
 interface ClusterViewPageProps {
     clusterId: string;
@@ -84,7 +85,6 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                         <Tab value="monitoring">Мониторинг</Tab>
                         <Tab value="operation">Операции</Tab>
                         <Tab value="backups">Резервные копии</Tab>
-                        <Tab value="alerts">Алерты</Tab>
                     </TabList>
                     <Box marginTop="10px">
                         <TabPanel value="info">
@@ -99,21 +99,19 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                         <TabPanel value="users">
                             <UsersTab clusterId={cluster.id} />
                         </TabPanel>
-                        <TabPanel value="logs">
-                            {/* Содержимое вкладки логов */}
-                            <Text>Логи кластера будут здесь</Text>
-                        </TabPanel>
                         <TabPanel value="monitoring">
-                            {/* Содержимое вкладки мониторинга */}
-                            <Text>Мониторинг кластера будет здесь</Text>
+                            <GrafanaFrame dashboardId="SsEeTs97k" />
                         </TabPanel>
-                        <TabPanel value="operation">
-                            {/* Содержимое вкладки операций */}
-                            <Text>Операции кластера будут здесь</Text>
+                        <TabPanel value="logs">
+                            <GrafanaFrame dashboardId="bdpzp3w3jkt8ga" />
                         </TabPanel>
                         <TabPanel value="backups">
                             {/* Содержимое вкладки резервных копий */}
                             <Text>Резервные копии кластера будут здесь</Text>
+                        </TabPanel>
+                        <TabPanel value="operation">
+                            {/* Содержимое вкладки операций */}
+                            <Text>Операции кластера будут здесь</Text>
                         </TabPanel>
                     </Box>
                 </TabProvider>

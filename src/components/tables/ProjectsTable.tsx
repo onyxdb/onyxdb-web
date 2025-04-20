@@ -2,13 +2,13 @@
 
 import React from 'react';
 import {Button, Label, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {useRouter} from 'next/navigation';
 import {V1ProjectResponse} from '@/generated/api-mdb';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '../Layout/HorizontalStack';
 
 interface ProjectsTableProps {
     projects: V1ProjectResponse[];
+    onView?: (project: V1ProjectResponse) => void;
     onEdit?: (project: V1ProjectResponse) => void;
     onArchive?: (id: string) => void;
     onUnarchive?: (id: string) => void;
@@ -16,11 +16,11 @@ interface ProjectsTableProps {
 
 export const ProjectsTable: React.FC<ProjectsTableProps> = ({
     projects,
+    onView,
     onEdit,
     onArchive,
     onUnarchive,
 }) => {
-    const router = useRouter();
     const {checkPermission} = useAuth();
 
     const MyTable = withTableSorting(Table);
@@ -31,7 +31,7 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
             template: (project) => (
                 <span
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
-                    onClick={() => router.push(`/projects/view/${project.id}`)}
+                    onClick={() => onView?.(project)}
                 >
                     {project.name} {project.isArchived && <Label theme="warning">Архив</Label>}
                 </span>

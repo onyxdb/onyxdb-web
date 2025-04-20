@@ -1,7 +1,7 @@
 // pages/projects/index.tsx
 'use client';
 import React, {useEffect, useState} from 'react';
-import {Button, Checkbox, Text, TextInput} from '@gravity-ui/uikit';
+import {Button, Checkbox, Modal, Text, TextInput} from '@gravity-ui/uikit';
 import {
     V1CreateProjectRequest,
     V1ProjectResponse,
@@ -17,13 +17,15 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {ProductSelector} from '@/components/ProductSelector';
 import {ProductDTO} from '@/generated/api';
+import {ProjectBlock} from '@/components/ProjectBlock';
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
     const [filteredProjects, setFilteredProjects] = useState<V1ProjectResponse[]>([]);
+    const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    const [editingProject, setEditingProject] = useState<V1ProjectResponse | null>(null);
+    const [selectedProject, setSelectedProject] = useState<V1ProjectResponse | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [showArchived, setShowArchived] = useState<boolean>(false);
     const [productId, setProductId] = useState<string | null>(null);
@@ -54,17 +56,26 @@ export default function ProjectsPage() {
     };
 
     const handleEditProject = (project: V1UpdateProjectRequest) => {
-        if (editingProject?.id) {
+        if (selectedProject?.id) {
             mdbProjectsApi
-                .updateProject({projectId: editingProject.id, v1UpdateProjectRequest: project})
+                .updateProject({projectId: selectedProject.id, v1UpdateProjectRequest: project})
                 .then(() => {
                     fetchProjects();
                     setIsEditModalOpen(false);
                 })
                 .catch((error) =>
-                    console.error('Error updating project:', editingProject.id, error),
+                    console.error('Error updating project:', selectedProject.id, error),
                 );
         }
+    };
+
+    const handleOpenViewModal = (project: V1ProjectResponse) => {
+        setSelectedProject(project);
+        setIsViewModalOpen(true);
+    };
+
+    const handleCloseViewModal = () => {
+        setIsViewModalOpen(false);
     };
 
     const handleOpenCreateModal = () => {
@@ -76,19 +87,20 @@ export default function ProjectsPage() {
     };
 
     const handleOpenEditModal = (project: V1ProjectResponse) => {
-        setEditingProject(project);
+        setSelectedProject(project);
         setIsEditModalOpen(true);
     };
 
     const handleCloseEditModal = () => {
         setIsEditModalOpen(false);
-        setEditingProject(null);
+        setSelectedProject(null);
     };
 
     const handleArchive = async (id: string) => {
         try {
             await mdbProjectsApi.archiveProject({projectId: id});
             await fetchProjects();
+            setIsViewModalOpen(false);
         } catch (error) {
             console.error('Error Archiving projects:', error);
         }
@@ -98,6 +110,7 @@ export default function ProjectsPage() {
         try {
             await mdbProjectsApi.unarchiveProject({projectId: id});
             await fetchProjects();
+            setIsViewModalOpen(false);
         } catch (error) {
             console.error('Error unArchiving projects:', error);
         }
@@ -177,23 +190,35 @@ export default function ProjectsPage() {
                 <ProductSelector selectProductAction={handleProductSelect} />
                 <ProjectsTable
                     projects={filteredProjects}
+                    onView={handleOpenViewModal}
                     onEdit={handleOpenEditModal}
                     onArchive={handleArchive}
                     onUnarchive={handleUnArchive}
                 />
-                {isCreateModalOpen && (
+                <Modal open={isViewModalOpen} onOpenChange={handleCloseViewModal}>
+                    {selectedProject && (
+                        <ProjectBlock
+                            data={selectedProject}
+                            archiveAction={handleArchive}
+                            unArchiveAction={handleUnArchive}
+                        />
+                    )}
+                </Modal>
+                <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                     <ProjectForm
                         closeAction={handleCloseCreateModal}
                         submitAction={handleCreateProject}
                     />
-                )}
-                {isEditModalOpen && editingProject && (
-                    <ProjectForm
-                        closeAction={handleCloseEditModal}
-                        submitAction={handleEditProject}
-                        initialValue={editingProject}
-                    />
-                )}
+                </Modal>
+                <Modal open={isEditModalOpen} onOpenChange={handleCloseEditModal}>
+                    {selectedProject && (
+                        <ProjectForm
+                            closeAction={handleCloseEditModal}
+                            submitAction={handleEditProject}
+                            initialValue={selectedProject}
+                        />
+                    )}
+                </Modal>
             </div>
         </div>
     );

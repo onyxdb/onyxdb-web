@@ -18,10 +18,21 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {AccountDTO} from '@/generated/api';
 import {UserBlock} from '@/components/common/UserBlock';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 interface DatabasesTableProps {
     databases: MongoDatabase[];
     deleteAction: (databaseId: string) => void;
+}
+
+export function parseDateArray(dateArray: number[] | string): Date {
+    if (typeof dateArray === 'string') {
+        return new Date(dateArray);
+    }
+    // Обратите внимание, что месяц уменьшается на 1, так как в JavaScript месяцы 0-11
+    const [year, month, day, hours, minutes, seconds, milliseconds] = dateArray;
+    // Делим последнее число на 1e6, если оно включает наносекунды (как 812113000)
+    return new Date(year, month - 1, day, hours, minutes, seconds, milliseconds / 1e6);
 }
 
 export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, deleteAction}) => {
@@ -31,34 +42,33 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
     const [popupAnchor, setPopupAnchor] = useState<HTMLElement | null>(null);
     const [popupContent, setPopupContent] = useState<string>('');
 
+    // Загружаем и кэшируем данные пользователей
+    const fetchUsers = async () => {
+        const userIds = new Set<string>();
+        databases.forEach((db) => {
+            if (db.createdBy) userIds.add(db.createdBy);
+            if (db.deletedBy) userIds.add(db.deletedBy);
+        });
+
+        const userPromises = Array.from(userIds).map(async (userId) => {
+            try {
+                const userResponse = await accountsApi.getAccountById({accountId: userId});
+                return {id: userId, user: userResponse.data};
+            } catch (error) {
+                console.error(`Error fetching user with id ${userId}:`, error);
+                return {id: userId, user: null};
+            }
+        });
+
+        const users = await Promise.all(userPromises);
+        const userMap: {[key: string]: AccountDTO | null} = {};
+        users.forEach((user) => {
+            userMap[user.id] = user.user;
+        });
+        setUserCache(userMap);
+    };
+
     useEffect(() => {
-        // Загружаем и кэшируем данные пользователей
-        const fetchUsers = async () => {
-            const userIds = new Set<string>();
-            databases.forEach((db) => {
-                if (db.createdBy) userIds.add(db.createdBy);
-                if (db.deletedBy) userIds.add(db.deletedBy);
-            });
-
-            console.log('userIds:', userIds);
-            const userPromises = Array.from(userIds).map(async (userId) => {
-                try {
-                    const userResponse = await accountsApi.getAccountById({accountId: userId});
-                    return {id: userId, user: userResponse.data};
-                } catch (error) {
-                    console.error(`Error fetching user with id ${userId}:`, error);
-                    return {id: userId, user: null};
-                }
-            });
-
-            const users = await Promise.all(userPromises);
-            const userMap: {[key: string]: AccountDTO | null} = {};
-            users.forEach((user) => {
-                userMap[user.id] = user.user;
-            });
-            setUserCache(userMap);
-        };
-
         fetchUsers();
     }, [databases]);
 
@@ -80,48 +90,16 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
     const MyTable = withTableSorting(Table);
     const columns: TableColumnConfig<MongoDatabase>[] = [
         {
+            id: 'id',
+            name: 'ID',
+            template: (database) => <TextWithCopy text={database.id} maxLength={5} />,
+        },
+        {
             id: 'name',
             name: 'Название',
-            meta: {
-                sort: true,
-            },
-        },
-        {
-            id: 'createdAt',
-            name: 'Дата создания',
-            meta: {
-                sort: true,
-            },
-            template: (database) => (
-                <Text variant="subheader-1" color="secondary">
-                    {new Date(database.createdAt).toLocaleString()}
-                </Text>
-            ),
-        },
-        {
-            id: 'createdBy',
-            name: 'Создано',
-            meta: {
-                sort: true,
-            },
-            template: (database) => (
-                <Text variant="subheader-1" color="secondary">
-                    {userCache[database.createdBy] === null ? (
-                        'Неизвестно'
-                    ) : (
-                        <UserBlock
-                            // @ts-ignore
-                            account={userCache[database.createdBy]}
-                        />
-                    )}
-                </Text>
-            ),
-        },
-        {
-            id: 'status',
-            name: 'Статус',
             template: (database) => (
                 <HorizontalStack gap={10}>
+                    <Text variant="subheader-1">{database.name}</Text>
                     {database.isDeleted && (
                         <Label theme="warning">
                             Удалена
@@ -142,6 +120,40 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
                         </Label>
                     )}
                 </HorizontalStack>
+            ),
+            meta: {
+                sort: true,
+            },
+        },
+        {
+            id: 'createdAt',
+            name: 'Дата создания',
+            meta: {
+                sort: true,
+            },
+            template: (database) => (
+                <Text variant="subheader-1" color="secondary">
+                    {parseDateArray(database.createdAt).toLocaleString()}
+                </Text>
+            ),
+        },
+        {
+            id: 'createdBy',
+            name: 'Создано',
+            meta: {
+                sort: true,
+            },
+            template: (database) => (
+                <Text variant="subheader-1" color="secondary">
+                    {userCache[database.createdBy] === null ? (
+                        'Неизвестно'
+                    ) : (
+                        <UserBlock
+                            // @ts-ignore
+                            account={userCache[database.createdBy]}
+                        />
+                    )}
+                </Text>
             ),
         },
         {

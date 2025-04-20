@@ -182,7 +182,9 @@ export const ClusterCreateForm: React.FC<ClusterCreateFormProps> = ({
                         ))}
                     </div>
                     {formik.errors.presetId && (
-                        <div style={{color: 'red', marginTop: '4px'}}>{formik.errors.presetId}</div>
+                        <Text variant="body-1" color="danger" style={{marginTop: '4px'}}>
+                            {formik.errors.presetId}
+                        </Text>
                     )}
                 </div>
                 <div style={{marginBottom: '16px'}}>

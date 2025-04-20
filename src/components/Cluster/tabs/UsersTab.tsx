@@ -19,6 +19,7 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
     const fetchData = async () => {
         try {
             const usersResponse = await mdbMongoDbUserApi.listUsers({clusterId});
+            console.log('usersResponse', usersResponse);
             setUsers(usersResponse.data.users);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -67,7 +68,11 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
                 <DBUsersTable users={users} deleteAction={handleDeleteUser} />
             </Box>
             {isCreateModalOpen && (
-                <DBUserForm closeAction={handleCloseCreateModal} submitAction={handleCreateUser} />
+                <DBUserForm
+                    clusterId={clusterId}
+                    closeAction={handleCloseCreateModal}
+                    submitAction={handleCreateUser}
+                />
             )}
         </div>
     );

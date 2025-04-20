@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     Button,
+    Card,
     Checkbox,
     Label,
     Modal,
@@ -19,6 +20,9 @@ import {formatDistanceToNow} from 'date-fns';
 import {ru} from 'date-fns/locale';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
+import {parseDateArray} from '@/components/tables/DatabasesTable';
+import {VerticalStack} from '@/components/Layout/VerticalStack';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 interface DBUsersTableProps {
     users: MongoUser[];
@@ -35,67 +39,67 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
 
+    // Загружаем и кэшируем данные пользователей
+    const fetchUsers = async () => {
+        const userIds = new Set<string>();
+        users.forEach((user) => {
+            if (user.createdBy) userIds.add(user.createdBy);
+            if (user.deletedBy) userIds.add(user.deletedBy);
+        });
+
+        const userPromises = Array.from(userIds).map(async (userId) => {
+            try {
+                const userResponse = await accountsApi.getAccountById({accountId: userId});
+                return {id: userId, name: userResponse.data.username};
+            } catch (error) {
+                console.error(`Error fetching user with id ${userId}:`, error);
+                return {id: userId, name: 'Неизвестный пользователь'};
+            }
+        });
+
+        const usersData = await Promise.all(userPromises);
+        const userMap: {[key: string]: string} = {};
+        usersData.forEach((user) => {
+            userMap[user.id] = user.name;
+        });
+        setUserCache(userMap);
+    };
+
     useEffect(() => {
-        // Загружаем и кэшируем данные пользователей
-        const fetchUsers = async () => {
-            const userIds = new Set<string>();
-            users.forEach((user) => {
-                if (user.createdBy) userIds.add(user.createdBy);
-                if (user.deletedBy) userIds.add(user.deletedBy);
-            });
-
-            const userPromises = Array.from(userIds).map(async (userId) => {
-                try {
-                    const userResponse = await accountsApi.getAccountById({accountId: userId});
-                    return {id: userId, name: userResponse.data.username};
-                } catch (error) {
-                    console.error(`Error fetching user with id ${userId}:`, error);
-                    return {id: userId, name: 'Неизвестный пользователь'};
-                }
-            });
-
-            const usersData = await Promise.all(userPromises);
-            const userMap: {[key: string]: string} = {};
-            usersData.forEach((user) => {
-                userMap[user.id] = user.name;
-            });
-            setUserCache(userMap);
-        };
-
         fetchUsers();
     }, [users]);
 
-    useEffect(() => {
-        // Загружаем и кэшируем данные разрешений
-        const fetchPermissions = async () => {
-            const permissionIds = new Set<string>();
-            users.forEach((user) => {
-                user.permissions.forEach((permission) => {
-                    if (permission.createdBy) permissionIds.add(permission.createdBy);
-                    if (permission.deletedBy) permissionIds.add(permission.deletedBy);
+    // Загружаем и кэшируем данные разрешений
+    const fetchPermissions = async () => {
+        const permissionIds = new Set<string>();
+        users.forEach((user) => {
+            user.permissions.forEach((permission) => {
+                if (permission.createdBy) permissionIds.add(permission.createdBy);
+                if (permission.deletedBy) permissionIds.add(permission.deletedBy);
+            });
+        });
+
+        const permissionPromises = Array.from(permissionIds).map(async (permissionId) => {
+            try {
+                const permissionResponse = await accountsApi.getAccountById({
+                    accountId: permissionId,
                 });
-            });
+                return {id: permissionId, name: permissionResponse.data.username};
+            } catch (error) {
+                console.error(`Error fetching permission user with id ${permissionId}:`, error);
+                return {id: permissionId, name: 'Неизвестный пользователь'};
+            }
+        });
 
-            const permissionPromises = Array.from(permissionIds).map(async (permissionId) => {
-                try {
-                    const permissionResponse = await accountsApi.getAccountById({
-                        accountId: permissionId,
-                    });
-                    return {id: permissionId, name: permissionResponse.data.username};
-                } catch (error) {
-                    console.error(`Error fetching permission user with id ${permissionId}:`, error);
-                    return {id: permissionId, name: 'Неизвестный пользователь'};
-                }
-            });
+        const permissionsData = await Promise.all(permissionPromises);
+        const permissionMap: {[key: string]: string} = {};
+        permissionsData.forEach((permission) => {
+            permissionMap[permission.id] = permission.name;
+        });
+        setPermissionCache(permissionMap);
+    };
 
-            const permissionsData = await Promise.all(permissionPromises);
-            const permissionMap: {[key: string]: string} = {};
-            permissionsData.forEach((permission) => {
-                permissionMap[permission.id] = permission.name;
-            });
-            setPermissionCache(permissionMap);
-        };
-
+    useEffect(() => {
         fetchPermissions();
     }, [users]);
 
@@ -127,6 +131,11 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
     const MyTable = withTableSorting(Table);
     const columns: TableColumnConfig<MongoUser>[] = [
         {
+            id: 'id',
+            name: 'ID',
+            template: (user) => <TextWithCopy text={user.id} maxLength={8} />,
+        },
+        {
             id: 'name',
             name: 'Имя пользователя',
             meta: {
@@ -141,7 +150,7 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
             },
             template: (user) => (
                 <Text variant="subheader-1" color="secondary">
-                    {new Date(user.createdAt).toLocaleString()}
+                    {parseDateArray(user.createdAt).toLocaleString()}
                 </Text>
             ),
         },
@@ -163,37 +172,39 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
             template: (user) => (
                 <div>
                     {user.permissions.map((permission) => (
-                        <div key={permission.id}>
-                            <Text variant="subheader-1" color="secondary">
-                                База данных: {permission.databaseId}
-                            </Text>
-                            <Text variant="subheader-1" color="secondary">
-                                Роли: {permission.roles.join(', ')}
-                            </Text>
-                            {permission.isDeleted && (
-                                <Label theme="warning">
-                                    Удалено{' '}
-                                    {formatDistanceToNow(new Date(permission.deletedAt), {
-                                        locale: ru,
-                                        addSuffix: true,
-                                    })}
-                                    <Button
-                                        view="flat"
-                                        size="xs"
-                                        onClick={(event) =>
-                                            handleTogglePopup(
-                                                event,
-                                                `Удалено ${new Date(permission.deletedAt).toLocaleString()} пользователем ${permissionCache[permission.deletedBy] || 'Загрузка...'}`,
-                                            )
-                                        }
-                                    >
-                                        <Text variant="body-1" color="secondary">
-                                            Подробнее
-                                        </Text>
-                                    </Button>
-                                </Label>
-                            )}
-                        </div>
+                        <Card key={permission.id} style={{padding: '2px'}}>
+                            <VerticalStack>
+                                <Text variant="subheader-1" color="secondary">
+                                    База данных: {permission.databaseId}
+                                </Text>
+                                <Text variant="subheader-1" color="secondary">
+                                    Роли: {permission.roles.join(', ')}
+                                </Text>
+                                {permission.isDeleted && (
+                                    <Label theme="warning">
+                                        Удалено{' '}
+                                        {formatDistanceToNow(new Date(permission.deletedAt), {
+                                            locale: ru,
+                                            addSuffix: true,
+                                        })}
+                                        <Button
+                                            view="flat"
+                                            size="xs"
+                                            onClick={(event) =>
+                                                handleTogglePopup(
+                                                    event,
+                                                    `Удалено ${new Date(permission.deletedAt).toLocaleString()} пользователем ${permissionCache[permission.deletedBy] || 'Загрузка...'}`,
+                                                )
+                                            }
+                                        >
+                                            <Text variant="body-1" color="secondary">
+                                                Подробнее
+                                            </Text>
+                                        </Button>
+                                    </Label>
+                                )}
+                            </VerticalStack>
+                        </Card>
                     ))}
                 </div>
             ),
@@ -275,8 +286,8 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
                     <Text variant="subheader-1">{popupContent}</Text>
                 </div>
             </Popup>
-            {isDeleteModalOpen && deletingUserId && (
-                <Modal open={true} onOpenChange={handleCloseDeleteModal}>
+            <Modal open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
+                {deletingUserId && (
                     <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
                         <Text variant="header-1">Подтверждение удаления пользователя</Text>
                         <Box marginTop="20px">
@@ -286,7 +297,7 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
                             </Text>
                         </Box>
                         <Box marginTop="20px">
-                            <HorizontalStack>
+                            <HorizontalStack gap={20}>
                                 <Button
                                     view="outlined-danger"
                                     size="m"
@@ -294,16 +305,14 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
                                 >
                                     Удалить
                                 </Button>
-                                <Box marginLeft="20px">
-                                    <Button view="normal" size="m" onClick={handleCloseDeleteModal}>
-                                        Отмена
-                                    </Button>
-                                </Box>
+                                <Button view="normal" size="m" onClick={handleCloseDeleteModal}>
+                                    Отмена
+                                </Button>
                             </HorizontalStack>
                         </Box>
                     </div>
-                </Modal>
-            )}
+                )}
+            </Modal>
         </div>
     );
 };

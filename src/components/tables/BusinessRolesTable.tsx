@@ -49,6 +49,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                 limit,
                 offset,
             });
+            console.log('businessRoles response', response.data.data);
             setBusinessRoles(response.data.data ?? []);
             setTotal(response.data.totalCount ?? 0);
         } catch (error) {

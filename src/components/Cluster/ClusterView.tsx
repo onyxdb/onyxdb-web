@@ -9,6 +9,7 @@ import InfoTab from '@/components/Cluster/tabs/InfoTab';
 import HostsTab from '@/components/Cluster/tabs/HostsTab';
 import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
 import UsersTab from '@/components/Cluster/tabs/UsersTab';
+import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 
 interface ClusterViewPageProps {
     clusterId: string;
@@ -16,30 +17,49 @@ interface ClusterViewPageProps {
 
 // eslint-disable-next-line no-empty-pattern
 export default function ClusterView({clusterId}: ClusterViewPageProps) {
-    const [activeTab, setActiveTab] = useState<string>('info');
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get('tab') || 'info';
+
+    const [activeTab, setActiveTab] = useState(tab);
     const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
     const [clusterPreset, setClusterPreset] = useState<V1ResourcePresetResponse | null>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const clusterResponse = await mdbMongoDbApi.getCluster({clusterId});
-                setCluster(clusterResponse.data);
+    const fetchData = async () => {
+        try {
+            const clusterResponse = await mdbMongoDbApi.getCluster({clusterId});
+            setCluster(clusterResponse.data);
 
-                if (clusterResponse.data?.config?.resources?.presetId) {
-                    console.log('preset', clusterResponse);
-                    const presetResponse = await mdbResourcePresetsApi.getResourcePreset({
-                        resourcePresetId: clusterResponse.data.config.resources.presetId,
-                    });
-                    setClusterPreset(presetResponse.data);
-                }
-            } catch (error) {
-                console.error('Error fetching cluster:', error);
+            if (clusterResponse.data?.config?.resources?.presetId) {
+                console.log('preset', clusterResponse);
+                const presetResponse = await mdbResourcePresetsApi.getResourcePreset({
+                    resourcePresetId: clusterResponse.data.config.resources.presetId,
+                });
+                setClusterPreset(presetResponse.data);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching cluster:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchData();
     }, [clusterId]);
+
+    useEffect(() => {
+        setActiveTab(tab);
+    }, [tab]);
+
+    const handleTabChange = (value: string) => {
+        const createQueryString = (name: string, val: string) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set(name, val);
+            return params.toString();
+        };
+        setActiveTab(value);
+        router.push(pathname + '?' + createQueryString('tab', value));
+    };
 
     if (!cluster || !clusterPreset) {
         return <div>No data</div>;
@@ -54,7 +74,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                 </Text>
             </Box>
             <Box marginTop="20px">
-                <TabProvider value={activeTab} onUpdate={setActiveTab}>
+                <TabProvider value={activeTab} onUpdate={handleTabChange}>
                     <TabList>
                         <Tab value="info">Обзор</Tab>
                         <Tab value="hosts">Хосты</Tab>
@@ -94,10 +114,6 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
                         <TabPanel value="backups">
                             {/* Содержимое вкладки резервных копий */}
                             <Text>Резервные копии кластера будут здесь</Text>
-                        </TabPanel>
-                        <TabPanel value="alerts">
-                            {/* Содержимое вкладки алертов */}
-                            <Text>Алерты кластера будут здесь</Text>
                         </TabPanel>
                     </Box>
                 </TabProvider>

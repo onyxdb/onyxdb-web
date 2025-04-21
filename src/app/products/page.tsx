@@ -206,15 +206,15 @@ export default function ProductsPage({}: ProductsPageProps) {
                         closeAction={handleCloseCreateModal}
                     />
                 </Modal>
-                {selectedProduct && (
-                    <Modal open={isEditModalOpen} onOpenChange={handleCloseEditModal}>
+                <Modal open={isEditModalOpen} onOpenChange={handleCloseEditModal}>
+                    {selectedProduct && (
                         <ProductForm
                             onSubmit={handleProductEditSubmit}
                             closeAction={handleCloseEditModal}
                             initialValue={selectedProduct}
                         />
-                    </Modal>
-                )}
+                    )}
+                </Modal>
             </div>
         </div>
     );

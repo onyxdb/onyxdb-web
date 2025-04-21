@@ -16,7 +16,7 @@ import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {ProductSelector} from '@/components/ProductSelector';
-import {ProductDTO} from '@/generated/api';
+import {ProductDTOGet} from '@/generated/api';
 import {ProjectBlock} from '@/components/ProjectBlock';
 
 export default function ProjectsPage() {
@@ -138,7 +138,7 @@ export default function ProjectsPage() {
         fetchFilteredProjects();
     }, [searchQuery, showArchived, productId]);
 
-    const handleProductSelect = (data: ProductDTO) => {
+    const handleProductSelect = (data: ProductDTOGet) => {
         if (data.id) {
             setProductId(data.id);
             fetchFilteredProjects();

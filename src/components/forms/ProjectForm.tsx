@@ -9,7 +9,7 @@ import {TextAreaField} from '@/components/formik/TextAreaField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {ProductSelector} from '@/components/ProductSelector';
-import {ProductDTO} from '@/generated/api';
+import {ProductDTOGet} from '@/generated/api';
 import {productsApi} from '@/app/apis';
 
 interface ProjectFormProps {
@@ -23,7 +23,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     submitAction,
     initialValue,
 }) => {
-    const [initialProduct, setInitialProduct] = useState<ProductDTO | null>(null);
+    const [initialProduct, setInitialProduct] = useState<ProductDTOGet | null>(null);
 
     const formik = useFormik<V1CreateProjectRequest>({
         initialValues: {
@@ -54,7 +54,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         },
     });
 
-    const handleProductSelect = (product: ProductDTO) => {
+    const handleProductSelect = (product: ProductDTOGet) => {
         console.log('ProjectForm handleProductSelect', product);
         formik.setFieldValue('productId', product.id);
     };

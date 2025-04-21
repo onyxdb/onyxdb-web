@@ -2,14 +2,14 @@
 
 import React from 'react';
 import {Card, Text} from '@gravity-ui/uikit';
-import {ProductDTO} from '@/generated/api';
+import {ProductDTOGet} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {Box} from '@/components/Layout/Box';
 
 interface ProductSmallCardProps {
-    product: ProductDTO;
-    onSelect: (product: ProductDTO) => void;
+    product: ProductDTOGet;
+    onSelect: (product: ProductDTOGet) => void;
 }
 
 export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSelect}) => {

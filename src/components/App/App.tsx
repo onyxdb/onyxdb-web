@@ -13,7 +13,7 @@ import {
     Sun,
 } from '@gravity-ui/icons';
 import {AsideHeader, FooterItem} from '@gravity-ui/navigation';
-import {ThemeProvider} from '@gravity-ui/uikit';
+import {ThemeProvider, Toaster, ToasterComponent, ToasterProvider} from '@gravity-ui/uikit';
 import {LoginInfo} from '@/components/Login/LoginInfo';
 import {usePathname, useRouter} from 'next/navigation';
 import {AuthProvider} from '@/context/AuthContext';
@@ -90,76 +90,81 @@ export const App: React.FC<AppProps> = ({children}) => {
         }
     }, [pathname, menuItems]);
 
+    const toaster = new Toaster();
+
     return (
         <ThemeProvider theme={theme ?? 'system'}>
             <AuthProvider>
-                {/*<Suspense fallback={<AsideFallback />}>*/}
-                <Suspense fallback={<MyLoader />}>
-                    <AsideHeader
-                        headerDecoration={true}
-                        compact={asideCollapsed ?? false}
-                        onChangeCompact={setAsideCollapsed}
-                        logo={{icon: Ghost, text: 'OnyxDB'}}
-                        menuItems={menuItems.map((mi) => ({
-                            ...mi,
-                            id: mi.title,
-                            current: activeTab === mi.title,
-                        }))}
-                        renderFooter={(data: {compact: boolean}) => {
-                            return (
-                                <>
-                                    <FooterItem
-                                        compact={data.compact}
-                                        item={{
-                                            id: 'login',
-                                            title: <LoginInfo />,
-                                        }}
-                                    />
-                                    <FooterItem
-                                        compact={data.compact}
-                                        item={{
-                                            id: 'ambient_mode',
-                                            title: `Mode: ${theme}`,
-                                            icon: isDarkMode ? Moon : Sun,
-                                            link: '#',
-                                            onItemClick: () => {
-                                                switch (theme) {
-                                                    case 'light':
-                                                        return setTheme('dark');
-                                                    case 'dark':
-                                                        return setTheme('light');
-                                                    default:
-                                                        return setTheme(
-                                                            isDarkMode ? 'light' : 'dark',
-                                                        );
-                                                }
-                                            },
-                                        }}
-                                    />
-                                    <FooterItem
-                                        compact={data.compact}
-                                        item={{
-                                            id: 'about',
-                                            title: 'About',
-                                            link: '/about',
-                                            icon: CircleQuestion,
-                                        }}
-                                    />
-                                    <FooterItem
-                                        compact={data.compact}
-                                        item={{
-                                            id: 'api',
-                                            title: 'API',
-                                            link: '/api/v1/docs',
-                                            icon: AbbrApi,
-                                        }}
-                                    />
-                                </>
-                            );
-                        }}
-                        renderContent={() => children}
-                    />
-                </Suspense>
+                <ToasterProvider toaster={toaster}>
+                    {/*<Suspense fallback={<AsideFallback />}>*/}
+                    <Suspense fallback={<MyLoader />}>
+                        <AsideHeader
+                            headerDecoration={true}
+                            compact={asideCollapsed ?? false}
+                            onChangeCompact={setAsideCollapsed}
+                            logo={{icon: Ghost, text: 'OnyxDB'}}
+                            menuItems={menuItems.map((mi) => ({
+                                ...mi,
+                                id: mi.title,
+                                current: activeTab === mi.title,
+                            }))}
+                            renderFooter={(data: {compact: boolean}) => {
+                                return (
+                                    <>
+                                        <FooterItem
+                                            compact={data.compact}
+                                            item={{
+                                                id: 'login',
+                                                title: <LoginInfo />,
+                                            }}
+                                        />
+                                        <FooterItem
+                                            compact={data.compact}
+                                            item={{
+                                                id: 'ambient_mode',
+                                                title: `Mode: ${theme}`,
+                                                icon: isDarkMode ? Moon : Sun,
+                                                link: '#',
+                                                onItemClick: () => {
+                                                    switch (theme) {
+                                                        case 'light':
+                                                            return setTheme('dark');
+                                                        case 'dark':
+                                                            return setTheme('light');
+                                                        default:
+                                                            return setTheme(
+                                                                isDarkMode ? 'light' : 'dark',
+                                                            );
+                                                    }
+                                                },
+                                            }}
+                                        />
+                                        <FooterItem
+                                            compact={data.compact}
+                                            item={{
+                                                id: 'about',
+                                                title: 'About',
+                                                link: '/about',
+                                                icon: CircleQuestion,
+                                            }}
+                                        />
+                                        <FooterItem
+                                            compact={data.compact}
+                                            item={{
+                                                id: 'api',
+                                                title: 'API',
+                                                link: '/api/v1/docs',
+                                                icon: AbbrApi,
+                                            }}
+                                        />
+                                    </>
+                                );
+                            }}
+                            renderContent={() => children}
+                        />
+                    </Suspense>
+                    <ToasterComponent />
+                </ToasterProvider>
             </AuthProvider>
         </ThemeProvider>
     );

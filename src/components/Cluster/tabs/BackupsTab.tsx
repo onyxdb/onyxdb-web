@@ -10,6 +10,7 @@ import {ru} from 'date-fns/locale';
 import {mdbMongoDbBackupsApi} from '@/app/apis';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
+import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 
 interface BackupsTabProps {
     clusterId: string;
@@ -137,32 +138,13 @@ const BackupsTab: React.FC<BackupsTabProps> = ({clusterId}) => {
 
     return (
         <div>
-            <HorizontalStack gap={10}>
-                <Button
-                    view={isMonitoring ? 'outlined-success' : 'outlined-info'}
-                    size="m"
-                    onClick={handleToggleMonitoring}
-                >
-                    {isMonitoring ? 'Слежка запущена' : 'Старт'}
-                </Button>
-                <Select
-                    size="m"
-                    placeholder="Выберите интервал"
-                    value={[selectedInterval.toString()]}
-                    onUpdate={handleIntervalChange}
-                >
-                    <Select.Option value="1">1 секунда</Select.Option>
-                    <Select.Option value="5">5 секунд</Select.Option>
-                    <Select.Option value="10">10 секунд</Select.Option>
-                    <Select.Option value="60">1 минута</Select.Option>
-                </Select>
-                {lastUpdate && (
-                    <Text variant="subheader-1" color="secondary">
-                        Последнее обновление:{' '}
-                        {formatDistanceToNow(lastUpdate, {locale: ru, addSuffix: true})}
-                    </Text>
-                )}
-            </HorizontalStack>
+            <SelectRequestInterval
+                lastUpdate={lastUpdate}
+                isMonitoring={isMonitoring}
+                selectedInterval={selectedInterval}
+                handleToggleMonitoring={handleToggleMonitoring}
+                handleIntervalChange={handleIntervalChange}
+            />
             <Box marginTop="20px">
                 <Button view="action" size="m" onClick={handleOpenCreateModal}>
                     Создать бекап

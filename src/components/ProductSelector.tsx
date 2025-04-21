@@ -2,14 +2,14 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Modal, Text, TextInput} from '@gravity-ui/uikit';
-import {ProductDTO} from '@/generated/api';
+import {ProductDTOGet} from '@/generated/api';
 import {productsApi} from '@/app/apis';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 
 interface ProductSelectorProps {
-    selectProductAction: (product: ProductDTO) => void;
-    initialValue?: ProductDTO;
+    selectProductAction: (product: ProductDTOGet) => void;
+    initialValue?: ProductDTOGet;
     header?: string;
     label?: string;
     placeholder?: string;
@@ -22,7 +22,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
     label = 'Продукт',
     placeholder = 'Введите и выберите продукт',
 }) => {
-    const [products, setProducts] = useState<ProductDTO[]>([]);
+    const [products, setProducts] = useState<ProductDTOGet[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isProductsModalOpen, setIsProductsModalOpen] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
         setSearchQuery(value);
     };
 
-    const handleProductSelect = (data: ProductDTO) => {
+    const handleProductSelect = (data: ProductDTOGet) => {
         console.log('ProductSelector handleProductSelect', data);
         setIsProductsModalOpen(false);
         selectProductAction(data);

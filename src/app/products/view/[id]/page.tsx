@@ -5,7 +5,7 @@ import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {mdbProjectsApi, productsApi} from '@/app/apis';
-import {ProductDTO} from '@/generated/api';
+import {ProductDTOGet} from '@/generated/api';
 import {ProductSmallCard} from '@/components/ProductSmallCard';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {V1ProjectResponse} from '@/generated/api-mdb';
@@ -17,11 +17,12 @@ import ChartKit, {settings} from '@gravity-ui/chartkit';
 import type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
 import {MyLoader} from '@/components/Loader';
+import QuotasTab from '@/app/products/view/[id]/QutasTab';
 
 settings.set({plugins: [YagrPlugin]});
 
 interface ProductTreeDTO {
-    item: ProductDTO;
+    item: ProductDTOGet;
     children?: ProductTreeDTO[];
 }
 
@@ -33,8 +34,8 @@ export default function ProductDetailPage() {
     const productId = pathname.split('/').pop() ?? '';
 
     const [activeTab, setActiveTab] = useState(tab);
-    const [product, setProduct] = useState<ProductDTO | null>(null);
-    const [productParents, setProductParents] = useState<ProductDTO[]>([]);
+    const [product, setProduct] = useState<ProductDTOGet | null>(null);
+    const [productParents, setProductParents] = useState<ProductDTOGet[]>([]);
     const [productTree, setProductTree] = useState<ProductTreeDTO | null>(null);
     const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
     const [showArchived, setShowArchived] = useState<boolean>(true);
@@ -97,7 +98,7 @@ export default function ProductDetailPage() {
         fetchProjects();
     }, [productId, showArchived]);
 
-    const handleProductSelect = (productDTO: ProductDTO) => {
+    const handleProductSelect = (productDTO: ProductDTOGet) => {
         router.push('/products/view/' + productDTO.id);
     };
 
@@ -194,7 +195,7 @@ export default function ProductDetailPage() {
                         <Tab value="projects">Проекты</Tab>
                         <Tab value="clusters">Кластеры</Tab>
                         <Tab value="users">Пользователи</Tab>
-                        <Tab value="cwots">Квоты</Tab>
+                        <Tab value="quotas">Квоты</Tab>
                         <Tab value="billing">Биллинг</Tab>
                     </TabList>
                     <TabPanel value="info">
@@ -226,9 +227,13 @@ export default function ProductDetailPage() {
                     </TabPanel>
                     <TabPanel value="users">
                         <div style={{marginTop: '20px'}}>
-                            <Text variant="header-2">Пользователи</Text>
+                            <AccountsTable />
                         </div>
-                        <AccountsTable />
+                    </TabPanel>
+                    <TabPanel value="quotas">
+                        <div style={{marginTop: '20px'}}>
+                            <QuotasTab productId={product.id} />
+                        </div>
                     </TabPanel>
                     <TabPanel value="billing">
                         <Suspense fallback={<MyLoader />}>

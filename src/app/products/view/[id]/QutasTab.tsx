@@ -10,10 +10,9 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {Quota, Resource} from '@/generated/api-mdb';
+import {Quota, Resource, ResourceUnitEnum} from '@/generated/api-mdb';
 import {mdbQuotasApi} from '@/app/apis';
 import {useAuth} from '@/context/AuthContext';
-import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import CreateQuotaModal from '@/components/modals/CreateQuotaModal';
@@ -35,11 +34,14 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
     const {checkPermission} = useAuth();
+    const convertRamToGB = (ram: number) => (ram / 1024 / 1024 / 1024).toFixed(2);
 
     const fetchData = async (productId: string) => {
         try {
-            const quotasResponse = await mdbQuotasApi.listQuotasByProduct({productId});
-            setQuotas(quotasResponse.data.quotas);
+            const quotasResponse = await mdbQuotasApi.listQuotasByProducts({
+                productIds: [productId],
+            });
+            setQuotas(quotasResponse.data.products[0].quotas);
             setLastUpdate(new Date());
         } catch (error) {
             console.error('Error fetching quotas:', error);
@@ -107,15 +109,9 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
             id: 'resource',
             name: 'Ресурс',
             template: (quota) => {
-                const resource = resources.find((r) => r.id === quota.resourceId);
-                return resource ? (
+                return (
                     <Text variant="subheader-1" color="secondary">
-                        {/*{resource.name} ({resource.units})*/} TODO
-                        {resource.name} (units)
-                    </Text>
-                ) : (
-                    <Text variant="subheader-1" color="secondary">
-                        Неизвестный ресурс
+                        {quota.resource.description}&nbsp;({quota.resource.name})
                     </Text>
                 );
             },
@@ -126,49 +122,111 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
             meta: {
                 sort: true,
             },
-            template: (quota) => (
-                <Text variant="subheader-1" color="secondary">
-                    {quota.limit.toLocaleString()}
-                </Text>
-            ),
+            template: (quota) => {
+                if (quota.resource.unit === ResourceUnitEnum.Bytes) {
+                    return (
+                        <Text variant="subheader-1" color="secondary">
+                            {convertRamToGB(quota.limit).toLocaleString()}&nbsp;GB
+                        </Text>
+                    );
+                }
+                return (
+                    <Text variant="subheader-1" color="secondary">
+                        {quota.limit.toLocaleString()}&nbsp;{quota.resource.unit}
+                    </Text>
+                );
+            },
         },
         {
-            id: 'allocation',
-            name: 'Использование',
+            id: 'usage',
+            name: 'Использовано',
             meta: {
                 sort: true,
             },
             template: (quota) => {
-                const resource = resources.find((r) => r.id === quota.resourceId);
-                if (!resource)
+                if (quota.resource.unit === ResourceUnitEnum.Bytes) {
                     return (
                         <Text variant="subheader-1" color="secondary">
-                            Неизвестный ресурс
+                            {convertRamToGB(quota.usage).toLocaleString()}&nbsp;GB
                         </Text>
                     );
-                const usedPercentage = (quota.allocation / quota.limit) * 100;
+                }
+                return (
+                    <Text variant="subheader-1" color="secondary">
+                        {quota.usage.toLocaleString()}&nbsp;{quota.resource.unit}
+                    </Text>
+                );
+            },
+        },
+        {
+            id: 'free',
+            name: 'Свободно',
+            meta: {
+                sort: true,
+            },
+            template: (quota) => {
+                if (quota.resource.unit === ResourceUnitEnum.Bytes) {
+                    return (
+                        <Text variant="subheader-1" color="secondary">
+                            {convertRamToGB(quota.free).toLocaleString()}&nbsp;GB
+                        </Text>
+                    );
+                }
+                return (
+                    <Text variant="subheader-1" color="secondary">
+                        {quota.free.toLocaleString()}&nbsp;{quota.resource.unit}
+                    </Text>
+                );
+            },
+        },
+        {
+            id: 'usage_in_perc',
+            name: 'Использовано, %',
+            template: (quota) => {
+                const usedPercentage = (quota.usage / quota.limit) * 100;
                 const freePercentage = (quota.free / quota.limit) * 100;
 
+                if (usedPercentage > 100) {
+                    return (
+                        <Progress
+                            stack={[
+                                {
+                                    theme: 'danger',
+                                    content: `${usedPercentage}%`,
+                                    value: 100,
+                                },
+                            ]}
+                        />
+                    );
+                }
                 return (
                     <Progress
                         stack={[
-                            {theme: 'default', content: 'Использовано', value: usedPercentage},
-                            {theme: 'success', content: 'Осталось', value: freePercentage},
+                            {
+                                theme: usedPercentage > 75 ? 'warning' : 'default',
+                                content: `${usedPercentage}%`,
+                                value: usedPercentage,
+                            },
+                            {
+                                theme: 'success',
+                                content: `${freePercentage}%`,
+                                value: freePercentage,
+                            },
                         ]}
                     />
                 );
             },
         },
-        {
-            id: 'actions',
-            name: 'Действия',
-            template: (quota) => (
-                <HorizontalStack gap={10}>
-                    {quota.limit}
-                    {/* Добавьте действия по необходимости */}
-                </HorizontalStack>
-            ),
-        },
+        // {
+        //     id: 'actions',
+        //     name: 'Действия',
+        //     template: (quota) => (
+        //         <HorizontalStack gap={10}>
+        //             {quota.limit}
+        //             {/* Добавьте действия по необходимости */}
+        //         </HorizontalStack>
+        //     ),
+        // },
     ];
 
     return (
@@ -193,7 +251,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
                         onClick={handleCreateQuota}
                         style={{marginLeft: '20px'}}
                     >
-                        Создать квоту
+                        Загрузить квоту
                     </Button>
                 )}
             </Box>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Icon, Label, Link, Text} from '@gravity-ui/uikit';
+import {Button, Card, Icon, Label, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {ProductDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
@@ -44,7 +44,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
     };
 
     const handleViewProjectDetails = (id: string) => {
-        router.push(`/projects/${id}`);
+        router.push(`/projects?prjId=${id}`);
     };
 
     return (
@@ -76,34 +76,28 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                             <VerticalStack gap={10}>
                                 <Text variant="subheader-2">Проекты:</Text>
                                 {projectsAll.map((project) => (
-                                    <Link
+                                    <Card
                                         key={project.id}
-                                        view="normal"
-                                        href={`/projects/${project.id}`}
+                                        style={{padding: '16px'}}
+                                        type="selection"
+                                        onClick={() => handleViewProjectDetails(project.id)}
                                     >
-                                        <Card
-                                            key={project.id}
-                                            style={{padding: '16px'}}
-                                            type="selection"
-                                            onClick={() => handleViewProjectDetails(project.id)}
-                                        >
-                                            <HorizontalStack justify="space-between">
+                                        <HorizontalStack justify="space-between">
+                                            <div>
                                                 <div>
-                                                    <div>
-                                                        <Text variant="subheader-3">
-                                                            {project.name}
-                                                        </Text>
-                                                    </div>
-                                                    <Text variant="subheader-1" color="secondary">
-                                                        {project.description}
+                                                    <Text variant="subheader-3">
+                                                        {project.name}
                                                     </Text>
                                                 </div>
-                                                {project.isArchived && (
-                                                    <Label theme="warning">Архив</Label>
-                                                )}
-                                            </HorizontalStack>
-                                        </Card>
-                                    </Link>
+                                                <Text variant="subheader-1" color="secondary">
+                                                    {project.description}
+                                                </Text>
+                                            </div>
+                                            {project.isArchived && (
+                                                <Label theme="warning">Архив</Label>
+                                            )}
+                                        </HorizontalStack>
+                                    </Card>
                                 ))}
                             </VerticalStack>
                         )}

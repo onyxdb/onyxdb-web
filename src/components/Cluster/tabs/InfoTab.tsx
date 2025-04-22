@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import {Icon, Text} from '@gravity-ui/uikit';
-import {Calendar} from '@gravity-ui/icons';
+import {Icon, Label, Text} from '@gravity-ui/uikit';
+import {Circles5Random, Cpu, Cpus, Database, SquareListUl} from '@gravity-ui/icons';
 import {
     V1ClusterResources,
     V1MongoClusterResponse,
@@ -18,6 +18,7 @@ interface InfoTabProps {
 
 const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
     const resources: V1ClusterResources | undefined = cluster.config?.resources;
+    const convertRamToGB = (ram: number) => (ram / 1024 / 1024 / 1024).toFixed(2);
 
     return (
         <div>
@@ -33,54 +34,55 @@ const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
                 >
                     <HorizontalStack align="center">
                         <Box marginRight="8px">
-                            <Icon data={Calendar} />
+                            <Icon data={SquareListUl} />
                         </Box>
                         <Text variant="caption-2" color="secondary">
-                            Конфиг:
+                            Конфиг:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
-                            {clusterPreset.name}
+                            {clusterPreset.name} <Label>{clusterPreset.type}</Label>
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">
                         <Box marginRight="8px">
-                            <Icon data={Calendar} />
+                            <Icon data={Cpus} />
                         </Box>
                         <Text variant="caption-2" color="secondary">
-                            Ресурсный пресет:
+                            Оперативная память:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
-                            {resources?.presetId ?? '???'}
+                            {convertRamToGB(clusterPreset.ram)}
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">
                         <Box marginRight="8px">
-                            <Icon data={Calendar} />
+                            <Icon data={Cpu} />
                         </Box>
                         <Text variant="caption-2" color="secondary">
-                            Класс хранилища:
+                            Процессор:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
-                            {resources?.storageClass ?? '???'}
+                            {clusterPreset.vcpu * 1000} milliCPU
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">
                         <Box marginRight="8px">
-                            <Icon data={Calendar} />
+                            <Icon data={Database} />
                         </Box>
                         <Text variant="caption-2" color="secondary">
-                            Хранилище:
+                            Хранилище:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
+                            {resources?.storageClass ?? '???'}&nbsp;
                             {resources?.storage ? `${resources.storage} MB` : '???'}
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">
                         <Box marginRight="8px">
-                            <Icon data={Calendar} />
+                            <Icon data={Circles5Random} />
                         </Box>
                         <Text variant="caption-2" color="secondary">
-                            Реплики:
+                            Реплики:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
                             {cluster.config?.replicas ?? '???'}

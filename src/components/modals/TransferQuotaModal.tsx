@@ -1,18 +1,19 @@
 'use client';
-import React, {useState} from 'react';
-import {Button, Progress, Select, Text, useToaster} from '@gravity-ui/uikit';
+
+import React, {useEffect, useState} from 'react';
+import {Button, Progress, Select, Text, Tooltip, useToaster} from '@gravity-ui/uikit';
 import {FormikErrors, useFormik} from 'formik';
 import {
-    ExchangeQuotasBetweenProductsRequest,
     Resource,
-    SimulateQuotasExchangeBetweenProductsResponse,
+    SimulateTransferQuotasBetweenProductsResponse,
+    TransferQuotasBetweenProductsRequest,
 } from '@/generated/api-mdb';
 import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProductSelector} from '@/components/ProductSelector';
-import {InputField} from '@/components/formik/InputField';
 import {ProductDTOGet} from '@/generated/api';
+import {ResourceInputField} from '@/components/ResourceInputField';
 
 interface TransferQuotaModalProps {
     product: ProductDTOGet;
@@ -27,9 +28,30 @@ interface QuotaToTransfer {
 }
 
 export interface TransferQuotaFormFields {
-    fromProductId: string;
-    toProductId: string;
+    srcProductId: string;
+    dstProductId: string;
     quotas: QuotaToTransfer[];
+    simulation: string;
+}
+
+function getColorDWI(isDanger: boolean, isWarning: boolean) {
+    // eslint-disable-next-line no-nested-ternary
+    return isDanger ? 'danger' : isWarning ? 'warning' : 'info';
+}
+
+function getColorDWS(isDanger: boolean, isWarning: boolean) {
+    // eslint-disable-next-line no-nested-ternary
+    return isDanger ? 'danger' : isWarning ? 'warning' : 'success';
+}
+
+function getColorDWP(isDanger: boolean, isWarning: boolean) {
+    // eslint-disable-next-line no-nested-ternary
+    return isDanger ? 'danger' : isWarning ? 'warning' : 'positive';
+}
+
+function roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
 }
 
 export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
@@ -38,13 +60,15 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     closeAction,
 }) => {
     const toaster = useToaster();
+    const [monitoringInterval, setMonitoringInterval] = useState<NodeJS.Timeout | null>(null);
+    const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [simulationResult, setSimulationResult] =
-        useState<SimulateQuotasExchangeBetweenProductsResponse | null>(null);
+        useState<SimulateTransferQuotasBetweenProductsResponse | null>(null);
 
     const formik = useFormik<TransferQuotaFormFields>({
         initialValues: {
-            fromProductId: product.id,
-            toProductId: '',
+            srcProductId: product.id,
+            dstProductId: '',
             quotas: [
                 {
                     id: '',
@@ -52,14 +76,15 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                     limit: 0,
                 },
             ],
+            simulation: '',
         },
         validate: (values) => {
             const errors: Partial<FormikErrors<TransferQuotaFormFields>> = {};
-            if (!values.fromProductId) {
-                errors.fromProductId = 'ID продукта, который отдаёт квоты, обязателен';
+            if (!values.srcProductId) {
+                errors.srcProductId = 'ID продукта, который отдаёт квоты, обязателен';
             }
-            if (!values.toProductId) {
-                errors.toProductId = 'ID продукта, который принимает квоты, обязателен';
+            if (!values.dstProductId) {
+                errors.dstProductId = 'ID продукта, который принимает квоты, обязателен';
             }
             values.quotas.forEach((quota, index) => {
                 if (!quota.resourceId || quota.limit <= 0) {
@@ -75,18 +100,25 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                     };
                 }
             });
+            if (
+                simulationResult?.srcProduct.quotas[0].free === undefined ||
+                simulationResult.srcProduct.quotas[0].free < 0
+            ) {
+                errors.simulation =
+                    'Результат симуляции отрицательный: Не осталось свободных ресурсов ';
+            }
             return errors;
         },
         onSubmit: async (values) => {
-            const request: ExchangeQuotasBetweenProductsRequest = {
-                fromProductId: values.fromProductId,
-                toProductId: values.toProductId,
+            const request: TransferQuotasBetweenProductsRequest = {
+                srcProductId: values.srcProductId,
+                dstProductId: values.dstProductId,
                 quotas: values.quotas,
             };
 
             try {
-                await mdbQuotasApi.exchangeQuotasBetweenProducts({
-                    exchangeQuotasBetweenProductsRequest: request,
+                await mdbQuotasApi.transferQuotasBetweenProducts({
+                    transferQuotasBetweenProductsRequest: request,
                 });
                 closeAction();
                 toaster.add({
@@ -108,16 +140,18 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     });
 
     const handleSimulateQuotasExchange = async () => {
-        const request: ExchangeQuotasBetweenProductsRequest = {
-            fromProductId: formik.values.fromProductId,
-            toProductId: formik.values.toProductId,
+        console.log('Simulate Quotas request', formik.values);
+        const request: TransferQuotasBetweenProductsRequest = {
+            srcProductId: formik.values.srcProductId,
+            dstProductId: formik.values.dstProductId,
             quotas: formik.values.quotas,
         };
 
         try {
-            const simulationResponse = await mdbQuotasApi.simulateQuotasExchangeBetweenProducts({
-                exchangeQuotasBetweenProductsRequest: request,
+            const simulationResponse = await mdbQuotasApi.simulateTransferQuotasBetweenProducts({
+                transferQuotasBetweenProductsRequest: request,
             });
+            console.log('Simulate Quotas response', simulationResponse.data);
             setSimulationResult(simulationResponse.data);
         } catch (error) {
             console.error('Error simulating quotas exchange:', error);
@@ -125,10 +159,26 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
         }
     };
 
+    useEffect(() => {
+        if (isMonitoring) {
+            const interval = setInterval(() => handleSimulateQuotasExchange(), 1000);
+            setMonitoringInterval(interval);
+            return () => {
+                clearInterval(interval);
+                setMonitoringInterval(null);
+            };
+        }
+        return () => {
+            if (monitoringInterval) {
+                clearInterval(monitoringInterval);
+                setMonitoringInterval(null);
+            }
+        };
+    }, [isMonitoring, formik.values.quotas[0]?.limit]);
+
     const resourceOptions = resources.map((resource) => (
         <Select.Option key={resource.id} value={resource.id}>
-            {/*{resource.displayName} ({resource.units}) TODO*/}
-            {resource.displayName} (units)
+            {resource.description} ({resource.unit})
         </Select.Option>
     ));
 
@@ -140,50 +190,45 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                     <ProductSelector
                         initialValue={product}
                         selectProductAction={(productDTO) =>
-                            formik.setFieldValue('fromProductId', productDTO.id)
+                            formik.setFieldValue('srcProductId', productDTO.id)
                         }
                         label="Отдающий продукт"
                     />
                     <ProductSelector
                         selectProductAction={(productDTO) =>
-                            formik.setFieldValue('toProductId', productDTO.id)
+                            formik.setFieldValue('dstProductId', productDTO.id)
                         }
                         label="Принимающий продукт"
                     />
                 </HorizontalStack>
             </Box>
-            <Box marginTop="20px">
-                <Text variant="subheader-2">Выбор ресурса и лимита</Text>
+            <div>
+                <Text variant="body-1">Ресурс</Text>
                 <Box marginBottom="10px">
                     <Select
                         size="m"
                         placeholder="Выберите ресурс"
                         value={[
                             resources.find((p) => p.id === formik.values.quotas[0].resourceId)
-                                ?.displayName ?? formik.values.quotas[0].resourceId,
+                                ?.description ?? formik.values.quotas[0].resourceId,
                         ]}
                         onUpdate={(value) => formik.setFieldValue('quotas[0].resourceId', value[0])}
+                        errorMessage={
+                            formik.touched.quotas?.[0]?.resourceId &&
+                            (formik.errors.quotas?.[0] as FormikErrors<QuotaToTransfer>)?.resourceId
+                        }
                     >
                         {resourceOptions}
                     </Select>
-                    {formik.touched.quotas?.[0]?.resourceId &&
-                    (formik.errors.quotas?.[0] as FormikErrors<QuotaToTransfer>)?.resourceId ? (
-                        <div style={{color: 'red', marginTop: '4px'}}>
-                            {
-                                (formik.errors.quotas?.[0] as FormikErrors<QuotaToTransfer>)
-                                    ?.resourceId
-                            }
-                        </div>
-                    ) : null}
                 </Box>
-                <Box marginBottom="10px">
-                    <InputField
-                        label="Лимит"
+                <Text variant="body-1">Сколько передам</Text>
+                <Box marginBottom="10px" style={{maxWidth: '300px'}}>
+                    <ResourceInputField
                         name="quotas[0].limit"
-                        value={formik.values.quotas[0].limit.toString()}
-                        onChange={(value) =>
-                            formik.setFieldValue('quotas[0].limit', parseInt(value, 10))
-                        }
+                        value={formik.values.quotas[0].limit}
+                        changeAction={(value: number) => {
+                            formik.setFieldValue('quotas[0].limit', value);
+                        }}
                         onBlur={formik.handleBlur('quotas[0].limit')}
                         error={
                             formik.touched.quotas?.[0]?.limit
@@ -192,87 +237,298 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                                 : undefined
                         }
                         placeholder="Введите лимит"
-                        type="number"
-                        // endContent={
-                        //     resources.find((r) => r.id === formik.values.quotas[0].resourceId)
-                        //         ?.units
-                        // }
+                        unitType={
+                            resources.find((r) => r.id === formik.values.quotas[0].resourceId)
+                                ?.unit ?? 'bytes'
+                        }
                     />
                 </Box>
                 <Box marginBottom="20px">
-                    <Button view="normal" size="m" onClick={handleSimulateQuotasExchange}>
+                    <Button
+                        view={isMonitoring ? 'outlined-success' : 'outlined-action'}
+                        size="m"
+                        onClick={() => setIsMonitoring(!isMonitoring)}
+                    >
                         Симулировать
                     </Button>
                 </Box>
-            </Box>
+            </div>
             {simulationResult && (
                 <Box marginTop="20px">
-                    <Text variant="subheader-2">Результат симуляции</Text>
-                    <HorizontalStack gap={20}>
-                        <Box>
-                            <Text variant="subheader-1">Отдающий продукт</Text>
+                    <Tooltip
+                        content={
                             <Progress
                                 stack={[
-                                    // {
-                                    //     theme: 'default',
-                                    //     content: 'Использовано',
-                                    //     value:
-                                    //         (simulationResult.fromProduct.quotas[0].allocation /
-                                    //             simulationResult.fromProduct.quotas[0].limit) *
-                                    //         100,
-                                    // },
-                                    // {
-                                    //     theme: 'success',
-                                    //     content: 'Осталось',
-                                    //     value:
-                                    //         (simulationResult.fromProduct.quotas[0].free /
-                                    //             simulationResult.fromProduct.quotas[0].limit) *
-                                    //         100,
-                                    // },
+                                    {
+                                        theme: 'info',
+                                        content: `Used`,
+                                        value: 30,
+                                    },
+                                    {
+                                        theme: 'success',
+                                        content: `Free`,
+                                        value: 30,
+                                    },
                                     {
                                         theme: 'danger',
-                                        content: 'Отдаёт',
-                                        value:
-                                            (formik.values.quotas[0].limit /
-                                                simulationResult.fromProduct.quotas[0].limit) *
-                                            100,
+                                        content: `Transferred`,
+                                        value: 40,
                                     },
                                 ]}
                             />
+                        }
+                    >
+                        <Text variant="subheader-1">Результат симуляции</Text>
+                    </Tooltip>
+                    <HorizontalStack justify="space-between" gap={20}>
+                        <Box style={{flex: 1}}>
+                            <Text variant="body-1" color="secondary">
+                                Отдающий продукт
+                            </Text>
+
+                            {(() => {
+                                const srcQuota = simulationResult.srcProduct.quotas[0];
+                                const transferAmount = formik.values.quotas[0].limit;
+                                // const transferPercent =
+                                //     roundTo(transferAmount / srcQuota.limit, 2) * 100;
+
+                                const currentLimit = srcQuota.limit + transferAmount;
+                                const currentUsage = srcQuota.usage;
+                                const currentUsagePercent = roundTo(
+                                    (currentUsage / currentLimit) * 100,
+                                    2,
+                                );
+                                const currentFree = srcQuota.free + transferAmount;
+                                const currentFreePercent = roundTo(
+                                    (currentFree / currentLimit) * 100,
+                                    2,
+                                );
+
+                                const willBeLimit = srcQuota.limit;
+                                const willBeFree = srcQuota.free;
+                                const willBeUsagePercent = roundTo(
+                                    (currentUsage / willBeLimit) * 100,
+                                    2,
+                                );
+                                const willBeFreePercent = roundTo(
+                                    (willBeFree / willBeLimit) * 100,
+                                    2,
+                                );
+
+                                // const willBeUsagePercentOrigin =
+                                //     roundTo(currentUsage / currentLimit, 2) * 100;
+                                // const willBeFreePercentOrigin =
+                                //     roundTo(willBeFree / currentLimit, 2) * 100;
+
+                                const isDangerCur = currentFree < 0;
+                                const isWarningCur = currentFreePercent <= 25;
+
+                                const isDangerNew = willBeFree < 0;
+                                const isWarningNew = willBeFreePercent <= 25;
+
+                                return (
+                                    <>
+                                        <Box
+                                            marginTop="8px"
+                                            style={{display: 'flex', flexDirection: 'column'}}
+                                        >
+                                            <Text variant="body-1">
+                                                Потребление: {currentUsage}&nbsp;
+                                                {srcQuota.resource.unit}
+                                            </Text>
+                                            <Text variant="body-1">
+                                                Лимит: {currentLimit}&nbsp;--&gt;&nbsp;
+                                                {willBeLimit}&nbsp;
+                                                {srcQuota.resource.unit}
+                                            </Text>
+                                            <Text variant="body-1">
+                                                Остаток: {currentFree}&nbsp;--&gt;&nbsp;
+                                                {willBeFree}&nbsp;
+                                                {srcQuota.resource.unit}
+                                            </Text>
+                                        </Box>
+                                        <Text variant="body-1" color="secondary">
+                                            Сейчас в отдающем продукте
+                                        </Text>
+                                        <Progress
+                                            stack={[
+                                                {
+                                                    theme: getColorDWI(isDangerCur, isWarningCur),
+                                                    content: (
+                                                        <Tooltip content="Использовано">
+                                                            <Text>{currentUsagePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.min(currentUsagePercent, 100),
+                                                },
+                                                {
+                                                    theme: 'misc',
+                                                    content: currentUsagePercent < 100 && (
+                                                        <Tooltip content="Осталось">
+                                                            <Text>{currentFreePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.min(currentFreePercent, 100),
+                                                },
+                                            ]}
+                                        />
+                                        <Text variant="body-1" color="secondary">
+                                            Станет в отдающем продукте
+                                        </Text>
+                                        <Progress
+                                            stack={[
+                                                {
+                                                    theme: getColorDWI(isDangerNew, isWarningNew),
+                                                    content: (
+                                                        <Tooltip content="Использовано">
+                                                            <Text>{willBeUsagePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.max(willBeUsagePercent, 100),
+                                                },
+                                                {
+                                                    theme: 'misc',
+                                                    content: willBeUsagePercent < 100 && (
+                                                        <Tooltip content="Осталось">
+                                                            <Text>{willBeFreePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: willBeFreePercent,
+                                                },
+                                            ]}
+                                        />
+                                    </>
+                                );
+                            })()}
                         </Box>
-                        <Box>
-                            <Text variant="subheader-1">Принимающий продукт</Text>
-                            <Progress
-                                stack={[
-                                    // {
-                                    //     theme: 'default',
-                                    //     content: 'Использовано',
-                                    //     value:
-                                    //         (simulationResult.toProduct.quotas[0].allocation /
-                                    //             simulationResult.toProduct.quotas[0].limit) *
-                                    //         100,
-                                    // },
-                                    // {
-                                    //     theme: 'success',
-                                    //     content: 'Осталось',
-                                    //     value:
-                                    //         (simulationResult.toProduct.quotas[0].free /
-                                    //             simulationResult.toProduct.quotas[0].limit) *
-                                    //         100,
-                                    // },
-                                    {
-                                        theme: 'warning',
-                                        content: 'Получает',
-                                        value:
-                                            (formik.values.quotas[0].limit /
-                                                simulationResult.toProduct.quotas[0].limit) *
-                                            100,
-                                    },
-                                ]}
-                            />
+
+                        <Box style={{flex: 1}}>
+                            <Text variant="body-1" color="secondary">
+                                Принимающий продукт
+                            </Text>
+
+                            {(() => {
+                                const dstQuota = simulationResult.dstProduct.quotas[0];
+                                const transferAmount = formik.values.quotas[0].limit;
+                                // const transferPercent =
+                                //     roundTo(transferAmount / dstQuota.limit, 2) * 100;
+
+                                const currentLimit = dstQuota.limit + transferAmount;
+                                const currentUsage = dstQuota.usage;
+                                const currentUsagePercent = roundTo(
+                                    (currentUsage / currentLimit) * 100,
+                                    2,
+                                );
+                                const currentFree = dstQuota.free + transferAmount;
+                                const currentFreePercent = roundTo(
+                                    (currentFree / currentLimit) * 100,
+                                    2,
+                                );
+
+                                const willBeLimit = dstQuota.limit;
+                                const willBeFree = dstQuota.free;
+                                const willBeUsagePercent = roundTo(
+                                    (currentUsage / willBeLimit) * 100,
+                                    2,
+                                );
+                                const willBeFreePercent = roundTo(
+                                    (willBeFree / willBeLimit) * 100,
+                                    2,
+                                );
+
+                                // const willBeUsagePercentOrigin =
+                                //     roundTo(currentUsage / currentLimit, 2) * 100;
+                                // const willBeFreePercentOrigin =
+                                //     roundTo(willBeFree / currentLimit, 2) * 100;
+
+                                const isDangerCur = currentFree < 0;
+                                const isWarningCur = currentFreePercent <= 25;
+
+                                const isDangerNew = willBeFree < 0;
+                                const isWarningNew = willBeFreePercent <= 25;
+
+                                return (
+                                    <>
+                                        <Box
+                                            marginTop="8px"
+                                            style={{display: 'flex', flexDirection: 'column'}}
+                                        >
+                                            <Text variant="body-1">
+                                                Потребление: {currentUsage}&nbsp;
+                                                {dstQuota.resource.unit}
+                                            </Text>
+                                            <Text variant="body-1">
+                                                Лимит: {currentLimit}&nbsp;--&gt;&nbsp;
+                                                {willBeLimit}&nbsp;
+                                                {dstQuota.resource.unit}
+                                            </Text>
+                                            <Text variant="body-1">
+                                                Остаток: {currentFree}&nbsp;--&gt;&nbsp;
+                                                {willBeFree}&nbsp;
+                                                {dstQuota.resource.unit}
+                                            </Text>
+                                        </Box>
+                                        <Text variant="body-1" color="secondary">
+                                            Сейчас в принимающем продукте
+                                        </Text>
+                                        <Progress
+                                            stack={[
+                                                {
+                                                    theme: getColorDWI(isDangerCur, isWarningCur),
+                                                    content: (
+                                                        <Tooltip content="Использовано">
+                                                            <Text>{currentUsagePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.min(currentUsagePercent, 100),
+                                                },
+                                                {
+                                                    theme: 'default',
+                                                    content: currentUsagePercent < 100 && (
+                                                        <Tooltip content="Осталось">
+                                                            <Text>{currentFreePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.min(currentFreePercent, 100),
+                                                },
+                                            ]}
+                                        />
+                                        <Text variant="body-1" color="secondary">
+                                            Станет в принимающем продукте
+                                        </Text>
+                                        <Progress
+                                            stack={[
+                                                {
+                                                    theme: getColorDWI(isDangerNew, isWarningNew),
+                                                    content: (
+                                                        <Tooltip content="Использовано">
+                                                            <Text>{willBeUsagePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.min(willBeUsagePercent, 100),
+                                                },
+                                                {
+                                                    theme: 'default',
+                                                    content: willBeUsagePercent < 100 && (
+                                                        <Tooltip content="Осталось">
+                                                            <Text>{willBeFreePercent}%</Text>
+                                                        </Tooltip>
+                                                    ),
+                                                    value: Math.min(willBeFreePercent, 100),
+                                                },
+                                            ]}
+                                        />
+                                    </>
+                                );
+                            })()}
                         </Box>
                     </HorizontalStack>
                 </Box>
+            )}
+            {formik.touched.simulation && formik.errors.simulation && (
+                <Text variant="body-1" color="danger" style={{marginTop: '4px'}}>
+                    {formik.errors.simulation}
+                </Text>
             )}
             <Box marginTop="20px">
                 <HorizontalStack>
@@ -282,8 +538,8 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                         size="l"
                         disabled={
                             !simulationResult ||
-                            simulationResult.toProduct.quotas[0].limit < 0 ||
-                            simulationResult.fromProduct.quotas[0].limit < 0 ||
+                            simulationResult.dstProduct.quotas[0].limit < 0 ||
+                            simulationResult.srcProduct.quotas[0].limit < 0 ||
                             formik.isSubmitting
                         }
                     >

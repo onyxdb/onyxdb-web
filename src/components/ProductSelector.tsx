@@ -87,18 +87,18 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
                                 key={item.id}
                                 type="selection"
                                 onClick={() => handleProductSelect(item)}
-                                style={{marginBottom: '10px', padding: '16px'}}
+                                style={{marginBottom: '10px', padding: '8px'}}
                             >
-                                <Box>
+                                <div>
                                     <div>
-                                        <Text variant="header-1" style={{marginRight: '10px'}}>
+                                        <Text variant="subheader-1" style={{marginRight: '10px'}}>
                                             {item.name}
                                         </Text>
                                     </div>
-                                    <Text variant="subheader-1" color="secondary" ellipsis={true}>
+                                    <Text variant="body-1" color="secondary" ellipsis={true}>
                                         {item.description}
                                     </Text>
-                                </Box>
+                                </div>
                             </Card>
                         ))}
                     </Box>

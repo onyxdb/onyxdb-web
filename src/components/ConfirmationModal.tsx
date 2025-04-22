@@ -27,7 +27,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
                 <Text variant="header-1">{title}</Text>
                 <Box marginTop="20px">
-                    <Text variant="subheader-1">{message}</Text>
+                    <Text variant="body-1">{message}</Text>
                 </Box>
                 <Box marginTop="20px">
                     <HorizontalStack>

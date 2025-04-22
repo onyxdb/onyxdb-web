@@ -1,8 +1,8 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {mdbMongoDbApi, mdbResourcePresetsApi} from '@/app/apis';
-import {Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
+import {mdbResourcePresetsApi} from '@/app/apis';
+import {Icon, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
 import InfoTab from '@/components/Cluster/tabs/InfoTab';
@@ -12,34 +12,28 @@ import UsersTab from '@/components/Cluster/tabs/UsersTab';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import GrafanaFrame from '@/components/GrafanaFrame';
 import BackupsTab from '@/components/Cluster/tabs/BackupsTab';
+import MongoLogo from '../../styles/mongodb.svg';
 
 interface ClusterViewPageProps {
-    clusterId: string;
+    cluster: V1MongoClusterResponse;
 }
 
 // eslint-disable-next-line no-empty-pattern
-export default function ClusterView({clusterId}: ClusterViewPageProps) {
+export default function ClusterView({cluster}: ClusterViewPageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'info';
 
     const [activeTab, setActiveTab] = useState(tab);
-    const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
     const [clusterPreset, setClusterPreset] = useState<V1ResourcePresetResponse | null>(null);
 
     const fetchData = async () => {
         try {
-            const clusterResponse = await mdbMongoDbApi.getCluster({clusterId});
-            setCluster(clusterResponse.data);
-
-            if (clusterResponse.data?.config?.resources?.presetId) {
-                console.log('preset', clusterResponse);
-                const presetResponse = await mdbResourcePresetsApi.getResourcePreset({
-                    resourcePresetId: clusterResponse.data.config.resources.presetId,
-                });
-                setClusterPreset(presetResponse.data);
-            }
+            const presetResponse = await mdbResourcePresetsApi.getResourcePreset({
+                resourcePresetId: cluster.config.resources.presetId,
+            });
+            setClusterPreset(presetResponse.data);
         } catch (error) {
             console.error('Error fetching cluster:', error);
         }
@@ -47,7 +41,7 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
 
     useEffect(() => {
         fetchData();
-    }, [clusterId]);
+    }, [cluster.id]);
 
     useEffect(() => {
         setActiveTab(tab);
@@ -69,12 +63,15 @@ export default function ClusterView({clusterId}: ClusterViewPageProps) {
 
     return (
         <div style={{padding: '20px', display: 'flex', flexDirection: 'column'}}>
-            <Text variant="header-1">{cluster.name}</Text>
-            <Box>
-                <Text variant="subheader-1" color="secondary" ellipsis={true}>
-                    {cluster.description}
-                </Text>
-            </Box>
+            <div style={{display: 'flex', alignItems: 'center', gap: '20px'}}>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <Text variant="header-1">{cluster.name}</Text>
+                    <Text variant="subheader-1" color="secondary" ellipsis={true}>
+                        {cluster.description}
+                    </Text>
+                </div>
+                <Icon data={MongoLogo} size={40} />
+            </div>
             <Box marginTop="20px">
                 <TabProvider value={activeTab} onUpdate={handleTabChange}>
                     <TabList>

@@ -1,15 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {AppHeader, ButtonView} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {CirclePlus, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePathname, useRouter} from 'next/navigation';
 import ClusterView from '@/components/Cluster/ClusterView';
-import {mdbMongoDbApi} from '@/app/apis';
+import {mdbMongoDbApi, mdbProjectsApi, productsApi} from '@/app/apis';
 import {useToaster} from '@gravity-ui/uikit';
+import {V1MongoClusterResponse} from '@/generated/api-mdb';
+import {ProductDTOGet} from '@/generated/api';
 
 export default function ClusterViewPage() {
+    const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
+    const [productParents, setProductParents] = useState<ProductDTOGet[]>([]);
     const {checkPermission} = useAuth();
     const router = useRouter();
     const pathname = usePathname();
@@ -20,6 +24,29 @@ export default function ClusterViewPage() {
     const handleEdit = () => {
         router.push(`/clusters/edit/${clusterId}`);
     };
+
+    const fetchCluster = async () => {
+        try {
+            const clusterResponse = await mdbMongoDbApi.getCluster({clusterId});
+            setCluster(clusterResponse.data);
+
+            const projectResponse = await mdbProjectsApi.getProject({
+                projectId: clusterResponse.data.projectId,
+            });
+
+            const response = await productsApi.getProductParents({
+                productId: projectResponse.data.productId,
+            });
+            const reversedData = response.data.reverse();
+            setProductParents(reversedData);
+        } catch (error) {
+            console.error('Error fetching cluster:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCluster();
+    }, [clusterId]);
 
     const handleDelete = async () => {
         try {
@@ -47,6 +74,13 @@ export default function ClusterViewPage() {
 
     const breadCrumbs = [
         {href: '/', text: 'Главная'},
+        {href: '/products', text: 'Продукты'},
+        ...productParents.map((parent) => ({
+            href: `/products/view/${parent.id}`,
+            text: parent.name,
+        })),
+        {href: '/projects', text: 'Проекты'},
+        {href: `/projects?prjId=${cluster?.projectId}`, text: `${cluster?.name}`},
         {href: '/clusters', text: 'Кластеры'},
     ];
 
@@ -79,7 +113,7 @@ export default function ClusterViewPage() {
     return (
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
-            <ClusterView clusterId={clusterId} />
+            {cluster && <ClusterView cluster={cluster} />}
         </div>
     );
 }

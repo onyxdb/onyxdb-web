@@ -5,10 +5,6 @@ import {MongoHost} from '@/generated/api-mdb';
 import {mdbMongoDbApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HostsTable} from '@/components/tables/HostsTable';
-import {Button, Select, Text} from '@gravity-ui/uikit';
-import {HorizontalStack} from '@/components/Layout/HorizontalStack';
-import {formatDistanceToNow} from 'date-fns';
-import {ru} from 'date-fns/locale';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 
 interface HostsTabProps {

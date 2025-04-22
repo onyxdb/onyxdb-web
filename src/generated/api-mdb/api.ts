@@ -50,32 +50,6 @@ export interface CreateMongoDatabaseRequest {
 /**
  *
  * @export
- * @interface ExchangeQuotasBetweenProductsRequest
- */
-export interface ExchangeQuotasBetweenProductsRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof ExchangeQuotasBetweenProductsRequest
-     */
-    fromProductId: string;
-    /**
-     *
-     * @type {string}
-     * @memberof ExchangeQuotasBetweenProductsRequest
-     */
-    toProductId: string;
-    /**
-     *
-     * @type {Array<QuotaToExchange>}
-     * @memberof ExchangeQuotasBetweenProductsRequest
-     */
-    quotas: Array<QuotaToExchange>;
-}
-
-/**
- *
- * @export
  * @interface InitMongoDatabase
  */
 export interface InitMongoDatabase {
@@ -105,20 +79,6 @@ export interface InitMongoUser {
      * @memberof InitMongoUser
      */
     password: string;
-}
-
-/**
- *
- * @export
- * @interface ListMdbResourcesRequest
- */
-export interface ListMdbResourcesRequest {
-    /**
-     *
-     * @type {Array<Resource>}
-     * @memberof ListMdbResourcesRequest
-     */
-    resources: Array<Resource>;
 }
 
 /**
@@ -180,15 +140,29 @@ export interface ListMongoUsersResponse {
 /**
  *
  * @export
- * @interface ListQuotasResponse
+ * @interface ListQuotasByProductsResponse
  */
-export interface ListQuotasResponse {
+export interface ListQuotasByProductsResponse {
     /**
      *
-     * @type {Array<Quota>}
-     * @memberof ListQuotasResponse
+     * @type {Array<ProductQuotas>}
+     * @memberof ListQuotasByProductsResponse
      */
-    quotas: Array<Quota>;
+    products: Array<ProductQuotas>;
+}
+
+/**
+ *
+ * @export
+ * @interface ListResourcesResponse
+ */
+export interface ListResourcesResponse {
+    /**
+     *
+     * @type {Array<Resource>}
+     * @memberof ListResourcesResponse
+     */
+    resources: Array<Resource>;
 }
 
 /**
@@ -543,10 +517,30 @@ export interface ProductQuotas {
     productId: string;
     /**
      *
-     * @type {Array<QuotaToExchange>}
+     * @type {Array<Quota>}
      * @memberof ProductQuotas
      */
-    quotas: Array<QuotaToExchange>;
+    quotas: Array<Quota>;
+}
+
+/**
+ *
+ * @export
+ * @interface ProductQuotasToTransfer
+ */
+export interface ProductQuotasToTransfer {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductQuotasToTransfer
+     */
+    productId: string;
+    /**
+     *
+     * @type {Array<QuotaToTransfer>}
+     * @memberof ProductQuotasToTransfer
+     */
+    quotas: Array<QuotaToTransfer>;
 }
 
 /**
@@ -557,16 +551,10 @@ export interface ProductQuotas {
 export interface Quota {
     /**
      *
-     * @type {string}
+     * @type {Resource}
      * @memberof Quota
      */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof Quota
-     */
-    resourceId: string;
+    resource: Resource;
     /**
      *
      * @type {number}
@@ -578,7 +566,7 @@ export interface Quota {
      * @type {number}
      * @memberof Quota
      */
-    allocation: number;
+    usage: number;
     /**
      *
      * @type {number}
@@ -590,25 +578,19 @@ export interface Quota {
 /**
  *
  * @export
- * @interface QuotaToExchange
+ * @interface QuotaToTransfer
  */
-export interface QuotaToExchange {
+export interface QuotaToTransfer {
     /**
      *
      * @type {string}
-     * @memberof QuotaToExchange
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof QuotaToExchange
+     * @memberof QuotaToTransfer
      */
     resourceId: string;
     /**
      *
      * @type {number}
-     * @memberof QuotaToExchange
+     * @memberof QuotaToTransfer
      */
     limit: number;
 }
@@ -636,19 +618,50 @@ export interface Resource {
      * @type {string}
      * @memberof Resource
      */
-    displayName: string;
+    description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof Resource
+     */
+    type: ResourceTypeEnum;
+    /**
+     *
+     * @type {string}
+     * @memberof Resource
+     */
+    unit: ResourceUnitEnum;
 }
+
+export const ResourceTypeEnum = {
+    Vcpu: 'vcpu',
+    Ram: 'ram',
+} as const;
+
+export type ResourceTypeEnum = (typeof ResourceTypeEnum)[keyof typeof ResourceTypeEnum];
+export const ResourceUnitEnum = {
+    Cores: 'cores',
+    Bytes: 'bytes',
+} as const;
+
+export type ResourceUnitEnum = (typeof ResourceUnitEnum)[keyof typeof ResourceUnitEnum];
 
 /**
  *
  * @export
- * @interface SimulateMongoDBQuotaUsageRequest
+ * @interface SimulateMongoDBQuotasUsageRequest
  */
-export interface SimulateMongoDBQuotaUsageRequest {
+export interface SimulateMongoDBQuotasUsageRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof SimulateMongoDBQuotasUsageRequest
+     */
+    projectId: string;
     /**
      *
      * @type {V1MongoConfig}
-     * @memberof SimulateMongoDBQuotaUsageRequest
+     * @memberof SimulateMongoDBQuotasUsageRequest
      */
     config: V1MongoConfig;
 }
@@ -656,13 +669,13 @@ export interface SimulateMongoDBQuotaUsageRequest {
 /**
  *
  * @export
- * @interface SimulateMongoDBQuotaUsageResponse
+ * @interface SimulateMongoDBQuotasUsageResponse
  */
-export interface SimulateMongoDBQuotaUsageResponse {
+export interface SimulateMongoDBQuotasUsageResponse {
     /**
      *
      * @type {Array<Quota>}
-     * @memberof SimulateMongoDBQuotaUsageResponse
+     * @memberof SimulateMongoDBQuotasUsageResponse
      */
     quotas: Array<Quota>;
 }
@@ -670,21 +683,47 @@ export interface SimulateMongoDBQuotaUsageResponse {
 /**
  *
  * @export
- * @interface SimulateQuotasExchangeBetweenProductsResponse
+ * @interface SimulateTransferQuotasBetweenProductsResponse
  */
-export interface SimulateQuotasExchangeBetweenProductsResponse {
+export interface SimulateTransferQuotasBetweenProductsResponse {
     /**
      *
      * @type {ProductQuotas}
-     * @memberof SimulateQuotasExchangeBetweenProductsResponse
+     * @memberof SimulateTransferQuotasBetweenProductsResponse
      */
-    fromProduct: ProductQuotas;
+    srcProduct: ProductQuotas;
     /**
      *
      * @type {ProductQuotas}
-     * @memberof SimulateQuotasExchangeBetweenProductsResponse
+     * @memberof SimulateTransferQuotasBetweenProductsResponse
      */
-    toProduct: ProductQuotas;
+    dstProduct: ProductQuotas;
+}
+
+/**
+ *
+ * @export
+ * @interface TransferQuotasBetweenProductsRequest
+ */
+export interface TransferQuotasBetweenProductsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof TransferQuotasBetweenProductsRequest
+     */
+    srcProductId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof TransferQuotasBetweenProductsRequest
+     */
+    dstProductId: string;
+    /**
+     *
+     * @type {Array<QuotaToTransfer>}
+     * @memberof TransferQuotasBetweenProductsRequest
+     */
+    quotas: Array<QuotaToTransfer>;
 }
 
 /**
@@ -709,10 +748,10 @@ export interface UpdateMongoHostsRequest {
 export interface UploadQuotasToProductsRequest {
     /**
      *
-     * @type {ProductQuotas}
+     * @type {Array<ProductQuotasToTransfer>}
      * @memberof UploadQuotasToProductsRequest
      */
-    products?: ProductQuotas;
+    products: Array<ProductQuotasToTransfer>;
 }
 
 /**
@@ -1194,68 +1233,16 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {ExchangeQuotasBetweenProductsRequest} exchangeQuotasBetweenProductsRequest
+         * @summary List MDB quotas by products
+         * @param {Array<string>} [productIds]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        exchangeQuotasBetweenProducts: async (
-            exchangeQuotasBetweenProductsRequest: ExchangeQuotasBetweenProductsRequest,
+        listQuotasByProducts: async (
+            productIds?: Array<string>,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'exchangeQuotasBetweenProductsRequest' is not null or undefined
-            assertParamExists(
-                'exchangeQuotasBetweenProducts',
-                'exchangeQuotasBetweenProductsRequest',
-                exchangeQuotasBetweenProductsRequest,
-            );
-            const localVarPath = `/api/quotas/mdb/exchange-between-products`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-            localVarRequestOptions.data = serializeDataIfNeeded(
-                exchangeQuotasBetweenProductsRequest,
-                localVarRequestOptions,
-                configuration,
-            );
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary List MDB quotas by product
-         * @param {string} productId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listQuotasByProduct: async (
-            productId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'productId' is not null or undefined
-            assertParamExists('listQuotasByProduct', 'productId', productId);
-            const localVarPath = `/api/quotas/mdb/by-product`;
+            const localVarPath = `/api/quotas/mdb/by-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1267,8 +1254,8 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (productId !== undefined) {
-                localVarQueryParameter['productId'] = productId;
+            if (productIds) {
+                localVarQueryParameter['productIds'] = productIds;
             }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1320,20 +1307,20 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          *
-         * @summary Simulate quotas usage for MongoDB cluster
-         * @param {SimulateMongoDBQuotaUsageRequest} simulateMongoDBQuotaUsageRequest
+         * @summary Simulate usage of quotas for MongoDB cluster
+         * @param {SimulateMongoDBQuotasUsageRequest} simulateMongoDBQuotasUsageRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         simulateMongoDbQuotasUsage: async (
-            simulateMongoDBQuotaUsageRequest: SimulateMongoDBQuotaUsageRequest,
+            simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'simulateMongoDBQuotaUsageRequest' is not null or undefined
+            // verify required parameter 'simulateMongoDBQuotasUsageRequest' is not null or undefined
             assertParamExists(
                 'simulateMongoDbQuotasUsage',
-                'simulateMongoDBQuotaUsageRequest',
-                simulateMongoDBQuotaUsageRequest,
+                'simulateMongoDBQuotasUsageRequest',
+                simulateMongoDBQuotasUsageRequest,
             );
             const localVarPath = `/api/quotas/mdb/managed-mongodb/simulate-usage`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1343,15 +1330,11 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (simulateMongoDBQuotaUsageRequest !== undefined) {
-                for (const [key, value] of Object.entries(simulateMongoDBQuotaUsageRequest)) {
-                    localVarQueryParameter[key] = value;
-                }
-            }
+            localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -1361,6 +1344,11 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 ...headersFromBaseOptions,
                 ...options.headers,
             };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                simulateMongoDBQuotasUsageRequest,
+                localVarRequestOptions,
+                configuration,
+            );
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1369,22 +1357,22 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          *
-         * @summary Simulate MDB quotas exchange between products
-         * @param {ExchangeQuotasBetweenProductsRequest} exchangeQuotasBetweenProductsRequest
+         * @summary Simulate transfer of MDB quotas between products
+         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        simulateQuotasExchangeBetweenProducts: async (
-            exchangeQuotasBetweenProductsRequest: ExchangeQuotasBetweenProductsRequest,
+        simulateTransferQuotasBetweenProducts: async (
+            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'exchangeQuotasBetweenProductsRequest' is not null or undefined
+            // verify required parameter 'transferQuotasBetweenProductsRequest' is not null or undefined
             assertParamExists(
-                'simulateQuotasExchangeBetweenProducts',
-                'exchangeQuotasBetweenProductsRequest',
-                exchangeQuotasBetweenProductsRequest,
+                'simulateTransferQuotasBetweenProducts',
+                'transferQuotasBetweenProductsRequest',
+                transferQuotasBetweenProductsRequest,
             );
-            const localVarPath = `/api/quotas/mdb/simulate-exchange-between-products`;
+            const localVarPath = `/api/quotas/mdb/simulate-transfer-between-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1392,15 +1380,11 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (exchangeQuotasBetweenProductsRequest !== undefined) {
-                for (const [key, value] of Object.entries(exchangeQuotasBetweenProductsRequest)) {
-                    localVarQueryParameter[key] = value;
-                }
-            }
+            localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -1410,6 +1394,61 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 ...headersFromBaseOptions,
                 ...options.headers,
             };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                transferQuotasBetweenProductsRequest,
+                localVarRequestOptions,
+                configuration,
+            );
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Exchange MDB quotas between products
+         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transferQuotasBetweenProducts: async (
+            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'transferQuotasBetweenProductsRequest' is not null or undefined
+            assertParamExists(
+                'transferQuotasBetweenProducts',
+                'transferQuotasBetweenProductsRequest',
+                transferQuotasBetweenProductsRequest,
+            );
+            const localVarPath = `/api/quotas/mdb/transfer-between-products`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+            localVarRequestOptions.data = serializeDataIfNeeded(
+                transferQuotasBetweenProductsRequest,
+                localVarRequestOptions,
+                configuration,
+            );
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1478,50 +1517,24 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {ExchangeQuotasBetweenProductsRequest} exchangeQuotasBetweenProductsRequest
+         * @summary List MDB quotas by products
+         * @param {Array<string>} [productIds]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async exchangeQuotasBetweenProducts(
-            exchangeQuotasBetweenProductsRequest: ExchangeQuotasBetweenProductsRequest,
+        async listQuotasByProducts(
+            productIds?: Array<string>,
             options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.exchangeQuotasBetweenProducts(
-                exchangeQuotasBetweenProductsRequest,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListQuotasByProductsResponse>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listQuotasByProducts(
+                productIds,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['MDBQuotasApi.exchangeQuotasBetweenProducts']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary List MDB quotas by product
-         * @param {string} productId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async listQuotasByProduct(
-            productId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListQuotasResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listQuotasByProduct(
-                productId,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['MDBQuotasApi.listQuotasByProduct']?.[
+                operationServerMap['MDBQuotasApi.listQuotasByProducts']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -1541,7 +1554,7 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         async listResources(
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMdbResourcesRequest>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListResourcesResponse>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -1558,22 +1571,22 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Simulate quotas usage for MongoDB cluster
-         * @param {SimulateMongoDBQuotaUsageRequest} simulateMongoDBQuotaUsageRequest
+         * @summary Simulate usage of quotas for MongoDB cluster
+         * @param {SimulateMongoDBQuotasUsageRequest} simulateMongoDBQuotasUsageRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async simulateMongoDbQuotasUsage(
-            simulateMongoDBQuotaUsageRequest: SimulateMongoDBQuotaUsageRequest,
+            simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<SimulateMongoDBQuotaUsageResponse>
+            ) => AxiosPromise<SimulateMongoDBQuotasUsageResponse>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.simulateMongoDbQuotasUsage(
-                simulateMongoDBQuotaUsageRequest,
+                simulateMongoDBQuotasUsageRequest,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -1591,28 +1604,56 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Simulate MDB quotas exchange between products
-         * @param {ExchangeQuotasBetweenProductsRequest} exchangeQuotasBetweenProductsRequest
+         * @summary Simulate transfer of MDB quotas between products
+         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async simulateQuotasExchangeBetweenProducts(
-            exchangeQuotasBetweenProductsRequest: ExchangeQuotasBetweenProductsRequest,
+        async simulateTransferQuotasBetweenProducts(
+            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<SimulateQuotasExchangeBetweenProductsResponse>
+            ) => AxiosPromise<SimulateTransferQuotasBetweenProductsResponse>
         > {
             const localVarAxiosArgs =
-                await localVarAxiosParamCreator.simulateQuotasExchangeBetweenProducts(
-                    exchangeQuotasBetweenProductsRequest,
+                await localVarAxiosParamCreator.simulateTransferQuotasBetweenProducts(
+                    transferQuotasBetweenProductsRequest,
                     options,
                 );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['MDBQuotasApi.simulateQuotasExchangeBetweenProducts']?.[
+                operationServerMap['MDBQuotasApi.simulateTransferQuotasBetweenProducts']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Exchange MDB quotas between products
+         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async transferQuotasBetweenProducts(
+            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.transferQuotasBetweenProducts(
+                transferQuotasBetweenProductsRequest,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['MDBQuotasApi.transferQuotasBetweenProducts']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -1667,35 +1708,17 @@ export const MDBQuotasApiFactory = function (
     return {
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {MDBQuotasApiExchangeQuotasBetweenProductsRequest} requestParameters Request parameters.
+         * @summary List MDB quotas by products
+         * @param {MDBQuotasApiListQuotasByProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        exchangeQuotasBetweenProducts(
-            requestParameters: MDBQuotasApiExchangeQuotasBetweenProductsRequest,
+        listQuotasByProducts(
+            requestParameters: MDBQuotasApiListQuotasByProductsRequest = {},
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<void> {
+        ): AxiosPromise<ListQuotasByProductsResponse> {
             return localVarFp
-                .exchangeQuotasBetweenProducts(
-                    requestParameters.exchangeQuotasBetweenProductsRequest,
-                    options,
-                )
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary List MDB quotas by product
-         * @param {MDBQuotasApiListQuotasByProductRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listQuotasByProduct(
-            requestParameters: MDBQuotasApiListQuotasByProductRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListQuotasResponse> {
-            return localVarFp
-                .listQuotasByProduct(requestParameters.productId, options)
+                .listQuotasByProducts(requestParameters.productIds, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -1704,12 +1727,12 @@ export const MDBQuotasApiFactory = function (
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listResources(options?: RawAxiosRequestConfig): AxiosPromise<ListMdbResourcesRequest> {
+        listResources(options?: RawAxiosRequestConfig): AxiosPromise<ListResourcesResponse> {
             return localVarFp.listResources(options).then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Simulate quotas usage for MongoDB cluster
+         * @summary Simulate usage of quotas for MongoDB cluster
          * @param {MDBQuotasApiSimulateMongoDbQuotasUsageRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1717,28 +1740,46 @@ export const MDBQuotasApiFactory = function (
         simulateMongoDbQuotasUsage(
             requestParameters: MDBQuotasApiSimulateMongoDbQuotasUsageRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<SimulateMongoDBQuotaUsageResponse> {
+        ): AxiosPromise<SimulateMongoDBQuotasUsageResponse> {
             return localVarFp
                 .simulateMongoDbQuotasUsage(
-                    requestParameters.simulateMongoDBQuotaUsageRequest,
+                    requestParameters.simulateMongoDBQuotasUsageRequest,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Simulate MDB quotas exchange between products
-         * @param {MDBQuotasApiSimulateQuotasExchangeBetweenProductsRequest} requestParameters Request parameters.
+         * @summary Simulate transfer of MDB quotas between products
+         * @param {MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        simulateQuotasExchangeBetweenProducts(
-            requestParameters: MDBQuotasApiSimulateQuotasExchangeBetweenProductsRequest,
+        simulateTransferQuotasBetweenProducts(
+            requestParameters: MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<SimulateQuotasExchangeBetweenProductsResponse> {
+        ): AxiosPromise<SimulateTransferQuotasBetweenProductsResponse> {
             return localVarFp
-                .simulateQuotasExchangeBetweenProducts(
-                    requestParameters.exchangeQuotasBetweenProductsRequest,
+                .simulateTransferQuotasBetweenProducts(
+                    requestParameters.transferQuotasBetweenProductsRequest,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Exchange MDB quotas between products
+         * @param {MDBQuotasApiTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transferQuotasBetweenProducts(
+            requestParameters: MDBQuotasApiTransferQuotasBetweenProductsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .transferQuotasBetweenProducts(
+                    requestParameters.transferQuotasBetweenProductsRequest,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -1762,31 +1803,17 @@ export const MDBQuotasApiFactory = function (
 };
 
 /**
- * Request parameters for exchangeQuotasBetweenProducts operation in MDBQuotasApi.
+ * Request parameters for listQuotasByProducts operation in MDBQuotasApi.
  * @export
- * @interface MDBQuotasApiExchangeQuotasBetweenProductsRequest
+ * @interface MDBQuotasApiListQuotasByProductsRequest
  */
-export interface MDBQuotasApiExchangeQuotasBetweenProductsRequest {
+export interface MDBQuotasApiListQuotasByProductsRequest {
     /**
      *
-     * @type {ExchangeQuotasBetweenProductsRequest}
-     * @memberof MDBQuotasApiExchangeQuotasBetweenProducts
+     * @type {Array<string>}
+     * @memberof MDBQuotasApiListQuotasByProducts
      */
-    readonly exchangeQuotasBetweenProductsRequest: ExchangeQuotasBetweenProductsRequest;
-}
-
-/**
- * Request parameters for listQuotasByProduct operation in MDBQuotasApi.
- * @export
- * @interface MDBQuotasApiListQuotasByProductRequest
- */
-export interface MDBQuotasApiListQuotasByProductRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof MDBQuotasApiListQuotasByProduct
-     */
-    readonly productId: string;
+    readonly productIds?: Array<string>;
 }
 
 /**
@@ -1797,24 +1824,38 @@ export interface MDBQuotasApiListQuotasByProductRequest {
 export interface MDBQuotasApiSimulateMongoDbQuotasUsageRequest {
     /**
      *
-     * @type {SimulateMongoDBQuotaUsageRequest}
+     * @type {SimulateMongoDBQuotasUsageRequest}
      * @memberof MDBQuotasApiSimulateMongoDbQuotasUsage
      */
-    readonly simulateMongoDBQuotaUsageRequest: SimulateMongoDBQuotaUsageRequest;
+    readonly simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest;
 }
 
 /**
- * Request parameters for simulateQuotasExchangeBetweenProducts operation in MDBQuotasApi.
+ * Request parameters for simulateTransferQuotasBetweenProducts operation in MDBQuotasApi.
  * @export
- * @interface MDBQuotasApiSimulateQuotasExchangeBetweenProductsRequest
+ * @interface MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest
  */
-export interface MDBQuotasApiSimulateQuotasExchangeBetweenProductsRequest {
+export interface MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest {
     /**
      *
-     * @type {ExchangeQuotasBetweenProductsRequest}
-     * @memberof MDBQuotasApiSimulateQuotasExchangeBetweenProducts
+     * @type {TransferQuotasBetweenProductsRequest}
+     * @memberof MDBQuotasApiSimulateTransferQuotasBetweenProducts
      */
-    readonly exchangeQuotasBetweenProductsRequest: ExchangeQuotasBetweenProductsRequest;
+    readonly transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest;
+}
+
+/**
+ * Request parameters for transferQuotasBetweenProducts operation in MDBQuotasApi.
+ * @export
+ * @interface MDBQuotasApiTransferQuotasBetweenProductsRequest
+ */
+export interface MDBQuotasApiTransferQuotasBetweenProductsRequest {
+    /**
+     *
+     * @type {TransferQuotasBetweenProductsRequest}
+     * @memberof MDBQuotasApiTransferQuotasBetweenProducts
+     */
+    readonly transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest;
 }
 
 /**
@@ -1840,38 +1881,18 @@ export interface MDBQuotasApiUploadQuotasToProductsRequest {
 export class MDBQuotasApi extends BaseAPI {
     /**
      *
-     * @summary Exchange MDB quotas between products
-     * @param {MDBQuotasApiExchangeQuotasBetweenProductsRequest} requestParameters Request parameters.
+     * @summary List MDB quotas by products
+     * @param {MDBQuotasApiListQuotasByProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MDBQuotasApi
      */
-    public exchangeQuotasBetweenProducts(
-        requestParameters: MDBQuotasApiExchangeQuotasBetweenProductsRequest,
+    public listQuotasByProducts(
+        requestParameters: MDBQuotasApiListQuotasByProductsRequest = {},
         options?: RawAxiosRequestConfig,
     ) {
         return MDBQuotasApiFp(this.configuration)
-            .exchangeQuotasBetweenProducts(
-                requestParameters.exchangeQuotasBetweenProductsRequest,
-                options,
-            )
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary List MDB quotas by product
-     * @param {MDBQuotasApiListQuotasByProductRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MDBQuotasApi
-     */
-    public listQuotasByProduct(
-        requestParameters: MDBQuotasApiListQuotasByProductRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return MDBQuotasApiFp(this.configuration)
-            .listQuotasByProduct(requestParameters.productId, options)
+            .listQuotasByProducts(requestParameters.productIds, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -1890,7 +1911,7 @@ export class MDBQuotasApi extends BaseAPI {
 
     /**
      *
-     * @summary Simulate quotas usage for MongoDB cluster
+     * @summary Simulate usage of quotas for MongoDB cluster
      * @param {MDBQuotasApiSimulateMongoDbQuotasUsageRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1901,25 +1922,48 @@ export class MDBQuotasApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBQuotasApiFp(this.configuration)
-            .simulateMongoDbQuotasUsage(requestParameters.simulateMongoDBQuotaUsageRequest, options)
+            .simulateMongoDbQuotasUsage(
+                requestParameters.simulateMongoDBQuotasUsageRequest,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Simulate MDB quotas exchange between products
-     * @param {MDBQuotasApiSimulateQuotasExchangeBetweenProductsRequest} requestParameters Request parameters.
+     * @summary Simulate transfer of MDB quotas between products
+     * @param {MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MDBQuotasApi
      */
-    public simulateQuotasExchangeBetweenProducts(
-        requestParameters: MDBQuotasApiSimulateQuotasExchangeBetweenProductsRequest,
+    public simulateTransferQuotasBetweenProducts(
+        requestParameters: MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest,
         options?: RawAxiosRequestConfig,
     ) {
         return MDBQuotasApiFp(this.configuration)
-            .simulateQuotasExchangeBetweenProducts(
-                requestParameters.exchangeQuotasBetweenProductsRequest,
+            .simulateTransferQuotasBetweenProducts(
+                requestParameters.transferQuotasBetweenProductsRequest,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Exchange MDB quotas between products
+     * @param {MDBQuotasApiTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MDBQuotasApi
+     */
+    public transferQuotasBetweenProducts(
+        requestParameters: MDBQuotasApiTransferQuotasBetweenProductsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return MDBQuotasApiFp(this.configuration)
+            .transferQuotasBetweenProducts(
+                requestParameters.transferQuotasBetweenProductsRequest,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -5048,7 +5092,18 @@ export interface V1ManagedMongoDbApiListHostsRequest {
  * @interface V1ManagedMongoDbApiUpdateClusterRequest
  */
 export interface V1ManagedMongoDbApiUpdateClusterRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof V1ManagedMongoDbApiUpdateCluster
+     */
     readonly clusterId: string;
+
+    /**
+     *
+     * @type {V1MongoUpdateClusterRequest}
+     * @memberof V1ManagedMongoDbApiUpdateCluster
+     */
     readonly v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest;
 }
 

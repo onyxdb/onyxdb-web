@@ -1,6 +1,6 @@
 import React from 'react';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
-import {Button, Select, Text} from '@gravity-ui/uikit';
+import {Button, Select, Text, Tooltip} from '@gravity-ui/uikit';
 import {formatDistanceToNow} from 'date-fns';
 import {ru} from 'date-fns/locale';
 
@@ -21,13 +21,16 @@ export const SelectRequestInterval: React.FC<SelectRequestIntervalProps> = ({
 }) => {
     return (
         <HorizontalStack gap={10} align="center">
-            <Button
-                view={isMonitoring ? 'outlined-success' : 'outlined-info'}
-                size="m"
-                onClick={handleToggleMonitoring}
-            >
-                {isMonitoring ? 'Автозагрузка запущена' : 'Начать автозагрузку'}
-            </Button>
+            <Tooltip content="Запукает автоматическую подгрузку данных каждые N времени">
+                <Button
+                    view={isMonitoring ? 'outlined-success' : 'outlined-info'}
+                    size="m"
+                    onClick={handleToggleMonitoring}
+                >
+                    {isMonitoring ? 'Слежение запущено' : 'Начать слежение'}
+                </Button>
+            </Tooltip>
+
             <Select
                 size="m"
                 placeholder="Выберите интервал"

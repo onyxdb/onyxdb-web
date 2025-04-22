@@ -23,10 +23,12 @@ export const CreateQuotaModal: React.FC<CreateQuotaModalProps> = ({productId, cl
         try {
             const request: MDBQuotasApiUploadQuotasToProductsRequest = {
                 uploadQuotasToProductsRequest: {
-                    products: {
-                        productId: productId,
-                        quotas: values.quotas,
-                    },
+                    products: [
+                        {
+                            productId: productId,
+                            quotas: values.quotas,
+                        },
+                    ],
                 },
             };
             await mdbQuotasApi.uploadQuotasToProducts(request);

@@ -111,8 +111,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
 
     const resourceOptions = resources.map((resource) => (
         <Select.Option key={resource.id} value={resource.id}>
-            {/*{resource.displayName} ({resource.units}) TODO*/}
-            {resource.displayName} (units)
+            {resource.description} ({resource.unit})
         </Select.Option>
     ));
 
@@ -137,7 +136,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                                     placeholder="Выберите ресурс"
                                     value={[
                                         resources.find((p) => p.id === quota.resourceId)
-                                            ?.displayName ?? quota.resourceId,
+                                            ?.description ?? quota.resourceId,
                                     ]}
                                     onUpdate={(value: string[]) =>
                                         handleQuotaChange(index, 'resourceId', value[0])
@@ -183,7 +182,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                                     }
                                     placeholder="Введите лимит"
                                     type="number"
-                                    // endContent={selectedResource?.units TODO}
+                                    // endContent={selectedResource?.units}
                                 />
                             </Box>
                             <Button

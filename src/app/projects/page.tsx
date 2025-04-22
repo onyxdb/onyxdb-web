@@ -18,6 +18,7 @@ import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {ProductSelector} from '@/components/ProductSelector';
 import {ProductDTOGet} from '@/generated/api';
 import {ProjectBlock} from '@/components/ProjectBlock';
+import {useSearchParams} from 'next/navigation';
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
@@ -29,13 +30,32 @@ export default function ProjectsPage() {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [showArchived, setShowArchived] = useState<boolean>(false);
     const [productId, setProductId] = useState<string | null>(null);
+    const searchParams = useSearchParams();
     const {checkPermission} = useAuth();
+
+    const prjIdFromPath = searchParams.get('prjId');
+
+    const handleOpenViewModal = (project: V1ProjectResponse) => {
+        setSelectedProject(project);
+        setIsViewModalOpen(true);
+    };
+
+    const handleCloseViewModal = () => {
+        setIsViewModalOpen(false);
+    };
 
     const fetchProjects = async () => {
         try {
             const response = await mdbProjectsApi.listProjects();
             setProjects(response.data.projects);
             setFilteredProjects(response.data.projects);
+
+            if (prjIdFromPath) {
+                const prjPreSelected = response.data.projects.find((p) => p.id == prjIdFromPath)
+                if (prjPreSelected) {
+                    handleOpenViewModal(prjPreSelected);
+                }
+            }
         } catch (error) {
             console.error('Error fetching clusters:', error);
         }
@@ -67,15 +87,6 @@ export default function ProjectsPage() {
                     console.error('Error updating project:', selectedProject.id, error),
                 );
         }
-    };
-
-    const handleOpenViewModal = (project: V1ProjectResponse) => {
-        setSelectedProject(project);
-        setIsViewModalOpen(true);
-    };
-
-    const handleCloseViewModal = () => {
-        setIsViewModalOpen(false);
     };
 
     const handleOpenCreateModal = () => {

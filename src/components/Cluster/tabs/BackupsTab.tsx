@@ -1,14 +1,11 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Select, Text} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 import {MongoBackup} from '@/generated/api-mdb';
 import {BackupsTable} from '@/components/tables/BackupsTable';
 import {ConfirmationModal} from '@/components/ConfirmationModal';
-import {formatDistanceToNow} from 'date-fns';
-import {ru} from 'date-fns/locale';
 import {mdbMongoDbBackupsApi} from '@/app/apis';
-import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 
@@ -171,7 +168,7 @@ const BackupsTab: React.FC<BackupsTabProps> = ({clusterId}) => {
                 closeAction={handleCloseCreateModal}
                 confirmAction={handleCreateBackup}
                 title="Подтверждение создания бекапа"
-                message={`Вы уверены, что хотите создать новый бекап ${selectedBackup}?`}
+                message={`Вы уверены, что хотите создать новый бекап?`}
                 confirmButtonText="Создать"
             />
             <ConfirmationModal

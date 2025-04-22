@@ -5048,18 +5048,7 @@ export interface V1ManagedMongoDbApiListHostsRequest {
  * @interface V1ManagedMongoDbApiUpdateClusterRequest
  */
 export interface V1ManagedMongoDbApiUpdateClusterRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ManagedMongoDbApiUpdateCluster
-     */
     readonly clusterId: string;
-
-    /**
-     *
-     * @type {V1MongoUpdateClusterRequest}
-     * @memberof V1ManagedMongoDbApiUpdateCluster
-     */
     readonly v1MongoUpdateClusterRequest: V1MongoUpdateClusterRequest;
 }
 

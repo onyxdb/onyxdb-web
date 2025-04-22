@@ -6,20 +6,39 @@ import {useAuth} from '@/context/AuthContext';
 import {CirclePlus, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePathname, useRouter} from 'next/navigation';
 import ClusterView from '@/components/Cluster/ClusterView';
+import {mdbMongoDbApi} from '@/app/apis';
+import {useToaster} from '@gravity-ui/uikit';
 
 export default function ClusterViewPage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
     const pathname = usePathname();
+    const toaster = useToaster();
 
     const clusterId = pathname.split('/').pop() ?? '';
 
     const handleEdit = () => {
-        console.log(clusterId);
+        router.push(`/clusters/edit/${clusterId}`);
     };
 
-    const handleDelete = () => {
-        console.log(clusterId);
+    const handleDelete = async () => {
+        try {
+            await mdbMongoDbApi.deleteCluster({clusterId: clusterId});
+            toaster.add({
+                name: 'cluster_delete',
+                title: 'Кластер успешно удалён',
+                content: 'Операция выполнена успешно.',
+                theme: 'success',
+            });
+        } catch (error) {
+            console.error('Error deleting clusters:', error);
+            toaster.add({
+                name: 'error_cluster_delete',
+                title: 'Ошибка удаления кластера',
+                content: `Не удалось удалить кластер: ${error}.`,
+                theme: 'danger',
+            });
+        }
     };
 
     const handleCreate = () => {

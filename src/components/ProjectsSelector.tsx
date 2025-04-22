@@ -8,28 +8,44 @@ import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface ProjectSelectorProps {
-    onProjectSelect: (project: V1ProjectResponse) => void;
+    initialValueId?: string;
+    selectProjectAction: (project: V1ProjectResponse) => void;
     header?: string;
     label?: string;
     placeholder?: string;
+    disabled?: boolean;
 }
 
 export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
-    onProjectSelect,
+    initialValueId,
+    selectProjectAction,
     header = 'Поиск проекта',
     label = 'Проект',
     placeholder = 'Введите и выберите проект',
+    disabled,
 }) => {
     const [projectsAll, setProjectsAll] = useState<V1ProjectResponse[]>([]);
     const [projectOptions, setProjectOptions] = useState<V1ProjectResponse[]>([]);
-    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>(initialValueId ?? '');
     const [showArchived, setShowArchived] = useState<boolean>(false);
     const [isProjectsModalOpen, setIsProjectsModalOpen] = useState<boolean>(false);
+
+    const handleProjectSelect = (data: V1ProjectResponse) => {
+        setIsProjectsModalOpen(false);
+        selectProjectAction(data);
+        setSearchQuery(data.name);
+    };
 
     const fetchProjectsAll = async () => {
         try {
             const response = await mdbProjectsApi.listProjects();
             setProjectsAll(response.data.projects ?? []);
+            if (initialValueId) {
+                const initial = response.data.projects.find((e) => e.id === initialValueId);
+                if (initial) {
+                    handleProjectSelect(initial);
+                }
+            }
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
@@ -60,12 +76,6 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
         setSearchQuery(value);
     };
 
-    const handleProjectSelect = (data: V1ProjectResponse) => {
-        setIsProjectsModalOpen(false);
-        onProjectSelect(data);
-        setSearchQuery(data.name);
-    };
-
     const handleOpenProjectsModal = () => {
         setIsProjectsModalOpen(true);
     };
@@ -73,6 +83,15 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
     const handleCloseProjectsModal = () => {
         setIsProjectsModalOpen(false);
     };
+
+    if (disabled) {
+        return (
+            <div style={{marginBottom: '20px'}}>
+                <Text>{label}</Text>
+                <TextInput value={searchQuery} disabled={disabled} />
+            </div>
+        );
+    }
 
     return (
         <div style={{marginBottom: '20px'}}>

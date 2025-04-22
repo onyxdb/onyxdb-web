@@ -66,7 +66,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
 
     return (
         <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px'}}>{label}</label>
+            <Text variant="body-1">{label}</Text>
             <HorizontalStack align="center" gap={10}>
                 <TextInput
                     name="product"

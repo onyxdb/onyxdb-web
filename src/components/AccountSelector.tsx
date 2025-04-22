@@ -9,17 +9,19 @@ import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface AccountSelectorProps {
-    onAccountSelect: (account: AccountDTO) => void;
+    selectAccountAction: (account: AccountDTO) => void;
     header?: string;
     label?: string;
     placeholder?: string;
+    disabled?: boolean;
 }
 
 export const AccountSelector: React.FC<AccountSelectorProps> = ({
-    onAccountSelect,
+    selectAccountAction,
     header = 'Поиск аккаунта',
     label = 'Аккаунт',
     placeholder = 'Введите и выберите аккаунт',
+    disabled,
 }) => {
     const {user} = useAuth();
     const [accountOptions, setAccountOptions] = useState<AccountDTO[]>([]);
@@ -45,7 +47,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
 
     const handleAccountSelect = (data: AccountDTO) => {
         setIsAccountsModalOpen(false);
-        onAccountSelect(data);
+        selectAccountAction(data);
         setSearchAccount(`${data.firstName} ${data.lastName} (${data.email})`);
     };
 
@@ -59,8 +61,25 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
     };
 
     const handleAssignMe = () => {
-        handleAccountSelect(user?.account);
+        if (user?.account) {
+            handleAccountSelect(user.account);
+        }
     };
+
+    if (disabled) {
+        return (
+            <div style={{marginBottom: '20px'}}>
+                <label style={{display: 'block', marginBottom: '8px'}}>{label}</label>
+                <TextInput
+                    name="account"
+                    value={searchAccount}
+                    placeholder={placeholder}
+                    onUpdate={handleAccountChange}
+                    disabled={disabled}
+                />
+            </div>
+        );
+    }
 
     return (
         <div style={{marginBottom: '20px'}}>

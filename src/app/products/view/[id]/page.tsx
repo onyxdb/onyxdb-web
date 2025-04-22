@@ -232,7 +232,7 @@ export default function ProductDetailPage() {
                     </TabPanel>
                     <TabPanel value="quotas">
                         <div style={{marginTop: '20px'}}>
-                            <QuotasTab productId={product.id} />
+                            <QuotasTab product={product} />
                         </div>
                     </TabPanel>
                     <TabPanel value="billing">

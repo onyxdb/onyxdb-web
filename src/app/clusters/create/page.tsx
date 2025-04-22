@@ -4,7 +4,7 @@ import React from 'react';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {useRouter} from 'next/navigation';
-import {ClusterCreateForm, ClusterFormValues} from '@/components/forms/ClusterCreateForm';
+import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {mdbMongoDbApi} from '@/app/apis';
 import {V1CreateMongoClusterRequest} from '@/generated/api-mdb';
 
@@ -54,7 +54,7 @@ export default function ClusterCreatePage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} />
             <div style={{padding: '20px'}}>
-                <ClusterCreateForm createAction={handleCreate} cancelAction={handleCancel} />
+                <ClusterForm submitAction={handleCreate} cancelAction={handleCancel} />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
-// pages/projects/index.tsx
 'use client';
+
 import React, {useEffect, useState} from 'react';
 import {Button, Checkbox, Modal, Text, TextInput} from '@gravity-ui/uikit';
 import {
@@ -51,7 +51,7 @@ export default function ProjectsPage() {
             setFilteredProjects(response.data.projects);
 
             if (prjIdFromPath) {
-                const prjPreSelected = response.data.projects.find((p) => p.id == prjIdFromPath)
+                const prjPreSelected = response.data.projects.find((p) => p.id === prjIdFromPath);
                 if (prjPreSelected) {
                     handleOpenViewModal(prjPreSelected);
                 }

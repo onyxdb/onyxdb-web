@@ -9,7 +9,7 @@ interface BillingTabProps {
     product: ProductDTOGet;
 }
 
-const BillingTab: React.FC<BillingTabProps> = ({product}) => {
+const BillingTab: React.FC<BillingTabProps> = () => {
     const data: YagrWidgetData = {
         data: {
             timeline: [

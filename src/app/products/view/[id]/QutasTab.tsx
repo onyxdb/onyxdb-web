@@ -101,6 +101,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
 
     const handleCloseExchangeModal = () => {
         setIsExchangeModalOpen(false);
+        fetchData(product.id);
     };
 
     const MyTable = withTableSorting(Table);

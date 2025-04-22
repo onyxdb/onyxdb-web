@@ -7,12 +7,14 @@ interface ResourceInputFieldProps {
     label?: string;
     name: string;
     value: number;
-    changeAction: (value: number, unit: string) => void;
+    changeAction: (value: number) => void;
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     error?: string;
     placeholder?: string;
     note?: React.ReactNode;
     unitType: ResourceUnitEnum;
+    // max?: number;
+    // min?: number;
 
     [key: string]: unknown;
 }
@@ -27,10 +29,12 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     placeholder,
     note,
     unitType,
+    // max,
+    // min,
     ...props
 }) => {
     const [currentValue, setCurrentValue] = useState<number>(value);
-    const [currentUnit, setCurrentUnit] = useState<string>(''); // Постоянное состояние текущего измерения
+    const [currentUnit, setCurrentUnit] = useState<string>('');
 
     const coresUnits = [
         {value: 'cores', label: 'CPU', coefficient: 1},
@@ -40,7 +44,7 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     const bytesUnits = [
         {value: 'GB', label: 'GB', coefficient: 1024 * 1024 * 1024},
         {value: 'MB', label: 'MB', coefficient: 1024 * 1024},
-        {value: 'bytes', label: 'bytes', coefficient: 1},
+        // {value: 'bytes', label: 'bytes', coefficient: 1},
     ];
 
     const [units, setUnits] = useState<{value: string; label: string; coefficient: number}[]>([]);
@@ -51,7 +55,7 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
             setCurrentUnit('cores');
         } else if (unitType === ResourceUnitEnum.Bytes) {
             setUnits(bytesUnits);
-            setCurrentUnit('bytes');
+            setCurrentUnit('GB');
         }
     }, [unitType]);
 
@@ -62,7 +66,7 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     const convertToBaseUnit = (val: number, unit: string): number => {
         const selectedUnit = units.find((u) => u.value === unit);
         if (selectedUnit) {
-            return val / selectedUnit.coefficient;
+            return val * selectedUnit.coefficient;
         }
         return val;
     };
@@ -70,25 +74,23 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     const convertFromBaseUnit = (val: number, unit: string): number => {
         const selectedUnit = units.find((u) => u.value === unit);
         if (selectedUnit) {
-            return val * selectedUnit.coefficient;
+            return val / selectedUnit.coefficient;
         }
         return val;
     };
 
     const handleValueChange = (newValue: string) => {
         const parsedValue = parseFloat(newValue);
-        setCurrentValue(parsedValue);
         const val = convertToBaseUnit(parsedValue, currentUnit);
-        console.log('handleValueChange', val);
-        changeAction(val, currentUnit);
+        setCurrentValue(val);
+        console.log('handleValueChange', val, currentUnit);
+        changeAction(val);
     };
 
     const handleUnitChange = (newUnit: string[]) => {
         const unit = newUnit[0];
         setCurrentUnit(unit);
-        const val = convertToBaseUnit(currentValue, unit);
-        console.log('handleUnitChange', val);
-        changeAction(val, currentUnit);
+        console.log('handleUnitChange', unit);
     };
 
     return (

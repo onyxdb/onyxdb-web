@@ -13,16 +13,16 @@ import {
 import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import CreateRoleRequestModal from '@/components/forms/CreateRoleRequestModal';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {getLinkedResourceLabel} from '@/utils/utils';
 import {Box} from '@/components/Layout/Box';
 
 export interface RoleTableProps {
-    onEdit: (roleId: string) => void;
-    onDelete: (roleId: string) => void;
+    editAction: (roleId: string) => void;
+    deleteAction: (roleId: string) => void;
 }
 
-export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
+export const RoleTable: React.FC<RoleTableProps> = ({editAction, deleteAction}) => {
     const [roles, setRoles] = useState<RoleDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit, setLimit] = useState<number>(10);
@@ -31,7 +31,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
 
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     useEffect(() => {
         const fetchRoles = async () => {
@@ -105,13 +105,17 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
                     <Button view="normal" size="m" onClick={() => handleOrderRole(role)}>
                         Заказать
                     </Button>
-                    {checkPermission('web-global-role', 'edit') && (
-                        <Button view="normal" size="m" onClick={() => onEdit(role.id ?? '???')}>
+                    {checkPermission('role', 'edit') && (
+                        <Button view="normal" size="m" onClick={() => editAction(role.id ?? '???')}>
                             Редактировать
                         </Button>
                     )}
-                    {checkPermission('web-global-role', 'delete') && (
-                        <Button view="normal" size="m" onClick={() => onDelete(role.id ?? '???')}>
+                    {checkPermission('role', 'delete') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => deleteAction(role.id ?? '???')}
+                        >
                             Удалить
                         </Button>
                     )}
@@ -133,6 +137,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({onEdit, onDelete}) => {
             </div>
             <div>
                 <MyTable
+                    width="max"
                     data={roles}
                     // @ts-ignore
                     columns={columns}

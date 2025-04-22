@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {organizationUnitsApi} from '@/app/apis';
 import {OrganizationUnitDTO} from '@/generated/api';
 
@@ -14,7 +14,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
 
     // const router = useRouter();
     const pathname = usePathname();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
     const orgId = pathname.split('/').pop() ?? '';
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
     //     }
     // };
 
-    if (!checkPermission('web-global-organization-unit', 'edit')) {
+    if (!checkPermission('organization-unit', 'edit')) {
         return (
             <div style={{padding: '20px'}}>У вас нет разрешения на создание Organization Unit.</div>
         );

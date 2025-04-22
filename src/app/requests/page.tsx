@@ -17,11 +17,9 @@ import {
 } from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 
-export interface RoleRequestsTableProps {}
-
-export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
+export default function RoleRequestsTable() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestDTO[]>([]);
 
     const [statusFilter, setStatusFilter] = useState<string>('');
@@ -44,7 +42,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
     const [searchRole, setSearchRole] = useState<string | null>(null);
     const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
 
     const fetchRoleRequests = async () => {
         try {
@@ -219,7 +217,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
                 roleRequest.status === 'WAITING' &&
                 checkActions([
                     {name: 'admin', action: ''},
-                    {name: 'web-global-role-request', action: 'edit'},
+                    {name: 'role-request', action: 'edit'},
                     //     TODO: Либо текущий человек овнер
                 ]) && (
                     <div style={{display: 'flex', gap: '10px'}}>
@@ -235,7 +233,7 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
 
     return (
         <div style={{padding: '20px'}}>
-            <h1>Заявки на доступы</h1>
+            <Text variant="header-2">Заявки на доступы</Text>
             <div style={{marginBottom: '20px'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
                     <label style={{display: 'block', marginBottom: '8px'}}>Статус заявки</label>
@@ -291,11 +289,10 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
                 </div>
             </div>
             <MyTable
+                width="max"
                 data={roleRequests}
                 // @ts-ignore
                 columns={columns}
-                // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
-                // sortState={sorting}
             />
             <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
                 <Pagination
@@ -397,6 +394,4 @@ export const RoleRequestsTable: React.FC<RoleRequestsTableProps> = () => {
             </Modal>
         </div>
     );
-};
-
-export default RoleRequestsTable;
+}

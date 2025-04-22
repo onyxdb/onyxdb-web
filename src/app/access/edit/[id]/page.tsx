@@ -12,7 +12,7 @@ export default function EditRolePage() {
     const pathname = usePathname();
     const roleId = pathname.split('/').pop() ?? '';
     const [role, setRole] = useState<RoleDTO | null>(null);
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/access', text: 'Роли'},
         {href: `${pathname}`, text: 'Редактирование роли'},
@@ -54,22 +54,22 @@ export default function EditRolePage() {
                     permissions: values.permissions.map((p) => mapPermissionFormToDTO(p)),
                 },
             });
-            router.push('/roles');
+            router.push('/access');
         } catch (error) {
             console.error('Failed to update role:', error);
         }
     };
 
     const handleEditModalCancel = () => {
-        router.push('/roles');
+        router.push('/access');
     };
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={[]} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleEdit}
-                onClose={handleEditModalCancel}
+                closeAction={handleEditModalCancel}
                 initialValue={role}
             />
         </div>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {useRouter} from 'next/navigation';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {organizationUnitsApi} from '@/app/apis';
 import {OrgCreateForm, OrgUnitFormFields} from '@/components/forms/OrgCreateForm';
 
@@ -11,7 +11,7 @@ interface OrgCreatePageProps {}
 // eslint-disable-next-line no-empty-pattern
 export default function OrgCreatePage({}: OrgCreatePageProps) {
     const router = useRouter();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const handleClose = () => {
         if (window.history?.length && window.history.length > 1) {
@@ -39,7 +39,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
         }
     };
 
-    if (!checkPermission('web-global-organization-unit', 'create')) {
+    if (!checkPermission('organization-unit', 'create')) {
         return (
             <div style={{padding: '20px'}}>У вас нет разрешения на создание Organization Unit.</div>
         );
@@ -47,7 +47,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
 
     return (
         <div style={{padding: '20px'}}>
-            <OrgCreateForm onSubmit={handleSubmitCreate} onClose={handleClose} />
+            <OrgCreateForm onSubmit={handleSubmitCreate} closeAction={handleClose} />
         </div>
     );
 }

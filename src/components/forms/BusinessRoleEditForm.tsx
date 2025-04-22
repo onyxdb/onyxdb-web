@@ -12,8 +12,8 @@ import {businessRolesApi, rolesApi} from '@/app/apis';
 import RoleSelectionTable from './RoleSelectionTable';
 
 interface BusinessRoleEditFormProps {
-    onSubmit: (values: BusinessRoleEditFormFields) => void;
-    onClose: () => void;
+    submitAction: (values: BusinessRoleEditFormFields) => void;
+    closeAction: () => void;
     initialValue: BusinessRoleDTO;
 }
 
@@ -38,8 +38,8 @@ function mapDTOtoFormFields(dto: BusinessRoleDTO, roles: RoleDTO[]): BusinessRol
 }
 
 export const BusinessRoleEditForm: React.FC<BusinessRoleEditFormProps> = ({
-    onSubmit,
-    onClose,
+    submitAction,
+    closeAction,
     initialValue,
 }) => {
     const [parentBusinessRoleOptions, setParentBusinessRoleOptions] = useState<BusinessRoleDTO[]>(
@@ -63,7 +63,7 @@ export const BusinessRoleEditForm: React.FC<BusinessRoleEditFormProps> = ({
             }
             return errors;
         },
-        onSubmit,
+        submitAction: submitAction,
     });
 
     useEffect(() => {
@@ -163,7 +163,7 @@ export const BusinessRoleEditForm: React.FC<BusinessRoleEditFormProps> = ({
             }
 
             setIsConfirmationModalOpen(false);
-            onSubmit(formik.values);
+            submitAction(formik.values);
         } catch (error) {
             console.error('Error updating roles for business role:', error);
             setIsConfirmationModalOpen(false);
@@ -321,7 +321,7 @@ export const BusinessRoleEditForm: React.FC<BusinessRoleEditFormProps> = ({
                 />
                 <Box marginTop="20px">
                     <HorizontalStack>
-                        <Button view="normal" size="l" onClick={onClose}>
+                        <Button view="normal" size="l" onClick={closeAction}>
                             Назад
                         </Button>
                         <Box marginLeft="20px">

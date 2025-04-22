@@ -5,24 +5,24 @@ import {Button, Card, Icon, Text} from '@gravity-ui/uikit';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
 import {DomainComponentDTO} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 
 interface DomainComponentProps {
     data: DomainComponentDTO;
-    onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
+    editAction: (id: string) => void;
+    deleteAction: (id: string) => void;
     onClick: () => void;
     isActive: boolean;
 }
 
 export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
     data,
-    onEdit,
-    onDelete,
+    editAction,
+    deleteAction,
     onClick,
     isActive,
 }) => {
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     return (
         <Card
@@ -41,18 +41,22 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                     </Box>
                 </div>
                 <Box marginLeft="10px">
-                    {checkPermission('web-global-domain-components', 'create') && (
+                    {checkPermission('domain-components', 'create') && (
                         <Box marginBottom="5px">
-                            <Button view="normal" size="m" onClick={() => onEdit(data.id ?? '???')}>
+                            <Button
+                                view="normal"
+                                size="m"
+                                onClick={() => editAction(data.id ?? '???')}
+                            >
                                 <Icon data={Pencil} />
                             </Button>
                         </Box>
                     )}
-                    {checkPermission('web-global-domain-components', 'delete') && (
+                    {checkPermission('domain-components', 'delete') && (
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() => onDelete(data.id ?? '???')}
+                            onClick={() => deleteAction(data.id ?? '???')}
                         >
                             <Icon data={TrashBin} />
                         </Button>

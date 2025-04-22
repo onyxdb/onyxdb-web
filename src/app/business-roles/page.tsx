@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {Modal, Text} from '@gravity-ui/uikit';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Box} from '@/components/Layout/Box';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useRouter} from 'next/navigation';
 import {businessRolesApi} from '@/app/apis';
@@ -12,7 +12,7 @@ import BusinessRolesTable from '@/components/tables/BusinessRolesTable';
 import BusinessRoleForm, {BusinessRoleFormFields} from '@/components/forms/BusinessRoleForm';
 
 export default function BusinessRolesPage() {
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
     const router = useRouter();
 
     const handleEdit = (businessRoleId: string) => {
@@ -55,13 +55,13 @@ export default function BusinessRolesPage() {
         setCreateModalVisible(false);
     };
 
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/business-roles', text: 'Бизнес-роли'},
     ];
 
     const actions = [];
-    if (checkPermission('web-global-business-role', 'create')) {
+    if (checkPermission('business-role', 'create')) {
         actions.push({
             text: 'Создать бизнес-роль',
             action: handleCreateBusinessRoleModal,
@@ -71,17 +71,17 @@ export default function BusinessRolesPage() {
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
                     <Text variant="header-2">Бизнес-роли</Text>
                 </Box>
-                <BusinessRolesTable onEdit={handleEdit} onDelete={handleDelete} />
+                <BusinessRolesTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
             <Modal open={isCreateModalVisible} onOpenChange={handleCreateModalCancel}>
                 <BusinessRoleForm
-                    onSubmit={handleBusinessRoleCreate}
-                    onClose={handleCreateModalCancel}
+                    submitAction={handleBusinessRoleCreate}
+                    closeAction={handleCreateModalCancel}
                 />
             </Modal>
         </div>

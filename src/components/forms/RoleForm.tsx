@@ -13,7 +13,7 @@ import PermissionForm, {PermissionFormFields} from './PermissionForm';
 
 interface RoleFormProps {
     onSubmit: (values: RoleFormFields) => void;
-    onClose: () => void;
+    closeAction: () => void;
     initialValue?: RoleDTO;
 }
 
@@ -85,7 +85,7 @@ export function mapDTOtoFormFields(dto: RoleDTO, permissions: PermissionDTO[]): 
     };
 }
 
-export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, onClose, initialValue}) => {
+export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initialValue}) => {
     const [productOptions, setProductOptions] = useState<ProductDTO[]>([]);
     const [searchProduct, setSearchProduct] = useState<string | null>(null);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -248,7 +248,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, onClose, initialVal
         handlePermissionModalClose();
     };
 
-    const handlePermissionDelete = (permissionId: string) => {
+    const handlePermissideleteAction = (permissionId: string) => {
         const updatedPermissions = formik.values.permissions.filter((p) => p.id !== permissionId);
         formik.setFieldValue('permissions', updatedPermissions);
     };
@@ -458,7 +458,9 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, onClose, initialVal
                                     <Button
                                         view="normal"
                                         size="m"
-                                        onClick={() => handlePermissionDelete(permission.id ?? '')}
+                                        onClick={() =>
+                                            handlePermissideleteAction(permission.id ?? '')
+                                        }
                                         disabled={permission.deleted}
                                     >
                                         Удалить
@@ -473,14 +475,14 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, onClose, initialVal
                         {selectedPermission && (
                             <PermissionForm
                                 onSubmit={handlePermissionSubmit}
-                                onClose={handlePermissionModalClose}
+                                closeAction={handlePermissionModalClose}
                                 initialValue={selectedPermission}
                             />
                         )}
                         {!selectedPermission && (
                             <PermissionForm
                                 onSubmit={handlePermissionSubmit}
-                                onClose={handlePermissionModalClose}
+                                closeAction={handlePermissionModalClose}
                                 initialValue={undefined}
                             />
                         )}
@@ -575,7 +577,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, onClose, initialVal
                                 view="normal"
                                 size="l"
                                 disabled={formik.isSubmitting}
-                                onClick={onClose}
+                                onClick={closeAction}
                             >
                                 Отменить
                             </Button>

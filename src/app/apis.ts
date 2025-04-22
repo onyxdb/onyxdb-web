@@ -10,11 +10,19 @@ import {
     RolesApi,
     RolesRequestsApi,
 } from '@/generated/api';
-import {V1ClustersApi, V1ProjectsApi} from '@/generated/api-mdb';
+import {
+    MDBQuotasApi,
+    ManagedMongoDBBackupsApi,
+    ManagedMongoDBDatabasesApi,
+    ManagedMongoDBUsersApi,
+    ProjectsApi,
+    V1ManagedMongoDbApi,
+    V1ResourcePresetsApi,
+} from '@/generated/api-mdb';
 import apiClient from '@/auth/apiClient';
 
-const config = new Configuration({
-    basePath: '', // Используем прокси в Next.js
+const configIDM = new Configuration({
+    basePath: '/idm', // Используем прокси в Next.js
     baseOptions: {
         headers: {
             'Content-Type': 'application/json',
@@ -22,15 +30,29 @@ const config = new Configuration({
     },
 });
 
-export const authApi = new AuthApi(config, '', apiClient);
-export const accountsApi = new AccountsApi(config, '', apiClient);
-export const businessRolesApi = new BusinessRolesApi(config, '', apiClient);
-export const domainComponentsApi = new DomainComponentsApi(config, '', apiClient);
-export const organizationUnitsApi = new OrganizationUnitsApi(config, '', apiClient);
-export const permissionsApi = new PermissionsApi(config, '', apiClient);
-export const productsApi = new ProductsApi(config, '', apiClient);
-export const rolesApi = new RolesApi(config, '', apiClient);
-export const rolesRequestsApi = new RolesRequestsApi(config, '', apiClient);
+const configMDB = new Configuration({
+    basePath: '/mdb', // Используем прокси в Next.js
+    baseOptions: {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    },
+});
 
-export const mdbProjectsApi = new V1ProjectsApi(config, '', apiClient);
-export const mdbClustersApi = new V1ClustersApi(config, '', apiClient);
+export const authApi = new AuthApi(configIDM, '', apiClient);
+export const accountsApi = new AccountsApi(configIDM, '', apiClient);
+export const businessRolesApi = new BusinessRolesApi(configIDM, '', apiClient);
+export const domainComponentsApi = new DomainComponentsApi(configIDM, '', apiClient);
+export const organizationUnitsApi = new OrganizationUnitsApi(configIDM, '', apiClient);
+export const permissionsApi = new PermissionsApi(configIDM, '', apiClient);
+export const productsApi = new ProductsApi(configIDM, '', apiClient);
+export const rolesApi = new RolesApi(configIDM, '', apiClient);
+export const rolesRequestsApi = new RolesRequestsApi(configIDM, '', apiClient);
+
+export const mdbProjectsApi = new ProjectsApi(configMDB, '', apiClient);
+export const mdbResourcePresetsApi = new V1ResourcePresetsApi(configMDB, '', apiClient);
+export const mdbMongoDbApi = new V1ManagedMongoDbApi(configMDB, '', apiClient);
+export const mdbMongoDbUserApi = new ManagedMongoDBUsersApi(configMDB, '', apiClient);
+export const mdbMongoDbDatabasesApi = new ManagedMongoDBDatabasesApi(configMDB, '', apiClient);
+export const mdbMongoDbBackupsApi = new ManagedMongoDBBackupsApi(configMDB, '', apiClient);
+export const mdbQuotasApi = new MDBQuotasApi(configMDB, '', apiClient);

@@ -11,8 +11,8 @@ import {Box} from '@/components/Layout/Box';
 import {businessRolesApi} from '@/app/apis';
 
 interface BusinessRoleFormProps {
-    onSubmit: (values: BusinessRoleFormFields) => void;
-    onClose: () => void;
+    submitAction: (values: BusinessRoleFormFields) => void;
+    closeAction: () => void;
     initialValue?: BusinessRoleDTO;
 }
 
@@ -35,8 +35,8 @@ function mapDTOtoFormFields(dto: BusinessRoleDTO): BusinessRoleFormFields {
 }
 
 export const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
-    onSubmit,
-    onClose,
+    submitAction,
+    closeAction,
     initialValue,
 }) => {
     const [parentBusinessRoleOptions, setParentBusinessRoleOptions] = useState<BusinessRoleDTO[]>(
@@ -69,7 +69,7 @@ export const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
             }
             return errors;
         },
-        onSubmit,
+        onSubmit: submitAction,
     });
 
     const handleParentBusinessRoleChange = (value: string) => {
@@ -227,7 +227,7 @@ export const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
                             view="normal"
                             size="l"
                             disabled={formik.isSubmitting}
-                            onClick={onClose}
+                            onClick={closeAction}
                         >
                             Отменить
                         </Button>

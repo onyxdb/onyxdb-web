@@ -10,7 +10,7 @@ import {TextAreaField} from '@/components/formik/TextAreaField';
 
 interface PermissionFormProps {
     onSubmit: (values: PermissionFormFields) => void;
-    onClose: () => void;
+    closeAction: () => void;
     initialValue?: PermissionFormFields;
 }
 
@@ -24,7 +24,7 @@ export interface PermissionFormFields {
 
 export const PermissionForm: React.FC<PermissionFormProps> = ({
     onSubmit,
-    onClose,
+    closeAction,
     initialValue,
 }) => {
     const formik = useFormik<PermissionFormFields>({
@@ -116,7 +116,7 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({
                                 view="normal"
                                 size="l"
                                 disabled={formik.isSubmitting}
-                                onClick={onClose}
+                                onClick={closeAction}
                             >
                                 Отменить
                             </Button>

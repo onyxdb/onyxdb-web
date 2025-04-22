@@ -15,7 +15,7 @@ import {
     TabProvider,
     Text,
 } from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {Box} from '@/components/Layout/Box';
 import {
     ArrowUpRightFromSquare,
@@ -51,7 +51,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
 
     const accountId = pathname.split('/').pop() ?? '';
 
@@ -133,7 +133,8 @@ export default function AccountViewPage({}: AccountViewPageProps) {
             // @ts-ignore
             // eslint-disable-next-line no-param-reassign
             values.data = values.anyData;
-            await accountsApi.updateAccount({accountId: values.id ?? '???', accountDTO: values});
+            const {anyData: _, ...newValues} = values;
+            await accountsApi.updateAccount({accountId: values.id ?? '???', accountDTO: newValues});
             handleCloseEditModal();
             // Обновление данных об аккаунте
             const response = await accountsApi.getAccountById({accountId: values.id ?? '???'});
@@ -445,7 +446,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                 <div>{account && <UserBlock account={account} selectable={true} size="l" />}</div>
                 <div>
                     {checkActions([
-                        {name: 'web-global-account', action: 'edit'},
+                        {name: 'account', action: 'edit'},
                         {
                             name: `web-account-${accountId}`,
                             action: 'edit',
@@ -462,7 +463,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         </Button>
                     )}
                     {checkActions([
-                        {name: 'web-global-account', action: 'delete'},
+                        {name: 'account', action: 'delete'},
                         {
                             name: `web-account-${accountId}`,
                             action: 'delete',
@@ -496,7 +497,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                 <AccountForm
                     initialValue={account}
                     onSubmit={handleSubmitEdit}
-                    onClose={handleCloseEditModal}
+                    closeAction={handleCloseEditModal}
                 />
             </Modal>
         </div>

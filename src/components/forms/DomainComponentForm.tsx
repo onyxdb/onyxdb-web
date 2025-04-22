@@ -11,14 +11,14 @@ import {TextAreaField} from '@/components/formik/TextAreaField';
 
 interface DomainComponentFormProps {
     initialValue?: DomainComponentDTO;
-    onSubmit: (values: DomainComponentDTO) => void;
-    onClose: () => void;
+    submitAction: (values: DomainComponentDTO) => void;
+    closeAction: () => void;
 }
 
 export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
     initialValue,
-    onSubmit,
-    onClose,
+    submitAction,
+    closeAction,
 }) => {
     const formik = useFormik<DomainComponentDTO>({
         initialValues: initialValue ?? {
@@ -36,7 +36,7 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
             }
             return errors;
         },
-        onSubmit,
+        onSubmit: submitAction,
     });
 
     return (
@@ -70,7 +70,7 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
                         {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}
                     </Button>
                     <Box marginLeft="10px">
-                        <Button view="normal" onClick={onClose}>
+                        <Button view="normal" onClick={closeAction}>
                             Закрыть
                         </Button>
                     </Box>

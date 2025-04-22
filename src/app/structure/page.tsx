@@ -11,7 +11,7 @@ import {
 } from '@/generated/api';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {Button, Modal, Text} from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {OrganizationUnitSmallCard} from '@/components/OrganizationUnitSmallCard';
 import {DomainComponentBlock} from '@/components/DomainComponentBlock';
 import {DomainComponentForm} from '@/components/forms/DomainComponentForm';
@@ -37,7 +37,7 @@ export default function StructurePage({}: StructurePageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -51,6 +51,7 @@ export default function StructurePage({}: StructurePageProps) {
 
     const handleDcSelect = (id: string) => {
         setSelectedDcId(id);
+        setSelectedOu(null);
         router.push(pathname + '?' + createQueryString('dcId', id));
     };
 
@@ -183,7 +184,7 @@ export default function StructurePage({}: StructurePageProps) {
     const handleSelectedOuDelete = async (id: string) => {
         console.log('handleOuDelete id', id);
         if (id) {
-            await domainComponentsApi.deleteDomainComponent({dcId: id});
+            await organizationUnitsApi.deleteOrganizationUnit({ouId: id});
             await fetchDomainComponents();
             if (selectedOu?.id === id) {
                 setSelectedDcId(null);
@@ -215,7 +216,7 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     return (
-        <Box padding="20px">
+        <div style={{padding: '20px'}}>
             <Box marginBottom="20px">
                 <Text variant="header-1">Domain Components</Text>
                 <HorizontalStack align="center">
@@ -223,14 +224,14 @@ export default function StructurePage({}: StructurePageProps) {
                         <Box marginRight="20px" key={dc.id}>
                             <DomainComponentBlock
                                 data={dc}
-                                onEdit={handleDcEdit}
-                                onDelete={handleDcDelete}
+                                editAction={handleDcEdit}
+                                deleteAction={handleDcDelete}
                                 onClick={() => handleDcSelect(dc.id ?? '???')}
                                 isActive={dc.id === selectedDcId}
                             />
                         </Box>
                     ))}
-                    {checkPermission('web-global-domain-component', 'create') && (
+                    {checkPermission('domain-component', 'create') && (
                         <Box marginBottom="10px">
                             <Button view="action" size="l" onClick={handleCreateDC}>
                                 Создать Domain Component
@@ -248,25 +249,27 @@ export default function StructurePage({}: StructurePageProps) {
                             <OrgUnitBlock
                                 data={selectedOu}
                                 dataAccounts={selectedOuAccounts}
-                                onEdit={handleSelectedOuEdit}
-                                onDelete={handleSelectedOuDelete}
+                                editAction={handleSelectedOuEdit}
+                                deleteAction={handleSelectedOuDelete}
                             />
                         )}
                     </div>
                 </HorizontalStack>
             </div>
             <div>
-                <Button view="action" size="l" onClick={handleCreateOU}>
-                    Создать Organization Unit
-                </Button>
+                {checkPermission('organization-unit', 'create') && (
+                    <Button view="action" size="l" onClick={handleCreateOU}>
+                        Создать Organization Unit
+                    </Button>
+                )}
             </div>
             <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                 <DomainComponentForm
                     initialValue={editingDomainComponent}
-                    onSubmit={handleDcSubmitCreate}
-                    onClose={handleCloseCreateModal}
+                    submitAction={handleDcSubmitCreate}
+                    closeAction={handleCloseCreateModal}
                 />
             </Modal>
-        </Box>
+        </div>
     );
 }

@@ -1,14 +1,17 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {getCurrentUser} from '@/auth/authService';
+import {AccountDTO} from '@/generated/api';
+
+// interface Permissions {
+//     [key: string]: {[key: string]: object} | null;
+// }
 
 interface Permissions {
-    [key: string]: string[];
+    [key: string]: null;
 }
 
 interface User {
-    account: {
-        username: string;
-    };
+    account: AccountDTO;
     permissions: Permissions;
 }
 
@@ -22,7 +25,7 @@ interface AuthContextType {
     setUser: (user: User | null) => void;
     permissions: Permissions;
     checkActions: (actions: Action[]) => boolean;
-    checkPermission: (name: string, action?: string) => boolean;
+    checkPermission: (entity: string, action?: string, id?: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -43,9 +46,21 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
         const fetchUser = async () => {
             try {
                 const userData = await getCurrentUser();
-                setUser({account: userData.account, permissions: userData.permissions});
-                setPermissions(userData.permissions);
-            } catch {
+                console.log('My account data:', userData);
+
+                const filteredPermissions: Permissions = {};
+                for (const item in userData.permissions) {
+                    if (item.startsWith('global-')) {
+                        filteredPermissions[item.substring('global-'.length)] = null;
+                    } else if (item.startsWith('web-')) {
+                        filteredPermissions[item.substring('web-'.length)] = null;
+                    }
+                }
+
+                setUser({account: userData.account, permissions: filteredPermissions});
+                setPermissions(filteredPermissions);
+            } catch (err) {
+                console.error('Error fetching user:', err);
                 setUser(null);
                 setPermissions({});
             }
@@ -55,16 +70,34 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     }, []);
 
     function checkActions(actions: Action[]) {
+        if (permissions['any'] !== undefined || permissions['any'] !== undefined) {
+            return true;
+        }
         for (const action of actions) {
-            if (permissions[action.name] || permissions[`${action.name}-${action.action}`]) {
+            if (
+                permissions[action.name] !== undefined ||
+                permissions[`${action.name}-${action.action}`] !== undefined
+            ) {
                 return true;
             }
         }
         return false;
     }
 
-    function checkPermission(name: string, action?: string) {
-        return Boolean(permissions[name] || permissions[`${name}-${action}`]);
+    function checkPermission(name: string, action?: string, id?: string) {
+        const suitablePermission = [
+            'any',
+            `${name}-any`,
+            `${name}-${id}`,
+            `${name}-${id}-any`,
+            `${name}-${id}-${action}`,
+        ];
+        for (const permission of suitablePermission) {
+            if (permissions[permission] !== undefined) {
+                return true;
+            }
+        }
+        return false;
     }
 
     return (

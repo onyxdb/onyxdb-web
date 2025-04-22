@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import {Table, TableColumnConfig, Text, TextInput, withTableSelection} from '@gravity-ui/uikit';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export interface RoleSelectionTableProps {
     selectedRoles: string[];
@@ -39,6 +40,11 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
 
     const columns: TableColumnConfig<RoleDTO>[] = [
         {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
+        {
             id: 'name',
             name: 'Название',
             template: (role) => role.name,
@@ -63,6 +69,7 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
                 />
             </div>
             <MyTable
+                width="max"
                 data={roles}
                 // @ts-ignore
                 columns={columns}

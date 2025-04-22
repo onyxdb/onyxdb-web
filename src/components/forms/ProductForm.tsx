@@ -12,7 +12,7 @@ import {accountsApi, productsApi} from '@/app/apis';
 
 interface ProductFormProps {
     onSubmit: (values: ProductFormFields) => void;
-    onClose: () => void;
+    closeAction: () => void;
     initialValue?: ProductDTO;
 }
 
@@ -36,7 +36,7 @@ function mapDTOtoFormFields(dto: ProductDTO): ProductFormFields {
     };
 }
 
-export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, onClose, initialValue}) => {
+export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, closeAction, initialValue}) => {
     const [parentProductOptions, setParentProductOptions] = useState<ProductDTO[]>([]);
     const [searchParentProduct, setSearchParentProduct] = useState<string | null>(null);
     const [selectedParentProductId, setSelectedParentProductId] = useState<string | null>(
@@ -311,7 +311,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, onClose, init
                             view="normal"
                             size="l"
                             disabled={formik.isSubmitting}
-                            onClick={onClose}
+                            onClick={closeAction}
                         >
                             Отменить
                         </Button>

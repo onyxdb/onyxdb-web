@@ -9,23 +9,23 @@ import {useRouter} from 'next/navigation';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 
 interface DomainComponentProps {
     data: OrganizationUnitDTO;
     dataAccounts: AccountDTO[];
-    onEdit: (ou: OrganizationUnitDTO) => void;
-    onDelete: (id: string) => void;
+    editAction: (ou: OrganizationUnitDTO) => void;
+    deleteAction: (id: string) => void;
 }
 
 export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
     data,
     dataAccounts,
-    onEdit,
-    onDelete,
+    editAction,
+    deleteAction,
 }) => {
     const router = useRouter();
-    const {checkActions} = usePermissions();
+    const {checkActions} = useAuth();
     const handleViewDetails = (ouId: string) => {
         router.push(`/org/view/${ouId}`);
     };
@@ -37,23 +37,23 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                     <h2>{data.name}</h2>
                     <div>
                         {checkActions([
-                            {name: 'web-global-organization-unit', action: 'edit'},
+                            {name: 'organization-unit', action: 'edit'},
                             {name: `web-organization-unit-${data.id}`, action: 'edit'},
                         ]) && (
                             <Box marginBottom="5px">
-                                <Button view="normal" size="m" onClick={() => onEdit(data)}>
+                                <Button view="normal" size="m" onClick={() => editAction(data)}>
                                     <Icon data={Pencil} />
                                 </Button>
                             </Box>
                         )}
                         {checkActions([
-                            {name: 'web-global-organization-unit', action: 'delete'},
+                            {name: 'organization-unit', action: 'delete'},
                             {name: `web-organization-unit-${data.id}`, action: 'delete'},
                         ]) && (
                             <Button
                                 view="outlined-danger"
                                 size="m"
-                                onClick={() => onDelete(data.id ?? '???')}
+                                onClick={() => deleteAction(data.id ?? '???')}
                             >
                                 <Icon data={TrashBin} />
                             </Button>

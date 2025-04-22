@@ -18,13 +18,18 @@ import {Box} from '@/components/Layout/Box';
 import {Eye} from '@gravity-ui/icons';
 import BusinessRoleViewModal from '@/components/modals/BusinessRoleViewModal';
 import BusinessRoleAssignModal from '@/components/modals/BusinessRoleAssignModal';
+import {useAuth} from '@/context/AuthContext';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export interface BusinessRolesTableProps {
-    onEdit: (businessRoleId: string) => void;
-    onDelete: (businessRoleId: string) => void;
+    editAction: (businessRoleId: string) => void;
+    deleteAction: (businessRoleId: string) => void;
 }
 
-export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, onDelete}) => {
+export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
+    editAction,
+    deleteAction,
+}) => {
     const [businessRoles, setBusinessRoles] = useState<BusinessRoleDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit, setLimit] = useState<number>(10);
@@ -36,6 +41,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
     const [accountOptions, setAccountOptions] = useState<AccountDTO[]>([]);
     const [searchAccount, setSearchAccount] = useState<string | null>(null);
     const [isAccountsModalOpen, setIsAccountsModalOpen] = useState(false);
+    const {checkPermission} = useAuth();
 
     const fetchBusinessRoles = async () => {
         try {
@@ -44,6 +50,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                 limit,
                 offset,
             });
+            console.log('businessRoles response', response.data.data);
             setBusinessRoles(response.data.data ?? []);
             setTotal(response.data.totalCount ?? 0);
         } catch (error) {
@@ -117,6 +124,11 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
             ),
         },
         {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
+        {
             id: 'name',
             name: 'Название',
             template: (businessRole) => businessRole.name,
@@ -150,27 +162,37 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
             name: 'Действия',
             template: (businessRole) => (
                 <div style={{display: 'flex', gap: '10px'}}>
-                    <Button
-                        view="normal"
-                        size="m"
-                        onClick={() => handleAssignBusinessRole(businessRole)}
-                    >
-                        Выдать роль
-                    </Button>
-                    <Button view="normal" size="m" onClick={() => onEdit(businessRole.id ?? '???')}>
-                        Редактировать
-                    </Button>
-                    <Button
-                        view="normal"
-                        size="m"
-                        onClick={() => {
-                            onDelete(businessRole.id ?? '???');
-                            // TODO fetch не работает после удаления :(
-                            fetchBusinessRoles();
-                        }}
-                    >
-                        Удалить
-                    </Button>
+                    {checkPermission('business-roles', 'assign') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => handleAssignBusinessRole(businessRole)}
+                        >
+                            Выдать роль
+                        </Button>
+                    )}
+                    {checkPermission('business-roles', 'edit') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => editAction(businessRole.id ?? '???')}
+                        >
+                            Редактировать
+                        </Button>
+                    )}
+                    {checkPermission('business-roles', 'delete') && (
+                        <Button
+                            view="normal"
+                            size="m"
+                            onClick={() => {
+                                deleteAction(businessRole.id ?? '???');
+                                // TODO fetch не работает после удаления :(
+                                fetchBusinessRoles();
+                            }}
+                        >
+                            Удалить
+                        </Button>
+                    )}
                 </div>
             ),
         },
@@ -188,6 +210,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({onEdit, o
                 />
             </div>
             <MyTable
+                width="max"
                 data={businessRoles}
                 // @ts-ignore
                 columns={columns}

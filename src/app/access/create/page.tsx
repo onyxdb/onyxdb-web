@@ -9,9 +9,9 @@ import {RoleForm, RoleFormFields, mapPermissionFormToDTO} from '@/components/for
 export default function CreateRolePage() {
     const router = useRouter();
     const pathname = usePathname();
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
-        {href: '/roles', text: 'Роли'},
+        {href: '/access', text: 'Роли'},
         {href: `${pathname}`, text: 'Создать роль'},
     ];
 
@@ -31,22 +31,22 @@ export default function CreateRolePage() {
                     permissions: values.permissions.map((p) => mapPermissionFormToDTO(p)),
                 },
             });
-            router.push(`/roles/edit/${response.data.role.id}`);
+            router.push(`/access/edit/${response.data.role.id}`);
         } catch (error) {
             console.error('Failed to create role:', error);
         }
     };
 
     const handleCreateModalCancel = () => {
-        router.push('/roles');
+        router.push('/access');
     };
 
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={[]} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleCreate}
-                onClose={handleCreateModalCancel}
+                closeAction={handleCreateModalCancel}
                 initialValue={undefined}
             />
         </div>

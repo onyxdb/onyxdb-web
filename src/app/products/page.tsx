@@ -5,7 +5,7 @@ import {productsApi} from '@/app/apis';
 import {ProductDTO, ProductTreeDTO} from '@/generated/api';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {Modal, Text} from '@gravity-ui/uikit';
-import {usePermissions} from '@/hooks/usePermissions';
+import {useAuth} from '@/context/AuthContext';
 import {ProductSmallCard} from '@/components/ProductSmallCard';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProductBlock} from '@/components/ProductBlock';
@@ -28,7 +28,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const {checkPermission} = usePermissions();
+    const {checkPermission} = useAuth();
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -168,13 +168,13 @@ export default function ProductsPage({}: ProductsPageProps) {
         }
     };
 
-    const breadCrumps = [
+    const breadCrumbs = [
         {href: '/', text: 'Главная'},
         {href: '/products', text: 'Продукты'},
     ];
 
     const actions = [];
-    if (checkPermission('web-global-product', 'create')) {
+    if (checkPermission('product', 'create')) {
         actions.push({
             text: 'Создать продукт',
             action: handleProductCreateModal,
@@ -183,7 +183,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     }
     return (
         <div>
-            <AppHeader breadCrumps={breadCrumps} actions={actions} />
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
                     <Text variant="header-2">Иерархия продуктов</Text>
@@ -194,8 +194,8 @@ export default function ProductsPage({}: ProductsPageProps) {
                         {selectedProduct && (
                             <ProductBlock
                                 data={selectedProduct}
-                                onEdit={handleProductEditModal}
-                                onDelete={handleProductDelete}
+                                editAction={handleProductEditModal}
+                                deleteAction={handleProductDelete}
                             />
                         )}
                     </div>
@@ -203,18 +203,18 @@ export default function ProductsPage({}: ProductsPageProps) {
                 <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
                     <ProductForm
                         onSubmit={handleProductCreateSubmit}
-                        onClose={handleCloseCreateModal}
+                        closeAction={handleCloseCreateModal}
                     />
                 </Modal>
-                {selectedProduct && (
-                    <Modal open={isEditModalOpen} onOpenChange={handleCloseEditModal}>
+                <Modal open={isEditModalOpen} onOpenChange={handleCloseEditModal}>
+                    {selectedProduct && (
                         <ProductForm
                             onSubmit={handleProductEditSubmit}
-                            onClose={handleCloseEditModal}
+                            closeAction={handleCloseEditModal}
                             initialValue={selectedProduct}
                         />
-                    </Modal>
-                )}
+                    )}
+                </Modal>
             </div>
         </div>
     );

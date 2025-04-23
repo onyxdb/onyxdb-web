@@ -18,6 +18,7 @@ import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import CreateQuotaModal from '@/components/modals/CreateQuotaModal';
 import {TransferQuotaModal} from '@/components/modals/TransferQuotaModal';
 import {ProductDTOGet} from '@/generated/api';
+import {roundTo, toPercent} from '@/utils/math';
 
 interface QuotasTabProps {
     product: ProductDTOGet;
@@ -41,7 +42,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
             const quotasResponse = await mdbQuotasApi.listQuotasByProducts({
                 productIds: [productId],
             });
-            setQuotas(quotasResponse.data.products[0].quotas);
+            setQuotas(quotasResponse.data.products[0]?.quotas ?? []);
             setLastUpdate(new Date());
         } catch (error) {
             console.error('Error fetching quotas:', error);
@@ -187,31 +188,24 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
                 const usedPercentage = (quota.usage / quota.limit) * 100;
                 const freePercentage = (quota.free / quota.limit) * 100;
 
-                if (usedPercentage > 100) {
-                    return (
-                        <Progress
-                            stack={[
-                                {
-                                    theme: 'danger',
-                                    content: `${usedPercentage}%`,
-                                    value: 100,
-                                },
-                            ]}
-                        />
-                    );
-                }
                 return (
                     <Progress
                         stack={[
                             {
-                                theme: usedPercentage > 75 ? 'warning' : 'default',
-                                content: `${usedPercentage}%`,
-                                value: usedPercentage,
+                                theme:
+                                    // eslint-disable-next-line no-nested-ternary
+                                    usedPercentage > 100
+                                        ? 'danger'
+                                        : usedPercentage > 75
+                                          ? 'warning'
+                                          : 'info',
+                                content: `${roundTo(usedPercentage, 0)}%`,
+                                value: toPercent(usedPercentage),
                             },
                             {
-                                theme: 'success',
-                                content: `${freePercentage}%`,
-                                value: freePercentage,
+                                theme: 'misc',
+                                content: usedPercentage < 100 && `${roundTo(freePercentage, 0)}%`,
+                                value: toPercent(freePercentage),
                             },
                         ]}
                     />

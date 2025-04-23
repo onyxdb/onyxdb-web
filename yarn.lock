@@ -1039,7 +1039,17 @@
     lodash "^4.17.21"
     universal-cookie "^7.2.0"
 
-"@gravity-ui/date-utils@^2.1.0", "@gravity-ui/date-utils@^2.5.4":
+"@gravity-ui/date-components@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@gravity-ui/date-components/-/date-components-3.1.0.tgz#6bbccb1a09a86ec5e52e0795c5aab768212e12f3"
+  integrity sha512-JhKUM0HpA2FtAO+DRWv4zkYKmv458gJWBKD31ltl70TUqk+GmpsLC94TT36Bq/uGgNCeWnT5yvq9nBnMifbhlQ==
+  dependencies:
+    "@bem-react/classname" "^1.6.0"
+    "@gravity-ui/date-utils" "^2.5.3"
+    "@gravity-ui/icons" "^2.2.0"
+    tslib "^2.6.2"
+
+"@gravity-ui/date-utils@^2.1.0", "@gravity-ui/date-utils@^2.5.3", "@gravity-ui/date-utils@^2.5.4", "@gravity-ui/date-utils@^2.5.6":
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/@gravity-ui/date-utils/-/date-utils-2.5.6.tgz#b524646608db6877df64891fe95038c78d4c08b5"
   integrity sha512-EjaN5b8jvnBlfU/db5QUHj6ooPz/uSRqvFYiPH/ydkCTnhusZhUpTk+xn8hnA7PPLbj3hMnJReF9fWxsfM6Y5w==
@@ -1070,7 +1080,7 @@
   resolved "https://registry.yarnpkg.com/@gravity-ui/i18n/-/i18n-1.8.0.tgz#19353e2eb7ccd4506fa061cd01aae5f71d11eb4b"
   integrity sha512-bVt/UGjL96Naw0h03QW+3z2tf6t4zvLh1j+eFzpdLlAIMeNu0dRjxn4X6EGtwhwKrfMyIfrlOqmLSroXtCNQAw==
 
-"@gravity-ui/icons@2.13", "@gravity-ui/icons@^2.11.0", "@gravity-ui/icons@^2.12.0":
+"@gravity-ui/icons@2.13", "@gravity-ui/icons@^2.11.0", "@gravity-ui/icons@^2.12.0", "@gravity-ui/icons@^2.2.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@gravity-ui/icons/-/icons-2.13.0.tgz#6e710fe2ff8fb25f8ba488f527cd5539871f25e8"
   integrity sha512-oHWJTb8rTuZo1czZRBSggEWMmthiXeM5LBpB0GzyS1tCkNE1A7DpEvvrKUwHYVHTxpw/xWIqQCxNj7LIo2R3NQ==

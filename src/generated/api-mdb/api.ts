@@ -50,6 +50,20 @@ export interface CreateMongoDatabaseRequest {
 /**
  *
  * @export
+ * @interface GetProductQuotaUsageReportResponseOA
+ */
+export interface GetProductQuotaUsageReportResponseOA {
+    /**
+     *
+     * @type {Array<ProductQuotaUsageReportItemOA>}
+     * @memberof GetProductQuotaUsageReportResponseOA
+     */
+    items: Array<ProductQuotaUsageReportItemOA>;
+}
+
+/**
+ *
+ * @export
  * @interface InitMongoDatabase
  */
 export interface InitMongoDatabase {
@@ -501,6 +515,50 @@ export interface MongoUserToCreate {
      * @memberof MongoUserToCreate
      */
     permissions: Array<MongoPermissionToCreate>;
+}
+
+/**
+ *
+ * @export
+ * @interface ProductQuotaUsageReportItemOA
+ */
+export interface ProductQuotaUsageReportItemOA {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    productId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    quotaProvider: string;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    limit: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    usage: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    free: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    timestamp: number;
 }
 
 /**
@@ -1224,6 +1282,221 @@ export const V1UpdateResourcePresetRequestTypeEnum = {
 
 export type V1UpdateResourcePresetRequestTypeEnum =
     (typeof V1UpdateResourcePresetRequestTypeEnum)[keyof typeof V1UpdateResourcePresetRequestTypeEnum];
+
+/**
+ * BillingApi - axios parameter creator
+ * @export
+ */
+export const BillingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Get product quota usage report
+         * @param {string} productId
+         * @param {string} starDate
+         * @param {string} endDate
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductQuotaUsageReport: async (
+            productId: string,
+            starDate: string,
+            endDate: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('getProductQuotaUsageReport', 'productId', productId);
+            // verify required parameter 'starDate' is not null or undefined
+            assertParamExists('getProductQuotaUsageReport', 'starDate', starDate);
+            // verify required parameter 'endDate' is not null or undefined
+            assertParamExists('getProductQuotaUsageReport', 'endDate', endDate);
+            const localVarPath = `/api/billing/product-quota-usage-report`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (productId !== undefined) {
+                localVarQueryParameter['productId'] = productId;
+            }
+
+            if (starDate !== undefined) {
+                localVarQueryParameter['starDate'] =
+                    (starDate as any) instanceof Date
+                        ? (starDate as any).toISOString().substring(0, 10)
+                        : starDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] =
+                    (endDate as any) instanceof Date
+                        ? (endDate as any).toISOString().substring(0, 10)
+                        : endDate;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * BillingApi - functional programming interface
+ * @export
+ */
+export const BillingApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = BillingApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Get product quota usage report
+         * @param {string} productId
+         * @param {string} starDate
+         * @param {string} endDate
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProductQuotaUsageReport(
+            productId: string,
+            starDate: string,
+            endDate: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<GetProductQuotaUsageReportResponseOA>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductQuotaUsageReport(
+                productId,
+                starDate,
+                endDate,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['BillingApi.getProductQuotaUsageReport']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * BillingApi - factory interface
+ * @export
+ */
+export const BillingApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = BillingApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Get product quota usage report
+         * @param {BillingApiGetProductQuotaUsageReportRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductQuotaUsageReport(
+            requestParameters: BillingApiGetProductQuotaUsageReportRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<GetProductQuotaUsageReportResponseOA> {
+            return localVarFp
+                .getProductQuotaUsageReport(
+                    requestParameters.productId,
+                    requestParameters.starDate,
+                    requestParameters.endDate,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for getProductQuotaUsageReport operation in BillingApi.
+ * @export
+ * @interface BillingApiGetProductQuotaUsageReportRequest
+ */
+export interface BillingApiGetProductQuotaUsageReportRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof BillingApiGetProductQuotaUsageReport
+     */
+    readonly productId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof BillingApiGetProductQuotaUsageReport
+     */
+    readonly starDate: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof BillingApiGetProductQuotaUsageReport
+     */
+    readonly endDate: string;
+}
+
+/**
+ * BillingApi - object-oriented interface
+ * @export
+ * @class BillingApi
+ * @extends {BaseAPI}
+ */
+export class BillingApi extends BaseAPI {
+    /**
+     *
+     * @summary Get product quota usage report
+     * @param {BillingApiGetProductQuotaUsageReportRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BillingApi
+     */
+    public getProductQuotaUsageReport(
+        requestParameters: BillingApiGetProductQuotaUsageReportRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return BillingApiFp(this.configuration)
+            .getProductQuotaUsageReport(
+                requestParameters.productId,
+                requestParameters.starDate,
+                requestParameters.endDate,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
 
 /**
  * MDBQuotasApi - axios parameter creator

@@ -46,6 +46,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
                     handleProjectSelect(initial);
                 }
             }
+            // console.log('fetchProjectsAll', response.data.projects);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
@@ -70,7 +71,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
 
     useEffect(() => {
         fetchProjectOptions();
-    }, [searchQuery, showArchived]);
+    }, [projectsAll.length, searchQuery, showArchived]);
 
     const handleProjectSearchChange = (value: string) => {
         setSearchQuery(value);

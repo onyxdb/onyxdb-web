@@ -7,6 +7,7 @@ import {mdbResourcePresetsApi} from '@/app/apis';
 import {
     InitMongoDatabase,
     InitMongoUser,
+    ResourceUnitEnum,
     V1MongoClusterResponse,
     V1ProjectResponse,
     V1ResourcePresetResponse,
@@ -19,6 +20,7 @@ import {AccountSelector} from '@/components/AccountSelector';
 import {ProjectSelector} from '@/components/ProjectsSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
+import {ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
 
 export interface ClusterFormValues {
     name: string;
@@ -163,7 +165,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         </Select.Option>
     ));
 
-    console.log('formik.values', formik.values);
+    console.log('formik.values', formik.values.storage);
     return (
         <div style={{maxWidth: '600px'}}>
             <Text variant="header-1">
@@ -248,23 +250,32 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                 onUpdate={(value: string[]) =>
                                     formik.setFieldValue('storageClass', value[0])
                                 }
+                                errorMessage={
+                                    formik.touched.storageClass && formik.errors.storageClass
+                                }
+                                validationState={
+                                    formik.touched.storageClass &&
+                                    formik.errors.storageClass &&
+                                    formik.errors.storageClass?.length === 0
+                                        ? 'invalid'
+                                        : undefined
+                                }
                                 // disabled={isEditMode}
                             >
                                 {storageClassOptions}
                             </Select>
                         </HorizontalStack>
                     </Box>
-                    <InputField
-                        label="Хранилище (в мегабайтах)"
+                    <ResourceInputField
                         name="storage"
-                        value={formik.values.storage.toString()}
-                        onChange={(value) => formik.setFieldValue('storage', parseInt(value, 10))}
+                        value={formik.values.storage}
+                        changeAction={(value: number, _: ResourceUnit) => {
+                            formik.setFieldValue('storage', value);
+                        }}
                         onBlur={formik.handleBlur('storage')}
                         error={formik.touched.storage ? formik.errors.storage : undefined}
-                        placeholder="Введите размер хранилища в мегабайтах"
-                        type="number"
-                        // disabled={isEditMode}
-                        endContent="MB"
+                        placeholder="Введите размер хранилища"
+                        unitType={ResourceUnitEnum.Bytes}
                     />
                 </div>
                 <div style={{marginBottom: '16px'}}>

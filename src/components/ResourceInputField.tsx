@@ -25,14 +25,18 @@ export interface ResourceUnit {
     coefficient: number;
 }
 
-const CoresMilliCPU: ResourceUnit = {value: 'milliCPU', label: 'milliCPU', coefficient: 0.001};
-const CoresCPU: ResourceUnit = {value: 'cores', label: 'CPU', coefficient: 1};
+export const CoresMilliCPU: ResourceUnit = {
+    value: 'milliCPU',
+    label: 'milliCPU',
+    coefficient: 0.001,
+};
+export const CoresCPU: ResourceUnit = {value: 'cores', label: 'CPU', coefficient: 1};
 
 export const coresUnits = [CoresCPU, CoresMilliCPU];
 
-const BytesBytes: ResourceUnit = {value: 'bytes', label: 'bytes', coefficient: 1};
-const BytesMB: ResourceUnit = {value: 'MB', label: 'MB', coefficient: 1024 * 1024};
-const BytesGB: ResourceUnit = {value: 'GB', label: 'GB', coefficient: 1024 * 1024 * 1024};
+export const BytesBytes: ResourceUnit = {value: 'bytes', label: 'bytes', coefficient: 1};
+export const BytesMB: ResourceUnit = {value: 'MB', label: 'MB', coefficient: 1024 * 1024};
+export const BytesGB: ResourceUnit = {value: 'GB', label: 'GB', coefficient: 1024 * 1024 * 1024};
 
 export const bytesUnits = [BytesBytes, BytesMB, BytesGB];
 

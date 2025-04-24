@@ -7,34 +7,50 @@ import {useRouter} from 'next/navigation';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {mdbMongoDbApi} from '@/app/apis';
 import {V1CreateMongoClusterRequest} from '@/generated/api-mdb';
+import {useToaster} from '@gravity-ui/uikit';
 
 export default function ClusterCreatePage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
+    const toaster = useToaster();
 
-    const handleCreate = async (values: ClusterFormValues) => {
-        try {
-            const request: V1CreateMongoClusterRequest = {
-                name: values.name,
-                description: values.description,
-                projectId: values.projectId,
-                config: {
-                    resources: {
-                        storage: values.storage,
-                        storageClass: values.storageClass,
-                        presetId: values.presetId,
-                    },
-                    replicas: values.replicas,
+    const handleCreate = (values: ClusterFormValues) => {
+        const request: V1CreateMongoClusterRequest = {
+            name: values.name,
+            description: values.description,
+            projectId: values.projectId,
+            config: {
+                resources: {
+                    storage: values.storage,
+                    storageClass: values.storageClass,
+                    presetId: values.presetId,
                 },
-                database: values.database,
-                user: values.user,
-            };
-            console.log('Cluster create request values', request);
-            await mdbMongoDbApi.createCluster({v1CreateMongoClusterRequest: request});
-            router.push('/clusters');
-        } catch (error) {
-            console.error('Ошибка при создании кластера:', error);
-        }
+                replicas: values.replicas,
+            },
+            database: values.database,
+            user: values.user,
+        };
+        console.log('Cluster create request values', request);
+        mdbMongoDbApi
+            .createCluster({v1CreateMongoClusterRequest: request})
+            .then((_) => {
+                return toaster.add({
+                    name: 'cluster_created',
+                    title: 'Кластер успешно создан',
+                    content: 'Операция выполнена успешно.',
+                    theme: 'success',
+                });
+            })
+            .catch((error) => {
+                console.error('Ошибка при создании кластера:', error);
+                toaster.add({
+                    name: 'error_cluster_created',
+                    title: 'Ошибка создания кластера',
+                    content: `Ошибка: ${error}`,
+                    theme: 'danger',
+                });
+            });
+        router.push('/clusters');
     };
 
     const handleCancel = () => {

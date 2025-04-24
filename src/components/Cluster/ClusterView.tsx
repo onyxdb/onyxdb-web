@@ -13,6 +13,7 @@ import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import GrafanaFrame from '@/components/GrafanaFrame';
 import BackupsTab from '@/components/Cluster/tabs/BackupsTab';
 import MongoLogo from '../../styles/mongodb.svg';
+import {OperationsTab} from '@/components/Cluster/tabs/OperationsTab';
 
 interface ClusterViewPageProps {
     cluster: V1MongoClusterResponse;
@@ -107,8 +108,7 @@ export default function ClusterView({cluster}: ClusterViewPageProps) {
                             <BackupsTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="operation">
-                            {/* Содержимое вкладки операций */}
-                            <Text>Операции кластера будут здесь</Text>
+                            <OperationsTab clusterId={cluster.id} />
                         </TabPanel>
                     </Box>
                 </TabProvider>

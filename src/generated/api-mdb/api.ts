@@ -50,6 +50,20 @@ export interface CreateMongoDatabaseRequest {
 /**
  *
  * @export
+ * @interface GetProductQuotaUsageReportResponseOA
+ */
+export interface GetProductQuotaUsageReportResponseOA {
+    /**
+     *
+     * @type {Array<ProductQuotaUsageByResourceOA>}
+     * @memberof GetProductQuotaUsageReportResponseOA
+     */
+    resources: Array<ProductQuotaUsageByResourceOA>;
+}
+
+/**
+ *
+ * @export
  * @interface InitMongoDatabase
  */
 export interface InitMongoDatabase {
@@ -135,6 +149,20 @@ export interface ListMongoUsersResponse {
      * @memberof ListMongoUsersResponse
      */
     users: Array<MongoUser>;
+}
+
+/**
+ *
+ * @export
+ * @interface ListOperationsResponseOA
+ */
+export interface ListOperationsResponseOA {
+    /**
+     *
+     * @type {Array<OperationOA>}
+     * @memberof ListOperationsResponseOA
+     */
+    operations: Array<OperationOA>;
 }
 
 /**
@@ -501,6 +529,160 @@ export interface MongoUserToCreate {
      * @memberof MongoUserToCreate
      */
     permissions: Array<MongoPermissionToCreate>;
+}
+
+/**
+ *
+ * @export
+ * @interface OperationOA
+ */
+export interface OperationOA {
+    /**
+     *
+     * @type {string}
+     * @memberof OperationOA
+     */
+    id: string;
+    /**
+     *
+     * @type {OperationTypeOA}
+     * @memberof OperationOA
+     */
+    type: OperationTypeOA;
+    /**
+     *
+     * @type {OperationStatusOA}
+     * @memberof OperationOA
+     */
+    status: OperationStatusOA;
+    /**
+     *
+     * @type {string}
+     * @memberof OperationOA
+     */
+    createdAt: string;
+    /**
+     *
+     * @type {string}
+     * @memberof OperationOA
+     */
+    createdBy: string;
+    /**
+     *
+     * @type {string}
+     * @memberof OperationOA
+     */
+    updatedAt: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof OperationOA
+     */
+    isRestartAllowed: boolean;
+}
+
+/**
+ *
+ * @export
+ * @interface OperationStatusOA
+ */
+export interface OperationStatusOA {
+    /**
+     *
+     * @type {string}
+     * @memberof OperationStatusOA
+     */
+    value: string;
+    /**
+     *
+     * @type {string}
+     * @memberof OperationStatusOA
+     */
+    displayValue: string;
+}
+
+/**
+ *
+ * @export
+ * @interface OperationTypeOA
+ */
+export interface OperationTypeOA {
+    /**
+     *
+     * @type {string}
+     * @memberof OperationTypeOA
+     */
+    value: string;
+    /**
+     *
+     * @type {string}
+     * @memberof OperationTypeOA
+     */
+    displayValue: string;
+}
+
+/**
+ *
+ * @export
+ * @interface ProductQuotaUsageByResourceOA
+ */
+export interface ProductQuotaUsageByResourceOA {
+    /**
+     *
+     * @type {Resource}
+     * @memberof ProductQuotaUsageByResourceOA
+     */
+    resource: Resource;
+    /**
+     *
+     * @type {Array<ProductQuotaUsageReportItemOA>}
+     * @memberof ProductQuotaUsageByResourceOA
+     */
+    items: Array<ProductQuotaUsageReportItemOA>;
+}
+
+/**
+ *
+ * @export
+ * @interface ProductQuotaUsageReportItemOA
+ */
+export interface ProductQuotaUsageReportItemOA {
+    /**
+     *
+     * @type {string}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    productId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    quotaProvider: string;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    limit: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    usage: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    free: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ProductQuotaUsageReportItemOA
+     */
+    timestamp: number;
 }
 
 /**
@@ -1224,6 +1406,221 @@ export const V1UpdateResourcePresetRequestTypeEnum = {
 
 export type V1UpdateResourcePresetRequestTypeEnum =
     (typeof V1UpdateResourcePresetRequestTypeEnum)[keyof typeof V1UpdateResourcePresetRequestTypeEnum];
+
+/**
+ * BillingApi - axios parameter creator
+ * @export
+ */
+export const BillingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary Get product quota usage report
+         * @param {string} productId
+         * @param {string} startDate
+         * @param {string} endDate
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductQuotaUsageReport: async (
+            productId: string,
+            startDate: string,
+            endDate: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('getProductQuotaUsageReport', 'productId', productId);
+            // verify required parameter 'startDate' is not null or undefined
+            assertParamExists('getProductQuotaUsageReport', 'startDate', startDate);
+            // verify required parameter 'endDate' is not null or undefined
+            assertParamExists('getProductQuotaUsageReport', 'endDate', endDate);
+            const localVarPath = `/api/billing/product-quota-usage-report`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (productId !== undefined) {
+                localVarQueryParameter['productId'] = productId;
+            }
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] =
+                    (startDate as any) instanceof Date
+                        ? (startDate as any).toISOString().substring(0, 10)
+                        : startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] =
+                    (endDate as any) instanceof Date
+                        ? (endDate as any).toISOString().substring(0, 10)
+                        : endDate;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * BillingApi - functional programming interface
+ * @export
+ */
+export const BillingApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = BillingApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary Get product quota usage report
+         * @param {string} productId
+         * @param {string} startDate
+         * @param {string} endDate
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProductQuotaUsageReport(
+            productId: string,
+            startDate: string,
+            endDate: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<GetProductQuotaUsageReportResponseOA>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProductQuotaUsageReport(
+                productId,
+                startDate,
+                endDate,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['BillingApi.getProductQuotaUsageReport']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * BillingApi - factory interface
+ * @export
+ */
+export const BillingApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = BillingApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary Get product quota usage report
+         * @param {BillingApiGetProductQuotaUsageReportRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProductQuotaUsageReport(
+            requestParameters: BillingApiGetProductQuotaUsageReportRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<GetProductQuotaUsageReportResponseOA> {
+            return localVarFp
+                .getProductQuotaUsageReport(
+                    requestParameters.productId,
+                    requestParameters.startDate,
+                    requestParameters.endDate,
+                    options,
+                )
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for getProductQuotaUsageReport operation in BillingApi.
+ * @export
+ * @interface BillingApiGetProductQuotaUsageReportRequest
+ */
+export interface BillingApiGetProductQuotaUsageReportRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof BillingApiGetProductQuotaUsageReport
+     */
+    readonly productId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof BillingApiGetProductQuotaUsageReport
+     */
+    readonly startDate: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof BillingApiGetProductQuotaUsageReport
+     */
+    readonly endDate: string;
+}
+
+/**
+ * BillingApi - object-oriented interface
+ * @export
+ * @class BillingApi
+ * @extends {BaseAPI}
+ */
+export class BillingApi extends BaseAPI {
+    /**
+     *
+     * @summary Get product quota usage report
+     * @param {BillingApiGetProductQuotaUsageReportRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BillingApi
+     */
+    public getProductQuotaUsageReport(
+        requestParameters: BillingApiGetProductQuotaUsageReportRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return BillingApiFp(this.configuration)
+            .getProductQuotaUsageReport(
+                requestParameters.productId,
+                requestParameters.startDate,
+                requestParameters.endDate,
+                options,
+            )
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
 
 /**
  * MDBQuotasApi - axios parameter creator
@@ -3740,6 +4137,278 @@ export class ManagedMongoDBUsersApi extends BaseAPI {
     ) {
         return ManagedMongoDBUsersApiFp(this.configuration)
             .listUsers(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * OperationsApi - axios parameter creator
+ * @export
+ */
+export const OperationsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary List operations
+         * @param {string} [clusterId]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listOperations: async (
+            clusterId?: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            const localVarPath = `/api/operations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Restart operation
+         * @param {string} operationId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restartOperation: async (
+            operationId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'operationId' is not null or undefined
+            assertParamExists('restartOperation', 'operationId', operationId);
+            const localVarPath = `/api/operations/{operationId}/restart`.replace(
+                `{${'operationId'}}`,
+                encodeURIComponent(String(operationId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * OperationsApi - functional programming interface
+ * @export
+ */
+export const OperationsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = OperationsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary List operations
+         * @param {string} [clusterId]
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listOperations(
+            clusterId?: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListOperationsResponseOA>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listOperations(
+                clusterId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['OperationsApi.listOperations']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary Restart operation
+         * @param {string} operationId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async restartOperation(
+            operationId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restartOperation(
+                operationId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['OperationsApi.restartOperation']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * OperationsApi - factory interface
+ * @export
+ */
+export const OperationsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = OperationsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary List operations
+         * @param {OperationsApiListOperationsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listOperations(
+            requestParameters: OperationsApiListOperationsRequest = {},
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListOperationsResponseOA> {
+            return localVarFp
+                .listOperations(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary Restart operation
+         * @param {OperationsApiRestartOperationRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restartOperation(
+            requestParameters: OperationsApiRestartOperationRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<void> {
+            return localVarFp
+                .restartOperation(requestParameters.operationId, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for listOperations operation in OperationsApi.
+ * @export
+ * @interface OperationsApiListOperationsRequest
+ */
+export interface OperationsApiListOperationsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OperationsApiListOperations
+     */
+    readonly clusterId?: string;
+}
+
+/**
+ * Request parameters for restartOperation operation in OperationsApi.
+ * @export
+ * @interface OperationsApiRestartOperationRequest
+ */
+export interface OperationsApiRestartOperationRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof OperationsApiRestartOperation
+     */
+    readonly operationId: string;
+}
+
+/**
+ * OperationsApi - object-oriented interface
+ * @export
+ * @class OperationsApi
+ * @extends {BaseAPI}
+ */
+export class OperationsApi extends BaseAPI {
+    /**
+     *
+     * @summary List operations
+     * @param {OperationsApiListOperationsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OperationsApi
+     */
+    public listOperations(
+        requestParameters: OperationsApiListOperationsRequest = {},
+        options?: RawAxiosRequestConfig,
+    ) {
+        return OperationsApiFp(this.configuration)
+            .listOperations(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Restart operation
+     * @param {OperationsApiRestartOperationRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OperationsApi
+     */
+    public restartOperation(
+        requestParameters: OperationsApiRestartOperationRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return OperationsApiFp(this.configuration)
+            .restartOperation(requestParameters.operationId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }

@@ -1,20 +1,15 @@
 import React from 'react';
 import {Progress, Text, Tooltip} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-
-interface Quota {
-    limit: number;
-    usage: number;
-    free: number;
-    resource: {
-        unit: string;
-    };
-}
+import {ResourceUnit} from '@/components/ResourceInputField';
+import {roundTo, toPercent} from '@/utils/math';
+import {Quota} from '@/generated/api-mdb';
 
 interface QuotaTransferSimulationResultProps {
     title: string;
     quota: Quota;
     transferAmount: number;
+    unit: ResourceUnit;
     isSource?: boolean;
 }
 
@@ -24,33 +19,25 @@ const getColorByStatus = (isDanger: boolean, isWarning: boolean) => {
     return 'success';
 };
 
-function roundTo(num: number, places: number) {
-    const factor = 10 ** places;
-    return Math.round(num * factor) / factor;
-}
-
-function toPercent(num: number) {
-    return Math.min(Math.max(num, 0), 100);
-}
-
 export const QuotaTransferSimulationResult: React.FC<QuotaTransferSimulationResultProps> = ({
     title,
     quota,
     transferAmount,
-    isSource,
+    unit,
+    isSource = false,
 }) => {
     // Расчет значений для текущего состояния
     const currentLimit = isSource ? quota.limit + transferAmount : quota.limit - transferAmount;
     const currentUsage = quota.usage;
-    const currentUsagePercent = (currentUsage / currentLimit) * 100;
-    const currentFree = isSource ? quota.free + transferAmount : quota.free - transferAmount;
-    const currentFreePercent = (currentFree / currentLimit) * 100;
+    const currentUsagePercent = currentLimit > 0 ? (currentUsage / currentLimit) * 100 : 100;
+    const currentFree = currentLimit - currentUsage;
+    const currentFreePercent = currentLimit > 0 ? (currentFree / currentLimit) * 100 : 100;
 
     // Расчет значений для будущего состояния
     const futureLimit = quota.limit;
-    const futureUsagePercent = (currentUsage / futureLimit) * 100;
-    const futureFree = quota.free;
-    const futureFreePercent = (futureFree / futureLimit) * 100;
+    const futureUsagePercent = futureLimit > 0 ? (currentUsage / futureLimit) * 100 : 100;
+    const futureFree = futureLimit - currentUsage;
+    const futureFreePercent = futureLimit > 0 ? (futureFree / futureLimit) * 100 : 100;
 
     // Определение статусов
     const isCurrentDanger = currentFree < 0;
@@ -58,39 +45,22 @@ export const QuotaTransferSimulationResult: React.FC<QuotaTransferSimulationResu
     const isFutureDanger = futureFree < 0;
     const isFutureWarning = futureFreePercent <= 25;
 
-    // console.log(
-    //     title,
-    //     'current',
-    //     currentLimit,
-    //     currentUsage,
-    //     currentUsagePercent,
-    //     currentFree,
-    //     currentFreePercent,
-    // );
-    // console.log(
-    //     title,
-    //     'future',
-    //     futureLimit,
-    //     currentUsage,
-    //     futureUsagePercent,
-    //     futureFree,
-    //     futureFreePercent,
-    // );
     return (
         <div>
             <Text variant="body-1" color="secondary">
                 {title}
             </Text>
-
             <Box marginTop="8px" style={{display: 'flex', flexDirection: 'column'}}>
                 <Text variant="body-1">
-                    Лимит: {currentLimit}&nbsp;--&gt;&nbsp;{futureLimit}&nbsp;{quota.resource.unit}
+                    Лимит: {roundTo(currentLimit / unit.coefficient, 0)}&nbsp;--&gt;&nbsp;
+                    {roundTo(futureLimit / unit.coefficient, 0)}&nbsp;{unit.label}
                 </Text>
                 <Text variant="body-1">
-                    Потребление: {currentUsage}&nbsp;{quota.resource.unit}
+                    Потребление: {roundTo(currentUsage / unit.coefficient, 2)}&nbsp;{unit.label}
                 </Text>
                 <Text variant="body-1">
-                    Остаток: {currentFree}&nbsp;--&gt;&nbsp;{futureFree}&nbsp;{quota.resource.unit}
+                    Остаток: {roundTo(currentFree / unit.coefficient, 2)}&nbsp;--&gt;&nbsp;
+                    {roundTo(futureFree / unit.coefficient, 2)}&nbsp;{unit.label}
                 </Text>
             </Box>
             <Text variant="body-1" color="secondary">
@@ -118,7 +88,6 @@ export const QuotaTransferSimulationResult: React.FC<QuotaTransferSimulationResu
                     },
                 ]}
             />
-
             <Text variant="body-1" color="secondary">
                 Использовано % после передачи
             </Text>

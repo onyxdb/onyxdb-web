@@ -10,6 +10,7 @@ import {
 } from '@/generated/api-mdb';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
+import {BytesGB} from '@/components/ResourceInputField';
 
 interface InfoTabProps {
     cluster: V1MongoClusterResponse;
@@ -74,7 +75,9 @@ const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
                         </Text>
                         <Text variant="body-1" color="primary">
                             {resources?.storageClass ?? '???'}&nbsp;
-                            {resources?.storage ? `${resources.storage} MB` : '???'}
+                            {resources?.storage
+                                ? `${resources.storage / BytesGB.coefficient} ${BytesGB.label}`
+                                : '???'}
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">

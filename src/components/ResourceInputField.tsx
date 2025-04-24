@@ -7,7 +7,7 @@ interface ResourceInputFieldProps {
     label?: string;
     name: string;
     value: number;
-    changeAction: (value: number) => void;
+    changeAction: (value: number, unit: ResourceUnit) => void;
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     error?: string;
     placeholder?: string;
@@ -18,6 +18,27 @@ interface ResourceInputFieldProps {
 
     [key: string]: unknown;
 }
+
+export interface ResourceUnit {
+    value: string;
+    label: string;
+    coefficient: number;
+}
+
+export const CoresMilliCPU: ResourceUnit = {
+    value: 'milliCPU',
+    label: 'milliCPU',
+    coefficient: 0.001,
+};
+export const CoresCPU: ResourceUnit = {value: 'cores', label: 'CPU', coefficient: 1};
+
+export const coresUnits = [CoresCPU, CoresMilliCPU];
+
+export const BytesBytes: ResourceUnit = {value: 'bytes', label: 'bytes', coefficient: 1};
+export const BytesMB: ResourceUnit = {value: 'MB', label: 'MB', coefficient: 1024 * 1024};
+export const BytesGB: ResourceUnit = {value: 'GB', label: 'GB', coefficient: 1024 * 1024 * 1024};
+
+export const bytesUnits = [BytesBytes, BytesMB, BytesGB];
 
 export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     label,
@@ -34,28 +55,16 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     ...props
 }) => {
     const [currentValue, setCurrentValue] = useState<number>(value);
-    const [currentUnit, setCurrentUnit] = useState<string>('');
-
-    const coresUnits = [
-        {value: 'cores', label: 'CPU', coefficient: 1},
-        {value: 'milliCPU', label: 'milliCPU', coefficient: 1000},
-    ];
-
-    const bytesUnits = [
-        {value: 'GB', label: 'GB', coefficient: 1024 * 1024 * 1024},
-        {value: 'MB', label: 'MB', coefficient: 1024 * 1024},
-        // {value: 'bytes', label: 'bytes', coefficient: 1},
-    ];
-
-    const [units, setUnits] = useState<{value: string; label: string; coefficient: number}[]>([]);
+    const [currentUnit, setCurrentUnit] = useState<ResourceUnit>(CoresCPU);
+    const [units, setUnits] = useState<ResourceUnit[]>([]);
 
     useEffect(() => {
         if (unitType === ResourceUnitEnum.Cores) {
             setUnits(coresUnits);
-            setCurrentUnit('cores');
+            setCurrentUnit(CoresCPU);
         } else if (unitType === ResourceUnitEnum.Bytes) {
             setUnits(bytesUnits);
-            setCurrentUnit('GB');
+            setCurrentUnit(BytesGB);
         }
     }, [unitType]);
 
@@ -63,20 +72,12 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
         setCurrentValue(value);
     }, [value]);
 
-    const convertToBaseUnit = (val: number, unit: string): number => {
-        const selectedUnit = units.find((u) => u.value === unit);
-        if (selectedUnit) {
-            return val * selectedUnit.coefficient;
-        }
-        return val;
+    const convertToBaseUnit = (val: number, res: ResourceUnit): number => {
+        return val * res.coefficient;
     };
 
-    const convertFromBaseUnit = (val: number, unit: string): number => {
-        const selectedUnit = units.find((u) => u.value === unit);
-        if (selectedUnit) {
-            return val / selectedUnit.coefficient;
-        }
-        return val;
+    const convertFromBaseUnit = (val: number, res: ResourceUnit): number => {
+        return val / res.coefficient;
     };
 
     const handleValueChange = (newValue: string) => {
@@ -84,13 +85,17 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
         const val = convertToBaseUnit(parsedValue, currentUnit);
         setCurrentValue(val);
         console.log('handleValueChange', val, currentUnit);
-        changeAction(val);
+        changeAction(val, currentUnit);
     };
 
     const handleUnitChange = (newUnit: string[]) => {
         const unit = newUnit[0];
-        setCurrentUnit(unit);
-        console.log('handleUnitChange', unit);
+        const selectedUnit = units.find((u) => u.value === unit);
+        if (selectedUnit) {
+            setCurrentUnit(selectedUnit);
+            console.log('handleUnitChange', unit);
+            changeAction(currentValue, selectedUnit);
+        }
     };
 
     return (
@@ -117,7 +122,7 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
                 </div>
                 <Select
                     size="m"
-                    value={[currentUnit]}
+                    value={[currentUnit.value]}
                     onUpdate={handleUnitChange}
                     placeholder="Выберите единицу измерения"
                     width={100}

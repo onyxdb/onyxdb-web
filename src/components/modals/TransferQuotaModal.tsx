@@ -13,7 +13,7 @@ import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProductSelector} from '@/components/ProductSelector';
 import {ProductDTOGet} from '@/generated/api';
-import {ResourceInputField} from '@/components/ResourceInputField';
+import {ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
 import {QuotaTransferSimulationResult} from '@/components/QuotaTransferSimulationResult';
 
 interface TransferQuotaModalProps {
@@ -40,11 +40,12 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     resources,
     closeAction,
 }) => {
-    const toaster = useToaster();
+    const [resourceUnit, setResourceUnit] = useState<ResourceUnit | null>(null);
     const [monitoringInterval, setMonitoringInterval] = useState<NodeJS.Timeout | null>(null);
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [simulationResult, setSimulationResult] =
         useState<SimulateTransferQuotasBetweenProductsResponse | null>(null);
+    const toaster = useToaster();
 
     const formik = useFormik<TransferQuotaFormFields>({
         initialValues: {
@@ -82,11 +83,6 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                 };
             }
 
-            console.log(
-                'simulation',
-                simulationResult?.srcProduct.quotas[0].free === undefined ||
-                    simulationResult.srcProduct.quotas[0].free < 0,
-            );
             if (
                 simulationResult?.srcProduct.quotas[0].free === undefined ||
                 simulationResult.srcProduct.quotas[0].free < 0
@@ -97,7 +93,6 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
             return errors;
         },
         onSubmit: async (values) => {
-            console.log('Transfer Quotas formik', formik.values);
             const request: TransferQuotasBetweenProductsRequest = {
                 srcProductId: values.srcProductId,
                 dstProductId: values.dstProductId,
@@ -218,10 +213,11 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                     <Text variant="body-1">Сколько передам</Text>
                     <Box marginBottom="10px" style={{maxWidth: '300px'}}>
                         <ResourceInputField
-                            name="quotas[0].limit"
+                            name="quota.limit"
                             value={formik.values.quota.limit}
-                            changeAction={(value: number) => {
+                            changeAction={(value: number, unit: ResourceUnit) => {
                                 formik.setFieldValue('quota.limit', value);
+                                setResourceUnit(unit);
                             }}
                             onBlur={formik.handleBlur('quota.limit')}
                             error={
@@ -250,29 +246,41 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                         </Button>
                     </Box>
                 </div>
-                {simulationResult && (
+                {simulationResult && resourceUnit && (
                     <Box marginTop="20px">
                         <Tooltip
                             content={
-                                <Progress
-                                    stack={[
-                                        {
-                                            theme: 'info',
-                                            content: `Used`,
-                                            value: 30,
-                                        },
-                                        {
-                                            theme: 'success',
-                                            content: `Free`,
-                                            value: 30,
-                                        },
-                                        {
-                                            theme: 'danger',
-                                            content: `Transferred`,
-                                            value: 40,
-                                        },
-                                    ]}
-                                />
+                                <div>
+                                    <Text>Пример отображения информации о загрузке по квотам</Text>
+                                    <Progress
+                                        stack={[
+                                            {
+                                                theme: 'info',
+                                                content: `Используется`,
+                                                value: 50,
+                                            },
+                                            {
+                                                theme: 'misc',
+                                                content: `Свободно`,
+                                                value: 50,
+                                            },
+                                        ]}
+                                    />
+                                    <Progress
+                                        stack={[
+                                            {
+                                                theme: 'warning',
+                                                content: `Исп. опасно`,
+                                                value: 85,
+                                            },
+                                            {
+                                                theme: 'misc',
+                                                content: `Свободно`,
+                                                value: 15,
+                                            },
+                                        ]}
+                                    />
+                                </div>
                             }
                         >
                             <Text variant="subheader-1">Результат симуляции</Text>
@@ -282,7 +290,8 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                                 <QuotaTransferSimulationResult
                                     title="Отдающий продукт"
                                     quota={simulationResult.srcProduct.quotas[0]}
-                                    transferAmount={formik.values.quota.limit}
+                                    transferAmount={formik.values.quota.limit || 0}
+                                    unit={resourceUnit}
                                     isSource
                                 />
                             </Box>
@@ -290,7 +299,8 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                                 <QuotaTransferSimulationResult
                                     title="Принимающий продукт"
                                     quota={simulationResult.dstProduct.quotas[0]}
-                                    transferAmount={formik.values.quota.limit}
+                                    transferAmount={formik.values.quota.limit || 0}
+                                    unit={resourceUnit}
                                 />
                             </Box>
                         </HorizontalStack>

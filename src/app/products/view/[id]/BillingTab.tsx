@@ -1,46 +1,38 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
-import {Button, Text, useToaster} from '@gravity-ui/uikit';
-import {DateTime, dateTimeParse} from '@gravity-ui/date-utils';
-import {DatePicker} from '@gravity-ui/date-components';
+import React, {useState} from 'react';
+import {Button, Card, Label, Text, useToaster} from '@gravity-ui/uikit';
+import {DateTime} from '@gravity-ui/date-utils';
+import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
 import {ProductDTOGet} from '@/generated/api';
-import {ProductQuotaUsageReportItemOA} from '@/generated/api-mdb';
+import {ProductQuotaUsageByResourceOA, Resource} from '@/generated/api-mdb';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import ChartKit from '@gravity-ui/chartkit';
 import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+
+type ResourceYagrWidgetData = {
+    resource: Resource;
+    data: YagrWidgetData;
+};
 
 interface BillingTabProps {
     product: ProductDTOGet;
 }
 
 const BillingTab: React.FC<BillingTabProps> = ({product}) => {
-    const [startDate, setStartDate] = useState<DateTime | null>(null);
-    const [endDate, setEndDate] = useState<DateTime | null>(null);
-    const [reportData, setReportData] = useState<ProductQuotaUsageReportItemOA[]>([]);
+    const [rangeDate, setRangeDate] = useState<RangeValue<DateTime> | null>(null);
+    const [reportData, setReportData] = useState<ProductQuotaUsageByResourceOA[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const toaster = useToaster();
 
-    useEffect(() => {
-        // Устанавливаем текущую дату как конечную дату по умолчанию
-        const now = dateTimeParse(new Date());
-        if (now) {
-            setEndDate(now);
-        }
-    }, []);
-
-    const handleStartDateChange = (value: DateTime | null) => {
-        setStartDate(value);
-    };
-
-    const handleEndDateChange = (value: DateTime | null) => {
-        setEndDate(value);
+    const handleDateChange = (value: RangeValue<DateTime> | null) => {
+        setRangeDate(value);
     };
 
     const fetchReport = async () => {
-        if (!startDate || !endDate) {
+        if (!rangeDate) {
             setError('Пожалуйста, выберите начальную и конечную даты.');
             return;
         }
@@ -50,12 +42,12 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
         try {
             const body = {
                 productId: product.id,
-                starDate: startDate.format('YYYY-MM-DD'),
-                endDate: endDate.format('YYYY-MM-DD'),
+                startDate: rangeDate.start.format('YYYY-MM-DD'),
+                endDate: rangeDate.end.format('YYYY-MM-DD'),
             };
             console.log('getProductQuotaUsageReport request', body);
             const response = await mdbBillingApi.getProductQuotaUsageReport(body);
-            setReportData(response.data.items);
+            setReportData(response.data.resources);
             console.log('getProductQuotaUsageReport response', response);
         } catch (fetchError) {
             console.error('Ошибка при получении отчёта о квотах:', fetchError);
@@ -73,97 +65,88 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
         }
     };
 
-    const prepareChartData = (data: ProductQuotaUsageReportItemOA[]): YagrWidgetData => {
-        const timeline = data.map((item) => item.timestamp);
-        const usageData = data.map((item) => item.usage);
-        const freeData = data.map((item) => item.free);
-        const limitData = data.map((item) => item.limit);
+    const prepareChartData = (data: ProductQuotaUsageByResourceOA): ResourceYagrWidgetData => {
+        const timeline = data.items.map((item) => item.timestamp);
+        const usageData = data.items.map((item) => item.usage);
+        const freeData = data.items.map((item) => item.free);
+        const limitData = data.items.map((item) => item.limit);
 
         const maxY = Math.max(...usageData, ...limitData);
         const minY = Math.min(...usageData, ...freeData);
         console.log('minY', minY, 'maxY', maxY);
         return {
+            resource: data.resource,
             data: {
-                timeline,
-                graphs: [
-                    {
-                        id: 'usage',
-                        name: 'Использовано',
-                        // color: '#6e8188',
-                        // color: 'var(--g-color-private-blue-600-solid)',
-                        color: 'var(--g-color-private-purple-600-solid)',
-                        data: usageData,
-                    },
-                    // {
-                    //     id: 'free',
-                    //     name: 'Свободно',
-                    //     // color: '#6c59c2',
-                    //     color: 'var(--g-color-private-green-600-solid)',
-                    //     data: freeData,
-                    // },
-                    {
-                        id: 'limit',
-                        name: 'Лимит',
-                        // color: 'var(--g-color-private-yellow-550-solid)',
-                        color: 'var(--g-color-private-yellow-550-solid)',
-                        data: limitData,
-                    },
-                ],
-            },
-            libraryConfig: {
-                chart: {
-                    series: {
-                        type: 'area',
-                    },
-                    select: {
-                        zoom: false,
-                    },
+                data: {
+                    timeline,
+                    graphs: [
+                        {
+                            id: 'usage',
+                            name: 'Использовано',
+                            color: 'var(--g-color-private-purple-600-solid)',
+                            data: usageData,
+                        },
+                        {
+                            id: 'limit',
+                            name: 'Лимит',
+                            // color: 'var(--g-color-private-yellow-550-solid)',
+                            color: 'var(--g-color-private-yellow-550-solid)',
+                            data: limitData,
+                        },
+                    ],
                 },
-                title: {
-                    text: `Использование квот для продукта ${product.name}`,
-                },
-                legend: {
-                    show: true,
-                    position: 'top',
+                libraryConfig: {
+                    chart: {
+                        series: {
+                            type: 'area',
+                        },
+                        select: {
+                            zoom: false,
+                        },
+                    },
+                    title: {
+                        text: `Использование квот для продукта ${product.name}`,
+                    },
+                    legend: {
+                        show: true,
+                        position: 'top',
+                    },
                 },
             },
         };
     };
 
-    const chartData = prepareChartData(reportData);
-
+    const chartsData = reportData.map((d) => prepareChartData(d));
     return (
         <div style={{padding: '20px'}}>
-            <Text variant="subheader-1">Отчёт о использовании квот</Text>
-            <div style={{marginTop: '20px'}}>
-                <HorizontalStack gap={16} align="flex-end">
+            <HorizontalStack justify="space-between">
+                <Card>
                     <div>
-                        <div>
-                            <Text>Начальная дата</Text>
-                        </div>
-                        <DatePicker value={startDate} onUpdate={handleStartDateChange} hasClear />
-                    </div>
-                    <div>
-                        <div>
-                            <Text>Конечная дата</Text>
-                        </div>
-                        <DatePicker value={endDate} onUpdate={handleEndDateChange} hasClear />
+                        <RangeCalendar value={rangeDate} onUpdate={handleDateChange} />
                     </div>
                     <Button view="action" size="m" onClick={fetchReport} disabled={loading}>
                         {loading ? 'Загрузка...' : 'Получить отчёт'}
                     </Button>
-                </HorizontalStack>
-            </div>
-            {error && (
-                <div style={{marginTop: '16px', color: 'red'}}>
-                    <Text variant="body-1">{error}</Text>
+                </Card>
+                <div>
+                    {error && (
+                        <div style={{marginTop: '16px', color: 'red'}}>
+                            <Text variant="body-1">{error}</Text>
+                        </div>
+                    )}
+                    {chartsData.map((cd) => (
+                        <>
+                            <Text>
+                                График потребления квот по ресурсу{' '}
+                                <Label>{cd.resource.description}</Label>
+                            </Text>
+                            <div style={{marginTop: '10px', height: '70vh'}}>
+                                <ChartKit type="yagr" data={cd.data} />
+                            </div>
+                        </>
+                    ))}
                 </div>
-            )}
-            {reportData.length > 0 && (
-                <div style={{marginTop: '10px', height: '70vh'}}>
-                    <ChartKit type="yagr" data={chartData} />
-                </div>
-            )}
+            </HorizontalStack>
         </div>
     );
 };

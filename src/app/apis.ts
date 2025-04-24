@@ -16,6 +16,7 @@ import {
     ManagedMongoDBBackupsApi,
     ManagedMongoDBDatabasesApi,
     ManagedMongoDBUsersApi,
+    OperationsApi,
     ProjectsApi,
     V1ManagedMongoDbApi,
     V1ResourcePresetsApi,
@@ -58,3 +59,4 @@ export const mdbMongoDbDatabasesApi = new ManagedMongoDBDatabasesApi(configMDB, 
 export const mdbMongoDbBackupsApi = new ManagedMongoDBBackupsApi(configMDB, '', apiClient);
 export const mdbQuotasApi = new MDBQuotasApi(configMDB, '', apiClient);
 export const mdbBillingApi = new BillingApi(configMDB, '', apiClient);
+export const mdbOperationApi = new OperationsApi(configMDB, '', apiClient);

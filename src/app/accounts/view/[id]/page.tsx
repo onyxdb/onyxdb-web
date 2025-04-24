@@ -21,8 +21,8 @@ import {
     ArrowUpRightFromSquare,
     Briefcase,
     Calendar,
-    ChevronLeft,
     CircleInfoFill,
+    CirclePlus,
     Clock,
     FileText,
     Folder,
@@ -37,6 +37,7 @@ import {AccountForm, AccountFormDTO} from '@/components/forms/AccountForm';
 import {UserBlock} from '@/components/common/UserBlock';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {MyLoader} from '@/components/Loader';
+import {AppHeader} from '@/components/AppHeader/AppHeader';
 
 interface AccountViewPageProps {}
 
@@ -51,72 +52,70 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
-    const {checkActions} = useAuth();
+    const {checkPermission} = useAuth();
 
     const accountId = pathname.split('/').pop() ?? '';
 
     // @ts-ignore
     const data = account ? (account.data as AccountData) : null;
 
+    const fetchAccount = async () => {
+        try {
+            const response = await accountsApi.getAccountById({accountId});
+            setAccount(response.data ?? null);
+        } catch (error) {
+            console.error('Error fetching account:', error);
+        }
+    };
     useEffect(() => {
-        const fetchAccount = async () => {
-            try {
-                const response = await accountsApi.getAccountById({accountId});
-                setAccount(response.data ?? null);
-            } catch (error) {
-                console.error('Error fetching account:', error);
-            }
-        };
-
         fetchAccount();
     }, [accountId]);
 
-    useEffect(() => {
-        const fetchAccountOrgUnits = async () => {
-            try {
-                const response = await accountsApi.getAccountOrganizationUnits({
-                    accountId,
+    const fetchAccountOrgUnits = async () => {
+        try {
+            const response = await accountsApi.getAccountOrganizationUnits({
+                accountId,
+            });
+            setAccountOrgUnits(response.data ?? []);
+
+            const ownerAccountId = response.data && response.data[0].ownerId;
+            if (ownerAccountId) {
+                const responseOwner = await accountsApi.getAccountById({
+                    accountId: ownerAccountId,
                 });
-                setAccountOrgUnits(response.data ?? []);
-
-                const ownerAccountId = response.data && response.data[0].ownerId;
-                if (ownerAccountId) {
-                    const responseOwner = await accountsApi.getAccountById({
-                        accountId: ownerAccountId,
-                    });
-                    setTeamLead(responseOwner.data);
-                }
-            } catch (error) {
-                console.error('Error fetching account org units:', error);
+                setTeamLead(responseOwner.data);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching account org units:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchAccountOrgUnits();
     }, [accountId]);
 
+    const fetchAccountRoles = async () => {
+        try {
+            const response = await accountsApi.getAccountRoles({accountId});
+            setAccountRoles(response.data ?? []);
+        } catch (error) {
+            console.error('Error fetching account roles:', error);
+        }
+    };
     useEffect(() => {
-        const fetchAccountRoles = async () => {
-            try {
-                const response = await accountsApi.getAccountRoles({accountId});
-                setAccountRoles(response.data ?? []);
-            } catch (error) {
-                console.error('Error fetching account roles:', error);
-            }
-        };
-
         fetchAccountRoles();
     }, [accountId]);
 
-    useEffect(() => {
-        const fetchAccountBusinessRoles = async () => {
-            try {
-                const response = await accountsApi.getAccountBusinessRoles({accountId});
-                setAccountBusinessRoles(response.data ?? []);
-            } catch (error) {
-                console.error('Error fetching account business roles:', error);
-            }
-        };
+    const fetchAccountBusinessRoles = async () => {
+        try {
+            const response = await accountsApi.getAccountBusinessRoles({accountId});
+            setAccountBusinessRoles(response.data ?? []);
+        } catch (error) {
+            console.error('Error fetching account business roles:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchAccountBusinessRoles();
     }, [accountId]);
 
@@ -136,7 +135,6 @@ export default function AccountViewPage({}: AccountViewPageProps) {
             const {anyData: _, ...newValues} = values;
             await accountsApi.updateAccount({accountId: values.id ?? '???', accountDTO: newValues});
             handleCloseEditModal();
-            // Обновление данных об аккаунте
             const response = await accountsApi.getAccountById({accountId: values.id ?? '???'});
             setAccount(response.data ?? null);
         } catch (error) {
@@ -434,14 +432,24 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         );
     };
 
+    const breadCrumbs = [
+        {href: '/', text: 'Главная'},
+        {href: '/accounts', text: 'Аккаунты'},
+        {href: '/accounts', text: 'Аккаунты'},
+    ];
+
+    const actions = [];
+    if (checkPermission('account', 'create')) {
+        actions.push({
+            text: 'Создать аккаунт',
+            action: handleCreate,
+            icon: CirclePlus,
+        });
+    }
+
     return (
-        <div style={{padding: '20px', display: 'flex', flexDirection: 'column'}}>
-            <Box marginBottom="8px">
-                <Button onClick={() => router.back()}>
-                    <Icon data={ChevronLeft} />
-                    Назад
-                </Button>
-            </Box>
+        <div>
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <HorizontalStack align="center" justify="space-between">
                 <div>{account && <UserBlock account={account} selectable={true} size="l" />}</div>
                 <div>

@@ -7,12 +7,11 @@ import {useRouter} from 'next/navigation';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {mdbMongoDbApi} from '@/app/apis';
 import {V1CreateMongoClusterRequest} from '@/generated/api-mdb';
-import {useToaster} from '@gravity-ui/uikit';
+import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 export default function ClusterCreatePage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
-    const toaster = useToaster();
 
     const handleCreate = (values: ClusterFormValues) => {
         const request: V1CreateMongoClusterRequest = {

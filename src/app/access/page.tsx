@@ -40,7 +40,7 @@ export default function RolesPage() {
         actions.push({
             text: 'Создать роль',
             action: handleRoleCreate,
-            icon: <CirclePlus />,
+            icon: CirclePlus,
         });
     }
 

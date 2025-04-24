@@ -3,41 +3,55 @@
 import React, {useEffect, useState} from 'react';
 import {accountsApi} from '@/app/apis';
 import {AccountDTO} from '@/generated/api';
-import {Button, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
+import {
+    Button,
+    Icon,
+    Pagination,
+    Table,
+    TableColumnConfig,
+    TextInput,
+    withTableSorting,
+} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {useAuth} from '@/context/AuthContext';
+import {TextWithCopy} from '@/components/TextWithCopy';
+import {Pencil, TrashBin} from '@gravity-ui/icons';
+import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 interface AccountsTableProps {
-    // search: '';
     editAction?: (accountId: string) => void;
-    deleteAction?: (accountId: string) => void;
+    deleteAction?: (accountId: string, accountName: string) => Promise<boolean>;
 }
 
 export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteAction}) => {
     const [accounts, setAccounts] = useState<AccountDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [limit] = useState<number>(8);
+    const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
     const router = useRouter();
-
     const {checkPermission, user} = useAuth();
 
-    useEffect(() => {
-        const fetchAccounts = async () => {
-            try {
-                const response = await accountsApi.getAllAccounts({
-                    search: searchQuery,
-                    limit,
-                    offset,
-                });
-                setAccounts(response.data.data ?? []);
-                setTotal(response.data.totalCount ?? 0);
-            } catch (error) {
-                console.error('Error fetching accounts:', error);
-            }
-        };
+    const fetchAccounts = async () => {
+        try {
+            const response = await accountsApi.getAllAccounts({
+                search: searchQuery,
+                limit,
+                offset,
+            });
+            setAccounts(response.data.data ?? []);
+            setTotal(response.data.totalCount ?? 0);
+        } catch (error) {
+            toaster.add({
+                name: 'error_account_get',
+                title: 'Ошибка поиска аккаунта',
+                content: `Не удалось найти аккаунты ${error}`,
+                theme: 'danger',
+            });
+        }
+    };
 
+    useEffect(() => {
         fetchAccounts();
     }, [searchQuery, limit, offset]);
 
@@ -46,15 +60,27 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
         setOffset(0);
     };
 
-    const handleNextPage = () => {
-        setOffset(offset + limit);
+    const handlePageChange = (page: number, pageSize: number) => {
+        setLimit(pageSize);
+        setOffset((page - 1) * pageSize);
     };
 
-    const handlePrevPage = () => {
-        setOffset(Math.max(0, offset - limit));
+    const handleDelete = async (accountId: string, accountName: string) => {
+        if (!deleteAction) {
+            return;
+        }
+        const isSuccess = await deleteAction(accountId, accountName);
+        if (isSuccess) {
+            await fetchAccounts();
+        }
     };
 
     const columns: TableColumnConfig<AccountDTO>[] = [
+        {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
         {
             id: 'username',
             name: 'Логин',
@@ -101,15 +127,22 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                             size="m"
                             onClick={() => editAction(account.id ?? '???')}
                         >
+                            <Icon data={Pencil} />
                             Редактировать
                         </Button>
                     ) : null}
                     {deleteAction && checkPermission('account', 'delete') ? (
                         <Button
-                            view="normal"
+                            view="outlined-danger"
                             size="m"
-                            onClick={() => deleteAction(account.id ?? '???')}
+                            onClick={() =>
+                                handleDelete(
+                                    account?.id ?? '???',
+                                    `${account.firstName} ${account.lastName}`,
+                                )
+                            }
                         >
+                            <Icon data={TrashBin} />
                             Удалить
                         </Button>
                     ) : null}
@@ -119,7 +152,6 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
     }
 
     const MyTable = withTableSorting(Table);
-
     return (
         <div>
             <div style={{marginBottom: '20px'}}>
@@ -134,21 +166,15 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                 data={accounts}
                 // @ts-ignore
                 columns={columns}
-                // onSort={(column: string, order: 'asc' | 'desc') => handleSort(column, order)}
-                // sortState={sorting}
             />
-            <div style={{marginTop: '20px', display: 'flex', justifyContent: 'space-between'}}>
-                <Button view="normal" size="m" onClick={handlePrevPage} disabled={offset === 0}>
-                    Предыдущая страница
-                </Button>
-                <Button
-                    view="normal"
-                    size="m"
-                    onClick={handleNextPage}
-                    disabled={offset + limit >= total}
-                >
-                    Следующая страница
-                </Button>
+            <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
+                <Pagination
+                    page={offset / limit + 1}
+                    pageSize={limit}
+                    pageSizeOptions={[5, 10, 20, 100]}
+                    total={total}
+                    onUpdate={handlePageChange}
+                />
             </div>
         </div>
     );

@@ -32,11 +32,13 @@ export function LoginInfo() {
     };
 
     return (
-        <div onClick={() => setIsInfoModalOpen(true)}>
-            <UserBlock account={user.account} />
+        <div>
+            <div onClick={() => setIsInfoModalOpen(true)}>
+                <UserBlock account={user.account} />
+            </div>
             <Modal open={isInfoModalOpen} onOpenChange={() => setIsInfoModalOpen(false)}>
                 <div style={{padding: '20px', whiteSpace: 'pre-wrap', fontFamily: 'monospace'}}>
-                    <h3>Permissions:</h3>
+                    <h3>Разрешения:</h3>
                     <pre>{formatPermissions(user.permissions)}</pre>
                     <Button
                         size="l"

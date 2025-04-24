@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import {Button, Card, Label, Text, useToaster} from '@gravity-ui/uikit';
+import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {DateTime} from '@gravity-ui/date-utils';
 import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
@@ -10,6 +10,7 @@ import {ProductQuotaUsageByResourceOA, Resource} from '@/generated/api-mdb';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import ChartKit from '@gravity-ui/chartkit';
 import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 type ResourceYagrWidgetData = {
     resource: Resource;
@@ -25,7 +26,6 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
     const [reportData, setReportData] = useState<ProductQuotaUsageByResourceOA[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
-    const toaster = useToaster();
 
     const handleDateChange = (value: RangeValue<DateTime> | null) => {
         setRangeDate(value);

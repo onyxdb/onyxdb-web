@@ -178,7 +178,7 @@ export default function ProductsPage({}: ProductsPageProps) {
         actions.push({
             text: 'Создать продукт',
             action: handleProductCreateModal,
-            icon: <CirclePlus />,
+            icon: CirclePlus,
         });
     }
     return (

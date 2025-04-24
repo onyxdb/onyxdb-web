@@ -65,7 +65,7 @@ export default function BusinessRolesPage() {
         actions.push({
             text: 'Создать бизнес-роль',
             action: handleCreateBusinessRoleModal,
-            icon: <CirclePlus />,
+            icon: CirclePlus,
         });
     }
 

@@ -18,6 +18,7 @@ import {
 import {Box} from '@/components/Layout/Box';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
 import {useAuth} from '@/context/AuthContext';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export default function RoleRequestsTable() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestDTO[]>([]);
@@ -170,6 +171,11 @@ export default function RoleRequestsTable() {
     ];
 
     const columns: TableColumnConfig<RoleRequestDTO>[] = [
+        {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
         {
             id: 'roleId',
             name: 'Роль',

@@ -114,6 +114,11 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
 
     const columns: TableColumnConfig<BusinessRoleDTO>[] = [
         {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
+        {
             id: 'view',
             name: '',
             template: (businessRole) => (
@@ -182,7 +187,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                     )}
                     {checkPermission('business-roles', 'delete') && (
                         <Button
-                            view="normal"
+                            view="outlined-danger"
                             size="m"
                             onClick={() => {
                                 deleteAction(businessRole.id ?? '???');

@@ -7,9 +7,9 @@ import {CirclePlus, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePathname, useRouter} from 'next/navigation';
 import ClusterView from '@/components/Cluster/ClusterView';
 import {mdbMongoDbApi, mdbProjectsApi, productsApi} from '@/app/apis';
-import {useToaster} from '@gravity-ui/uikit';
 import {V1MongoClusterResponse} from '@/generated/api-mdb';
 import {ProductDTOGet} from '@/generated/api';
+import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 export default function ClusterViewPage() {
     const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
@@ -17,7 +17,6 @@ export default function ClusterViewPage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
     const pathname = usePathname();
-    const toaster = useToaster();
 
     const clusterId = pathname.split('/').pop() ?? '';
 
@@ -89,7 +88,7 @@ export default function ClusterViewPage() {
         actions.push({
             text: 'Создать кластер',
             action: handleCreate,
-            icon: <CirclePlus />,
+            icon: CirclePlus,
         });
     }
 
@@ -97,7 +96,7 @@ export default function ClusterViewPage() {
         actions.push({
             text: 'Редактировать кластер',
             action: handleEdit,
-            icon: <Pencil />,
+            icon: Pencil,
         });
     }
 
@@ -105,7 +104,7 @@ export default function ClusterViewPage() {
         actions.push({
             text: 'Удалить кластер',
             action: handleDelete,
-            icon: <TrashBin />,
+            icon: TrashBin,
             view: ButtonView.OutlinedDanger,
         });
     }

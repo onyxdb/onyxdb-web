@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import {Breadcrumbs, BreadcrumbsItem, Button} from '@gravity-ui/uikit';
+import {Breadcrumbs, BreadcrumbsItem, Button, Icon, IconData} from '@gravity-ui/uikit';
 import '../../styles/globals.css';
 
 export enum ButtonView {
@@ -37,7 +37,7 @@ interface BreadCrumb {
 interface ActionButton {
     text: string;
     action: () => void;
-    icon: React.ReactNode;
+    icon: IconData;
     view?: ButtonView;
 }
 
@@ -76,9 +76,9 @@ export const AppHeader: React.FC<HeaderActionsProps> = ({breadCrumbs, actions}) 
                             view={action.view ?? 'action'}
                             size="m"
                             onClick={action.action}
-                            icon={action.icon}
                             style={{marginRight: '10px'}}
                         >
+                            <Icon data={action.icon} />
                             {action.text}
                         </Button>
                     ))}

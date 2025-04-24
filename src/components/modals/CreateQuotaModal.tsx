@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import {useToaster} from '@gravity-ui/uikit';
 import {MDBQuotasApiUploadQuotasToProductsRequest} from '@/generated/api-mdb';
 import {mdbQuotasApi} from '@/app/apis';
 import CreateQuotaForm, {CreateQuotaFormFields} from '@/components/forms/CreateQuotaForm';
+import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 interface CreateQuotaModalProps {
     productId: string;
@@ -13,7 +13,6 @@ interface CreateQuotaModalProps {
 
 export const CreateQuotaModal: React.FC<CreateQuotaModalProps> = ({productId, closeAction}) => {
     // const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
-    const toaster = useToaster();
 
     const handleCloseCreateModal = () => {
         closeAction();

@@ -3,12 +3,16 @@
 import React, {Suspense, useEffect, useState} from 'react';
 import {
     AbbrApi,
+    Boxes3,
+    BranchesRight,
     CircleQuestion,
-    Cpu,
+    Database,
     Ghost,
     ListCheck,
-    ListUl,
+    LockOpen,
     Moon,
+    PersonMagnifier,
+    PersonWorker,
     Persons,
     Sun,
 } from '@gravity-ui/icons';
@@ -23,6 +27,49 @@ interface AppProps {
     children: React.ReactNode;
 }
 
+export const menuItems = [
+    {
+        title: 'Аккаунты',
+        icon: PersonMagnifier,
+        myLink: '/accounts',
+    },
+    {
+        title: 'Оргструктура',
+        icon: Persons,
+        myLink: '/structure',
+    },
+    {
+        title: 'Доступы',
+        icon: LockOpen,
+        myLink: '/access',
+    },
+    {
+        title: 'Бизнес Роли',
+        icon: PersonWorker,
+        myLink: '/business-roles',
+    },
+    {
+        title: 'Запросы',
+        icon: ListCheck,
+        myLink: '/requests',
+    },
+    {
+        title: 'Продукты',
+        icon: BranchesRight,
+        myLink: '/products',
+    },
+    {
+        title: 'Проекты',
+        icon: Boxes3,
+        myLink: '/projects',
+    },
+    {
+        title: 'Кластеры',
+        icon: Database,
+        myLink: '/clusters',
+    },
+];
+
 export const App: React.FC<AppProps> = ({children}) => {
     const [asideCollapsed, setAsideCollapsed] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
@@ -31,57 +78,6 @@ export const App: React.FC<AppProps> = ({children}) => {
     const isDarkMode = theme === 'dark';
     const pathname = usePathname();
     const router = useRouter();
-
-    const menuItems = [
-        {
-            title: 'Аккаунты',
-            icon: Persons,
-            onItemClick: () => router.push('/accounts'),
-            myLink: '/accounts',
-        },
-        {
-            title: 'Оргструктура',
-            icon: Persons,
-            onItemClick: () => router.push('/structure'),
-            myLink: '/structure',
-        },
-        {
-            title: 'Доступы',
-            icon: ListUl,
-            onItemClick: () => router.push('/access'),
-            myLink: '/access',
-        },
-        {
-            title: 'Бизнес Роли',
-            icon: ListUl,
-            onItemClick: () => router.push('/business-roles'),
-            myLink: '/business-roles',
-        },
-        {
-            title: 'Запросы',
-            icon: ListCheck,
-            onItemClick: () => router.push('/requests'),
-            myLink: '/requests',
-        },
-        {
-            title: 'Продукты',
-            icon: Cpu,
-            onItemClick: () => router.push('/products'),
-            myLink: '/products',
-        },
-        {
-            title: 'Проекты',
-            icon: Cpu,
-            onItemClick: () => router.push('/projects'),
-            myLink: '/projects',
-        },
-        {
-            title: 'Кластеры',
-            icon: Cpu,
-            onItemClick: () => router.push('/clusters'),
-            myLink: '/clusters',
-        },
-    ];
 
     useEffect(() => {
         if (pathname) {
@@ -104,9 +100,11 @@ export const App: React.FC<AppProps> = ({children}) => {
                             onChangeCompact={setAsideCollapsed}
                             logo={{icon: Ghost, text: 'OnyxDB'}}
                             menuItems={menuItems.map((mi) => ({
-                                ...mi,
                                 id: mi.title,
                                 current: activeTab === mi.title,
+                                title: mi.title,
+                                icon: mi.icon,
+                                onItemClick: () => router.push(mi.myLink),
                             }))}
                             renderFooter={(data: {compact: boolean}) => {
                                 return (

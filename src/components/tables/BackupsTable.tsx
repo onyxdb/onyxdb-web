@@ -69,13 +69,21 @@ export const BackupsTable: React.FC<BackupsTableProps> = ({
             template: (backup) => (
                 <HorizontalStack gap={10}>
                     {checkPermission('cluster', 'backup', clusterId) && (
-                        <Button view="outlined" size="m" onClick={() => deleteAction(backup.name)}>
-                            Удалить
+                        <Button
+                            view="outlined-success"
+                            size="m"
+                            onClick={() => restoreAction(backup.name)}
+                        >
+                            Восстановить
                         </Button>
                     )}
                     {checkPermission('cluster', 'backup', clusterId) && (
-                        <Button view="outlined" size="m" onClick={() => restoreAction(backup.name)}>
-                            Восстановить
+                        <Button
+                            view="outlined-danger"
+                            size="m"
+                            onClick={() => deleteAction(backup.name)}
+                        >
+                            Удалить
                         </Button>
                     )}
                 </HorizontalStack>

@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
-import {Button, Card, Checkbox, Modal, Select, Text, TextInput} from '@gravity-ui/uikit';
+import {Button, Card, Checkbox, Icon, Modal, Select, Text, TextInput} from '@gravity-ui/uikit';
 import {OrganizationUnitDTO, PermissionDTO, ProductDTO, RoleDTO} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
@@ -10,6 +10,7 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {organizationUnitsApi, productsApi, rolesApi} from '@/app/apis';
 import PermissionForm, {PermissionFormFields} from './PermissionForm';
+import {Pencil, TrashBin} from '@gravity-ui/icons';
 
 interface RoleFormProps {
     onSubmit: (values: RoleFormFields) => void;
@@ -453,16 +454,18 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
                                         size="m"
                                         onClick={() => handlePermissionEdit(permission)}
                                     >
+                                        <Icon data={Pencil} />
                                         Редактировать
                                     </Button>
                                     <Button
-                                        view="normal"
+                                        view="outlined-danger"
                                         size="m"
                                         onClick={() =>
                                             handlePermissideleteAction(permission.id ?? '')
                                         }
                                         disabled={permission.deleted}
                                     >
+                                        <Icon data={TrashBin} />
                                         Удалить
                                     </Button>
                                 </HorizontalStack>

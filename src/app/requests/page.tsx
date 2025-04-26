@@ -179,7 +179,7 @@ export default function RoleRequestsTable() {
         {
             id: 'roleId',
             name: 'Роль',
-            template: (roleRequest) => roleRequest.roleId,
+            template: (item) => <TextWithCopy text={item.roleId} maxLength={8} />,
             meta: {
                 sort: true,
             },
@@ -195,7 +195,7 @@ export default function RoleRequestsTable() {
         {
             id: 'accountId',
             name: 'Аккаунт',
-            template: (roleRequest) => roleRequest.accountId,
+            template: (item) => <TextWithCopy text={item.accountId} maxLength={8} />,
             meta: {
                 sort: true,
             },
@@ -203,7 +203,8 @@ export default function RoleRequestsTable() {
         {
             id: 'ownerId',
             name: 'Владелец',
-            template: (roleRequest) => roleRequest.ownerId,
+            template: (item) =>
+                item.ownerId ? <TextWithCopy text={item.ownerId} maxLength={8} /> : 'No data',
             meta: {
                 sort: true,
             },

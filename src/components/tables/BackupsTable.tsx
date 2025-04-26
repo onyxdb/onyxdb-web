@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import {Button, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
+import {Button, Icon, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
 import {MongoBackup} from '@/generated/api-mdb';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {TrashBin} from '@gravity-ui/icons';
 
 interface BackupsTableProps {
     clusterId: string;
@@ -83,6 +84,7 @@ export const BackupsTable: React.FC<BackupsTableProps> = ({
                             size="m"
                             onClick={() => deleteAction(backup.name)}
                         >
+                            <Icon data={TrashBin} />
                             Удалить
                         </Button>
                     )}

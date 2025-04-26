@@ -3,13 +3,13 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {AccountDTO, ProductDTO} from '@/generated/api';
+import {AccountDTO, ProductDTOGet} from '@/generated/api';
 import {accountsApi, productsApi} from '@/app/apis';
 import {TextWithCopy} from '@/components/TextWithCopy';
 
 export default function ProductsPage() {
     const router = useRouter();
-    const [products, setProducts] = useState<ProductDTO[]>([]);
+    const [products, setProducts] = useState<ProductDTOGet[]>([]);
     const [accounts, setAccounts] = useState<AccountDTO[]>([]);
     // const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -29,7 +29,7 @@ export default function ProductsPage() {
 
     const MyTable = withTableSorting(Table);
 
-    const columns: TableColumnConfig<ProductDTO>[] = [
+    const columns: TableColumnConfig<ProductDTOGet>[] = [
         {
             id: 'id',
             name: 'Id',
@@ -57,6 +57,7 @@ export default function ProductsPage() {
         {
             id: 'createdAt',
             name: 'Дата создания',
+            template: (item) => new Date(item.createdAt).toLocaleString(),
             meta: {
                 sort: true,
             },

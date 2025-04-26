@@ -7,7 +7,6 @@ import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
 import {ProductDTOGet} from '@/generated/api';
 import {ProductQuotaUsageByResourceOA, Resource} from '@/generated/api-mdb';
-import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import ChartKit from '@gravity-ui/chartkit';
 import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
@@ -118,35 +117,46 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
 
     const chartsData = reportData.map((d) => prepareChartData(d));
     return (
-        <div style={{padding: '20px'}}>
-            <HorizontalStack justify="space-between">
-                <Card>
-                    <div>
-                        <RangeCalendar value={rangeDate} onUpdate={handleDateChange} />
-                    </div>
-                    <Button view="action" size="m" onClick={fetchReport} disabled={loading}>
-                        {loading ? 'Загрузка...' : 'Получить отчёт'}
-                    </Button>
-                </Card>
+        <div style={{display: 'flex', gap: '20px', marginTop: '20px'}}>
+            <Card
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '250px',
+                    height: '300px',
+                }}
+            >
                 <div>
-                    {error && (
-                        <div style={{marginTop: '16px', color: 'red'}}>
-                            <Text variant="body-1">{error}</Text>
-                        </div>
-                    )}
-                    {chartsData.map((cd) => (
-                        <>
-                            <Text>
-                                График потребления квот по ресурсу{' '}
-                                <Label>{cd.resource.description}</Label>
-                            </Text>
-                            <div style={{marginTop: '10px', height: '70vh'}}>
-                                <ChartKit type="yagr" data={cd.data} />
-                            </div>
-                        </>
-                    ))}
+                    <RangeCalendar value={rangeDate} onUpdate={handleDateChange} />
                 </div>
-            </HorizontalStack>
+                <Button
+                    view="action"
+                    size="m"
+                    onClick={fetchReport}
+                    disabled={loading}
+                    style={{marginBottom: '10px'}}
+                >
+                    {loading ? 'Загрузка...' : 'Получить отчёт'}
+                </Button>
+            </Card>
+            <div style={{display: 'flex', flexWrap: 'wrap', gap: '20px', flex: '1'}}>
+                {error && (
+                    <div style={{marginTop: '16px', color: 'red'}}>
+                        <Text variant="body-1">{error}</Text>
+                    </div>
+                )}
+                {chartsData.map((cd) => (
+                    <div key={cd.resource.id} style={{width: 'calc(50% - 10px)'}}>
+                        <Text>
+                            Потребление квот <Label>{cd.resource.description}</Label>
+                        </Text>
+                        <div style={{marginTop: '10px', height: '70vh'}}>
+                            <ChartKit type="yagr" data={cd.data} />
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

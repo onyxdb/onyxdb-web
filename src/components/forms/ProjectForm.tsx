@@ -49,6 +49,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             return errors;
         },
         onSubmit: (values) => {
+            console.log('submitAction project');
             submitAction(values);
             formik.resetForm();
         },

@@ -18,6 +18,7 @@ import {
 import {Box} from '@/components/Layout/Box';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
 import {useAuth} from '@/context/AuthContext';
+import {TextWithCopy} from '@/components/TextWithCopy';
 
 export default function RoleRequestsTable() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestDTO[]>([]);
@@ -171,9 +172,14 @@ export default function RoleRequestsTable() {
 
     const columns: TableColumnConfig<RoleRequestDTO>[] = [
         {
+            id: 'id',
+            name: 'Id',
+            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+        },
+        {
             id: 'roleId',
             name: 'Роль',
-            template: (roleRequest) => roleRequest.roleId,
+            template: (item) => <TextWithCopy text={item.roleId} maxLength={8} />,
             meta: {
                 sort: true,
             },
@@ -189,7 +195,7 @@ export default function RoleRequestsTable() {
         {
             id: 'accountId',
             name: 'Аккаунт',
-            template: (roleRequest) => roleRequest.accountId,
+            template: (item) => <TextWithCopy text={item.accountId} maxLength={8} />,
             meta: {
                 sort: true,
             },
@@ -197,7 +203,8 @@ export default function RoleRequestsTable() {
         {
             id: 'ownerId',
             name: 'Владелец',
-            template: (roleRequest) => roleRequest.ownerId,
+            template: (item) =>
+                item.ownerId ? <TextWithCopy text={item.ownerId} maxLength={8} /> : 'No data',
             meta: {
                 sort: true,
             },

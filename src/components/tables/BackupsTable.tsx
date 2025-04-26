@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import {Button, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
+import {Button, Icon, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
 import {MongoBackup} from '@/generated/api-mdb';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {TrashBin} from '@gravity-ui/icons';
 
 interface BackupsTableProps {
     clusterId: string;
@@ -69,13 +70,22 @@ export const BackupsTable: React.FC<BackupsTableProps> = ({
             template: (backup) => (
                 <HorizontalStack gap={10}>
                     {checkPermission('cluster', 'backup', clusterId) && (
-                        <Button view="outlined" size="m" onClick={() => deleteAction(backup.name)}>
-                            Удалить
+                        <Button
+                            view="outlined-success"
+                            size="m"
+                            onClick={() => restoreAction(backup.name)}
+                        >
+                            Восстановить
                         </Button>
                     )}
                     {checkPermission('cluster', 'backup', clusterId) && (
-                        <Button view="outlined" size="m" onClick={() => restoreAction(backup.name)}>
-                            Восстановить
+                        <Button
+                            view="outlined-danger"
+                            size="m"
+                            onClick={() => deleteAction(backup.name)}
+                        >
+                            <Icon data={TrashBin} />
+                            Удалить
                         </Button>
                     )}
                 </HorizontalStack>

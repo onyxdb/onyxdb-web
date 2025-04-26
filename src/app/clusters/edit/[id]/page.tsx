@@ -67,6 +67,10 @@ export default function ClusterEditPage() {
         return <div>No access</div>;
     }
 
+    if (!cluster) {
+        return <div>No data</div>;
+    }
+
     return (
         <div>
             <AppHeader breadCrumbs={breadCrumbs} />

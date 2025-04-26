@@ -171,7 +171,7 @@ export default function ProjectsPage() {
         actions.push({
             text: 'Создать проект',
             action: handleOpenCreateModal,
-            icon: <CirclePlus />,
+            icon: CirclePlus,
         });
     }
 

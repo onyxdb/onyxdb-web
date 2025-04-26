@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     Button,
+    Icon,
     Modal,
     Pagination,
     Table,
@@ -16,6 +17,7 @@ import CreateRoleRequestModal from '@/components/forms/CreateRoleRequestModal';
 import {useAuth} from '@/context/AuthContext';
 import {getLinkedResourceLabel} from '@/utils/utils';
 import {Box} from '@/components/Layout/Box';
+import {Pencil, TrashBin} from '@gravity-ui/icons';
 
 export interface RoleTableProps {
     editAction: (roleId: string) => void;
@@ -107,16 +109,16 @@ export const RoleTable: React.FC<RoleTableProps> = ({editAction, deleteAction}) 
                     </Button>
                     {checkPermission('role', 'edit') && (
                         <Button view="normal" size="m" onClick={() => editAction(role.id ?? '???')}>
-                            Редактировать
+                            <Icon data={Pencil} />
                         </Button>
                     )}
                     {checkPermission('role', 'delete') && (
                         <Button
-                            view="normal"
+                            view="outlined-danger"
                             size="m"
                             onClick={() => deleteAction(role.id ?? '???')}
                         >
-                            Удалить
+                            <Icon data={TrashBin} />
                         </Button>
                     )}
                 </div>

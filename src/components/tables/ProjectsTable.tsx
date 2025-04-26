@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import {Button, Label, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
+import {Button, Icon, Label, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
 import {V1ProjectResponse} from '@/generated/api-mdb';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '../Layout/HorizontalStack';
 import {TextWithCopy} from '@/components/TextWithCopy';
+import {Pencil} from '@gravity-ui/icons';
 
 interface ProjectsTableProps {
     projects: V1ProjectResponse[];
@@ -52,7 +53,8 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
         },
         {
             id: 'productId',
-            name: 'ID продукта',
+            name: 'Продукт',
+            template: (item) => <TextWithCopy text={item.productId} maxLength={8} />,
             meta: {
                 sort: true,
             },
@@ -64,6 +66,7 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
                 <HorizontalStack gap={10}>
                     {checkPermission('project', 'edit', project.id) && (
                         <Button view="normal" size="m" onClick={() => onEdit?.(project)}>
+                            <Icon data={Pencil} />
                             Редактировать
                         </Button>
                     )}

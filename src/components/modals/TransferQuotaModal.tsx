@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Button, Progress, Select, Text, Tooltip, useToaster} from '@gravity-ui/uikit';
+import {Button, Progress, Select, Text, Tooltip} from '@gravity-ui/uikit';
 import {FormikErrors, useFormik} from 'formik';
 import {
     Resource,
@@ -15,6 +15,7 @@ import {ProductSelector} from '@/components/ProductSelector';
 import {ProductDTOGet} from '@/generated/api';
 import {ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
 import {QuotaTransferSimulationResult} from '@/components/QuotaTransferSimulationResult';
+import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 interface TransferQuotaModalProps {
     product: ProductDTOGet;
@@ -45,7 +46,6 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [simulationResult, setSimulationResult] =
         useState<SimulateTransferQuotasBetweenProductsResponse | null>(null);
-    const toaster = useToaster();
 
     const formik = useFormik<TransferQuotaFormFields>({
         initialValues: {

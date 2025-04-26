@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {
     Button,
     Checkbox,
+    Icon,
     Label,
     Popup,
     Table,
@@ -19,6 +20,7 @@ import {Box} from '@/components/Layout/Box';
 import {AccountDTO} from '@/generated/api';
 import {UserBlock} from '@/components/common/UserBlock';
 import {TextWithCopy} from '@/components/TextWithCopy';
+import {TrashBin} from '@gravity-ui/icons';
 
 interface DatabasesTableProps {
     databases: MongoDatabase[];
@@ -162,7 +164,12 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
             template: (database) => (
                 <HorizontalStack gap={10}>
                     {checkPermission('database', 'delete', database.id) && !database.isDeleted && (
-                        <Button view="outlined" size="m" onClick={() => deleteAction(database.id)}>
+                        <Button
+                            view="outlined-danger"
+                            size="m"
+                            onClick={() => deleteAction(database.id)}
+                        >
+                            <Icon data={TrashBin} />
                             Удалить
                         </Button>
                     )}

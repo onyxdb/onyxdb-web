@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     Checkbox,
+    Icon,
     Label,
     Modal,
     Popup,
@@ -23,6 +24,7 @@ import {Box} from '@/components/Layout/Box';
 import {parseDateArray} from '@/components/tables/DatabasesTable';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {TextWithCopy} from '@/components/TextWithCopy';
+import {TrashBin} from '@gravity-ui/icons';
 
 interface DBUsersTableProps {
     users: MongoUser[];
@@ -251,6 +253,7 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
                             size="m"
                             onClick={() => handleOpenDeleteModal(user.id)}
                         >
+                            <Icon data={TrashBin} />
                             Удалить
                         </Button>
                     )}

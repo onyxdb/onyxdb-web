@@ -139,7 +139,7 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({
                             {key}: {formik.values.data[key]}
                         </Text>
                         <Button
-                            view="normal"
+                            view="outlined-danger"
                             size="m"
                             onClick={() => handleDataRemove(key)}
                             disabled={formik.isSubmitting}

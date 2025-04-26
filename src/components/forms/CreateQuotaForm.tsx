@@ -186,7 +186,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                                 />
                             </Box>
                             <Button
-                                view="outlined"
+                                view="outlined-danger"
                                 size="m"
                                 onClick={() => handleRemoveQuota(index)}
                             >

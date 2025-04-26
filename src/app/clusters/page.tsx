@@ -27,7 +27,7 @@ export default function ClustersPage() {
         actions.push({
             text: 'Создать кластер',
             action: handleCreate,
-            icon: <CirclePlus />,
+            icon: CirclePlus,
         });
     }
 

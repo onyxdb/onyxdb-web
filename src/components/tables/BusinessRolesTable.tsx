@@ -6,6 +6,7 @@ import {AccountDTO, BusinessRoleDTO} from '@/generated/api';
 import {
     Button,
     Card,
+    Icon,
     Modal,
     Pagination,
     Table,
@@ -15,7 +16,7 @@ import {
     withTableSorting,
 } from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-import {Eye} from '@gravity-ui/icons';
+import {Eye, Pencil, TrashBin} from '@gravity-ui/icons';
 import BusinessRoleViewModal from '@/components/modals/BusinessRoleViewModal';
 import BusinessRoleAssignModal from '@/components/modals/BusinessRoleAssignModal';
 import {useAuth} from '@/context/AuthContext';
@@ -23,7 +24,7 @@ import {TextWithCopy} from '@/components/TextWithCopy';
 
 export interface BusinessRolesTableProps {
     editAction: (businessRoleId: string) => void;
-    deleteAction: (businessRoleId: string) => void;
+    deleteAction: (businessRoleId: string, businessRoleName: string) => Promise<void>;
 }
 
 export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
@@ -112,6 +113,14 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
         setAssignModalVisible(false);
     };
 
+    const handleDelete = async (businessRoleId: string, businessRoleName: string) => {
+        if (!deleteAction) {
+            return;
+        }
+        await deleteAction(businessRoleId, businessRoleName);
+        await fetchBusinessRoles();
+    };
+
     const columns: TableColumnConfig<BusinessRoleDTO>[] = [
         {
             id: 'view',
@@ -145,14 +154,12 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
             },
         },
         {
-            id: 'id',
-            name: 'Идентификатор',
-            template: (businessRole) => businessRole.id,
-        },
-        {
             id: 'createdAt',
             name: 'Дата создания',
-            template: (businessRole) => businessRole.createdAt,
+            template: (businessRole) =>
+                businessRole.createdAt
+                    ? new Date(businessRole.createdAt).toLocaleString()
+                    : 'No data',
             meta: {
                 sort: true,
             },
@@ -177,20 +184,18 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                             size="m"
                             onClick={() => editAction(businessRole.id ?? '???')}
                         >
-                            Редактировать
+                            <Icon data={Pencil} />
                         </Button>
                     )}
                     {checkPermission('business-roles', 'delete') && (
                         <Button
-                            view="normal"
+                            view="outlined-danger"
                             size="m"
-                            onClick={() => {
-                                deleteAction(businessRole.id ?? '???');
-                                // TODO fetch не работает после удаления :(
-                                fetchBusinessRoles();
-                            }}
+                            onClick={() =>
+                                handleDelete(businessRole.id ?? '???', businessRole.name)
+                            }
                         >
-                            Удалить
+                            <Icon data={TrashBin} />
                         </Button>
                     )}
                 </div>

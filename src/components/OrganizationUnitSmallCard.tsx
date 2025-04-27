@@ -21,7 +21,7 @@ export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps>
     const router = useRouter();
 
     const handleViewDetails = () => {
-        router.push(`/org/view/${orgUnit.id}`);
+        router.push(`/structure/view/${orgUnit.id}`);
     };
 
     return (

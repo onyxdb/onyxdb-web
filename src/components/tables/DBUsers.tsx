@@ -14,7 +14,7 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {MongoUser} from '@/generated/api-mdb';
+import {MongoDatabase, MongoUser} from '@/generated/api-mdb';
 import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {formatDistanceToNow} from 'date-fns';
@@ -23,16 +23,17 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {parseDateArray} from '@/components/tables/DatabasesTable';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
-import {TextWithCopy} from '@/components/TextWithCopy';
 import {TrashBin} from '@gravity-ui/icons';
+import {UserBlock} from '@/components/common/UserBlock';
 
 interface DBUsersTableProps {
     users: MongoUser[];
+    databases: MongoDatabase[];
     deleteAction: (userId: string) => void;
 }
 
-export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction}) => {
-    const {checkPermission} = useAuth();
+export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, databases, deleteAction}) => {
+    const {user: userMe, checkPermission} = useAuth();
     const [showDeleted, setShowDeleted] = useState<boolean>(false);
     const [userCache, setUserCache] = useState<{[key: string]: string}>({});
     const [permissionCache, setPermissionCache] = useState<{[key: string]: string}>({});
@@ -44,10 +45,10 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
     // Загружаем и кэшируем данные пользователей
     const fetchUsers = async () => {
         const userIds = new Set<string>();
-        users.forEach((user) => {
-            if (user.createdBy) userIds.add(user.createdBy);
-            if (user.deletedBy) userIds.add(user.deletedBy);
-        });
+        // users.forEach((user) => {
+        //     if (user.createdBy) userIds.add(user.createdBy);
+        //     if (user.deletedBy) userIds.add(user.deletedBy);
+        // });
 
         const userPromises = Array.from(userIds).map(async (userId) => {
             try {
@@ -74,12 +75,12 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
     // Загружаем и кэшируем данные разрешений
     const fetchPermissions = async () => {
         const permissionIds = new Set<string>();
-        users.forEach((user) => {
-            user.permissions.forEach((permission) => {
-                if (permission.createdBy) permissionIds.add(permission.createdBy);
-                if (permission.deletedBy) permissionIds.add(permission.deletedBy);
-            });
-        });
+        // users.forEach((user) => {
+        //     user.permissions.forEach((permission) => {
+        //         if (permission.createdBy) permissionIds.add(permission.createdBy);
+        //         if (permission.deletedBy) permissionIds.add(permission.deletedBy);
+        //     });
+        // });
 
         const permissionPromises = Array.from(permissionIds).map(async (permissionId) => {
             try {
@@ -130,13 +131,14 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
         setIsDeleteModalOpen(false);
     };
 
+    console.log('userCache', userCache);
     const MyTable = withTableSorting(Table);
     const columns: TableColumnConfig<MongoUser>[] = [
-        {
-            id: 'id',
-            name: 'ID',
-            template: (user) => <TextWithCopy text={user.id} maxLength={8} />,
-        },
+        // {
+        //     id: 'id',
+        //     name: 'ID',
+        //     template: (user) => <TextWithCopy text={user.id} maxLength={8} />,
+        // },
         {
             id: 'name',
             name: 'Имя пользователя',
@@ -162,11 +164,10 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
             meta: {
                 sort: true,
             },
-            template: (user) => (
-                <Text variant="subheader-1" color="secondary">
-                    {userCache[user.createdBy] || 'Загрузка...'}
-                </Text>
-            ),
+            template: (_) => userMe?.account && <UserBlock account={userMe?.account} size="m" />,
+            // <Text variant="subheader-1" color="secondary">
+            //             {(userMe?.account.id && userCache[userMe?.account.id]) || 'Загрузка...'}
+            //         </Text>
         },
         {
             id: 'permissions',
@@ -177,7 +178,9 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, deleteAction})
                         <Card key={permission.id} style={{padding: '2px'}}>
                             <VerticalStack>
                                 <Text variant="subheader-1" color="secondary">
-                                    База данных: {permission.databaseId}
+                                    База данных:{' '}
+                                    {databases.find((p) => p.id === permission.databaseId)?.name ??
+                                        permission.databaseId}
                                 </Text>
                                 <Text variant="subheader-1" color="secondary">
                                     Роли: {permission.roles.join(', ')}

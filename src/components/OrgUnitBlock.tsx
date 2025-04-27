@@ -27,7 +27,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
     const router = useRouter();
     const {checkActions} = useAuth();
     const handleViewDetails = (ouId: string) => {
-        router.push(`/org/view/${ouId}`);
+        router.push(`/structure/view/${ouId}`);
     };
 
     return (

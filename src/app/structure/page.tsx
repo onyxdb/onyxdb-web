@@ -129,7 +129,7 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     const handleCreateOU = () => {
-        router.push('/org/create');
+        router.push('/structure/create');
     };
 
     const handleDcEdit = (id: string) => {
@@ -178,7 +178,7 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     const handleSelectedOuEdit = (ou: OrganizationUnitDTO) => {
-        router.push(`/org/edit/${ou.id}`);
+        router.push(`/structure/edit/${ou.id}`);
     };
 
     const handleSelectedOuDelete = async (id: string) => {

@@ -328,7 +328,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                             ? 'invalid'
                                             : undefined
                                     }
-                                    // disabled={isEditMode}
+                                    disabled={isEditMode}
                                 >
                                     {storageClassOptions}
                                 </Select>
@@ -344,6 +344,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             error={formik.touched.storage ? formik.errors.storage : undefined}
                             placeholder="Введите размер хранилища"
                             unitType={ResourceUnitEnum.Bytes}
+                            disabled={isEditMode}
                         />
                     </div>
                     <div style={{marginBottom: '16px'}}>

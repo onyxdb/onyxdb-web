@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import {Button, Card, Text, TextInput} from '@gravity-ui/uikit';
+import {Button, Card, Text, TextInput, useToaster} from '@gravity-ui/uikit';
 import {login} from '@/auth/authService';
 import {Box} from '@/components/Layout/Box';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
@@ -11,13 +11,20 @@ export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
+    const toaster = useToaster();
 
     const handleLogin = async () => {
         try {
             await login(username, password);
-            router.back();
+            router.replace('/');
         } catch (error) {
-            alert('Login failed' + error);
+            console.log('login_failed', error);
+            toaster.add({
+                name: `login_failed`,
+                title: 'Ошибка логина в аккаунт',
+                content: `Вы указали неверный логин или пароль`,
+                theme: 'danger',
+            });
         }
     };
 

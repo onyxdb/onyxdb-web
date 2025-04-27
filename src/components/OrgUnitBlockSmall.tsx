@@ -35,7 +35,7 @@ export const OrgUnitBlockSmall: React.FC<DomainComponentProps> = ({data}) => {
     }, [data.ownerId]);
 
     const handleViewDetails = (ouId: string) => {
-        router.push(`/org/view/${ouId}`);
+        router.push(`/structure/view/${ouId}`);
     };
 
     return (

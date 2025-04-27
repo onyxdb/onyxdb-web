@@ -19,7 +19,6 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {AccountDTO} from '@/generated/api';
 import {UserBlock} from '@/components/common/UserBlock';
-import {TextWithCopy} from '@/components/TextWithCopy';
 import {TrashBin} from '@gravity-ui/icons';
 
 interface DatabasesTableProps {
@@ -38,7 +37,7 @@ export function parseDateArray(dateArray: number[] | string): Date {
 }
 
 export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, deleteAction}) => {
-    const {checkPermission} = useAuth();
+    const {user: userMe, checkPermission} = useAuth();
     const [showDeleted, setShowDeleted] = useState<boolean>(false);
     const [userCache, setUserCache] = useState<{[key: string]: AccountDTO | null}>({});
     const [popupAnchor, setPopupAnchor] = useState<HTMLElement | null>(null);
@@ -47,10 +46,10 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
     // Загружаем и кэшируем данные пользователей
     const fetchUsers = async () => {
         const userIds = new Set<string>();
-        databases.forEach((db) => {
-            if (db.createdBy) userIds.add(db.createdBy);
-            if (db.deletedBy) userIds.add(db.deletedBy);
-        });
+        // databases.forEach((db) => {
+        //     if (db.createdBy) userIds.add(db.createdBy);
+        //     if (db.deletedBy) userIds.add(db.deletedBy);
+        // });
 
         const userPromises = Array.from(userIds).map(async (userId) => {
             try {
@@ -91,11 +90,11 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
 
     const MyTable = withTableSorting(Table);
     const columns: TableColumnConfig<MongoDatabase>[] = [
-        {
-            id: 'id',
-            name: 'ID',
-            template: (database) => <TextWithCopy text={database.id} maxLength={5} />,
-        },
+        // {
+        //     id: 'id',
+        //     name: 'ID',
+        //     template: (database) => <TextWithCopy text={database.id} maxLength={5} />,
+        // },
         {
             id: 'name',
             name: 'Название',
@@ -145,18 +144,19 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
             meta: {
                 sort: true,
             },
-            template: (database) => (
-                <Text variant="subheader-1" color="secondary">
-                    {userCache[database.createdBy] === null ? (
-                        'Неизвестно'
-                    ) : (
-                        <UserBlock
-                            // @ts-ignore
-                            account={userCache[database.createdBy]}
-                        />
-                    )}
-                </Text>
-            ),
+            template: (_) => userMe?.account && <UserBlock account={userMe?.account} size="m" />,
+            // template: (database) => (
+            //     <Text variant="subheader-1" color="secondary">
+            //         {userCache[database.createdBy] === null ? (
+            //             'Неизвестно'
+            //         ) : (
+            //             <UserBlock
+            //                 // @ts-ignore
+            //                 account={userCache[database.createdBy]}
+            //             />
+            //         )}
+            //     </Text>
+            // ),
         },
         {
             id: 'actions',

@@ -12,6 +12,21 @@ import {organizationUnitsApi, productsApi, rolesApi} from '@/app/apis';
 import PermissionForm, {PermissionFormFields} from './PermissionForm';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
 
+export const RoleTypeEnum = {
+    ADMIN: 'ADMIN',
+    OWNER: 'OWNER',
+    EDITOR: 'EDITOR',
+    VIEWER: 'VIEWER',
+    AUDITOR: 'AUDITOR',
+} as const;
+
+export const RoleConnectionEnum = {
+    GLOBAL: 'GLOBAL',
+    ENTITY: 'ENTITY',
+    PRODUCT: 'PRODUCT',
+    ORGUNIT: 'ORGUNIT',
+} as const;
+
 interface RoleFormProps {
     onSubmit: (values: RoleFormFields) => void;
     closeAction: () => void;
@@ -20,10 +35,12 @@ interface RoleFormProps {
 
 export interface RoleFormFields {
     roleType: string;
+    roleConnectionType: string;
     name: string;
     shopName: string;
     isShopHidden: boolean;
     description: string;
+    entity?: string;
     productId?: string;
     orgUnitId?: string;
     permissions: PermissionFormFields[];
@@ -73,13 +90,28 @@ export function mapPermissionDTOtoFormFields(dto: PermissionDTO): PermissionForm
     };
 }
 
+function getRoleConType(dto: RoleDTO) {
+    if (dto.productId) {
+        return RoleConnectionEnum.PRODUCT;
+    }
+    if (dto.orgUnitId) {
+        return RoleConnectionEnum.ORGUNIT;
+    }
+    if (dto.entity) {
+        return RoleConnectionEnum.ENTITY;
+    }
+    return RoleConnectionEnum.GLOBAL;
+}
+
 export function mapDTOtoFormFields(dto: RoleDTO, permissions: PermissionDTO[]): RoleFormFields {
     return {
         roleType: dto.roleType,
+        roleConnectionType: getRoleConType(dto),
         name: dto.name,
         shopName: dto.shopName,
         isShopHidden: dto.isShopHidden,
         description: dto.description,
+        entity: dto.entity,
         productId: dto.productId,
         orgUnitId: dto.orgUnitId,
         permissions: permissions.map((p) => mapPermissionDTOtoFormFields(p)),
@@ -103,11 +135,13 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
         initialValues: initialValue
             ? mapDTOtoFormFields(initialValue, permissions)
             : {
-                  roleType: 'GLOBAL',
+                  roleType: RoleTypeEnum.EDITOR,
+                  roleConnectionType: RoleConnectionEnum.GLOBAL,
                   name: '',
                   shopName: '',
                   isShopHidden: false,
                   description: '',
+                  entity: undefined,
                   productId: undefined,
                   orgUnitId: undefined,
                   permissions: [],
@@ -120,10 +154,13 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
             if (!values.description) {
                 errors.description = 'Описание обязательно';
             }
-            if (values.roleType === 'PRODUCT' && !values.productId) {
+            if (!values.roleType) {
+                errors.roleType = 'Тип роли обязателен';
+            }
+            if (values.roleConnectionType === 'PRODUCT' && !values.productId) {
                 errors.productId = 'Продукт обязателен';
             }
-            if (values.roleType === 'ORG_UNIT' && !values.orgUnitId) {
+            if (values.roleConnectionType === 'ORG_UNIT' && !values.orgUnitId) {
                 errors.orgUnitId = 'Организационная единица обязательна';
             }
             return errors;
@@ -161,7 +198,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
         setSearchProduct(product.name);
         formik.setFieldValue('productId', product.id);
         formik.setFieldValue('orgUnitId', undefined);
-        formik.setFieldValue('roleType', 'PRODUCT');
+        formik.setFieldValue('roleConnectionType', RoleConnectionEnum.PRODUCT);
     };
 
     const fetchProductOptions = async () => {
@@ -193,7 +230,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
         setSearchOrgUnit(orgUnit.name);
         formik.setFieldValue('orgUnitId', orgUnit.id);
         formik.setFieldValue('productId', undefined);
-        formik.setFieldValue('roleType', 'ORG_UNIT');
+        formik.setFieldValue('roleConnectionType', RoleConnectionEnum.ORGUNIT);
     };
 
     const fetchOrgUnitOptions = async () => {
@@ -215,9 +252,21 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
 
     const handleRoleTypeChange = (value: string[]) => {
         formik.setFieldValue('roleType', value[0]);
-        if (value[0] === 'GLOBAL') {
+    };
+
+    const handleRoleConnectionTypeChange = (value: string[]) => {
+        formik.setFieldValue('roleConnectionType', value[0]);
+        if (value[0] === RoleConnectionEnum.GLOBAL || value[0] === RoleConnectionEnum.ENTITY) {
             formik.setFieldValue('productId', undefined);
             formik.setFieldValue('orgUnitId', undefined);
+        }
+        if (value[0] === RoleConnectionEnum.PRODUCT) {
+            formik.setFieldValue('orgUnitId', undefined);
+            formik.setFieldValue('entity', 'orgunit');
+        }
+        if (value[0] === RoleConnectionEnum.ORGUNIT) {
+            formik.setFieldValue('productId', undefined);
+            formik.setFieldValue('entity', 'product');
         }
     };
 
@@ -496,9 +545,18 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
     };
 
     const roleTypeOptions = [
-        {value: 'GLOBAL', content: 'Глобальная'},
-        {value: 'PRODUCT', content: 'Для продукта'},
-        {value: 'ORG_UNIT', content: 'Для организации'},
+        {value: RoleTypeEnum.ADMIN, content: 'Админ'},
+        {value: RoleTypeEnum.OWNER, content: 'Владелец'},
+        {value: RoleTypeEnum.EDITOR, content: 'Модератор'},
+        {value: RoleTypeEnum.VIEWER, content: 'Наблюдатель'},
+        {value: RoleTypeEnum.AUDITOR, content: 'Слушатель'},
+    ];
+
+    const roleConnectionTypeOptions = [
+        {value: RoleConnectionEnum.GLOBAL, content: 'Глобальная'},
+        {value: RoleConnectionEnum.ENTITY, content: 'Сущностная'},
+        {value: RoleConnectionEnum.PRODUCT, content: 'Для продукта'},
+        {value: RoleConnectionEnum.ORGUNIT, content: 'Для организации'},
     ];
 
     return (
@@ -547,6 +605,17 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
                             </Select.Option>
                         ))}
                     </Select>
+                    <Select
+                        value={[formik.values.roleConnectionType]}
+                        onUpdate={handleRoleConnectionTypeChange}
+                        placeholder="Выберите тип связи роли"
+                    >
+                        {roleConnectionTypeOptions.map((option) => (
+                            <Select.Option key={option.value} value={option.value}>
+                                {option.content}
+                            </Select.Option>
+                        ))}
+                    </Select>
                     <Box marginLeft="20px">
                         <Checkbox
                             size="l"
@@ -556,19 +625,21 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
                             Скрывать роль в магазине?
                         </Checkbox>
                     </Box>
-                    {/*<InputField*/}
-                    {/*    label="Is Shop Hidden"*/}
-                    {/*    name="isShopHidden"*/}
-                    {/*    value={formik.values.isShopHidden.toString()}*/}
-                    {/*    onChange={(value) => formik.setFieldValue('isShopHidden', value === 'true')}*/}
-                    {/*    onBlur={formik.handleBlur('isShopHidden')}*/}
-                    {/*    error={formik.touched.isShopHidden ? formik.errors.isShopHidden : undefined}*/}
-                    {/*    placeholder="true или false"*/}
-                    {/*    note="Определяет, скрыта ли роль для магазина"*/}
-                    {/*/>*/}
                 </HorizontalStack>
-                {formik.values.roleType === 'PRODUCT' && renderProductSelector()}
-                {formik.values.roleType === 'ORG_UNIT' && renderOrgUnitSelector()}
+                {formik.values.roleConnectionType === RoleConnectionEnum.ENTITY && (
+                    <TextInput
+                        name="entity"
+                        value={formik.values.entity}
+                        onUpdate={(value) => formik.setFieldValue('entity', value)}
+                        onBlur={formik.handleBlur('entity')}
+                        error={formik.touched.entity ? formik.errors.entity : undefined}
+                        placeholder="Введите название сущности"
+                    />
+                )}
+                {formik.values.roleConnectionType === RoleConnectionEnum.PRODUCT &&
+                    renderProductSelector()}
+                {formik.values.roleConnectionType === RoleConnectionEnum.ORGUNIT &&
+                    renderOrgUnitSelector()}
                 {renderPermissions()}
                 <Box marginTop="20px">
                     <HorizontalStack>

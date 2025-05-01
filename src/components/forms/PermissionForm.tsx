@@ -28,7 +28,12 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({
     initialValue,
 }) => {
     const formik = useFormik<PermissionFormFields>({
-        initialValues: initialValue ?? {actionType: '', resourceType: '', data: {}, deleted: false},
+        initialValues: {
+            actionType: initialValue?.actionType ?? '',
+            resourceType: initialValue?.resourceType ?? '',
+            data: initialValue?.data ?? {},
+            deleted: initialValue?.deleted ?? false,
+        },
         validate: (values) => {
             const errors: Partial<PermissionFormFields> = {};
             if (!values.actionType) {
@@ -81,7 +86,7 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({
                     note="Тип действия, например, READ, WRITE"
                 />
                 <InputField
-                    label="Название ресурс"
+                    label="Название ресурса"
                     name="resourceType"
                     value={formik.values.resourceType}
                     onChange={(value) => formik.setFieldValue('resourceType', value)}

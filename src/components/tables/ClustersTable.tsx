@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {mdbMongoDbApi} from '@/app/apis';
+import {mdbApi} from '@/app/apis';
 import {Pagination, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
 import {Eye} from '@gravity-ui/icons';
 import {V1MongoClusterResponse} from '@/generated/api-mdb';
@@ -24,7 +24,7 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
 
     const fetchClusters = async () => {
         try {
-            const response = await mdbMongoDbApi.listClusters();
+            const response = await mdbApi.listClusters();
             const filteredClusters = projectsIds
                 ? response.data.clusters.filter((p) => projectsIds.includes(p.projectId))
                 : response.data.clusters;

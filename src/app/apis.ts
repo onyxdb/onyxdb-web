@@ -5,6 +5,7 @@ import {
     BusinessRolesApi,
     Configuration,
     DomainComponentsApi,
+    MDBApi,
     MDBQuotasApi,
     ManagedMongoDBBackupsApi,
     ManagedMongoDBDatabasesApi,
@@ -17,7 +18,6 @@ import {
     ResourcePresetsApi,
     RolesApi,
     RolesRequestsApi,
-    V1ManagedMongoDbApi,
 } from '@/generated/api';
 import apiClient from '@/auth/apiClient';
 
@@ -51,7 +51,7 @@ export const rolesRequestsApi = new RolesRequestsApi(configIDM, '', apiClient);
 
 export const mdbProjectsApi = new ProjectsApi(configMDB, '', apiClient);
 export const mdbResourcePresetsApi = new ResourcePresetsApi(configMDB, '', apiClient);
-export const mdbMongoDbApi = new V1ManagedMongoDbApi(configMDB, '', apiClient);
+export const mdbApi = new MDBApi(configMDB, '', apiClient);
 export const mdbMongoDbUserApi = new ManagedMongoDBUsersApi(configMDB, '', apiClient);
 export const mdbMongoDbDatabasesApi = new ManagedMongoDBDatabasesApi(configMDB, '', apiClient);
 export const mdbMongoDbBackupsApi = new ManagedMongoDBBackupsApi(configMDB, '', apiClient);

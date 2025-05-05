@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {usePathname, useRouter} from 'next/navigation';
-import {mdbMongoDbApi} from '@/app/apis';
+import {mdbApi} from '@/app/apis';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {V1MongoClusterResponse, V1MongoUpdateClusterRequest} from '@/generated/api-mdb';
 
@@ -17,7 +17,7 @@ export default function ClusterEditPage() {
 
     const fetchCluster = async () => {
         try {
-            const response = await mdbMongoDbApi.getCluster({clusterId: clusterId});
+            const response = await mdbApi.getCluster({clusterId: clusterId});
             setCluster(response.data);
         } catch (error) {
             console.error('Error fetching cluster:', error);
@@ -43,7 +43,7 @@ export default function ClusterEditPage() {
                 },
             };
             console.log('Cluster create request values', request);
-            await mdbMongoDbApi.updateCluster({
+            await mdbApi.updateCluster({
                 clusterId: clusterId,
                 v1MongoUpdateClusterRequest: request,
             });

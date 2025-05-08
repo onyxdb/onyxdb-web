@@ -55,6 +55,7 @@ export interface ClusterCreateFormProps {
     cancelAction: () => void;
 }
 
+// eslint-disable-next-line complexity
 export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
     initialValues,
     submitAction,

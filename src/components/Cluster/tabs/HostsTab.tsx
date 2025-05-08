@@ -20,7 +20,7 @@ const HostsTab: React.FC<HostsTabProps> = ({clusterId}) => {
 
     const fetchData = async () => {
         try {
-            const hostsResponse = await mdbApi.updateHosts().listHosts({clusterId});
+            const hostsResponse = await mdbApi.listHosts({clusterId});
             setClusterHosts(hostsResponse.data.hosts);
             setLastUpdate(new Date());
         } catch (error) {

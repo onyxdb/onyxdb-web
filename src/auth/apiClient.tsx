@@ -10,7 +10,9 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     if (accessToken) {
         // TODO юзать функцию из @/generated/api/common
         // setBearerAuthToObject()
+        // eslint-disable-next-line no-param-reassign
         config.headers = config.headers || {};
+        // eslint-disable-next-line no-param-reassign
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;

@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Progress, Select, Text, Tooltip} from '@gravity-ui/uikit';
 import {FormikErrors, useFormik} from 'formik';
 import {
+    ProductDTO,
     Resource,
     SimulateTransferQuotasBetweenProductsResponse,
     TransferQuotasBetweenProductsRequest,
@@ -12,7 +13,6 @@ import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProductSelector} from '@/components/ProductSelector';
-import {ProductDTO} from '@/generated/api';
 import {ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
 import {QuotaTransferSimulationResult} from '@/components/QuotaTransferSimulationResult';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';

@@ -6,11 +6,11 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ArrowUpFromSquare, TrashBin} from '@gravity-ui/icons';
 import {useAuth} from '@/context/AuthContext';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
-import {V1ProjectResponse} from '@/generated/api-mdb';
+import {ProjectDTO} from '@/generated/api';
 import ClustersTable from '@/components/tables/ClustersTable';
 
 interface ProjectBlockProps {
-    data: V1ProjectResponse;
+    data: ProjectDTO;
     archiveAction: (id: string) => void;
     unArchiveAction: (id: string) => void;
 }

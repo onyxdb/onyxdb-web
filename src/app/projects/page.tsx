@@ -3,10 +3,11 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Checkbox, Modal, Text, TextInput} from '@gravity-ui/uikit';
 import {
-    V1CreateProjectRequest,
-    V1ProjectResponse,
-    V1UpdateProjectRequest,
-} from '@/generated/api-mdb';
+    CreateProjectRequestDTO,
+    ProductDTO,
+    ProjectDTO,
+    UpdateProjectRequestDTO,
+} from '@/generated/api';
 import {mdbProjectsApi} from '@/app/apis';
 import {ProjectForm} from '@/components/forms/ProjectForm';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
@@ -16,17 +17,16 @@ import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {ProductSelector} from '@/components/ProductSelector';
-import {ProductDTOGet} from '@/generated/api';
 import {ProjectBlock} from '@/components/ProjectBlock';
 import {useSearchParams} from 'next/navigation';
 
 export default function ProjectsPage() {
-    const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
-    const [filteredProjects, setFilteredProjects] = useState<V1ProjectResponse[]>([]);
+    const [projects, setProjects] = useState<ProjectDTO[]>([]);
+    const [filteredProjects, setFilteredProjects] = useState<ProjectDTO[]>([]);
     const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    const [selectedProject, setSelectedProject] = useState<V1ProjectResponse | null>(null);
+    const [selectedProject, setSelectedProject] = useState<ProjectDTO | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [showArchived, setShowArchived] = useState<boolean>(false);
     const [productId, setProductId] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export default function ProjectsPage() {
 
     const prjIdFromPath = searchParams.get('prjId');
 
-    const handleOpenViewModal = (project: V1ProjectResponse) => {
+    const handleOpenViewModal = (project: ProjectDTO) => {
         setSelectedProject(project);
         setIsViewModalOpen(true);
     };
@@ -65,9 +65,9 @@ export default function ProjectsPage() {
         fetchProjects();
     }, []);
 
-    const handleCreateProject = (project: V1CreateProjectRequest) => {
+    const handleCreateProject = (project: CreateProjectRequestDTO) => {
         mdbProjectsApi
-            .createProject({v1CreateProjectRequest: project})
+            .createProject({createProjectRequestDTO: project})
             .then(() => {
                 fetchProjects();
                 setIsCreateModalOpen(false);
@@ -75,10 +75,10 @@ export default function ProjectsPage() {
             .catch((error) => console.error('Error creating project:', error));
     };
 
-    const handleEditProject = (project: V1UpdateProjectRequest) => {
+    const handleEditProject = (project: UpdateProjectRequestDTO) => {
         if (selectedProject?.id) {
             mdbProjectsApi
-                .updateProject({projectId: selectedProject.id, v1UpdateProjectRequest: project})
+                .updateProject({projectId: selectedProject.id, updateProjectRequestDTO: project})
                 .then(() => {
                     fetchProjects();
                     setIsEditModalOpen(false);
@@ -97,7 +97,7 @@ export default function ProjectsPage() {
         setIsCreateModalOpen(false);
     };
 
-    const handleOpenEditModal = (project: V1ProjectResponse) => {
+    const handleOpenEditModal = (project: ProjectDTO) => {
         setSelectedProject(project);
         setIsEditModalOpen(true);
     };
@@ -109,7 +109,7 @@ export default function ProjectsPage() {
 
     const handleArchive = async (id: string) => {
         try {
-            await mdbProjectsApi.archiveProject({projectId: id});
+            await mdbProjectsApi.deleteProject({projectId: id});
             await fetchProjects();
             setIsViewModalOpen(false);
         } catch (error) {
@@ -119,7 +119,7 @@ export default function ProjectsPage() {
 
     const handleUnArchive = async (id: string) => {
         try {
-            await mdbProjectsApi.unarchiveProject({projectId: id});
+            await mdbProjectsApi.deleteProject({projectId: id});
             await fetchProjects();
             setIsViewModalOpen(false);
         } catch (error) {
@@ -140,7 +140,7 @@ export default function ProjectsPage() {
                     p.name.includes(searchQuery) ||
                     p.description.includes(searchQuery),
             )
-            .filter((p) => showArchived || !p.isArchived)
+            .filter((p) => showArchived || !p.isDeleted)
             .filter((p) => productId === null || p.productId === productId);
         setFilteredProjects(filtered);
     };
@@ -149,7 +149,7 @@ export default function ProjectsPage() {
         fetchFilteredProjects();
     }, [searchQuery, showArchived, productId]);
 
-    const handleProductSelect = (data: ProductDTOGet) => {
+    const handleProductSelect = (data: ProductDTO) => {
         if (data.id) {
             setProductId(data.id);
             fetchFilteredProjects();

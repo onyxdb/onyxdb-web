@@ -14,7 +14,7 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {MongoDatabase, MongoUser} from '@/generated/api-mdb';
+import {MongoDatabase, MongoUser} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {formatDistanceToNow} from 'date-fns';

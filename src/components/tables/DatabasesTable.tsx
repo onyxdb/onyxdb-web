@@ -12,7 +12,7 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {MongoDatabase} from '@/generated/api-mdb';
+import {MongoDatabase} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';

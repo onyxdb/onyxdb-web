@@ -8,7 +8,7 @@ import {
     MongoHostRoleEnum,
     MongoHostStatusEnum,
     MongoHostTypeEnum,
-} from '@/generated/api-mdb';
+} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';

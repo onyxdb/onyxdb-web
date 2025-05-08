@@ -7,18 +7,18 @@ import {
     Resource,
     SimulateTransferQuotasBetweenProductsResponse,
     TransferQuotasBetweenProductsRequest,
-} from '@/generated/api-mdb';
+} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProductSelector} from '@/components/ProductSelector';
-import {ProductDTOGet} from '@/generated/api';
+import {ProductDTO} from '@/generated/api';
 import {ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
 import {QuotaTransferSimulationResult} from '@/components/QuotaTransferSimulationResult';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 interface TransferQuotaModalProps {
-    product: ProductDTOGet;
+    product: ProductDTO;
     resources: Resource[];
     closeAction: () => void;
 }

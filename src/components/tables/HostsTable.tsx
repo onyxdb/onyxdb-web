@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {MongoHost} from '@/generated/api-mdb';
+import {MongoHost} from '@/generated/api';
 
 interface HostsTableProps {
     hosts: MongoHost[];

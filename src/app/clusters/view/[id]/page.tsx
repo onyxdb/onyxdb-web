@@ -7,13 +7,12 @@ import {CirclePlus, Pencil, TrashBin} from '@gravity-ui/icons';
 import {usePathname, useRouter} from 'next/navigation';
 import ClusterView from '@/components/Cluster/ClusterView';
 import {mdbApi, mdbProjectsApi, productsApi} from '@/app/apis';
-import {V1MongoClusterResponse} from '@/generated/api-mdb';
-import {ProductDTOGet} from '@/generated/api';
+import {MongoClusterDTO, ProductDTO} from '@/generated/api';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 export default function ClusterViewPage() {
-    const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
-    const [productParents, setProductParents] = useState<ProductDTOGet[]>([]);
+    const [cluster, setCluster] = useState<MongoClusterDTO | null>(null);
+    const [productParents, setProductParents] = useState<ProductDTO[]>([]);
     const {checkPermission} = useAuth();
     const router = useRouter();
     const pathname = usePathname();

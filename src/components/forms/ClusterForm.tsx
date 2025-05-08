@@ -1,24 +1,24 @@
 'use client';
 import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
-import {Button, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
+import {Button, Checkbox, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
 import {mdbQuotasApi, mdbResourcePresetsApi} from '@/app/apis';
 import {
-    InitMongoDatabase,
-    InitMongoUser,
+    AccountDTO,
+    MongoClusterDTO,
+    MongoDatabaseDTO,
+    MongoUserDTO,
+    ProjectDTO,
     Quota,
     Resource,
     ResourceUnitEnum,
     SimulateMongoDBQuotasUsageRequest,
-    V1MongoClusterResponse,
-    V1ProjectResponse,
     V1ResourcePresetResponse,
     V1ResourcePresetResponseTypeEnum,
-} from '@/generated/api-mdb';
+} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
-import {AccountDTO} from '@/generated/api';
 import {AccountSelector} from '@/components/AccountSelector';
 import {ProjectSelector} from '@/components/ProjectsSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
@@ -35,8 +35,10 @@ export interface ClusterFormValues {
     storage: number;
     replicas: number;
     ownerId: string;
-    database: InitMongoDatabase;
-    user: InitMongoUser;
+    database: MongoDatabaseDTO;
+    user: MongoUserDTO;
+    backupIsEnabled: boolean;
+    backupSchedule: string;
 }
 
 const V1StorageClassTypeEnum = {
@@ -48,7 +50,7 @@ const V1StorageClassTypeEnum = {
 const DEFAULT_PRESET = V1ResourcePresetResponseTypeEnum.Standard;
 
 export interface ClusterCreateFormProps {
-    initialValues?: V1MongoClusterResponse;
+    initialValues?: MongoClusterDTO;
     submitAction: (data: ClusterFormValues) => void;
     cancelAction: () => void;
 }
@@ -98,6 +100,8 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             ownerId: '',
             database: {name: ''},
             user: {name: '', password: ''},
+            backupIsEnabled: true,
+            backupSchedule: '0 0 * * * *',
         },
         validate: (values) => {
             const errors: Partial<FormikErrors<ClusterFormValues>> = {};
@@ -151,7 +155,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         formik.setFieldValue('presetId', preset.id);
     };
 
-    const handleProjectSelect = (project: V1ProjectResponse) => {
+    const handleProjectSelect = (project: ProjectDTO) => {
         formik.setFieldValue('projectId', project.id);
     };
 
@@ -194,19 +198,23 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             return;
         }
 
-        const simulateRequest: SimulateMongoDBQuotasUsageRequest = {
-            projectId: formik.values.projectId,
-            config: {
-                resources: {
-                    presetId: formik.values.presetId,
-                    storageClass: formik.values.storageClass,
-                    storage: formik.values.storage,
-                },
-                replicas: formik.values.replicas,
-            },
-        };
-
         try {
+            const simulateRequest: SimulateMongoDBQuotasUsageRequest = {
+                projectId: formik.values.projectId,
+                config: {
+                    version: '',
+                    backup: {
+                        isEnabled: formik.values.backupIsEnabled,
+                        schedule: formik.values.backupSchedule,
+                    },
+                    resources: {
+                        presetId: formik.values.presetId,
+                        storageClass: formik.values.storageClass,
+                        storage: formik.values.storage,
+                    },
+                    replicas: formik.values.replicas,
+                },
+            };
             const simulationResponse = await mdbQuotasApi.simulateMongoDbQuotasUsage({
                 simulateMongoDBQuotasUsageRequest: simulateRequest,
             });
@@ -361,6 +369,32 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             type="number"
                         />
                     </div>
+                    <Box marginTop={16} marginBottom={16}>
+                        <Checkbox
+                            size="l"
+                            checked={formik.values.backupIsEnabled}
+                            onUpdate={(value) => formik.setFieldValue('backupIsEnabled', value)}
+                        >
+                            Нужно ли автосоздание бекапов?
+                        </Checkbox>
+                    </Box>
+                    {formik.values.backupIsEnabled && (
+                        <InputField
+                            label="График создания бекапов"
+                            name="backupSchedule"
+                            value={formik.values.backupSchedule.toString()}
+                            onChange={(value) =>
+                                formik.setFieldValue('backupSchedule', parseInt(value, 10))
+                            }
+                            onBlur={formik.handleBlur('backupSchedule')}
+                            error={
+                                formik.touched.backupSchedule
+                                    ? formik.errors.backupSchedule
+                                    : undefined
+                            }
+                            placeholder="<Минуты> <Часы> <Дни_месяца> <Месяцы> <Дни_недели> <Годы>"
+                        />
+                    )}
                     {!isEditMode && (
                         <div>
                             <Text variant="subheader-2">Создание новой базы данных</Text>

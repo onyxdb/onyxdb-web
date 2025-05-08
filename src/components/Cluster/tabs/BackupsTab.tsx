@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {MongoBackup} from '@/generated/api-mdb';
+import {MongoBackup} from '@/generated/api';
 import {BackupsTable} from '@/components/tables/BackupsTable';
 import {ConfirmationModal} from '@/components/ConfirmationModal';
 import {mdbMongoDbBackupsApi} from '@/app/apis';

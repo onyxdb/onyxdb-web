@@ -5,10 +5,9 @@ import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {mdbProjectsApi, productsApi} from '@/app/apis';
-import {ProductDTOGet} from '@/generated/api';
 import {ProductSmallCard} from '@/components/ProductSmallCard';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
-import {V1ProjectResponse} from '@/generated/api-mdb';
+import {ProductDTO, ProjectDTO} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
 import {ClustersTable} from '@/components/tables/ClustersTable';
 import {AccountsTable} from '@/components/tables/AccountsTable';
@@ -21,7 +20,7 @@ import BillingTab from '@/app/products/view/[id]/BillingTab';
 settings.set({plugins: [YagrPlugin]});
 
 interface ProductTreeDTO {
-    item: ProductDTOGet;
+    item: ProductDTO;
     children?: ProductTreeDTO[];
 }
 
@@ -33,10 +32,10 @@ export default function ProductDetailPage() {
     const productId = pathname.split('/').pop() ?? '';
 
     const [activeTab, setActiveTab] = useState(tab);
-    const [product, setProduct] = useState<ProductDTOGet | null>(null);
-    const [productParents, setProductParents] = useState<ProductDTOGet[]>([]);
+    const [product, setProduct] = useState<ProductDTO | null>(null);
+    const [productParents, setProductParents] = useState<ProductDTO[]>([]);
     const [productTree, setProductTree] = useState<ProductTreeDTO | null>(null);
-    const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
+    const [projects, setProjects] = useState<ProjectDTO[]>([]);
     const [showArchived, setShowArchived] = useState<boolean>(true);
 
     const fetchProductParents = async (currentProductId: string) => {
@@ -77,7 +76,7 @@ export default function ProductDetailPage() {
             const response = await mdbProjectsApi.listProjects();
             setProjects(
                 response.data.projects
-                    .filter((p) => showArchived || !p.isArchived)
+                    .filter((p) => showArchived || !p.isDeleted)
                     .filter((p) => productId === null || p.productId === productId),
             );
         } catch (error) {
@@ -97,7 +96,7 @@ export default function ProductDetailPage() {
         fetchProjects();
     }, [productId, showArchived]);
 
-    const handleProductSelect = (productDTO: ProductDTOGet) => {
+    const handleProductSelect = (productDTO: ProductDTO) => {
         router.push('/products/view/' + productDTO.id);
     };
 

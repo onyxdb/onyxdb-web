@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Button, Icon, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
-import {MongoBackup} from '@/generated/api-mdb';
+import {MongoBackup} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {TrashBin} from '@gravity-ui/icons';

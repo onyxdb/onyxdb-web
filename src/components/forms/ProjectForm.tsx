@@ -3,19 +3,18 @@
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import {Button, Text} from '@gravity-ui/uikit';
-import {V1CreateProjectRequest, V1ProjectResponse} from '@/generated/api-mdb';
+import {CreateProjectRequestDTO, ProductDTO, ProjectDTO} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {ProductSelector} from '@/components/ProductSelector';
-import {ProductDTOGet} from '@/generated/api';
 import {productsApi} from '@/app/apis';
 
 interface ProjectFormProps {
     closeAction: () => void;
-    submitAction: (project: V1CreateProjectRequest) => void;
-    initialValue?: V1ProjectResponse;
+    submitAction: (project: CreateProjectRequestDTO) => void;
+    initialValue?: ProjectDTO;
 }
 
 export const ProjectForm: React.FC<ProjectFormProps> = ({
@@ -23,16 +22,16 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     submitAction,
     initialValue,
 }) => {
-    const [initialProduct, setInitialProduct] = useState<ProductDTOGet | null>(null);
+    const [initialProduct, setInitialProduct] = useState<ProductDTO | null>(null);
 
-    const formik = useFormik<V1CreateProjectRequest>({
+    const formik = useFormik<CreateProjectRequestDTO>({
         initialValues: {
             name: initialValue?.name || '',
             description: initialValue?.description || '',
             productId: initialValue?.productId || '',
         },
         validate: (values) => {
-            const errors: Partial<V1CreateProjectRequest> = {};
+            const errors: Partial<CreateProjectRequestDTO> = {};
             if (!values.name) {
                 errors.name = 'Название обязательно';
             } else if (values.name.length > 100) {
@@ -55,7 +54,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         },
     });
 
-    const handleProductSelect = (product: ProductDTOGet) => {
+    const handleProductSelect = (product: ProductDTO) => {
         console.log('ProjectForm handleProductSelect', product);
         formik.setFieldValue('productId', product.id);
     };

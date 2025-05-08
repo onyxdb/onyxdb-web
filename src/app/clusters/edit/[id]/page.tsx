@@ -6,14 +6,14 @@ import {useAuth} from '@/context/AuthContext';
 import {usePathname, useRouter} from 'next/navigation';
 import {mdbApi} from '@/app/apis';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
-import {V1MongoClusterResponse, V1MongoUpdateClusterRequest} from '@/generated/api-mdb';
+import {MongoClusterDTO, V1MongoUpdateClusterRequest} from '@/generated/api';
 
 export default function ClusterEditPage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
     const pathname = usePathname();
     const clusterId = pathname.split('/').pop() ?? '';
-    const [cluster, setCluster] = useState<V1MongoClusterResponse | null>(null);
+    const [cluster, setCluster] = useState<MongoClusterDTO | null>(null);
 
     const fetchCluster = async () => {
         try {

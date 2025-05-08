@@ -3,22 +3,18 @@
 import React from 'react';
 import {Icon, Label, Text} from '@gravity-ui/uikit';
 import {Circles5Random, Cpu, Cpus, Database, SquareListUl} from '@gravity-ui/icons';
-import {
-    V1ClusterResources,
-    V1MongoClusterResponse,
-    V1ResourcePresetResponse,
-} from '@/generated/api-mdb';
+import {ClusterResourcesDTO, MongoClusterDTO, V1ResourcePresetResponse} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {BytesGB} from '@/components/ResourceInputField';
 
 interface InfoTabProps {
-    cluster: V1MongoClusterResponse;
+    cluster: MongoClusterDTO;
     clusterPreset: V1ResourcePresetResponse;
 }
 
 const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
-    const resources: V1ClusterResources | undefined = cluster.config?.resources;
+    const resources: ClusterResourcesDTO | undefined = cluster.config?.resources;
     const convertRamToGB = (ram: number) => (ram / 1024 / 1024 / 1024).toFixed(2);
 
     return (

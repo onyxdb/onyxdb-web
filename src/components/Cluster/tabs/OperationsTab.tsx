@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Icon, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {OperationOA} from '@/generated/api-mdb';
+import {OperationOA} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import {Arrows3RotateLeft} from '@gravity-ui/icons';

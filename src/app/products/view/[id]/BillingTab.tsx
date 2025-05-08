@@ -5,8 +5,7 @@ import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {DateTime} from '@gravity-ui/date-utils';
 import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
-import {ProductDTOGet} from '@/generated/api';
-import {ProductQuotaUsageByResourceOA, Resource} from '@/generated/api-mdb';
+import {ProductDTO, ProductQuotaUsageByResourceOA, Resource} from '@/generated/api';
 import ChartKit from '@gravity-ui/chartkit';
 import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
@@ -17,7 +16,7 @@ type ResourceYagrWidgetData = {
 };
 
 interface BillingTabProps {
-    product: ProductDTOGet;
+    product: ProductDTO;
 }
 
 const BillingTab: React.FC<BillingTabProps> = ({product}) => {

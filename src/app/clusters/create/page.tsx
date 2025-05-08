@@ -6,7 +6,7 @@ import {useAuth} from '@/context/AuthContext';
 import {useRouter} from 'next/navigation';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {mdbApi} from '@/app/apis';
-import {V1CreateMongoClusterRequest} from '@/generated/api-mdb';
+import {V1CreateMongoClusterRequest} from '@/generated/api';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 export default function ClusterCreatePage() {

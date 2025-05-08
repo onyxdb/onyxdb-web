@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, Text} from '@gravity-ui/uikit';
-import {V1ResourcePresetResponse} from '@/generated/api-mdb';
+import {V1ResourcePresetResponse} from '@/generated/api';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 
 interface ResourcePresetCardProps {

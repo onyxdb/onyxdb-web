@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import {MDBQuotasApiUploadQuotasToProductsRequest} from '@/generated/api-mdb';
+import {MDBQuotasApiUploadQuotasToProductsRequest} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import CreateQuotaForm, {CreateQuotaFormFields} from '@/components/forms/CreateQuotaForm';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Card, Select, Text} from '@gravity-ui/uikit';
 import {InputField} from '@/components/formik/InputField';
-import {Resource} from '@/generated/api-mdb';
+import {Resource} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {ProductSelector} from '@/components/ProductSelector';

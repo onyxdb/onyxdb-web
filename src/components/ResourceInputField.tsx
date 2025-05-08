@@ -1,7 +1,7 @@
 'use client';
 import React, {useEffect, useState} from 'react';
 import {Select, TextInput} from '@gravity-ui/uikit';
-import {ResourceUnitEnum} from '@/generated/api-mdb'; // Предполагается, что ResourceUnitEnum определён в этом файле
+import {ResourceUnitEnum} from '@/generated/api'; // Предполагается, что ResourceUnitEnum определён в этом файле
 
 interface ResourceInputFieldProps {
     label?: string;

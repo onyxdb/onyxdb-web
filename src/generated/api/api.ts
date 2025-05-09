@@ -467,16 +467,16 @@ export interface CreateMongoClusterRequestDTO {
     config: MongoConfigDTO;
     /**
      *
-     * @type {MongoDatabaseDTO}
+     * @type {MongoInitDatabaseDTO}
      * @memberof CreateMongoClusterRequestDTO
      */
-    database: MongoDatabaseDTO;
+    database: MongoInitDatabaseDTO;
     /**
      *
-     * @type {MongoUserDTO}
+     * @type {MongoInitUserDTO}
      * @memberof CreateMongoClusterRequestDTO
      */
-    user: MongoUserDTO;
+    user: MongoInitUserDTO;
 }
 
 /**
@@ -502,13 +502,13 @@ export interface CreateMongoClusterResponseDTO {
 /**
  *
  * @export
- * @interface CreateMongoDatabaseRequest
+ * @interface CreateMongoDatabaseRequestDTO
  */
-export interface CreateMongoDatabaseRequest {
+export interface CreateMongoDatabaseRequestDTO {
     /**
      *
      * @type {string}
-     * @memberof CreateMongoDatabaseRequest
+     * @memberof CreateMongoDatabaseRequestDTO
      */
     name: string;
 }
@@ -728,15 +728,15 @@ export interface ListMongoClustersResponseDTO {
 /**
  *
  * @export
- * @interface ListMongoDatabasesResponse
+ * @interface ListMongoDatabasesResponseDTO
  */
-export interface ListMongoDatabasesResponse {
+export interface ListMongoDatabasesResponseDTO {
     /**
      *
-     * @type {Array<MongoDatabase>}
-     * @memberof ListMongoDatabasesResponse
+     * @type {Array<MongoDatabaseDTO>}
+     * @memberof ListMongoDatabasesResponseDTO
      */
-    databases: Array<MongoDatabase>;
+    databases: Array<MongoDatabaseDTO>;
 }
 
 /**
@@ -1025,62 +1025,6 @@ export interface MongoConfigDTO {
 /**
  *
  * @export
- * @interface MongoDatabase
- */
-export interface MongoDatabase {
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    clusterId: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    createdAt: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    createdBy: string;
-    /**
-     *
-     * @type {boolean}
-     * @memberof MongoDatabase
-     */
-    isDeleted: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    deletedAt: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoDatabase
-     */
-    deletedBy: string;
-}
-
-/**
- *
- * @export
  * @interface MongoDatabaseDTO
  */
 export interface MongoDatabaseDTO {
@@ -1090,6 +1034,42 @@ export interface MongoDatabaseDTO {
      * @memberof MongoDatabaseDTO
      */
     name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoDatabaseDTO
+     */
+    clusterId: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoDatabaseDTO
+     */
+    createdAt: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoDatabaseDTO
+     */
+    createdBy: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof MongoDatabaseDTO
+     */
+    isDeleted: boolean;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoDatabaseDTO
+     */
+    deletedAt: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoDatabaseDTO
+     */
+    deletedBy: string;
 }
 
 /**
@@ -1150,6 +1130,40 @@ export const MongoHostRoleEnum = {
 } as const;
 
 export type MongoHostRoleEnum = (typeof MongoHostRoleEnum)[keyof typeof MongoHostRoleEnum];
+
+/**
+ *
+ * @export
+ * @interface MongoInitDatabaseDTO
+ */
+export interface MongoInitDatabaseDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof MongoInitDatabaseDTO
+     */
+    name: string;
+}
+
+/**
+ *
+ * @export
+ * @interface MongoInitUserDTO
+ */
+export interface MongoInitUserDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof MongoInitUserDTO
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof MongoInitUserDTO
+     */
+    password: string;
+}
 
 /**
  *
@@ -1287,26 +1301,6 @@ export interface MongoUser {
      * @memberof MongoUser
      */
     permissions: Array<MongoPermission>;
-}
-
-/**
- *
- * @export
- * @interface MongoUserDTO
- */
-export interface MongoUserDTO {
-    /**
-     *
-     * @type {string}
-     * @memberof MongoUserDTO
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoUserDTO
-     */
-    password: string;
 }
 
 /**
@@ -1713,10 +1707,10 @@ export interface PaginatedRoleRequestResponse {
     endPosition: number;
     /**
      *
-     * @type {Array<RoleRequestDTO>}
+     * @type {Array<RoleRequestFullDTO>}
      * @memberof PaginatedRoleRequestResponse
      */
-    data: Array<RoleRequestDTO>;
+    data: Array<RoleRequestFullDTO>;
 }
 
 /**
@@ -2468,6 +2462,71 @@ export const RoleRequestDTOStatusEnum = {
 
 export type RoleRequestDTOStatusEnum =
     (typeof RoleRequestDTOStatusEnum)[keyof typeof RoleRequestDTOStatusEnum];
+
+/**
+ *
+ * @export
+ * @interface RoleRequestFullDTO
+ */
+export interface RoleRequestFullDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestFullDTO
+     */
+    id: string;
+    /**
+     *
+     * @type {RoleDTO}
+     * @memberof RoleRequestFullDTO
+     */
+    role?: RoleDTO;
+    /**
+     *
+     * @type {AccountDTO}
+     * @memberof RoleRequestFullDTO
+     */
+    account?: AccountDTO;
+    /**
+     *
+     * @type {AccountDTO}
+     * @memberof RoleRequestFullDTO
+     */
+    owner?: AccountDTO;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestFullDTO
+     */
+    reason: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestFullDTO
+     */
+    status: RoleRequestFullDTOStatusEnum;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestFullDTO
+     */
+    createdAt: string;
+    /**
+     *
+     * @type {string}
+     * @memberof RoleRequestFullDTO
+     */
+    resolvedAt?: string;
+}
+
+export const RoleRequestFullDTOStatusEnum = {
+    Waiting: 'WAITING',
+    Approved: 'APPROVED',
+    Declined: 'DECLINED',
+} as const;
+
+export type RoleRequestFullDTOStatusEnum =
+    (typeof RoleRequestFullDTOStatusEnum)[keyof typeof RoleRequestFullDTOStatusEnum];
 
 /**
  *
@@ -8275,27 +8334,24 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
          *
          * @summary Create MongoDB database
          * @param {string} clusterId
-         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
+         * @param {CreateMongoDatabaseRequestDTO} createMongoDatabaseRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createDatabase: async (
             clusterId: string,
-            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
+            createMongoDatabaseRequestDTO: CreateMongoDatabaseRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('createDatabase', 'clusterId', clusterId);
-            // verify required parameter 'createMongoDatabaseRequest' is not null or undefined
+            // verify required parameter 'createMongoDatabaseRequestDTO' is not null or undefined
             assertParamExists(
                 'createDatabase',
-                'createMongoDatabaseRequest',
-                createMongoDatabaseRequest,
+                'createMongoDatabaseRequestDTO',
+                createMongoDatabaseRequestDTO,
             );
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
+            const localVarPath = `/api/mdb/mongodb/databases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8311,6 +8367,10 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8322,7 +8382,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                createMongoDatabaseRequest,
+                createMongoDatabaseRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -8592,23 +8652,20 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
          *
          * @summary Delete MongoDB database
          * @param {string} clusterId
-         * @param {string} databaseId
+         * @param {string} databaseName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteDatabase: async (
             clusterId: string,
-            databaseId: string,
+            databaseName: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('deleteDatabase', 'clusterId', clusterId);
-            // verify required parameter 'databaseId' is not null or undefined
-            assertParamExists('deleteDatabase', 'databaseId', databaseId);
-            const localVarPath =
-                `/api/managed-mongodb/v1/clusters/{clusterId}/databases/{databaseId}`
-                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
-                    .replace(`{${'databaseId'}}`, encodeURIComponent(String(databaseId)));
+            // verify required parameter 'databaseName' is not null or undefined
+            assertParamExists('deleteDatabase', 'databaseName', databaseName);
+            const localVarPath = `/api/mdb/mongodb/databases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8623,6 +8680,14 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
+
+            if (databaseName !== undefined) {
+                localVarQueryParameter['databaseName'] = databaseName;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -9139,10 +9204,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listDatabases', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
+            const localVarPath = `/api/mdb/mongodb/databases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9157,6 +9219,10 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -9212,12 +9278,12 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary List operations
-         * @param {string} [id]
+         * @param {string} [clusterId]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listOperations: async (
-            id?: string,
+            clusterId?: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             const localVarPath = `/api/mdb/operations`;
@@ -9236,8 +9302,8 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-            if (id !== undefined) {
-                localVarQueryParameter['id'] = id;
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
             }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -10181,20 +10247,20 @@ export const MDBApiFp = function (configuration?: Configuration) {
          *
          * @summary Create MongoDB database
          * @param {string} clusterId
-         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
+         * @param {CreateMongoDatabaseRequestDTO} createMongoDatabaseRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createDatabase(
             clusterId: string,
-            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
+            createMongoDatabaseRequestDTO: CreateMongoDatabaseRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createDatabase(
                 clusterId,
-                createMongoDatabaseRequest,
+                createMongoDatabaseRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10357,20 +10423,20 @@ export const MDBApiFp = function (configuration?: Configuration) {
          *
          * @summary Delete MongoDB database
          * @param {string} clusterId
-         * @param {string} databaseId
+         * @param {string} databaseName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteDatabase(
             clusterId: string,
-            databaseId: string,
+            databaseName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDatabase(
                 clusterId,
-                databaseId,
+                databaseName,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10674,7 +10740,10 @@ export const MDBApiFp = function (configuration?: Configuration) {
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoDatabasesResponse>
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<ListMongoDatabasesResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listDatabases(
                 clusterId,
@@ -10717,17 +10786,20 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary List operations
-         * @param {string} [id]
+         * @param {string} [clusterId]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async listOperations(
-            id?: string,
+            clusterId?: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListOperationsResponseDTO>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listOperations(id, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listOperations(
+                clusterId,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['MDBApi.listOperations']?.[localVarOperationServerIndex]?.url;
@@ -11288,11 +11360,11 @@ export const MDBApiFactory = function (
         createDatabase(
             requestParameters: MDBApiCreateDatabaseRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .createDatabase(
                     requestParameters.clusterId,
-                    requestParameters.createMongoDatabaseRequest,
+                    requestParameters.createMongoDatabaseRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -11386,9 +11458,13 @@ export const MDBApiFactory = function (
         deleteDatabase(
             requestParameters: MDBApiDeleteDatabaseRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
-                .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
+                .deleteDatabase(
+                    requestParameters.clusterId,
+                    requestParameters.databaseName,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11556,7 +11632,7 @@ export const MDBApiFactory = function (
         listDatabases(
             requestParameters: MDBApiListDatabasesRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoDatabasesResponse> {
+        ): AxiosPromise<ListMongoDatabasesResponseDTO> {
             return localVarFp
                 .listDatabases(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -11582,7 +11658,7 @@ export const MDBApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<ListOperationsResponseDTO> {
             return localVarFp
-                .listOperations(requestParameters.id, options)
+                .listOperations(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11898,10 +11974,10 @@ export interface MDBApiCreateDatabaseRequest {
 
     /**
      *
-     * @type {CreateMongoDatabaseRequest}
+     * @type {CreateMongoDatabaseRequestDTO}
      * @memberof MDBApiCreateDatabase
      */
-    readonly createMongoDatabaseRequest: CreateMongoDatabaseRequest;
+    readonly createMongoDatabaseRequestDTO: CreateMongoDatabaseRequestDTO;
 }
 
 /**
@@ -12006,7 +12082,7 @@ export interface MDBApiDeleteDatabaseRequest {
      * @type {string}
      * @memberof MDBApiDeleteDatabase
      */
-    readonly databaseId: string;
+    readonly databaseName: string;
 }
 
 /**
@@ -12195,7 +12271,7 @@ export interface MDBApiListOperationsRequest {
      * @type {string}
      * @memberof MDBApiListOperations
      */
-    readonly id?: string;
+    readonly clusterId?: string;
 }
 
 /**
@@ -12450,7 +12526,7 @@ export class MDBApi extends BaseAPI {
         return MDBApiFp(this.configuration)
             .createDatabase(
                 requestParameters.clusterId,
-                requestParameters.createMongoDatabaseRequest,
+                requestParameters.createMongoDatabaseRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -12551,7 +12627,7 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
+            .deleteDatabase(requestParameters.clusterId, requestParameters.databaseName, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -12761,7 +12837,7 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .listOperations(requestParameters.id, options)
+            .listOperations(requestParameters.clusterId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -15431,27 +15507,24 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
          *
          * @summary Create MongoDB database
          * @param {string} clusterId
-         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
+         * @param {CreateMongoDatabaseRequestDTO} createMongoDatabaseRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createDatabase: async (
             clusterId: string,
-            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
+            createMongoDatabaseRequestDTO: CreateMongoDatabaseRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('createDatabase', 'clusterId', clusterId);
-            // verify required parameter 'createMongoDatabaseRequest' is not null or undefined
+            // verify required parameter 'createMongoDatabaseRequestDTO' is not null or undefined
             assertParamExists(
                 'createDatabase',
-                'createMongoDatabaseRequest',
-                createMongoDatabaseRequest,
+                'createMongoDatabaseRequestDTO',
+                createMongoDatabaseRequestDTO,
             );
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
+            const localVarPath = `/api/mdb/mongodb/databases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15467,6 +15540,10 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -15478,7 +15555,7 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                createMongoDatabaseRequest,
+                createMongoDatabaseRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -15492,23 +15569,20 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
          *
          * @summary Delete MongoDB database
          * @param {string} clusterId
-         * @param {string} databaseId
+         * @param {string} databaseName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteDatabase: async (
             clusterId: string,
-            databaseId: string,
+            databaseName: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('deleteDatabase', 'clusterId', clusterId);
-            // verify required parameter 'databaseId' is not null or undefined
-            assertParamExists('deleteDatabase', 'databaseId', databaseId);
-            const localVarPath =
-                `/api/managed-mongodb/v1/clusters/{clusterId}/databases/{databaseId}`
-                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
-                    .replace(`{${'databaseId'}}`, encodeURIComponent(String(databaseId)));
+            // verify required parameter 'databaseName' is not null or undefined
+            assertParamExists('deleteDatabase', 'databaseName', databaseName);
+            const localVarPath = `/api/mdb/mongodb/databases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15523,6 +15597,14 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
+
+            if (databaseName !== undefined) {
+                localVarQueryParameter['databaseName'] = databaseName;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -15551,10 +15633,7 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listDatabases', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/databases`.replace(
-                `{${'clusterId'}}`,
-                encodeURIComponent(String(clusterId)),
-            );
+            const localVarPath = `/api/mdb/mongodb/databases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15569,6 +15648,10 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
+            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -15598,20 +15681,20 @@ export const ManagedMongoDBDatabasesApiFp = function (configuration?: Configurat
          *
          * @summary Create MongoDB database
          * @param {string} clusterId
-         * @param {CreateMongoDatabaseRequest} createMongoDatabaseRequest
+         * @param {CreateMongoDatabaseRequestDTO} createMongoDatabaseRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createDatabase(
             clusterId: string,
-            createMongoDatabaseRequest: CreateMongoDatabaseRequest,
+            createMongoDatabaseRequestDTO: CreateMongoDatabaseRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createDatabase(
                 clusterId,
-                createMongoDatabaseRequest,
+                createMongoDatabaseRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -15631,20 +15714,20 @@ export const ManagedMongoDBDatabasesApiFp = function (configuration?: Configurat
          *
          * @summary Delete MongoDB database
          * @param {string} clusterId
-         * @param {string} databaseId
+         * @param {string} databaseName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteDatabase(
             clusterId: string,
-            databaseId: string,
+            databaseName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDatabase(
                 clusterId,
-                databaseId,
+                databaseName,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -15671,7 +15754,10 @@ export const ManagedMongoDBDatabasesApiFp = function (configuration?: Configurat
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoDatabasesResponse>
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<ListMongoDatabasesResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listDatabases(
                 clusterId,
@@ -15714,11 +15800,11 @@ export const ManagedMongoDBDatabasesApiFactory = function (
         createDatabase(
             requestParameters: ManagedMongoDBDatabasesApiCreateDatabaseRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .createDatabase(
                     requestParameters.clusterId,
-                    requestParameters.createMongoDatabaseRequest,
+                    requestParameters.createMongoDatabaseRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -15733,9 +15819,13 @@ export const ManagedMongoDBDatabasesApiFactory = function (
         deleteDatabase(
             requestParameters: ManagedMongoDBDatabasesApiDeleteDatabaseRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
-                .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
+                .deleteDatabase(
+                    requestParameters.clusterId,
+                    requestParameters.databaseName,
+                    options,
+                )
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -15748,7 +15838,7 @@ export const ManagedMongoDBDatabasesApiFactory = function (
         listDatabases(
             requestParameters: ManagedMongoDBDatabasesApiListDatabasesRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoDatabasesResponse> {
+        ): AxiosPromise<ListMongoDatabasesResponseDTO> {
             return localVarFp
                 .listDatabases(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -15771,10 +15861,10 @@ export interface ManagedMongoDBDatabasesApiCreateDatabaseRequest {
 
     /**
      *
-     * @type {CreateMongoDatabaseRequest}
+     * @type {CreateMongoDatabaseRequestDTO}
      * @memberof ManagedMongoDBDatabasesApiCreateDatabase
      */
-    readonly createMongoDatabaseRequest: CreateMongoDatabaseRequest;
+    readonly createMongoDatabaseRequestDTO: CreateMongoDatabaseRequestDTO;
 }
 
 /**
@@ -15795,7 +15885,7 @@ export interface ManagedMongoDBDatabasesApiDeleteDatabaseRequest {
      * @type {string}
      * @memberof ManagedMongoDBDatabasesApiDeleteDatabase
      */
-    readonly databaseId: string;
+    readonly databaseName: string;
 }
 
 /**
@@ -15834,7 +15924,7 @@ export class ManagedMongoDBDatabasesApi extends BaseAPI {
         return ManagedMongoDBDatabasesApiFp(this.configuration)
             .createDatabase(
                 requestParameters.clusterId,
-                requestParameters.createMongoDatabaseRequest,
+                requestParameters.createMongoDatabaseRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -15853,7 +15943,7 @@ export class ManagedMongoDBDatabasesApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ManagedMongoDBDatabasesApiFp(this.configuration)
-            .deleteDatabase(requestParameters.clusterId, requestParameters.databaseId, options)
+            .deleteDatabase(requestParameters.clusterId, requestParameters.databaseName, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -16677,12 +16767,12 @@ export const OperationsApiAxiosParamCreator = function (configuration?: Configur
         /**
          *
          * @summary List operations
-         * @param {string} [id]
+         * @param {string} [clusterId]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listOperations: async (
-            id?: string,
+            clusterId?: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             const localVarPath = `/api/mdb/operations`;
@@ -16701,8 +16791,8 @@ export const OperationsApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-            if (id !== undefined) {
-                localVarQueryParameter['id'] = id;
+            if (clusterId !== undefined) {
+                localVarQueryParameter['clusterId'] = clusterId;
             }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -16778,17 +16868,20 @@ export const OperationsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary List operations
-         * @param {string} [id]
+         * @param {string} [clusterId]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async listOperations(
-            id?: string,
+            clusterId?: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListOperationsResponseDTO>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listOperations(id, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listOperations(
+                clusterId,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['OperationsApi.listOperations']?.[localVarOperationServerIndex]
@@ -16854,7 +16947,7 @@ export const OperationsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<ListOperationsResponseDTO> {
             return localVarFp
-                .listOperations(requestParameters.id, options)
+                .listOperations(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -16886,7 +16979,7 @@ export interface OperationsApiListOperationsRequest {
      * @type {string}
      * @memberof OperationsApiListOperations
      */
-    readonly id?: string;
+    readonly clusterId?: string;
 }
 
 /**
@@ -16923,7 +17016,7 @@ export class OperationsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return OperationsApiFp(this.configuration)
-            .listOperations(requestParameters.id, options)
+            .listOperations(requestParameters.clusterId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 

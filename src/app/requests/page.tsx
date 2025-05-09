@@ -2,7 +2,12 @@
 
 import React, {useEffect, useState} from 'react';
 import {rolesRequestsApi} from '@/app/apis';
-import {AccountDTO, RoleDTO, RoleRequestDTO, RoleRequestDTOStatusEnum} from '@/generated/api';
+import {
+    AccountDTO,
+    RoleDTO,
+    RoleRequestFullDTO,
+    RoleRequestFullDTOStatusEnum,
+} from '@/generated/api';
 import {
     Button,
     Modal,
@@ -10,6 +15,7 @@ import {
     Select,
     Table,
     TableColumnConfig,
+    Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
@@ -19,9 +25,10 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {AccountSelector} from '@/components/AccountSelector';
 import {RoleSelector} from '@/components/RoleSelector';
 import {StatusLabel} from '@/components/common/StatusLabel';
+import {UserBlock} from '@/components/common/UserBlock';
 
 export default function RoleRequestsTable() {
-    const [roleRequests, setRoleRequests] = useState<RoleRequestDTO[]>([]);
+    const [roleRequests, setRoleRequests] = useState<RoleRequestFullDTO[]>([]);
 
     const [statusFilter, setStatusFilter] = useState<string>('');
     const [receiverFilter, setReceiverFilter] = useState<AccountDTO | null>(null);
@@ -32,7 +39,7 @@ export default function RoleRequestsTable() {
     const [total, setTotal] = useState<number>(0);
 
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
-    const [selectedRoleRequest, setSelectedRoleRequest] = useState<RoleRequestDTO | null>(null);
+    const [selectedRoleRequest, setSelectedRoleRequest] = useState<RoleRequestFullDTO | null>(null);
 
     const {checkPermission, user} = useAuth();
 
@@ -62,7 +69,7 @@ export default function RoleRequestsTable() {
         setOffset((page - 1) * pageSize);
     };
 
-    const handleOrderRole = (roleRequest: RoleRequestDTO) => {
+    const handleOrderRole = (roleRequest: RoleRequestFullDTO) => {
         setSelectedRoleRequest(roleRequest);
         setModalVisible(true);
     };
@@ -72,19 +79,16 @@ export default function RoleRequestsTable() {
         fetchRoleRequests();
     };
 
-    const columns: TableColumnConfig<RoleRequestDTO>[] = [
+    const columns: TableColumnConfig<RoleRequestFullDTO>[] = [
         {
             id: 'id',
             name: 'Id',
             template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
-            id: 'roleId',
+            id: 'role',
             name: 'Роль',
-            template: (item) => <TextWithCopy text={item.roleId} maxLength={8} />,
-            meta: {
-                sort: true,
-            },
+            template: (item) => <Text>{item.role?.shopName ?? 'No data'}</Text>,
         },
         {
             id: 'status',
@@ -95,29 +99,21 @@ export default function RoleRequestsTable() {
             },
         },
         {
-            id: 'accountId',
+            id: 'account',
             name: 'Аккаунт',
-            template: (item) => <TextWithCopy text={item.accountId} maxLength={8} />,
-            meta: {
-                sort: true,
-            },
+            template: (item) =>
+                item.account ? <UserBlock account={item.account} size="s" /> : 'No data',
         },
         {
-            id: 'ownerId',
+            id: 'owner',
             name: 'Владелец',
             template: (item) =>
-                item.ownerId ? <TextWithCopy text={item.ownerId} maxLength={8} /> : 'No data',
-            meta: {
-                sort: true,
-            },
+                item.owner ? <UserBlock account={item.owner} size="s" /> : 'No data',
         },
         {
             id: 'reason',
             name: 'Причина',
             template: (roleRequest) => roleRequest.reason,
-            meta: {
-                sort: true,
-            },
         },
         {
             id: 'actions',
@@ -125,7 +121,7 @@ export default function RoleRequestsTable() {
             template: (roleRequest) =>
                 roleRequest.status === 'WAITING' &&
                 (checkPermission('role-request', 'edit') ||
-                    user?.account.id === roleRequest.ownerId) && (
+                    (user && user?.account.id === roleRequest.owner?.id)) && (
                     <div style={{display: 'flex', gap: '10px'}}>
                         <Button view="normal" size="m" onClick={() => handleOrderRole(roleRequest)}>
                             Принять решение
@@ -188,9 +184,15 @@ export default function RoleRequestsTable() {
                             defaultValue={['']}
                             options={[
                                 {value: '', content: 'Все статусы'},
-                                {value: RoleRequestDTOStatusEnum.Waiting, content: 'Ожидание'},
-                                {value: RoleRequestDTOStatusEnum.Approved, content: 'Утверждена'},
-                                {value: RoleRequestDTOStatusEnum.Declined, content: 'Отклонена'},
+                                {value: RoleRequestFullDTOStatusEnum.Waiting, content: 'Ожидание'},
+                                {
+                                    value: RoleRequestFullDTOStatusEnum.Approved,
+                                    content: 'Утверждена',
+                                },
+                                {
+                                    value: RoleRequestFullDTOStatusEnum.Declined,
+                                    content: 'Отклонена',
+                                },
                             ]}
                         />
                     </div>

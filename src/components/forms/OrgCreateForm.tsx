@@ -116,7 +116,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     const handleDcSelect = (dc: DomainComponentDTO) => {
         console.log('handleDcSelect dc', dc);
         setIsDcModalOpen(false);
-        setSelectedDcId(dc.id ?? '???');
+        setSelectedDcId(dc.id);
         setSearchDc(dc.name);
         formik.setFieldValue('domainComponent', dc.name);
         formik.setFieldValue('domainComponentId', dc.id);
@@ -130,7 +130,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     const handleParentOuSelect = (ou: OrganizationUnitDTO) => {
         console.log('handleParentOuSelect ou', ou);
         setIsParentModalOpen(false);
-        setSelectedParentOuId(ou.id ?? '???');
+        setSelectedParentOuId(ou.id);
         setSearchOu(ou.name);
         formik.setFieldValue('parentOrgUnit', ou.name);
         formik.setFieldValue('parentOrgUnitId', ou.id);
@@ -145,7 +145,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     const handleAccountSelect = (data: AccountDTO) => {
         console.log('handleAccountSelect data', data);
         setIsAccountsModalOpen(false);
-        setSelectedAccountId(data.id ?? '???');
+        setSelectedAccountId(data.id);
         setSearchAccount(`${data.firstName} ${data.lastName} (${data.email})`);
         formik.setFieldValue('ownerAccount', `${data.firstName} ${data.lastName} (${data.email})`);
         formik.setFieldValue('ownerAccountId', data.id);

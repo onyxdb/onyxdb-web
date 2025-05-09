@@ -22,7 +22,7 @@ export const ProductInfoTab: React.FC<ProductInfoTabProps> = ({product}) => {
                     ID:
                 </Text>
                 <Text variant="body-1" color="primary">
-                    {product.id ?? '???'}
+                    {product.id}
                 </Text>
             </HorizontalStack>
             <HorizontalStack align="center">
@@ -33,7 +33,7 @@ export const ProductInfoTab: React.FC<ProductInfoTabProps> = ({product}) => {
                     Дата создания:
                 </Text>
                 <Text variant="body-1" color="primary">
-                    {product.createdAt ?? '???'}
+                    {product.createdAt}
                 </Text>
             </HorizontalStack>
             <HorizontalStack align="center">
@@ -44,7 +44,7 @@ export const ProductInfoTab: React.FC<ProductInfoTabProps> = ({product}) => {
                     Дата обновления:
                 </Text>
                 <Text variant="body-1" color="primary">
-                    {product.updatedAt ?? '???'}
+                    {product.updatedAt}
                 </Text>
             </HorizontalStack>
         </div>

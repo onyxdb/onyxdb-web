@@ -160,8 +160,8 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         formik.setFieldValue('projectId', project.id);
     };
 
-    const handleOwnerSelect = (account: AccountDTO) => {
-        formik.setFieldValue('ownerId', account.id);
+    const handleOwnerSelect = (account: AccountDTO | null) => {
+        formik.setFieldValue('ownerId', account?.id ?? '');
     };
 
     const typeOptions = Object.values(V1ResourcePresetResponseTypeEnum).map((type) => (

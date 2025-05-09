@@ -9,7 +9,7 @@ import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface AccountSelectorProps {
-    selectAccountAction: (account: AccountDTO) => void;
+    selectAccountAction: (account: AccountDTO | null) => void;
     header?: string;
     label?: string;
     placeholder?: string;
@@ -41,6 +41,9 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
     };
 
     const handleAccountChange = (value: string) => {
+        if (value.length === 0) {
+            selectAccountAction(null);
+        }
         setSearchAccount(value);
         fetchAccountOptions();
     };
@@ -76,6 +79,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
                     placeholder={placeholder}
                     onUpdate={handleAccountChange}
                     disabled={disabled}
+                    hasClear={true}
                 />
             </div>
         );
@@ -90,6 +94,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
                     value={searchAccount}
                     placeholder={placeholder}
                     onUpdate={handleAccountChange}
+                    hasClear={true}
                 />
                 <Button view="action" size="m" onClick={handleOpenAccountsModal}>
                     Поиск

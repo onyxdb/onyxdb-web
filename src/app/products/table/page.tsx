@@ -33,7 +33,7 @@ export default function ProductsPage() {
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'name',

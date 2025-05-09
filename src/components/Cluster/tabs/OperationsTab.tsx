@@ -75,7 +75,7 @@ export const OperationsTab: React.FC<OperationsTabProps> = ({clusterId}) => {
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'type',

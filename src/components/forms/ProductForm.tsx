@@ -86,7 +86,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, closeAction, 
 
     const handleAccountSelect = (data: AccountDTO) => {
         setIsAccountsModalOpen(false);
-        setSelectedAccountId(data.id ?? '???');
+        setSelectedAccountId(data.id);
         setSearchAccount(`${data.firstName} ${data.lastName} (${data.email})`);
         formik.setFieldValue('ownerAccount', `${data.firstName} ${data.lastName} (${data.email})`);
         formik.setFieldValue('ownerAccountId', data.id);
@@ -98,7 +98,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, closeAction, 
 
     const handleParentProductSelect = (product: ProductDTO) => {
         setIsParentProductModalOpen(false);
-        setSelectedParentProductId(product.id ?? '???');
+        setSelectedParentProductId(product.id);
         setSearchParentProduct(product.name);
         formik.setFieldValue('parentProduct', product.name);
         formik.setFieldValue('parentProductId', product.id);

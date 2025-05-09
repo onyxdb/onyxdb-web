@@ -78,7 +78,7 @@ export const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
 
     const handleParentBusinessRoleSelect = (businessRole: BusinessRoleDTO) => {
         setIsParentBusinessRoleModalOpen(false);
-        setSelectedParentBusinessRoleId(businessRole.id ?? '???');
+        setSelectedParentBusinessRoleId(businessRole.id);
         setSearchParentBusinessRole(businessRole.name);
         formik.setFieldValue('parentBusinessRole', businessRole.name);
         formik.setFieldValue('parentBusinessRoleId', businessRole.id);

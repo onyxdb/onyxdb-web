@@ -79,7 +79,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'username',
@@ -125,7 +125,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                         <Button
                             view="normal"
                             size="m"
-                            onClick={() => editAction(account.id ?? '???')}
+                            onClick={() => editAction(account.id)}
                         >
                             <Icon data={Pencil} />
                             Редактировать
@@ -137,7 +137,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                             size="m"
                             onClick={() =>
                                 handleDelete(
-                                    account?.id ?? '???',
+                                    account?.id,
                                     `${account.firstName} ${account.lastName}`,
                                 )
                             }

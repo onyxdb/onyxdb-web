@@ -135,7 +135,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'name',
@@ -182,7 +182,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                         <Button
                             view="normal"
                             size="m"
-                            onClick={() => editAction(businessRole.id ?? '???')}
+                            onClick={() => editAction(businessRole.id)}
                         >
                             <Icon data={Pencil} />
                         </Button>
@@ -192,7 +192,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                             view="outlined-danger"
                             size="m"
                             onClick={() =>
-                                handleDelete(businessRole.id ?? '???', businessRole.name)
+                                handleDelete(businessRole.id, businessRole.name)
                             }
                         >
                             <Icon data={TrashBin} />

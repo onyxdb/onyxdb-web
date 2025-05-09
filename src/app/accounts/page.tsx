@@ -79,8 +79,8 @@ export default function AccountsPage({}: AccountsPageProps) {
             const {anyData: _, ...newValues} = values;
             if (editingAccount) {
                 await accountsApi.updateAccount({
-                    accountId: editingAccount.id ?? '???',
-                    accountDTO: newValues,
+                    accountId: editingAccount.id,
+                    accountPostDTO: newValues,
                 });
                 toaster.add({
                     name: `account_edit_${editingAccount.id}`,

@@ -68,7 +68,7 @@ export const CreateRoleRequestModal: React.FC<CreateRoleRequestModalProps> = ({r
 
     const handleAccountSelect = (data: AccountDTO) => {
         setIsAccountsModalOpen(false);
-        setSelectedAccountId(data.id ?? '???');
+        setSelectedAccountId(data.id);
         setSearchAccount(`${data.firstName} ${data.lastName} (${data.email})`);
         formik.setFieldValue('accountId', data.id);
     };

@@ -46,7 +46,7 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                             <Button
                                 view="normal"
                                 size="m"
-                                onClick={() => editAction(data.id ?? '???')}
+                                onClick={() => editAction(data.id)}
                             >
                                 <Icon data={Pencil} />
                             </Button>
@@ -56,7 +56,7 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() => deleteAction(data.id ?? '???')}
+                            onClick={() => deleteAction(data.id)}
                         >
                             <Icon data={TrashBin} />
                         </Button>

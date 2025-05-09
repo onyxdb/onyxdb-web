@@ -98,7 +98,8 @@ export const App: React.FC<AppProps> = ({children}) => {
                             headerDecoration={true}
                             compact={asideCollapsed ?? false}
                             onChangeCompact={setAsideCollapsed}
-                            logo={{icon: Ghost, text: 'OnyxDB'}}
+                            // logo={{icon: Ghost, text: 'OnyxDB'}}
+                            logo={{icon: Ghost, text: 'DBaaS platform'}}
                             menuItems={menuItems.map((mi) => ({
                                 id: mi.title,
                                 current: activeTab === mi.title,

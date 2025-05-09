@@ -1,5 +1,6 @@
 import React from 'react';
 import {Label} from '@gravity-ui/uikit';
+import {capitalizeFirstLetter} from '@/utils/utils';
 
 interface StatusLabelProps {
     status: string;
@@ -18,8 +19,11 @@ export const StatusLabel: React.FC<StatusLabelProps> = ({status}) => {
             | 'clear';
     } = {
         alive: 'success',
+        approved: 'success',
         scheduled: 'info',
+        waiting: 'warning',
         in_progress: 'warning',
+        declined: 'danger',
         error: 'danger',
         success: 'success',
         unknown: 'unknown',
@@ -29,5 +33,5 @@ export const StatusLabel: React.FC<StatusLabelProps> = ({status}) => {
 
     const theme = statusToThemeMap[status] || 'unknown';
 
-    return <Label theme={theme}>{status}</Label>;
+    return <Label theme={theme}>{capitalizeFirstLetter(status.toLowerCase())}</Label>;
 };

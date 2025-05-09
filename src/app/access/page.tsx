@@ -7,8 +7,6 @@ import {useRouter} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useAuth} from '@/context/AuthContext';
-import {Text} from '@gravity-ui/uikit';
-import {Box} from '@/components/Layout/Box';
 
 export default function RolesPage() {
     const router = useRouter();
@@ -48,9 +46,6 @@ export default function RolesPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
-                <Box marginBottom="20px">
-                    <Text variant="header-2">Роли</Text>
-                </Box>
                 <RoleTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
         </div>

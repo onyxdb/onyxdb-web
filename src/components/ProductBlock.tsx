@@ -103,7 +103,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                         <Button
                             view="normal"
                             size="l"
-                            onClick={() => handleViewProductDetails(data?.id ?? '???')}
+                            onClick={() => handleViewProductDetails(data?.id)}
                         >
                             <Icon data={Eye} />
                             Подробнее
@@ -127,7 +127,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                             <Button
                                 view="outlined-danger"
                                 size="m"
-                                onClick={() => deleteAction(data.id ?? '???')}
+                                onClick={() => deleteAction(data.id)}
                             >
                                 <Icon data={TrashBin} />
                             </Button>

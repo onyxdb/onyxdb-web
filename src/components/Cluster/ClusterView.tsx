@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {mdbResourcePresetsApi} from '@/app/apis';
 import {Icon, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-import {MongoClusterDTO, V1ResourcePresetResponse} from '@/generated/api';
+import {MongoClusterDTO, ResourcePresetResponseDTO} from '@/generated/api';
 import InfoTab from '@/components/Cluster/tabs/InfoTab';
 import HostsTab from '@/components/Cluster/tabs/HostsTab';
 import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
@@ -27,7 +27,7 @@ export default function ClusterView({cluster}: ClusterViewPageProps) {
     const tab = searchParams.get('tab') || 'info';
 
     const [activeTab, setActiveTab] = useState(tab);
-    const [clusterPreset, setClusterPreset] = useState<V1ResourcePresetResponse | null>(null);
+    const [clusterPreset, setClusterPreset] = useState<ResourcePresetResponseDTO | null>(null);
 
     const fetchData = async () => {
         try {

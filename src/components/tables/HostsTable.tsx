@@ -2,15 +2,15 @@
 
 import React from 'react';
 import {Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {MongoHost} from '@/generated/api';
+import {MongoHostDTO} from '@/generated/api';
 
 interface HostsTableProps {
-    hosts: MongoHost[];
+    hosts: MongoHostDTO[];
 }
 
 export const HostsTable: React.FC<HostsTableProps> = ({hosts}) => {
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<MongoHost>[] = [
+    const columns: TableColumnConfig<MongoHostDTO>[] = [
         {
             id: 'name',
             name: 'Название',

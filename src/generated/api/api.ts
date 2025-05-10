@@ -14,7 +14,8 @@
 
 import type {Configuration} from './configuration';
 import type {AxiosInstance, AxiosPromise, RawAxiosRequestConfig} from 'axios';
-import globalAxios from 'axios'; // Some imports not used depending on template conditions
+import globalAxios from 'axios';
+// Some imports not used depending on template conditions
 // @ts-ignore
 import {
     assertParamExists,
@@ -25,7 +26,8 @@ import {
     setSearchParams,
     toPathString,
 } from './common';
-import type {RequestArgs} from './base'; // @ts-ignore
+import type {RequestArgs} from './base';
+// @ts-ignore
 import {BASE_PATH, BaseAPI, COLLECTION_FORMATS, operationServerMap, RequiredError} from './base';
 
 /**
@@ -649,6 +651,38 @@ export interface CreateProjectResponseDTO {
 /**
  *
  * @export
+ * @interface CreateResourcePresetRequestDTO
+ */
+export interface CreateResourcePresetRequestDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    type: string;
+    /**
+     *
+     * @type {number}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    ram: number;
+}
+
+/**
+ *
+ * @export
  * @interface DomainComponentDTO
  */
 export interface DomainComponentDTO {
@@ -829,6 +863,20 @@ export interface ListMongoDatabasesResponseDTO {
 /**
  *
  * @export
+ * @interface ListMongoHostsResponseDTO
+ */
+export interface ListMongoHostsResponseDTO {
+    /**
+     *
+     * @type {Array<MongoHostDTO>}
+     * @memberof ListMongoHostsResponseDTO
+     */
+    hosts: Array<MongoHostDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface ListMongoRolesResponseDTO
  */
 export interface ListMongoRolesResponseDTO {
@@ -927,6 +975,20 @@ export interface ListQuotasByProductsResponse {
 /**
  *
  * @export
+ * @interface ListResourcePresetsResponseDTO
+ */
+export interface ListResourcePresetsResponseDTO {
+    /**
+     *
+     * @type {Array<ResourcePresetResponseDTO>}
+     * @memberof ListResourcePresetsResponseDTO
+     */
+    resourcePresets: Array<ResourcePresetResponseDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface ListResourcesResponse
  */
 export interface ListResourcesResponse {
@@ -982,6 +1044,12 @@ export interface MongoBackupDTO {
      * @memberof MongoBackupDTO
      */
     status: BackupStatusDTO;
+    /**
+     *
+     * @type {boolean}
+     * @memberof MongoBackupDTO
+     */
+    isReady: boolean;
     /**
      *
      * @type {string}
@@ -1161,61 +1229,40 @@ export interface MongoDatabaseDTO {
 /**
  *
  * @export
- * @interface MongoHost
+ * @interface MongoHostDTO
  */
-export interface MongoHost {
+export interface MongoHostDTO {
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
     clusterId: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
-    type: MongoHostTypeEnum;
+    type: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
-    status: MongoHostStatusEnum;
+    status: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
-    role: MongoHostRoleEnum;
+    role: string;
 }
-
-export const MongoHostTypeEnum = {
-    Unknown: 'unknown',
-    Mongod: 'mongod',
-} as const;
-
-export type MongoHostTypeEnum = (typeof MongoHostTypeEnum)[keyof typeof MongoHostTypeEnum];
-export const MongoHostStatusEnum = {
-    Unknown: 'unknown',
-    Alive: 'alive',
-    Dead: 'dead',
-} as const;
-
-export type MongoHostStatusEnum = (typeof MongoHostStatusEnum)[keyof typeof MongoHostStatusEnum];
-export const MongoHostRoleEnum = {
-    Unknown: 'unknown',
-    Primary: 'primary',
-    Secondary: 'secondary',
-} as const;
-
-export type MongoHostRoleEnum = (typeof MongoHostRoleEnum)[keyof typeof MongoHostRoleEnum];
 
 /**
  *
@@ -2261,6 +2308,38 @@ export type ResourceUnitEnum = (typeof ResourceUnitEnum)[keyof typeof ResourceUn
 /**
  *
  * @export
+ * @interface ResourcePresetResponseDTO
+ */
+export interface ResourcePresetResponseDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof ResourcePresetResponseDTO
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ResourcePresetResponseDTO
+     */
+    type: string;
+    /**
+     *
+     * @type {number}
+     * @memberof ResourcePresetResponseDTO
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ResourcePresetResponseDTO
+     */
+    ram: number;
+}
+
+/**
+ *
+ * @export
  * @interface RoleDTO
  */
 export interface RoleDTO {
@@ -2826,15 +2905,15 @@ export interface UpdateMongoConfigDTO {
 /**
  *
  * @export
- * @interface UpdateMongoHostsRequest
+ * @interface UpdateMongoHostsRequestDTO
  */
-export interface UpdateMongoHostsRequest {
+export interface UpdateMongoHostsRequestDTO {
     /**
      *
-     * @type {Array<MongoHost>}
-     * @memberof UpdateMongoHostsRequest
+     * @type {Array<MongoHostDTO>}
+     * @memberof UpdateMongoHostsRequestDTO
      */
-    hosts?: Array<MongoHost>;
+    hosts: Array<MongoHostDTO>;
 }
 
 /**
@@ -2872,6 +2951,32 @@ export interface UpdateProjectRequestDTO {
 /**
  *
  * @export
+ * @interface UpdateResourcePresetRequestDTO
+ */
+export interface UpdateResourcePresetRequestDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof UpdateResourcePresetRequestDTO
+     */
+    type: string;
+    /**
+     *
+     * @type {number}
+     * @memberof UpdateResourcePresetRequestDTO
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof UpdateResourcePresetRequestDTO
+     */
+    ram: number;
+}
+
+/**
+ *
+ * @export
  * @interface UploadQuotasToProductsRequest
  */
 export interface UploadQuotasToProductsRequest {
@@ -2882,149 +2987,6 @@ export interface UploadQuotasToProductsRequest {
      */
     products: Array<ProductQuotasToTransfer>;
 }
-
-/**
- *
- * @export
- * @interface V1CreateResourcePresetRequest
- */
-export interface V1CreateResourcePresetRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1CreateResourcePresetRequest
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1CreateResourcePresetRequest
-     */
-    type: V1CreateResourcePresetRequestTypeEnum;
-    /**
-     *
-     * @type {number}
-     * @memberof V1CreateResourcePresetRequest
-     */
-    vcpu: number;
-    /**
-     *
-     * @type {number}
-     * @memberof V1CreateResourcePresetRequest
-     */
-    ram: number;
-}
-
-export const V1CreateResourcePresetRequestTypeEnum = {
-    CpuOptimized: 'cpu_optimized',
-    Standard: 'standard',
-    RamOptimized: 'ram_optimized',
-} as const;
-
-export type V1CreateResourcePresetRequestTypeEnum =
-    (typeof V1CreateResourcePresetRequestTypeEnum)[keyof typeof V1CreateResourcePresetRequestTypeEnum];
-
-/**
- *
- * @export
- * @interface V1ListResourcePresetsResponse
- */
-export interface V1ListResourcePresetsResponse {
-    /**
-     *
-     * @type {Array<V1ResourcePresetResponse>}
-     * @memberof V1ListResourcePresetsResponse
-     */
-    resourcePresets: Array<V1ResourcePresetResponse>;
-}
-
-/**
- *
- * @export
- * @interface V1ResourcePresetResponse
- */
-export interface V1ResourcePresetResponse {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ResourcePresetResponse
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1ResourcePresetResponse
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1ResourcePresetResponse
-     */
-    type: V1ResourcePresetResponseTypeEnum;
-    /**
-     *
-     * @type {number}
-     * @memberof V1ResourcePresetResponse
-     */
-    vcpu: number;
-    /**
-     *
-     * @type {number}
-     * @memberof V1ResourcePresetResponse
-     */
-    ram: number;
-}
-
-export const V1ResourcePresetResponseTypeEnum = {
-    CpuOptimized: 'cpu_optimized',
-    Standard: 'standard',
-    RamOptimized: 'ram_optimized',
-} as const;
-
-export type V1ResourcePresetResponseTypeEnum =
-    (typeof V1ResourcePresetResponseTypeEnum)[keyof typeof V1ResourcePresetResponseTypeEnum];
-
-/**
- *
- * @export
- * @interface V1UpdateResourcePresetRequest
- */
-export interface V1UpdateResourcePresetRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    type: V1UpdateResourcePresetRequestTypeEnum;
-    /**
-     *
-     * @type {number}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    vcpu: number;
-    /**
-     *
-     * @type {number}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    ram: number;
-}
-
-export const V1UpdateResourcePresetRequestTypeEnum = {
-    CpuOptimized: 'cpu_optimized',
-    Standard: 'standard',
-    RamOptimized: 'ram_optimized',
-} as const;
-
-export type V1UpdateResourcePresetRequestTypeEnum =
-    (typeof V1UpdateResourcePresetRequestTypeEnum)[keyof typeof V1UpdateResourcePresetRequestTypeEnum];
 
 /**
  * AccountsApi - axios parameter creator
@@ -8458,21 +8420,21 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createResourcePreset: async (
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'createResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'createResourcePreset',
-                'v1CreateResourcePresetRequest',
-                v1CreateResourcePresetRequest,
+                'createResourcePresetRequestDTO',
+                createResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8499,7 +8461,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -8769,7 +8731,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('deleteResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -9025,7 +8987,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('getResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -9169,6 +9131,52 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listDatabases', 'clusterId', clusterId);
             const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listHosts', 'clusterId', clusterId);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/hosts`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -9367,12 +9375,12 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9917,17 +9925,21 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateHosts: async (
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
-            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
-            const localVarPath = `/api/managed-mongodb/v1/internal/hosts`;
+            // verify required parameter 'updateMongoHostsRequestDTO' is not null or undefined
+            assertParamExists(
+                'updateHosts',
+                'updateMongoHostsRequestDTO',
+                updateMongoHostsRequestDTO,
+            );
+            const localVarPath = `/api/mdb/mongodb/internal/hosts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9954,7 +9966,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -10025,24 +10037,24 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateResourcePreset: async (
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('updateResourcePreset', 'resourcePresetId', resourcePresetId);
-            // verify required parameter 'v1UpdateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'updateResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'updateResourcePreset',
-                'v1UpdateResourcePresetRequest',
-                v1UpdateResourcePresetRequest,
+                'updateResourcePresetRequestDTO',
+                updateResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -10072,7 +10084,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -10267,16 +10279,16 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createResourcePreset(
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createResourcePreset(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10598,7 +10610,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             resourcePresetId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ResourcePresetResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourcePresetResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getResourcePreset(
                 resourcePresetId,
@@ -10697,6 +10709,31 @@ export const MDBApiFp = function (configuration?: Configuration) {
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['MDBApi.listDatabases']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listHosts(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoHostsResponseDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listHosts(clusterId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['MDBApi.listHosts']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -10810,7 +10847,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10820,7 +10857,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<V1ListResourcePresetsResponse>
+            ) => AxiosPromise<ListResourcePresetsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResourcePresets(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11142,16 +11179,16 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateHosts(
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11198,18 +11235,18 @@ export const MDBApiFp = function (configuration?: Configuration) {
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateResourcePreset(
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateResourcePreset(
                 resourcePresetId,
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11341,7 +11378,7 @@ export const MDBApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+                .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11517,7 +11554,7 @@ export const MDBApiFactory = function (
         getResourcePreset(
             requestParameters: MDBApiGetResourcePresetRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ResourcePresetResponse> {
+        ): AxiosPromise<ResourcePresetResponseDTO> {
             return localVarFp
                 .getResourcePreset(requestParameters.resourcePresetId, options)
                 .then((request) => request(axios, basePath));
@@ -11565,6 +11602,21 @@ export const MDBApiFactory = function (
         ): AxiosPromise<ListMongoDatabasesResponseDTO> {
             return localVarFp
                 .listDatabases(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {MDBApiListHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts(
+            requestParameters: MDBApiListHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoHostsResponseDTO> {
+            return localVarFp
+                .listHosts(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11617,13 +11669,13 @@ export const MDBApiFactory = function (
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets(
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ListResourcePresetsResponse> {
+        ): AxiosPromise<ListResourcePresetsResponseDTO> {
             return localVarFp
                 .listResourcePresets(options)
                 .then((request) => request(axios, basePath));
@@ -11798,7 +11850,7 @@ export const MDBApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .updateHosts(requestParameters.updateMongoHostsRequest, options)
+                .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11834,7 +11886,7 @@ export const MDBApiFactory = function (
             return localVarFp
                 .updateResourcePreset(
                     requestParameters.resourcePresetId,
-                    requestParameters.v1UpdateResourcePresetRequest,
+                    requestParameters.updateResourcePresetRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -11928,10 +11980,10 @@ export interface MDBApiCreateProjectRequest {
 export interface MDBApiCreateResourcePresetRequest {
     /**
      *
-     * @type {V1CreateResourcePresetRequest}
+     * @type {CreateResourcePresetRequestDTO}
      * @memberof MDBApiCreateResourcePreset
      */
-    readonly v1CreateResourcePresetRequest: V1CreateResourcePresetRequest;
+    readonly createResourcePresetRequestDTO: CreateResourcePresetRequestDTO;
 }
 
 /**
@@ -12180,6 +12232,20 @@ export interface MDBApiListDatabasesRequest {
 }
 
 /**
+ * Request parameters for listHosts operation in MDBApi.
+ * @export
+ * @interface MDBApiListHostsRequest
+ */
+export interface MDBApiListHostsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof MDBApiListHosts
+     */
+    readonly clusterId: string;
+}
+
+/**
  * Request parameters for listOperations operation in MDBApi.
  * @export
  * @interface MDBApiListOperationsRequest
@@ -12327,10 +12393,10 @@ export interface MDBApiUpdateClusterRequest {
 export interface MDBApiUpdateHostsRequest {
     /**
      *
-     * @type {UpdateMongoHostsRequest}
+     * @type {UpdateMongoHostsRequestDTO}
      * @memberof MDBApiUpdateHosts
      */
-    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
+    readonly updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO;
 }
 
 /**
@@ -12369,10 +12435,10 @@ export interface MDBApiUpdateResourcePresetRequest {
 
     /**
      *
-     * @type {V1UpdateResourcePresetRequest}
+     * @type {UpdateResourcePresetRequestDTO}
      * @memberof MDBApiUpdateResourcePreset
      */
-    readonly v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest;
+    readonly updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO;
 }
 
 /**
@@ -12481,7 +12547,7 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+            .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -12722,6 +12788,20 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
+     * @summary List MongoDB hosts
+     * @param {MDBApiListHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MDBApi
+     */
+    public listHosts(requestParameters: MDBApiListHostsRequest, options?: RawAxiosRequestConfig) {
+        return MDBApiFp(this.configuration)
+            .listHosts(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @summary List namespaces
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12782,7 +12862,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Get resource presets
+     * @summary List resource presets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MDBApi
@@ -12987,7 +13067,7 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .updateHosts(requestParameters.updateMongoHostsRequest, options)
+            .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -13027,7 +13107,7 @@ export class MDBApi extends BaseAPI {
         return MDBApiFp(this.configuration)
             .updateResourcePreset(
                 requestParameters.resourcePresetId,
-                requestParameters.v1UpdateResourcePresetRequest,
+                requestParameters.updateResourcePresetRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -15862,6 +15942,166 @@ export class ManagedMongoDBDatabasesApi extends BaseAPI {
 }
 
 /**
+ * ManagedMongoDBHostsApi - axios parameter creator
+ * @export
+ */
+export const ManagedMongoDBHostsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listHosts', 'clusterId', clusterId);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/hosts`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBHostsApi - functional programming interface
+ * @export
+ */
+export const ManagedMongoDBHostsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ManagedMongoDBHostsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listHosts(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoHostsResponseDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listHosts(clusterId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBHostsApi.listHosts']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBHostsApi - factory interface
+ * @export
+ */
+export const ManagedMongoDBHostsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ManagedMongoDBHostsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {ManagedMongoDBHostsApiListHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts(
+            requestParameters: ManagedMongoDBHostsApiListHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoHostsResponseDTO> {
+            return localVarFp
+                .listHosts(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for listHosts operation in ManagedMongoDBHostsApi.
+ * @export
+ * @interface ManagedMongoDBHostsApiListHostsRequest
+ */
+export interface ManagedMongoDBHostsApiListHostsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBHostsApiListHosts
+     */
+    readonly clusterId: string;
+}
+
+/**
+ * ManagedMongoDBHostsApi - object-oriented interface
+ * @export
+ * @class ManagedMongoDBHostsApi
+ * @extends {BaseAPI}
+ */
+export class ManagedMongoDBHostsApi extends BaseAPI {
+    /**
+     *
+     * @summary List MongoDB hosts
+     * @param {ManagedMongoDBHostsApiListHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBHostsApi
+     */
+    public listHosts(
+        requestParameters: ManagedMongoDBHostsApiListHostsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBHostsApiFp(this.configuration)
+            .listHosts(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
  * ManagedMongoDBInternalsApi - axios parameter creator
  * @export
  */
@@ -15872,17 +16112,21 @@ export const ManagedMongoDBInternalsApiAxiosParamCreator = function (
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateHosts: async (
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
-            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
-            const localVarPath = `/api/managed-mongodb/v1/internal/hosts`;
+            // verify required parameter 'updateMongoHostsRequestDTO' is not null or undefined
+            assertParamExists(
+                'updateHosts',
+                'updateMongoHostsRequestDTO',
+                updateMongoHostsRequestDTO,
+            );
+            const localVarPath = `/api/mdb/mongodb/internal/hosts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15909,7 +16153,7 @@ export const ManagedMongoDBInternalsApiAxiosParamCreator = function (
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -15932,16 +16176,16 @@ export const ManagedMongoDBInternalsApiFp = function (configuration?: Configurat
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateHosts(
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -15983,7 +16227,7 @@ export const ManagedMongoDBInternalsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .updateHosts(requestParameters.updateMongoHostsRequest, options)
+                .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
     };
@@ -15997,10 +16241,10 @@ export const ManagedMongoDBInternalsApiFactory = function (
 export interface ManagedMongoDBInternalsApiUpdateHostsRequest {
     /**
      *
-     * @type {UpdateMongoHostsRequest}
+     * @type {UpdateMongoHostsRequestDTO}
      * @memberof ManagedMongoDBInternalsApiUpdateHosts
      */
-    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
+    readonly updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO;
 }
 
 /**
@@ -16023,7 +16267,7 @@ export class ManagedMongoDBInternalsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ManagedMongoDBInternalsApiFp(this.configuration)
-            .updateHosts(requestParameters.updateMongoHostsRequest, options)
+            .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -20569,21 +20813,21 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createResourcePreset: async (
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'createResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'createResourcePreset',
-                'v1CreateResourcePresetRequest',
-                v1CreateResourcePresetRequest,
+                'createResourcePresetRequestDTO',
+                createResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -20610,7 +20854,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -20633,7 +20877,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('deleteResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -20679,7 +20923,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('getResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -20714,12 +20958,12 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -20753,24 +20997,24 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateResourcePreset: async (
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('updateResourcePreset', 'resourcePresetId', resourcePresetId);
-            // verify required parameter 'v1UpdateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'updateResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'updateResourcePreset',
-                'v1UpdateResourcePresetRequest',
-                v1UpdateResourcePresetRequest,
+                'updateResourcePresetRequestDTO',
+                updateResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -20800,7 +21044,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -20823,16 +21067,16 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createResourcePreset(
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createResourcePreset(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -20887,7 +21131,7 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
             resourcePresetId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ResourcePresetResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourcePresetResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getResourcePreset(
                 resourcePresetId,
@@ -20908,7 +21152,7 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20918,7 +21162,7 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<V1ListResourcePresetsResponse>
+            ) => AxiosPromise<ListResourcePresetsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResourcePresets(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -20938,18 +21182,18 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateResourcePreset(
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateResourcePreset(
                 resourcePresetId,
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -20991,7 +21235,7 @@ export const ResourcePresetsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+                .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -21019,20 +21263,20 @@ export const ResourcePresetsApiFactory = function (
         getResourcePreset(
             requestParameters: ResourcePresetsApiGetResourcePresetRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ResourcePresetResponse> {
+        ): AxiosPromise<ResourcePresetResponseDTO> {
             return localVarFp
                 .getResourcePreset(requestParameters.resourcePresetId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets(
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ListResourcePresetsResponse> {
+        ): AxiosPromise<ListResourcePresetsResponseDTO> {
             return localVarFp
                 .listResourcePresets(options)
                 .then((request) => request(axios, basePath));
@@ -21051,7 +21295,7 @@ export const ResourcePresetsApiFactory = function (
             return localVarFp
                 .updateResourcePreset(
                     requestParameters.resourcePresetId,
-                    requestParameters.v1UpdateResourcePresetRequest,
+                    requestParameters.updateResourcePresetRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -21067,10 +21311,10 @@ export const ResourcePresetsApiFactory = function (
 export interface ResourcePresetsApiCreateResourcePresetRequest {
     /**
      *
-     * @type {V1CreateResourcePresetRequest}
+     * @type {CreateResourcePresetRequestDTO}
      * @memberof ResourcePresetsApiCreateResourcePreset
      */
-    readonly v1CreateResourcePresetRequest: V1CreateResourcePresetRequest;
+    readonly createResourcePresetRequestDTO: CreateResourcePresetRequestDTO;
 }
 
 /**
@@ -21116,10 +21360,10 @@ export interface ResourcePresetsApiUpdateResourcePresetRequest {
 
     /**
      *
-     * @type {V1UpdateResourcePresetRequest}
+     * @type {UpdateResourcePresetRequestDTO}
      * @memberof ResourcePresetsApiUpdateResourcePreset
      */
-    readonly v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest;
+    readonly updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO;
 }
 
 /**
@@ -21142,7 +21386,7 @@ export class ResourcePresetsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ResourcePresetsApiFp(this.configuration)
-            .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+            .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -21182,7 +21426,7 @@ export class ResourcePresetsApi extends BaseAPI {
 
     /**
      *
-     * @summary Get resource presets
+     * @summary List resource presets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcePresetsApi
@@ -21208,7 +21452,7 @@ export class ResourcePresetsApi extends BaseAPI {
         return ResourcePresetsApiFp(this.configuration)
             .updateResourcePreset(
                 requestParameters.resourcePresetId,
-                requestParameters.v1UpdateResourcePresetRequest,
+                requestParameters.updateResourcePresetRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -21327,6 +21571,7 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
          * @param {string} [search]
          * @param {string} [productId]
          * @param {string} [orgUnitId]
+         * @param {string} [entity]
          * @param {number} [limit]
          * @param {number} [offset]
          * @param {*} [options] Override http request option.
@@ -21336,6 +21581,7 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
             search?: string,
             productId?: string,
             orgUnitId?: string,
+            entity?: string,
             limit?: number,
             offset?: number,
             options: RawAxiosRequestConfig = {},
@@ -21366,6 +21612,10 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
 
             if (orgUnitId !== undefined) {
                 localVarQueryParameter['orgUnitId'] = orgUnitId;
+            }
+
+            if (entity !== undefined) {
+                localVarQueryParameter['entity'] = entity;
             }
 
             if (limit !== undefined) {
@@ -21656,6 +21906,7 @@ export const RolesApiFp = function (configuration?: Configuration) {
          * @param {string} [search]
          * @param {string} [productId]
          * @param {string} [orgUnitId]
+         * @param {string} [entity]
          * @param {number} [limit]
          * @param {number} [offset]
          * @param {*} [options] Override http request option.
@@ -21665,6 +21916,7 @@ export const RolesApiFp = function (configuration?: Configuration) {
             search?: string,
             productId?: string,
             orgUnitId?: string,
+            entity?: string,
             limit?: number,
             offset?: number,
             options?: RawAxiosRequestConfig,
@@ -21675,6 +21927,7 @@ export const RolesApiFp = function (configuration?: Configuration) {
                 search,
                 productId,
                 orgUnitId,
+                entity,
                 limit,
                 offset,
                 options,
@@ -21860,6 +22113,7 @@ export const RolesApiFactory = function (
                     requestParameters.search,
                     requestParameters.productId,
                     requestParameters.orgUnitId,
+                    requestParameters.entity,
                     requestParameters.limit,
                     requestParameters.offset,
                     options,
@@ -21987,6 +22241,13 @@ export interface RolesApiGetAllRolesRequest {
      * @memberof RolesApiGetAllRoles
      */
     readonly orgUnitId?: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof RolesApiGetAllRoles
+     */
+    readonly entity?: string;
 
     /**
      *
@@ -22124,6 +22385,7 @@ export class RolesApi extends BaseAPI {
                 requestParameters.search,
                 requestParameters.productId,
                 requestParameters.orgUnitId,
+                requestParameters.entity,
                 requestParameters.limit,
                 requestParameters.offset,
                 options,

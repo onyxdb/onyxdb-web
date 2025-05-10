@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Checkbox, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
-import {mdbApi, mdbQuotasApi, mdbResourcePresetsApi} from '@/app/apis';
+import {mdbApi, mdbQuotasApi} from '@/app/apis';
 import {
     AccountDTO,
     MongoClusterDTO,
@@ -12,10 +12,9 @@ import {
     ProjectDTO,
     Quota,
     Resource,
+    ResourcePresetResponseDTO,
     ResourceUnitEnum,
     SimulateMongoDBQuotasUsageRequest,
-    V1ResourcePresetResponse,
-    V1ResourcePresetResponseTypeEnum,
 } from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
@@ -43,13 +42,7 @@ export interface ClusterFormValues {
     backupLimit: number;
 }
 
-const V1StorageClassTypeEnum = {
-    HDD: 'HDD',
-    SSD: 'SSD',
-    NVME: 'NVME',
-} as const;
-
-const DEFAULT_PRESET = V1ResourcePresetResponseTypeEnum.Standard;
+const DEFAULT_PRESET = 'standard';
 
 export interface ClusterCreateFormProps {
     initialValues?: MongoClusterDTO;
@@ -63,18 +56,22 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
     submitAction,
     cancelAction,
 }) => {
+    const [storageClasses, setStorageClasses] = useState<string[]>([]);
     const [clusterVersions, setClusterVersions] = useState<string[]>([]);
-    const [resourcePresets, setResourcePresets] = useState<V1ResourcePresetResponse[]>([]);
-    const [filteredPresets, setFilteredPresets] = useState<V1ResourcePresetResponse[]>([]);
-    const [selectedPreset, setSelectedPreset] = useState<V1ResourcePresetResponse | null>(null);
+    const [resourcePresetsTypes, setResourcePresetsTypes] = useState<string[]>([]);
+    const [resourcePresets, setResourcePresets] = useState<ResourcePresetResponseDTO[]>([]);
+    const [filteredPresets, setFilteredPresets] = useState<ResourcePresetResponseDTO[]>([]);
+    const [selectedPreset, setSelectedPreset] = useState<ResourcePresetResponseDTO | null>(null);
     const [simulationResult, setSimulationResult] = useState<Quota[] | null>(null);
     const [isSimulationValid, setIsSimulationValid] = useState<boolean>(false);
 
     useEffect(() => {
-        mdbResourcePresetsApi
+        mdbApi
             .listResourcePresets()
             .then((response) => {
                 setResourcePresets(response.data.resourcePresets);
+                const presetsTypes = response.data.resourcePresets.map((p) => p.type);
+                setResourcePresetsTypes(presetsTypes);
                 const presetsByType = response.data.resourcePresets.filter(
                     (preset) => preset.type === DEFAULT_PRESET,
                 );
@@ -91,6 +88,10 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
 
         mdbApi.listVersions().then((response) => {
             setClusterVersions(response.data.versions);
+        });
+
+        mdbApi.listStorageClasses().then((response) => {
+            setStorageClasses(response.data.storageClasses);
         });
     }, [initialValues]);
 
@@ -166,7 +167,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         setFilteredPresets(presetsByType);
     };
 
-    const handlePresetSelect = (preset: V1ResourcePresetResponse) => {
+    const handlePresetSelect = (preset: ResourcePresetResponseDTO) => {
         setSelectedPreset(preset);
         formik.setFieldValue('presetId', preset.id);
     };
@@ -179,13 +180,13 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         formik.setFieldValue('ownerId', account?.id ?? '');
     };
 
-    const typeOptions = Object.values(V1ResourcePresetResponseTypeEnum).map((type) => (
+    const typeOptions = Object.values(resourcePresetsTypes).map((type) => (
         <SegmentedRadioGroup.Option key={type} value={type}>
             {type}
         </SegmentedRadioGroup.Option>
     ));
 
-    const storageClassOptions = Object.values(V1StorageClassTypeEnum).map((storageClass) => (
+    const storageClassOptions = Object.values(storageClasses).map((storageClass) => (
         <Select.Option key={storageClass} value={storageClass}>
             {storageClass}
         </Select.Option>

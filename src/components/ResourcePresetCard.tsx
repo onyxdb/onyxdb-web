@@ -1,11 +1,11 @@
 import React from 'react';
 import {Card, Text} from '@gravity-ui/uikit';
-import {V1ResourcePresetResponse} from '@/generated/api';
+import {ResourcePresetResponseDTO} from '@/generated/api';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 
 interface ResourcePresetCardProps {
-    preset: V1ResourcePresetResponse;
-    onSelect: (preset: V1ResourcePresetResponse) => void;
+    preset: ResourcePresetResponseDTO;
+    onSelect: (preset: ResourcePresetResponseDTO) => void;
     isActive: boolean;
 }
 
@@ -26,7 +26,7 @@ export const ResourcePresetCard: React.FC<ResourcePresetCardProps> = ({
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <VerticalStack>
                     <Text variant="subheader-3" style={{marginBottom: '5px'}}>
-                        {preset.name}
+                        {preset.type}
                     </Text>
                     <Text variant="subheader-1" color="secondary">
                         CPU: {preset.vcpu} ядра

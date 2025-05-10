@@ -11,7 +11,7 @@ import {Box} from '@/components/Layout/Box';
 
 interface OrganizationUnitSmallCardProps {
     orgUnit: OrganizationUnitDTO;
-    onSelect: (ou: OrganizationUnitDTO) => void;
+    onSelect?: (ou: OrganizationUnitDTO) => void;
 }
 
 export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps> = ({
@@ -28,7 +28,7 @@ export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps>
         <Card
             type="selection"
             style={{marginBottom: '10px', padding: '10px'}}
-            onClick={() => onSelect(orgUnit)}
+            onClick={() => onSelect && onSelect(orgUnit)}
         >
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <VerticalStack>

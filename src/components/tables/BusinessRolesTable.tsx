@@ -179,11 +179,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                         </Button>
                     )}
                     {checkPermission('business-roles', 'edit') && (
-                        <Button
-                            view="normal"
-                            size="m"
-                            onClick={() => editAction(businessRole.id)}
-                        >
+                        <Button view="normal" size="m" onClick={() => editAction(businessRole.id)}>
                             <Icon data={Pencil} />
                         </Button>
                     )}
@@ -191,9 +187,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() =>
-                                handleDelete(businessRole.id, businessRole.name)
-                            }
+                            onClick={() => handleDelete(businessRole.id, businessRole.name)}
                         >
                             <Icon data={TrashBin} />
                         </Button>

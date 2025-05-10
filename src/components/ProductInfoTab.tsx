@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import {Icon, Text} from '@gravity-ui/uikit';
 import {ProductDTO} from '@/generated/api';

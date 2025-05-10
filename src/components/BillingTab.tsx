@@ -6,9 +6,11 @@ import {DateTime} from '@gravity-ui/date-utils';
 import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
 import {ProductDTO, ProductQuotaUsageByResourceOA, Resource} from '@/generated/api';
-import ChartKit from '@gravity-ui/chartkit';
-import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import ChartKit, {settings} from '@gravity-ui/chartkit';
+import {YagrPlugin, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+
+settings.set({plugins: [YagrPlugin]});
 
 type ResourceYagrWidgetData = {
     resource: Resource;
@@ -144,6 +146,9 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
                     <div style={{marginTop: '16px', color: 'red'}}>
                         <Text variant="body-1">{error}</Text>
                     </div>
+                )}
+                {chartsData.length === 0 && (
+                    <Text>Нет данных. Попробуйте изменить временной промежуток</Text>
                 )}
                 {chartsData.map((cd) => (
                     <div key={cd.resource.id} style={{width: 'calc(50% - 10px)'}}>

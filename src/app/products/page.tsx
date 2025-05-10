@@ -126,7 +126,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     const handleProductCreateSubmit = async (values: ProductFormFields) => {
         try {
             await productsApi.createProduct({
-                productDTO: {
+                productPostDTO: {
                     name: values.name,
                     description: values.description,
                     parentId: values.parentProductId,
@@ -155,7 +155,7 @@ export default function ProductsPage({}: ProductsPageProps) {
         if (selectedProductId) {
             await productsApi.updateProduct({
                 productId: selectedProductId,
-                productDTO: {
+                productPostDTO: {
                     id: selectedProductId,
                     name: values.name,
                     description: values.description,

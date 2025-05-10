@@ -25,13 +25,6 @@ export const UserBlockWithFetch: React.FC<DomainComponentProps> = ({
                 .getAccountById({accountId: accountId})
                 .then((response) => setOwner(response.data))
                 .catch((error) => console.error('Error fetching account:', error));
-        } else {
-            setOwner({
-                username: '???',
-                email: '???',
-                firstName: 'Not',
-                lastName: 'Stated',
-            });
         }
     }, [accountId]);
 

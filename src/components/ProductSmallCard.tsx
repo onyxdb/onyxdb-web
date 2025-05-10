@@ -12,7 +12,7 @@ interface ProductSmallCardProps {
     onSelect: (product: ProductDTO) => void;
 }
 
-export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSelect}) => {
+export function ProductSmallCard({product, onSelect}: ProductSmallCardProps) {
     return (
         <Card
             type="selection"
@@ -32,4 +32,4 @@ export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSe
             </div>
         </Card>
     );
-};
+}

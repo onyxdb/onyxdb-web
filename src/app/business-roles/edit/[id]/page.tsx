@@ -38,7 +38,7 @@ export default function BusinessRoleEditPage() {
         try {
             await businessRolesApi.updateBusinessRole({
                 businessRoleId: brId,
-                businessRoleDTO: {
+                businessRolePostDTO: {
                     id: brId,
                     name: values.name,
                     shopName: values.shopName,

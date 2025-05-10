@@ -5,24 +5,15 @@ import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {mdbProjectsApi, productsApi} from '@/app/apis';
-import {ProductSmallCard} from '@/components/ProductSmallCard';
-import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {ProductDTO, ProjectDTO} from '@/generated/api';
+import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {Box} from '@/components/Layout/Box';
 import {ClustersTable} from '@/components/tables/ClustersTable';
 import {AccountsTable} from '@/components/tables/AccountsTable';
 import ProductInfoTab from '@/components/ProductInfoTab';
-import {settings} from '@gravity-ui/chartkit';
-import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
-import QuotasTab from '@/app/products/view/[id]/QutasTab';
-import BillingTab from '@/app/products/view/[id]/BillingTab';
-
-settings.set({plugins: [YagrPlugin]});
-
-interface ProductTreeDTO {
-    item: ProductDTO;
-    children?: ProductTreeDTO[];
-}
+import QuotasTab from '@/components/QutasTab';
+import BillingTab from '@/components/BillingTab';
+import {ProductTree} from '@/components/ProductsTree';
 
 export default function ProductDetailPage() {
     const router = useRouter();
@@ -34,7 +25,6 @@ export default function ProductDetailPage() {
     const [activeTab, setActiveTab] = useState(tab);
     const [product, setProduct] = useState<ProductDTO | null>(null);
     const [productParents, setProductParents] = useState<ProductDTO[]>([]);
-    const [productTree, setProductTree] = useState<ProductTreeDTO | null>(null);
     const [projects, setProjects] = useState<ProjectDTO[]>([]);
     const [showArchived, setShowArchived] = useState<boolean>(true);
 
@@ -48,23 +38,12 @@ export default function ProductDetailPage() {
         }
     };
 
-    const fetchProductsTree = async (currentProductId: string) => {
-        try {
-            console.log('currentProductId', currentProductId);
-            const response = await productsApi.getProductTree({productId: currentProductId});
-            setProductTree(response.data);
-        } catch (error) {
-            console.error('Error fetching products tree:', error);
-        }
-    };
-
     const fetchProduct = async () => {
         try {
             const response = await productsApi.getProductById({productId: productId});
             setProduct(response.data);
             if (response.data.id) {
                 fetchProductParents(response.data.id);
-                fetchProductsTree(response.data.id);
             }
         } catch (error) {
             console.error('Error fetching product:', error);
@@ -96,10 +75,6 @@ export default function ProductDetailPage() {
         fetchProjects();
     }, [productId, showArchived]);
 
-    const handleProductSelect = (productDTO: ProductDTO) => {
-        router.push('/products/view/' + productDTO.id);
-    };
-
     const handleTabChange = (value: string) => {
         const createQueryString = (name: string, val: string) => {
             const params = new URLSearchParams(searchParams.toString());
@@ -108,21 +83,6 @@ export default function ProductDetailPage() {
         };
         setActiveTab(value);
         router.push(pathname + '?' + createQueryString('tab', value));
-    };
-
-    const renderProductTree = (tree: ProductTreeDTO[]) => {
-        if (!tree) return null;
-        const renderItem = (item: ProductTreeDTO, level = 0) => {
-            return (
-                <div key={item.item.id} style={{marginLeft: `${level * 30}px`}}>
-                    <ProductSmallCard product={item.item} onSelect={handleProductSelect} />
-                    {item.children && item.children.length > 0 && (
-                        <div>{item.children.map((child) => renderItem(child, level + 1))}</div>
-                    )}
-                </div>
-            );
-        };
-        return <div>{tree.map((item) => renderItem(item))}</div>;
     };
 
     const handleShowArchivedChange = (checked: boolean) => {
@@ -167,9 +127,7 @@ export default function ProductDetailPage() {
                         {product && <ProductInfoTab product={product} />}
                     </TabPanel>
                     <TabPanel value="children">
-                        <div style={{marginTop: '20px'}}>
-                            {productTree && renderProductTree([productTree])}
-                        </div>
+                        {product && <ProductTree productId={product.id} />}
                     </TabPanel>
                     <TabPanel value="projects">
                         <Box marginTop={20} marginBottom={16}>

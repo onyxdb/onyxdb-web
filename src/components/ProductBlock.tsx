@@ -3,14 +3,13 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Icon, Label, Text} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {ProductDTO} from '@/generated/api';
+import {ProductDTO, ProjectDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {Eye, Pencil, TrashBin} from '@gravity-ui/icons';
 import {useAuth} from '@/context/AuthContext';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
-import {V1ProjectResponse} from '@/generated/api-mdb';
 import {mdbProjectsApi} from '@/app/apis';
 
 interface ProductBlockProps {
@@ -20,7 +19,7 @@ interface ProductBlockProps {
 }
 
 export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, deleteAction}) => {
-    const [projectsAll, setProjectsAll] = useState<V1ProjectResponse[]>([]);
+    const [projectsAll, setProjectsAll] = useState<ProjectDTO[]>([]);
     const router = useRouter();
     const {checkActions} = useAuth();
 
@@ -104,7 +103,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                         <Button
                             view="normal"
                             size="l"
-                            onClick={() => handleViewProductDetails(data?.id ?? '???')}
+                            onClick={() => handleViewProductDetails(data?.id)}
                         >
                             <Icon data={Eye} />
                             Подробнее
@@ -128,7 +127,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                             <Button
                                 view="outlined-danger"
                                 size="m"
-                                onClick={() => deleteAction(data.id ?? '???')}
+                                onClick={() => deleteAction(data.id)}
                             >
                                 <Icon data={TrashBin} />
                             </Button>

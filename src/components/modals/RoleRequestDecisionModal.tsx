@@ -1,16 +1,15 @@
-// components/RoleRequestDecisionModal.js
-
+// TODO попробовать server side
 'use client';
 
 import React, {useEffect, useState} from 'react';
 import {accountsApi, rolesApi, rolesRequestsApi} from '@/app/apis';
-import {AccountDTO, RoleDTO, RoleRequestDTO, RoleWithPermissionsDTO} from '@/generated/api';
+import {AccountDTO, RoleDTO, RoleRequestFullDTO, RoleWithPermissionsDTO} from '@/generated/api';
 import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 export interface RoleRequestDecisionModalProps {
-    roleRequest: RoleRequestDTO;
+    roleRequest: RoleRequestFullDTO;
     onCancel: () => void;
 }
 
@@ -27,16 +26,18 @@ export const RoleRequestDecisionModal: React.FC<RoleRequestDecisionModalProps> =
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const accountResponse = await accountsApi.getAccountById({
-                    accountId: roleRequest.accountId,
+                const accountResponse = accountsApi.getAccountById({
+                    accountId: roleRequest.account?.id ?? '',
                 });
-                const roleResponse = await rolesApi.getRoleById({roleId: roleRequest.roleId});
-                const permissionsResponse = await rolesApi.getPermissionsByRoleId({
-                    roleId: roleRequest.roleId,
+                const roleResponse = rolesApi.getRoleById({
+                    roleId: roleRequest.role?.id ?? '',
                 });
-                setAccount(accountResponse.data);
-                setRole(roleResponse.data);
-                setRoleWithPermissions(permissionsResponse.data);
+                const permissionsResponse = rolesApi.getPermissionsByRoleId({
+                    roleId: roleRequest.role?.id ?? '',
+                });
+                setAccount((await accountResponse).data);
+                setRole((await roleResponse).data);
+                setRoleWithPermissions((await permissionsResponse).data);
             } catch (error) {
                 console.error('Error fetching data for role request:', error);
             }

@@ -1,9 +1,8 @@
 'use client';
 
 import React, {useState} from 'react';
-import {Modal, Text} from '@gravity-ui/uikit';
+import {Modal} from '@gravity-ui/uikit';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
-import {Box} from '@/components/Layout/Box';
 import {useAuth} from '@/context/AuthContext';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useRouter} from 'next/navigation';
@@ -61,7 +60,7 @@ export default function BusinessRolesPage() {
     const handleBusinessRoleCreate = async (values: BusinessRoleFormFields) => {
         try {
             const response = await businessRolesApi.createBusinessRole({
-                businessRoleDTO: {
+                businessRolePostDTO: {
                     name: values.name,
                     shopName: values.shopName,
                     description: values.description,
@@ -107,9 +106,6 @@ export default function BusinessRolesPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
-                <Box marginBottom="20px">
-                    <Text variant="header-2">Бизнес-роли</Text>
-                </Box>
                 <BusinessRolesTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
             <Modal open={isCreateModalVisible} onOpenChange={handleCreateModalCancel}>

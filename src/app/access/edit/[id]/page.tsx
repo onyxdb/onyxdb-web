@@ -41,13 +41,15 @@ export default function EditRolePage() {
         try {
             await rolesApi.updateRole({
                 roleId: roleId,
-                roleWithPermissionsDTO: {
+                roleWithPermissionsPostDTO: {
                     role: {
+                        id: roleId,
                         roleType: values.roleType,
                         name: values.name,
                         shopName: values.shopName,
                         isShopHidden: values.isShopHidden,
                         description: values.description,
+                        entity: values.entity,
                         productId: values.roleType === 'PRODUCT' ? values.productId : undefined,
                         orgUnitId: values.roleType === 'ORG_UNIT' ? values.orgUnitId : undefined,
                     },

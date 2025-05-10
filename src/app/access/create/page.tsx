@@ -18,13 +18,14 @@ export default function CreateRolePage() {
     const handleRoleCreate = async (values: RoleFormFields) => {
         try {
             const response = await rolesApi.createRole({
-                roleWithPermissionsDTO: {
+                roleWithPermissionsPostDTO: {
                     role: {
                         roleType: values.roleType,
                         name: values.name,
                         shopName: values.shopName,
                         isShopHidden: values.isShopHidden,
                         description: values.description,
+                        entity: values.entity,
                         productId: values.roleType === 'PRODUCT' ? values.productId : undefined,
                         orgUnitId: values.roleType === 'ORG_UNIT' ? values.orgUnitId : undefined,
                     },

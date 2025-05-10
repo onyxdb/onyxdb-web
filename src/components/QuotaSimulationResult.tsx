@@ -3,7 +3,7 @@ import {Progress, Text, Tooltip} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
 import {ResourceUnit} from '@/components/ResourceInputField';
 import {roundTo, toPercent} from '@/utils/math';
-import {Quota} from '@/generated/api-mdb';
+import {Quota} from '@/generated/api';
 
 interface QuotaSimulationResultProps {
     title: string;

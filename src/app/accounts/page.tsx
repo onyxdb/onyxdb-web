@@ -79,8 +79,8 @@ export default function AccountsPage({}: AccountsPageProps) {
             const {anyData: _, ...newValues} = values;
             if (editingAccount) {
                 await accountsApi.updateAccount({
-                    accountId: editingAccount.id ?? '???',
-                    accountDTO: newValues,
+                    accountId: editingAccount.id,
+                    accountPostDTO: newValues,
                 });
                 toaster.add({
                     name: `account_edit_${editingAccount.id}`,
@@ -89,7 +89,7 @@ export default function AccountsPage({}: AccountsPageProps) {
                     theme: 'success',
                 });
             } else {
-                await accountsApi.createAccount({accountDTO: newValues});
+                await accountsApi.createAccount({accountPostDTO: newValues});
                 toaster.add({
                     name: 'account_created',
                     title: 'Аккаунт успешно создан',

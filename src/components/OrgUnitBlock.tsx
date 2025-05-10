@@ -53,7 +53,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                             <Button
                                 view="outlined-danger"
                                 size="m"
-                                onClick={() => deleteAction(data.id ?? '???')}
+                                onClick={() => deleteAction(data.id)}
                             >
                                 <Icon data={TrashBin} />
                             </Button>
@@ -79,7 +79,7 @@ export const OrgUnitBlock: React.FC<DomainComponentProps> = ({
                         </div>
                     ))}
                 </div>
-                <Button view="normal" size="l" onClick={() => handleViewDetails(data?.id ?? '???')}>
+                <Button view="normal" size="l" onClick={() => handleViewDetails(data?.id)}>
                     Подробнее
                 </Button>
             </div>

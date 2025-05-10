@@ -1,8 +1,8 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {MongoHost} from '@/generated/api-mdb';
-import {mdbMongoDbApi} from '@/app/apis';
+import {MongoHost} from '@/generated/api';
+import {mdbApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HostsTable} from '@/components/tables/HostsTable';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
@@ -20,7 +20,7 @@ const HostsTab: React.FC<HostsTabProps> = ({clusterId}) => {
 
     const fetchData = async () => {
         try {
-            const hostsResponse = await mdbMongoDbApi.listHosts({clusterId});
+            const hostsResponse = await mdbApi.listHosts({clusterId});
             setClusterHosts(hostsResponse.data.hosts);
             setLastUpdate(new Date());
         } catch (error) {

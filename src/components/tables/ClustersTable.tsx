@@ -1,10 +1,10 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {mdbMongoDbApi} from '@/app/apis';
+import {mdbApi} from '@/app/apis';
 import {Pagination, Table, TableColumnConfig, TextInput, withTableSorting} from '@gravity-ui/uikit';
 import {Eye} from '@gravity-ui/icons';
-import {V1MongoClusterResponse} from '@/generated/api-mdb';
+import {MongoClusterDTO} from '@/generated/api';
 import {StatusLabel} from '@/components/common/StatusLabel';
 import {useRouter} from 'next/navigation';
 import {TextWithCopy} from '@/components/TextWithCopy';
@@ -14,8 +14,8 @@ export interface ClustersTableProps {
 }
 
 export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
-    const [clustersAll, setClustersAll] = useState<V1MongoClusterResponse[]>([]);
-    const [clustersFiltered, setClustersFiltered] = useState<V1MongoClusterResponse[]>([]);
+    const [clustersAll, setClustersAll] = useState<MongoClusterDTO[]>([]);
+    const [clustersFiltered, setClustersFiltered] = useState<MongoClusterDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
@@ -24,7 +24,7 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
 
     const fetchClusters = async () => {
         try {
-            const response = await mdbMongoDbApi.listClusters();
+            const response = await mdbApi.listClusters();
             const filteredClusters = projectsIds
                 ? response.data.clusters.filter((p) => projectsIds.includes(p.projectId))
                 : response.data.clusters;
@@ -70,7 +70,7 @@ export const ClustersTable: React.FC<ClustersTableProps> = ({projectsIds}) => {
         router.push(`/clusters/view/${clusterId}`);
     };
 
-    const columns: TableColumnConfig<V1MongoClusterResponse>[] = [
+    const columns: TableColumnConfig<MongoClusterDTO>[] = [
         {
             id: 'view',
             name: '',

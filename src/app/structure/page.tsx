@@ -10,7 +10,7 @@ import {
     OrganizationUnitDTO,
 } from '@/generated/api';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
-import {Button, Modal, Text} from '@gravity-ui/uikit';
+import {Modal, Text} from '@gravity-ui/uikit';
 import {useAuth} from '@/context/AuthContext';
 import {OrganizationUnitSmallCard} from '@/components/OrganizationUnitSmallCard';
 import {DomainComponentBlock} from '@/components/DomainComponentBlock';
@@ -18,6 +18,8 @@ import {DomainComponentForm} from '@/components/forms/DomainComponentForm';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {OrgUnitBlock} from '@/components/OrgUnitBlock';
+import {AppHeader} from '@/components/AppHeader/AppHeader';
+import {CirclePlus} from '@gravity-ui/icons';
 
 interface StructurePageProps {}
 
@@ -156,14 +158,12 @@ export default function StructurePage({}: StructurePageProps) {
     const handleDcSubmitCreate = async (values: DomainComponentDTO) => {
         try {
             if (editingDomainComponent) {
-                // Редактирование существующего Domain Component
                 await domainComponentsApi.updateDomainComponent({
-                    dcId: editingDomainComponent.id ?? '???',
-                    domainComponentDTO: values,
+                    dcId: editingDomainComponent.id,
+                    domainComponentPostDTO: values,
                 });
             } else {
-                // Создание нового Domain Component
-                await domainComponentsApi.createDomainComponent({domainComponentDTO: values});
+                await domainComponentsApi.createDomainComponent({domainComponentPostDTO: values});
             }
             handleCloseCreateModal();
             await fetchDomainComponents();
@@ -174,7 +174,7 @@ export default function StructurePage({}: StructurePageProps) {
 
     const handleOuSelect = (ou: OrganizationUnitDTO) => {
         setSelectedOu(ou);
-        router.push(pathname + '?' + createQueryString('ouId', ou.id ?? '???'));
+        router.push(pathname + '?' + createQueryString('ouId', ou.id));
     };
 
     const handleSelectedOuEdit = (ou: OrganizationUnitDTO) => {
@@ -215,10 +215,34 @@ export default function StructurePage({}: StructurePageProps) {
         );
     };
 
+    const breadCrumbs = [
+        {href: '/', text: 'Главная'},
+        {href: '/structure', text: 'Оргструктура'},
+    ];
+
+    const actions = [];
+    if (checkPermission('domain-component', 'create')) {
+        actions.push({
+            text: 'Создать домен',
+            action: handleCreateDC,
+            icon: CirclePlus,
+        });
+    }
+    if (checkPermission('organization-unit', 'create')) {
+        actions.push({
+            text: 'Создать организацию',
+            action: handleCreateOU,
+            icon: CirclePlus,
+        });
+    }
+
     return (
-        <div style={{padding: '20px'}}>
-            <Box marginBottom="20px">
-                <Text variant="header-1">Domain Components</Text>
+        <div>
+            <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
+            <div style={{padding: '20px'}}>
+                <div style={{marginBottom: '5px'}}>
+                    <Text variant="header-1">Домены</Text>
+                </div>
                 <HorizontalStack align="center">
                     {domainComponents.map((dc) => (
                         <Box marginRight="20px" key={dc.id}>
@@ -226,50 +250,38 @@ export default function StructurePage({}: StructurePageProps) {
                                 data={dc}
                                 editAction={handleDcEdit}
                                 deleteAction={handleDcDelete}
-                                onClick={() => handleDcSelect(dc.id ?? '???')}
+                                onClick={() => handleDcSelect(dc.id)}
                                 isActive={dc.id === selectedDcId}
                             />
                         </Box>
                     ))}
-                    {checkPermission('domain-component', 'create') && (
-                        <Box marginBottom="10px">
-                            <Button view="action" size="l" onClick={handleCreateDC}>
-                                Создать Domain Component
-                            </Button>
-                        </Box>
-                    )}
                 </HorizontalStack>
-            </Box>
-            <div style={{flex: 1}}>
-                <h1>Organization Units</h1>
-                <HorizontalStack>
-                    {renderDomainTree(domainTree)}
-                    <div style={{width: '400px', marginLeft: '20px'}}>
-                        {selectedOu && (
-                            <OrgUnitBlock
-                                data={selectedOu}
-                                dataAccounts={selectedOuAccounts}
-                                editAction={handleSelectedOuEdit}
-                                deleteAction={handleSelectedOuDelete}
-                            />
-                        )}
+                <div style={{marginTop: '10px'}}>
+                    <div style={{marginBottom: '5px'}}>
+                        <Text variant="header-1">Организационная структура</Text>
                     </div>
-                </HorizontalStack>
+                    <HorizontalStack>
+                        {renderDomainTree(domainTree)}
+                        <div style={{width: '400px', marginLeft: '20px'}}>
+                            {selectedOu && (
+                                <OrgUnitBlock
+                                    data={selectedOu}
+                                    dataAccounts={selectedOuAccounts}
+                                    editAction={handleSelectedOuEdit}
+                                    deleteAction={handleSelectedOuDelete}
+                                />
+                            )}
+                        </div>
+                    </HorizontalStack>
+                </div>
+                <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
+                    <DomainComponentForm
+                        initialValue={editingDomainComponent}
+                        submitAction={handleDcSubmitCreate}
+                        closeAction={handleCloseCreateModal}
+                    />
+                </Modal>
             </div>
-            <div>
-                {checkPermission('organization-unit', 'create') && (
-                    <Button view="action" size="l" onClick={handleCreateOU}>
-                        Создать Organization Unit
-                    </Button>
-                )}
-            </div>
-            <Modal open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
-                <DomainComponentForm
-                    initialValue={editingDomainComponent}
-                    submitAction={handleDcSubmitCreate}
-                    closeAction={handleCloseCreateModal}
-                />
-            </Modal>
         </div>
     );
 }

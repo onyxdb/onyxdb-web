@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {CreateMongoDatabaseRequest, MongoDatabase} from '@/generated/api-mdb';
+import {CreateMongoDatabaseRequest, MongoDatabase} from '@/generated/api';
 import {mdbMongoDbDatabasesApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {DatabasesTable} from '@/components/tables/DatabasesTable';

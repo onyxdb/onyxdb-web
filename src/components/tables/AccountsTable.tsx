@@ -10,13 +10,13 @@ import {
     Table,
     TableColumnConfig,
     TextInput,
+    useToaster,
     withTableSorting,
 } from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {useAuth} from '@/context/AuthContext';
 import {TextWithCopy} from '@/components/TextWithCopy';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
-import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 interface AccountsTableProps {
     editAction?: (accountId: string) => void;
@@ -31,6 +31,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
     const [total, setTotal] = useState<number>(0);
     const router = useRouter();
     const {checkPermission, user} = useAuth();
+    const toaster = useToaster();
 
     const fetchAccounts = async () => {
         try {
@@ -79,7 +80,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'username',
@@ -122,11 +123,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                 <div style={{display: 'flex', gap: '10px'}}>
                     {editAction &&
                     (checkPermission('account', 'edit') || user?.account.id === account.id) ? (
-                        <Button
-                            view="normal"
-                            size="m"
-                            onClick={() => editAction(account.id ?? '???')}
-                        >
+                        <Button view="normal" size="m" onClick={() => editAction(account.id)}>
                             <Icon data={Pencil} />
                             Редактировать
                         </Button>
@@ -137,7 +134,7 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                             size="m"
                             onClick={() =>
                                 handleDelete(
-                                    account?.id ?? '???',
+                                    account?.id,
                                     `${account.firstName} ${account.lastName}`,
                                 )
                             }

@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Modal} from '@gravity-ui/uikit';
-import {MongoDatabase, MongoUser, MongoUserToCreate} from '@/generated/api-mdb';
+import {MongoDatabase, MongoUser, MongoUserToCreate} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
 import {DBUsersTable} from '@/components/tables/DBUsers';
 import {DBUserForm} from '@/components/forms/DBUserForm';

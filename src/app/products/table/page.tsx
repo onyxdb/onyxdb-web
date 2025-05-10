@@ -3,13 +3,13 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {AccountDTO, ProductDTOGet} from '@/generated/api';
+import {AccountDTO, ProductDTO} from '@/generated/api';
 import {accountsApi, productsApi} from '@/app/apis';
 import {TextWithCopy} from '@/components/TextWithCopy';
 
 export default function ProductsPage() {
     const router = useRouter();
-    const [products, setProducts] = useState<ProductDTOGet[]>([]);
+    const [products, setProducts] = useState<ProductDTO[]>([]);
     const [accounts, setAccounts] = useState<AccountDTO[]>([]);
     // const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -29,11 +29,11 @@ export default function ProductsPage() {
 
     const MyTable = withTableSorting(Table);
 
-    const columns: TableColumnConfig<ProductDTOGet>[] = [
+    const columns: TableColumnConfig<ProductDTO>[] = [
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'name',

@@ -2,14 +2,14 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Checkbox, Label, Modal, Text, TextInput} from '@gravity-ui/uikit';
-import {V1ProjectResponse} from '@/generated/api-mdb';
+import {ProjectDTO} from '@/generated/api';
 import {mdbProjectsApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface ProjectSelectorProps {
     initialValueId?: string;
-    selectProjectAction: (project: V1ProjectResponse) => void;
+    selectProjectAction: (project: ProjectDTO) => void;
     header?: string;
     label?: string;
     placeholder?: string;
@@ -24,13 +24,13 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
     placeholder = 'Введите и выберите проект',
     disabled,
 }) => {
-    const [projectsAll, setProjectsAll] = useState<V1ProjectResponse[]>([]);
-    const [projectOptions, setProjectOptions] = useState<V1ProjectResponse[]>([]);
+    const [projectsAll, setProjectsAll] = useState<ProjectDTO[]>([]);
+    const [projectOptions, setProjectOptions] = useState<ProjectDTO[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>(initialValueId ?? '');
     const [showArchived, setShowArchived] = useState<boolean>(false);
     const [isProjectsModalOpen, setIsProjectsModalOpen] = useState<boolean>(false);
 
-    const handleProjectSelect = (data: V1ProjectResponse) => {
+    const handleProjectSelect = (data: ProjectDTO) => {
         setIsProjectsModalOpen(false);
         selectProjectAction(data);
         setSearchQuery(data.name);

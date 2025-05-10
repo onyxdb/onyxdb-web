@@ -14,7 +14,7 @@ const nextConfig = {
         return [
             {
                 source: '/idm/api/:path*', // Все запросы, начинающиеся с /idm/api
-                destination: 'http://localhost:9003/api/:path*', // Перенаправлять на бекенд
+                destination: 'http://localhost:9001/api/:path*', // Перенаправлять на бекенд
             },
             {
                 source: '/mdb/api/:path*', // Все запросы, начинающиеся с /mdb/api

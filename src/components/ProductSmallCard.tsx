@@ -2,17 +2,17 @@
 
 import React from 'react';
 import {Card, Text} from '@gravity-ui/uikit';
-import {ProductDTOGet} from '@/generated/api';
+import {ProductDTO} from '@/generated/api';
 import {UserBlockWithFetch} from '@/components/common/UserBlockWithFetch';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {Box} from '@/components/Layout/Box';
 
 interface ProductSmallCardProps {
-    product: ProductDTOGet;
-    onSelect: (product: ProductDTOGet) => void;
+    product: ProductDTO;
+    onSelect: (product: ProductDTO) => void;
 }
 
-export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSelect}) => {
+export function ProductSmallCard({product, onSelect}: ProductSmallCardProps) {
     return (
         <Card
             type="selection"
@@ -32,4 +32,4 @@ export const ProductSmallCard: React.FC<ProductSmallCardProps> = ({product, onSe
             </div>
         </Card>
     );
-};
+}

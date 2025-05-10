@@ -7,6 +7,7 @@ import {UserBlock} from '@/components/common/UserBlock';
 import {useRouter} from 'next/navigation';
 
 export function LoginInfo() {
+    // TODO не обновляется компонент
     const {user} = useAuth();
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const router = useRouter();

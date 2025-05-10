@@ -2,16 +2,16 @@
 
 import React from 'react';
 import {Button, Icon, Label, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {V1ProjectResponse} from '@/generated/api-mdb';
+import {ProjectDTO} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '../Layout/HorizontalStack';
 import {TextWithCopy} from '@/components/TextWithCopy';
 import {Pencil} from '@gravity-ui/icons';
 
 interface ProjectsTableProps {
-    projects: V1ProjectResponse[];
-    onView?: (project: V1ProjectResponse) => void;
-    onEdit?: (project: V1ProjectResponse) => void;
+    projects: ProjectDTO[];
+    onView?: (project: ProjectDTO) => void;
+    onEdit?: (project: ProjectDTO) => void;
     onArchive?: (id: string) => void;
     onUnarchive?: (id: string) => void;
 }
@@ -26,7 +26,7 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
     const {checkPermission} = useAuth();
 
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<V1ProjectResponse>[] = [
+    const columns: TableColumnConfig<ProjectDTO>[] = [
         {
             id: 'id',
             name: 'Id',

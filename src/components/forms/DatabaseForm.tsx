@@ -3,7 +3,7 @@
 import React from 'react';
 import {useFormik} from 'formik';
 import {Button, Modal, Text} from '@gravity-ui/uikit';
-import {CreateMongoDatabaseRequest} from '@/generated/api-mdb';
+import {CreateMongoDatabaseRequest} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';

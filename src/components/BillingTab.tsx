@@ -5,11 +5,12 @@ import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {DateTime} from '@gravity-ui/date-utils';
 import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
-import {ProductDTOGet} from '@/generated/api';
-import {ProductQuotaUsageByResourceOA, Resource} from '@/generated/api-mdb';
-import ChartKit from '@gravity-ui/chartkit';
-import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import {ProductDTO, ProductQuotaUsageByResourceOA, Resource} from '@/generated/api';
+import ChartKit, {settings} from '@gravity-ui/chartkit';
+import {YagrPlugin, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+
+settings.set({plugins: [YagrPlugin]});
 
 type ResourceYagrWidgetData = {
     resource: Resource;
@@ -17,7 +18,7 @@ type ResourceYagrWidgetData = {
 };
 
 interface BillingTabProps {
-    product: ProductDTOGet;
+    product: ProductDTO;
 }
 
 const BillingTab: React.FC<BillingTabProps> = ({product}) => {
@@ -145,6 +146,9 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
                     <div style={{marginTop: '16px', color: 'red'}}>
                         <Text variant="body-1">{error}</Text>
                     </div>
+                )}
+                {chartsData.length === 0 && (
+                    <Text>Нет данных. Попробуйте изменить временной промежуток</Text>
                 )}
                 {chartsData.map((cd) => (
                     <div key={cd.resource.id} style={{width: 'calc(50% - 10px)'}}>

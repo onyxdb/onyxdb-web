@@ -8,7 +8,8 @@ import '../styles/globals.css';
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'OnyxDB',
+    // title: 'OnyxDB',
+    title: 'DBaaS platform',
     description: 'Web',
 };
 

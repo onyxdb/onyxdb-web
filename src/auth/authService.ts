@@ -30,7 +30,7 @@ export const logout = async () => {
     clearTokens();
 };
 export const refreshToken = async () => {
-    const refreshTokenValue = localStorage.getItem('refreshToken');
+    const refreshTokenValue = getRefreshToken();
     if (!refreshTokenValue) {
         throw new Error('No refresh token found');
     }
@@ -38,6 +38,10 @@ export const refreshToken = async () => {
     const response = await authApi.refreshToken({
         refreshTokenDTO: {refreshToken: refreshTokenValue},
     });
+    if (response.status === 403) {
+        clearTokens();
+        throw new Error('Unauthorized');
+    }
     setTokens(response.data.accessToken, response.data.refreshToken);
     return response.data;
 };

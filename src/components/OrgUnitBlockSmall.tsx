@@ -42,7 +42,7 @@ export const OrgUnitBlockSmall: React.FC<DomainComponentProps> = ({data}) => {
         <div
             key={data.id}
             style={{marginBottom: '8px', cursor: 'pointer'}}
-            onClick={() => handleViewDetails(data.id ?? '???')}
+            onClick={() => handleViewDetails(data.id)}
         >
             <Card theme="info">
                 <HorizontalStack align="center">

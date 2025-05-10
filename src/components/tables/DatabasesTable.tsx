@@ -12,12 +12,11 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {MongoDatabase} from '@/generated/api-mdb';
+import {AccountDTO, MongoDatabase} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {AccountDTO} from '@/generated/api';
 import {UserBlock} from '@/components/common/UserBlock';
 import {TrashBin} from '@gravity-ui/icons';
 

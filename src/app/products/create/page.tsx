@@ -49,7 +49,7 @@ export default function CreateProductPage() {
         },
         onSubmit: async (values) => {
             try {
-                await productsApi.createProduct({productDTO: values});
+                await productsApi.createProduct({productPostDTO: values});
                 router.push('/products'); // Перенаправление на страницу проектов после успешного создания
             } catch (error) {
                 console.error('Ошибка при создании проекта:', error);

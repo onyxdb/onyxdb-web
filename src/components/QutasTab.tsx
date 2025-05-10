@@ -10,18 +10,17 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {Quota, Resource, ResourceUnitEnum} from '@/generated/api-mdb';
+import {ProductDTO, Quota, Resource, ResourceUnitEnum} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {useAuth} from '@/context/AuthContext';
 import {Box} from '@/components/Layout/Box';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import CreateQuotaModal from '@/components/modals/CreateQuotaModal';
 import {TransferQuotaModal} from '@/components/modals/TransferQuotaModal';
-import {ProductDTOGet} from '@/generated/api';
 import {roundTo, toPercent} from '@/utils/math';
 
 interface QuotasTabProps {
-    product: ProductDTOGet;
+    product: ProductDTO;
 }
 
 const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {

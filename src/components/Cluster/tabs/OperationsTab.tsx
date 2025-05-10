@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Icon, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {OperationOA} from '@/generated/api-mdb';
+import {OperationOA} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import {Arrows3RotateLeft} from '@gravity-ui/icons';
@@ -75,7 +75,7 @@ export const OperationsTab: React.FC<OperationsTabProps> = ({clusterId}) => {
         {
             id: 'id',
             name: 'Id',
-            template: (item) => <TextWithCopy text={item.id ?? '???'} maxLength={8} />,
+            template: (item) => <TextWithCopy text={item.id} maxLength={8} />,
         },
         {
             id: 'type',

@@ -3,103 +3,72 @@
 import React, {useEffect, useState} from 'react';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
-import {Checkbox, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
-import {mdbProjectsApi, productsApi} from '@/app/apis';
-import {ProductDTOGet} from '@/generated/api';
-import {ProductSmallCard} from '@/components/ProductSmallCard';
-import {ProjectsTable} from '@/components/tables/ProjectsTable';
-import {V1ProjectResponse} from '@/generated/api-mdb';
+import {Icon, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
+import {organizationUnitsApi} from '@/app/apis';
+import {AccountDTO, OrganizationTreeDTO, OrganizationUnitDTO} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
-import {ClustersTable} from '@/components/tables/ClustersTable';
-import {AccountsTable} from '@/components/tables/AccountsTable';
-import ProductInfoTab from '@/components/ProductInfoTab';
-import {settings} from '@gravity-ui/chartkit';
-import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
-import QuotasTab from '@/app/products/view/[id]/QutasTab';
-import BillingTab from '@/app/products/view/[id]/BillingTab';
+import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {Clock, ClockArrowRotateLeft, Persons, Star} from '@gravity-ui/icons';
+import {AccountsTableSimple} from '@/components/tables/AccountsTableSimple';
+import {OrganizationUnitSmallCard} from '@/components/OrganizationUnitSmallCard';
 
-settings.set({plugins: [YagrPlugin]});
-
-interface ProductTreeDTO {
-    item: ProductDTOGet;
-    children?: ProductTreeDTO[];
-}
-
-export default function ProductDetailPage() {
+export default function OrgUnitDetailPage() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'info';
-    const productId = pathname.split('/').pop() ?? '';
+    const orgUnitId = pathname.split('/').pop() ?? '';
 
-    const [activeTab, setActiveTab] = useState(tab);
-    const [product, setProduct] = useState<ProductDTOGet | null>(null);
-    const [productParents, setProductParents] = useState<ProductDTOGet[]>([]);
-    const [productTree, setProductTree] = useState<ProductTreeDTO | null>(null);
-    const [projects, setProjects] = useState<V1ProjectResponse[]>([]);
-    const [showArchived, setShowArchived] = useState<boolean>(true);
+    const [orgUnit, setOrgUnit] = useState<OrganizationUnitDTO | null>(null);
+    const [orgUnitParents, setOrgUnitParents] = useState<OrganizationUnitDTO[]>([]);
+    const [orgUnitAccounts, setOrgUnitAccounts] = useState<AccountDTO[]>([]);
+    const [orgUnitTree, setOrgUnitTree] = useState<OrganizationTreeDTO | null>(null);
 
-    const fetchProductParents = async (currentProductId: string) => {
+    const fetchOrganizationUnitParents = async () => {
         try {
-            const response = await productsApi.getProductParents({productId: currentProductId});
+            const response = await organizationUnitsApi.getOrganizationUnitParents({
+                ouId: orgUnitId,
+            });
             const reversedData = response.data.reverse();
-            setProductParents(reversedData);
+            setOrgUnitParents(reversedData);
         } catch (error) {
-            console.error('Error fetching product parents:', error);
+            console.error('Error fetching orgUnit parents:', error);
         }
     };
 
-    const fetchProductsTree = async (currentProductId: string) => {
+    const fetchOrganizationUnit = async () => {
         try {
-            console.log('currentProductId', currentProductId);
-            const response = await productsApi.getProductTree({productId: currentProductId});
-            setProductTree(response.data);
+            const response = await organizationUnitsApi.getOrganizationUnitById({ouId: orgUnitId});
+            setOrgUnit(response.data);
         } catch (error) {
-            console.error('Error fetching products tree:', error);
+            console.error('Error fetching orgUnit:', error);
         }
     };
 
-    const fetchProduct = async () => {
+    const fetchOrganizationUnitAccounts = async () => {
         try {
-            const response = await productsApi.getProductById({productId: productId});
-            setProduct(response.data);
-            if (response.data.id) {
-                fetchProductParents(response.data.id);
-                fetchProductsTree(response.data.id);
-            }
+            const response = await organizationUnitsApi.getAccountsByouId({ouId: orgUnitId});
+            setOrgUnitAccounts(response.data);
         } catch (error) {
-            console.error('Error fetching product:', error);
+            console.error('Error fetching orgUnit accounts:', error);
         }
     };
 
-    const fetchProjects = async () => {
+    const fetchOrganizationUnitTree = async () => {
         try {
-            const response = await mdbProjectsApi.listProjects();
-            setProjects(
-                response.data.projects
-                    .filter((p) => showArchived || !p.isArchived)
-                    .filter((p) => productId === null || p.productId === productId),
-            );
+            const response = await organizationUnitsApi.getOrganizationUnitTree({ouId: orgUnitId});
+            setOrgUnitTree(response.data);
         } catch (error) {
-            console.error('Error fetching projects:', error);
+            console.error('Error fetching orgUnit tree:', error);
         }
     };
 
     useEffect(() => {
-        setActiveTab(tab);
-    }, [tab]);
-
-    useEffect(() => {
-        fetchProduct();
-    }, [productId]);
-
-    useEffect(() => {
-        fetchProjects();
-    }, [productId, showArchived]);
-
-    const handleProductSelect = (productDTO: ProductDTOGet) => {
-        router.push('/products/view/' + productDTO.id);
-    };
+        fetchOrganizationUnit();
+        fetchOrganizationUnitParents();
+        fetchOrganizationUnitAccounts();
+        fetchOrganizationUnitTree();
+    }, [orgUnitId]);
 
     const handleTabChange = (value: string) => {
         const createQueryString = (name: string, val: string) => {
@@ -107,39 +76,41 @@ export default function ProductDetailPage() {
             params.set(name, val);
             return params.toString();
         };
-        setActiveTab(value);
         router.push(pathname + '?' + createQueryString('tab', value));
     };
 
-    const renderProductTree = (tree: ProductTreeDTO[]) => {
+    if (!orgUnit) {
+        return <div>Продукт не найден</div>;
+    }
+
+    const renderOrgUnitTree = (tree: OrganizationTreeDTO | null) => {
         if (!tree) return null;
-        const renderItem = (item: ProductTreeDTO, level = 0) => {
+
+        const renderItem = (item: OrganizationTreeDTO, level = 0) => {
             return (
-                <div key={item.item.id} style={{marginLeft: `${level * 30}px`}}>
-                    <ProductSmallCard product={item.item} onSelect={handleProductSelect} />
-                    {item.children && item.children.length > 0 && (
-                        <div>{item.children.map((child) => renderItem(child, level + 1))}</div>
+                <div key={item.unit.id} style={{marginLeft: `${level * 30}px`}}>
+                    <OrganizationUnitSmallCard orgUnit={item.unit} />
+                    {item.items && item.items.length > 0 && (
+                        <div>{item.items.map((child) => renderItem(child, level + 1))}</div>
                     )}
                 </div>
             );
         };
-        return <div>{tree.map((item) => renderItem(item))}</div>;
-    };
 
-    const handleShowArchivedChange = (checked: boolean) => {
-        setShowArchived(checked);
-        fetchProjects();
+        return (
+            <div>
+                {tree.items && tree.items.length > 0 && (
+                    <div>{tree.items.map((child) => renderItem(child))}</div>
+                )}
+            </div>
+        );
     };
-
-    if (!product) {
-        return <div>Продукт не найден</div>;
-    }
 
     const breadCrumbs = [
         {href: '/', text: 'Главная'},
-        {href: '/products', text: 'Продукты'},
-        ...productParents.map((parent) => ({
-            href: `/products/view/${parent.id}`,
+        {href: '/structure', text: 'Структура'},
+        ...orgUnitParents.map((parent) => ({
+            href: `/structure/view/${parent.id}`,
             text: parent.name,
         })),
     ];
@@ -148,61 +119,75 @@ export default function ProductDetailPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <div style={{padding: '20px'}}>
-                <Text variant="header-1">{product.name}</Text>
+                <Text variant="header-1">{orgUnit.name}</Text>
                 <Box>
                     <Text variant="subheader-1" color="secondary" ellipsis={true}>
-                        {product.description}
+                        {orgUnit.description}
                     </Text>
                 </Box>
-                <TabProvider value={activeTab} onUpdate={handleTabChange}>
+                <TabProvider value={tab} onUpdate={handleTabChange}>
                     <TabList>
                         <Tab value="info">Информация</Tab>
-                        <Tab value="children">Дочерние продукты</Tab>
-                        <Tab value="projects">Проекты</Tab>
-                        <Tab value="clusters">Кластеры</Tab>
+                        <Tab value="children">Дочерние организации</Tab>
                         <Tab value="users">Пользователи</Tab>
-                        <Tab value="quotas">Квоты</Tab>
-                        <Tab value="billing">Биллинг</Tab>
                     </TabList>
                     <TabPanel value="info">
-                        {product && <ProductInfoTab product={product} />}
+                        <div style={{padding: '20px'}}>
+                            <HorizontalStack align="center">
+                                <Box marginRight="8px">
+                                    <Icon data={Star} />
+                                </Box>
+                                <Text variant="caption-2" color="secondary">
+                                    ID:
+                                </Text>
+                                <Text variant="body-1" color="primary">
+                                    {orgUnit.id}
+                                </Text>
+                            </HorizontalStack>
+                            <HorizontalStack align="center">
+                                <Box marginRight="8px">
+                                    <Icon data={Persons} />
+                                </Box>
+                                <Text variant="caption-2" color="secondary">
+                                    Количество аккаунтов:
+                                </Text>
+                                <Text variant="body-1" color="primary">
+                                    {orgUnitAccounts.length}
+                                </Text>
+                            </HorizontalStack>
+                            <HorizontalStack align="center">
+                                <Box marginRight="8px">
+                                    <Icon data={Clock} />
+                                </Box>
+                                <Text variant="caption-2" color="secondary">
+                                    Дата создания:
+                                </Text>
+                                <Text variant="body-1" color="primary">
+                                    {orgUnit.createdAt}
+                                </Text>
+                            </HorizontalStack>
+                            <HorizontalStack align="center">
+                                <Box marginRight="8px">
+                                    <Icon data={ClockArrowRotateLeft} />
+                                </Box>
+                                <Text variant="caption-2" color="secondary">
+                                    Дата обновления:
+                                </Text>
+                                <Text variant="body-1" color="primary">
+                                    {orgUnit.updatedAt}
+                                </Text>
+                            </HorizontalStack>
+                        </div>
                     </TabPanel>
                     <TabPanel value="children">
                         <div style={{marginTop: '20px'}}>
-                            {productTree && renderProductTree([productTree])}
-                        </div>
-                    </TabPanel>
-                    <TabPanel value="projects">
-                        <Box marginTop={20} marginBottom={16}>
-                            <Checkbox
-                                size="l"
-                                checked={showArchived}
-                                onUpdate={handleShowArchivedChange}
-                            >
-                                Показывать архивные проекты
-                            </Checkbox>
-                        </Box>
-                        <ProjectsTable projects={projects} />
-                    </TabPanel>
-                    <TabPanel value="clusters">
-                        <div style={{marginTop: '20px'}}>
-                            {product?.id && (
-                                <ClustersTable projectsIds={projects.map((p) => p.id)} />
-                            )}
+                            {orgUnitTree && renderOrgUnitTree(orgUnitTree)}
                         </div>
                     </TabPanel>
                     <TabPanel value="users">
                         <div style={{marginTop: '20px'}}>
-                            <AccountsTable />
+                            <AccountsTableSimple accounts={orgUnitAccounts} />
                         </div>
-                    </TabPanel>
-                    <TabPanel value="quotas">
-                        <div style={{marginTop: '20px'}}>
-                            <QuotasTab product={product} />
-                        </div>
-                    </TabPanel>
-                    <TabPanel value="billing">
-                        <BillingTab product={product} />
                     </TabPanel>
                 </TabProvider>
             </div>

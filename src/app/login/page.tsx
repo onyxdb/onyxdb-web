@@ -16,7 +16,14 @@ export default function LoginPage() {
     const handleLogin = async () => {
         try {
             await login(username, password);
+            toaster.add({
+                name: `login_success`,
+                title: 'Успешный логин',
+                content: `Вы указали правильный пароль ${username}`,
+                theme: 'success',
+            });
             router.replace('/');
+            router.refresh();
         } catch (error) {
             console.log('login_failed', error);
             toaster.add({

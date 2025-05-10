@@ -140,7 +140,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
             const {anyData: _, ...newValues} = values;
             await accountsApi.updateAccount({
                 accountId: values.id ?? ('???' as string),
-                accountDTO: newValues,
+                accountPostDTO: newValues,
             });
             toaster.add({
                 name: `account_edit_${values.id}`,

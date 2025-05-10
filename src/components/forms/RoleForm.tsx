@@ -3,7 +3,13 @@
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import {Button, Card, Checkbox, Icon, Modal, Select, Text, TextInput} from '@gravity-ui/uikit';
-import {OrganizationUnitDTO, PermissionDTO, ProductDTO, RoleDTO} from '@/generated/api';
+import {
+    OrganizationUnitDTO,
+    PermissionDTO,
+    PermissionPostDTO,
+    ProductDTO,
+    RoleDTO,
+} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
@@ -40,13 +46,13 @@ export interface RoleFormFields {
     shopName: string;
     isShopHidden: boolean;
     description: string;
-    entity?: string;
+    entity: string;
     productId?: string;
     orgUnitId?: string;
     permissions: PermissionFormFields[];
 }
 
-export function mapPermissionFormToDTO(formFields: PermissionFormFields): PermissionDTO {
+export function mapPermissionFormToDTO(formFields: PermissionFormFields): PermissionPostDTO {
     const transformedData: {[key: string]: object} = {};
 
     for (const key in formFields.data) {
@@ -141,7 +147,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
                   shopName: '',
                   isShopHidden: false,
                   description: '',
-                  entity: undefined,
+                  entity: '',
                   productId: undefined,
                   orgUnitId: undefined,
                   permissions: [],

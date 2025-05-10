@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {mdbResourcePresetsApi} from '@/app/apis';
 import {Icon, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-import {V1MongoClusterResponse, V1ResourcePresetResponse} from '@/generated/api-mdb';
+import {MongoClusterDTO, V1ResourcePresetResponse} from '@/generated/api';
 import InfoTab from '@/components/Cluster/tabs/InfoTab';
 import HostsTab from '@/components/Cluster/tabs/HostsTab';
 import DatabasesTab from '@/components/Cluster/tabs/DatabasesTab';
@@ -16,7 +16,7 @@ import MongoLogo from '../../styles/mongodb.svg';
 import {OperationsTab} from '@/components/Cluster/tabs/OperationsTab';
 
 interface ClusterViewPageProps {
-    cluster: V1MongoClusterResponse;
+    cluster: MongoClusterDTO;
 }
 
 // eslint-disable-next-line no-empty-pattern

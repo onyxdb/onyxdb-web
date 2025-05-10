@@ -7,7 +7,7 @@ import {
     ListMongoDatabasesResponse,
     MongoPermissionToCreate,
     MongoUserToCreate,
-} from '@/generated/api-mdb';
+} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';

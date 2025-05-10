@@ -5,8 +5,8 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {useRouter} from 'next/navigation';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
-import {mdbMongoDbApi} from '@/app/apis';
-import {V1CreateMongoClusterRequest} from '@/generated/api-mdb';
+import {mdbApi} from '@/app/apis';
+import {V1CreateMongoClusterRequest} from '@/generated/api';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 export default function ClusterCreatePage() {
@@ -30,7 +30,7 @@ export default function ClusterCreatePage() {
             user: values.user,
         };
         console.log('Cluster create request values', request);
-        mdbMongoDbApi
+        mdbApi
             .createCluster({v1CreateMongoClusterRequest: request})
             .then((_) => {
                 return toaster.add({

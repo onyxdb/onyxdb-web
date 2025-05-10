@@ -108,7 +108,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({editAction, deleteAction}) 
                         Заказать
                     </Button>
                     {checkPermission('role', 'edit') && (
-                        <Button view="normal" size="m" onClick={() => editAction(role.id ?? '???')}>
+                        <Button view="normal" size="m" onClick={() => editAction(role.id)}>
                             <Icon data={Pencil} />
                         </Button>
                     )}
@@ -116,7 +116,7 @@ export const RoleTable: React.FC<RoleTableProps> = ({editAction, deleteAction}) 
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() => deleteAction(role.id ?? '???')}
+                            onClick={() => deleteAction(role.id)}
                         >
                             <Icon data={TrashBin} />
                         </Button>

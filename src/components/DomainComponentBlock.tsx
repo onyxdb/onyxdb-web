@@ -43,11 +43,7 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                 <Box marginLeft="10px">
                     {checkPermission('domain-components', 'create') && (
                         <Box marginBottom="5px">
-                            <Button
-                                view="normal"
-                                size="m"
-                                onClick={() => editAction(data.id ?? '???')}
-                            >
+                            <Button view="normal" size="m" onClick={() => editAction(data.id)}>
                                 <Icon data={Pencil} />
                             </Button>
                         </Box>
@@ -56,7 +52,7 @@ export const DomainComponentBlock: React.FC<DomainComponentProps> = ({
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() => deleteAction(data.id ?? '???')}
+                            onClick={() => deleteAction(data.id)}
                         >
                             <Icon data={TrashBin} />
                         </Button>

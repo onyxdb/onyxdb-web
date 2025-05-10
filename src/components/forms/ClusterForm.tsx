@@ -3,12 +3,12 @@ import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Checkbox, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
-import {mdbQuotasApi, mdbResourcePresetsApi} from '@/app/apis';
+import {mdbApi, mdbQuotasApi, mdbResourcePresetsApi} from '@/app/apis';
 import {
     AccountDTO,
     MongoClusterDTO,
-    MongoDatabaseDTO,
-    MongoUserDTO,
+    MongoInitDatabaseDTO,
+    MongoInitUserDTO,
     ProjectDTO,
     Quota,
     Resource,
@@ -35,10 +35,12 @@ export interface ClusterFormValues {
     storage: number;
     replicas: number;
     ownerId: string;
-    database: MongoDatabaseDTO;
-    user: MongoUserDTO;
+    clusterVersion: string;
+    database: MongoInitDatabaseDTO;
+    user: MongoInitUserDTO;
     backupIsEnabled: boolean;
     backupSchedule: string;
+    backupLimit: number;
 }
 
 const V1StorageClassTypeEnum = {
@@ -61,6 +63,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
     submitAction,
     cancelAction,
 }) => {
+    const [clusterVersions, setClusterVersions] = useState<string[]>([]);
     const [resourcePresets, setResourcePresets] = useState<V1ResourcePresetResponse[]>([]);
     const [filteredPresets, setFilteredPresets] = useState<V1ResourcePresetResponse[]>([]);
     const [selectedPreset, setSelectedPreset] = useState<V1ResourcePresetResponse | null>(null);
@@ -85,6 +88,10 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                 }
             })
             .catch((error) => console.error('Error fetching resource presets:', error));
+
+        mdbApi.listVersions().then((response) => {
+            setClusterVersions(response.data.versions);
+        });
     }, [initialValues]);
 
     const isEditMode = Boolean(initialValues);
@@ -101,8 +108,10 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             ownerId: '',
             database: {name: ''},
             user: {name: '', password: ''},
+            clusterVersion: clusterVersions[0] ?? '8.0',
             backupIsEnabled: true,
             backupSchedule: '0 0 * * * *',
+            backupLimit: 5,
         },
         validate: (values) => {
             const errors: Partial<FormikErrors<ClusterFormValues>> = {};
@@ -136,6 +145,12 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                     errors.user = {name: 'Имя обязательно', password: ''};
                 } else if (!values.user.password) {
                     errors.user = {name: '', password: 'Пароль обязателен'};
+                }
+            }
+            if (values.backupIsEnabled) {
+                const re = new RegExp('/(((\\d+,)+\\d+|(\\d+([/\\-])\\d+)|\\d+|\\*) ?){5,7}/');
+                if (!re.test(values.backupSchedule)) {
+                    errors.backupSchedule = 'Формат крон неверный';
                 }
             }
             return errors;
@@ -207,6 +222,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                     backup: {
                         isEnabled: formik.values.backupIsEnabled,
                         schedule: formik.values.backupSchedule,
+                        limit: formik.values.backupLimit,
                     },
                     resources: {
                         presetId: formik.values.presetId,
@@ -362,7 +378,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             name="replicas"
                             value={formik.values.replicas.toString()}
                             onChange={(value) =>
-                                formik.setFieldValue('replicas', parseInt(value, 10))
+                                formik.setFieldValue('replicas', Math.max(parseInt(value, 10), 1))
                             }
                             onBlur={formik.handleBlur('replicas')}
                             error={formik.touched.replicas ? formik.errors.replicas : undefined}
@@ -380,21 +396,40 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                         </Checkbox>
                     </Box>
                     {formik.values.backupIsEnabled && (
-                        <InputField
-                            label="График создания бекапов"
-                            name="backupSchedule"
-                            value={formik.values.backupSchedule.toString()}
-                            onChange={(value) =>
-                                formik.setFieldValue('backupSchedule', parseInt(value, 10))
-                            }
-                            onBlur={formik.handleBlur('backupSchedule')}
-                            error={
-                                formik.touched.backupSchedule
-                                    ? formik.errors.backupSchedule
-                                    : undefined
-                            }
-                            placeholder="<Минуты> <Часы> <Дни_месяца> <Месяцы> <Дни_недели> <Годы>"
-                        />
+                        <>
+                            <InputField
+                                label="График создания бекапов"
+                                name="backupSchedule"
+                                value={formik.values.backupSchedule.toString()}
+                                onChange={(value) => formik.setFieldValue('backupSchedule', value)}
+                                onBlur={formik.handleBlur('backupSchedule')}
+                                error={
+                                    formik.touched.backupSchedule
+                                        ? formik.errors.backupSchedule
+                                        : undefined
+                                }
+                                placeholder="<Минуты> <Часы> <Дни_месяца> <Месяцы> <Дни_недели> <Годы>"
+                            />
+                            <InputField
+                                label="Количество бекапов"
+                                name="backupLimit"
+                                value={formik.values.backupLimit.toString()}
+                                onChange={(value) =>
+                                    formik.setFieldValue(
+                                        'backupLimit',
+                                        Math.max(parseInt(value, 10), 1),
+                                    )
+                                }
+                                onBlur={formik.handleBlur('backupLimit')}
+                                error={
+                                    formik.touched.backupLimit
+                                        ? formik.errors.backupLimit
+                                        : undefined
+                                }
+                                placeholder="Введите число"
+                                type="number"
+                            />
+                        </>
                     )}
                     {!isEditMode && (
                         <div>

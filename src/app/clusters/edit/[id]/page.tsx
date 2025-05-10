@@ -6,7 +6,7 @@ import {useAuth} from '@/context/AuthContext';
 import {usePathname, useRouter} from 'next/navigation';
 import {mdbApi} from '@/app/apis';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
-import {MongoClusterDTO, V1MongoUpdateClusterRequest} from '@/generated/api';
+import {MongoClusterDTO, UpdateMongoClusterRequestDTO} from '@/generated/api';
 
 export default function ClusterEditPage() {
     const {checkPermission} = useAuth();
@@ -30,22 +30,28 @@ export default function ClusterEditPage() {
 
     const handleEdit = async (values: ClusterFormValues) => {
         try {
-            const request: V1MongoUpdateClusterRequest = {
-                name: values.name,
-                // description: values.description,
+            const request: UpdateMongoClusterRequestDTO = {
+                // name: values.name,
+                description: values.description,
                 config: {
                     resources: {
-                        storage: values.storage,
-                        storageClass: values.storageClass,
+                        // storage: values.storage,
+                        // storageClass: values.storageClass,
                         presetId: values.presetId,
                     },
                     replicas: values.replicas,
+                    version: values.clusterVersion,
+                    backup: {
+                        isEnabled: values.backupIsEnabled,
+                        schedule: values.backupSchedule,
+                        limit: values.backupLimit,
+                    },
                 },
             };
             console.log('Cluster create request values', request);
             await mdbApi.updateCluster({
                 clusterId: clusterId,
-                v1MongoUpdateClusterRequest: request,
+                updateMongoClusterRequestDTO: request,
             });
             router.push('/clusters');
         } catch (error) {

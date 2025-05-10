@@ -61,7 +61,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
                     p.name.includes(searchQuery) ||
                     p.description.includes(searchQuery),
             )
-            .filter((p) => showArchived || !p.isArchived);
+            .filter((p) => showArchived || !p.isDeleted);
         setProjectOptions(filteredProjects);
     };
 
@@ -132,7 +132,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
                                     <Text variant="header-1" style={{marginRight: '10px'}}>
                                         {item.name}
                                     </Text>
-                                    {item.isArchived && <Label theme="warning">Архив</Label>}
+                                    {item.isDeleted && <Label theme="warning">Архив</Label>}
                                 </HorizontalStack>
                                 <Box>
                                     <Text variant="subheader-1" color="secondary" ellipsis={true}>

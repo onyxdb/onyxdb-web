@@ -3,21 +3,22 @@
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import {Button, Card, Radio, RadioGroup, Select, Text} from '@gravity-ui/uikit';
-import {
-    ListMongoDatabasesResponse,
-    MongoPermissionToCreate,
-    MongoUserToCreate,
-} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {mdbMongoDbDatabasesApi} from '@/app/apis';
+import {
+    CreateMongoPermissionDTO,
+    CreateMongoUserRequestDTO,
+    MongoDatabaseDTO,
+    MongoUserDTO,
+} from '@/generated/api';
 
 interface DBUserFormProps {
     clusterId: string;
     closeAction: () => void;
-    submitAction: (user: MongoUserToCreate) => void;
-    initialValue?: MongoUserToCreate;
+    submitAction: (user: CreateMongoUserRequestDTO) => void;
+    initialValue?: MongoUserDTO;
 }
 
 const V1DatabaseUserRolesEnum = {
@@ -31,16 +32,17 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
     submitAction,
     initialValue,
 }) => {
-    const [databases, setDatabases] = useState<ListMongoDatabasesResponse['databases']>([]);
+    const [databases, setDatabases] = useState<MongoDatabaseDTO[]>([]);
 
-    const formik = useFormik<MongoUserToCreate>({
+    const formik = useFormik<CreateMongoUserRequestDTO>({
         initialValues: {
             name: initialValue?.name || '',
-            password: initialValue?.password || '',
-            permissions: initialValue?.permissions || [{databaseId: '', roles: []}],
+            // password: initialValue?.password || '',
+            password: '',
+            permissions: initialValue?.permissions || [{databaseName: '', roles: []}],
         },
         validate: (values) => {
-            const errors: Partial<MongoUserToCreate> = {};
+            const errors: Partial<CreateMongoUserRequestDTO> = {};
             if (!values.name) {
                 errors.name = 'Имя пользователя обязательно';
             }
@@ -48,10 +50,10 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
                 errors.password = 'Пароль обязателен';
             }
 
-            const errorsPermission: MongoPermissionToCreate[] = [];
+            const errorsPermission: CreateMongoPermissionDTO[] = [];
             values.permissions.forEach((permission, index) => {
-                if (!permission.databaseId || permission.roles.length === 0) {
-                    const permissionErrorDB = permission.databaseId
+                if (!permission.databaseName || permission.roles.length === 0) {
+                    const permissionErrorDB = permission.databaseName
                         ? ''
                         : 'ID базы данных обязателен';
                     const permissionErrorRoles =
@@ -60,7 +62,7 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
                             : ['Обязательно указать хотя бы одну роль'];
                     if (permissionErrorDB.length > 0 || permissionErrorRoles.length > 0) {
                         errorsPermission[index] = {
-                            databaseId: permissionErrorDB,
+                            databaseName: permissionErrorDB,
                             roles: permissionErrorRoles,
                         };
                     }
@@ -149,19 +151,24 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
                         <Box marginBottom="10px">
                             <RadioGroup
                                 name={`permissions[${index}].databaseId`}
-                                value={permission.databaseId}
+                                value={permission.databaseName}
                                 onUpdate={(value: string) =>
                                     handlePermissionChange(index, 'databaseId', value)
                                 }
                             >
                                 {databases.map((db) => (
-                                    <Radio key={db.id} value={db.id} content={db.name} size="m" />
+                                    <Radio
+                                        key={db.name}
+                                        value={db.name}
+                                        content={db.name}
+                                        size="m"
+                                    />
                                 ))}
                             </RadioGroup>
-                            {formik.touched.permissions?.[index]?.databaseId &&
+                            {formik.touched.permissions?.[index]?.databaseName &&
                                 formik.errors.permissions &&
-                                (formik.errors.permissions[index] as MongoPermissionToCreate)
-                                    ?.databaseId && (
+                                (formik.errors.permissions[index] as CreateMongoPermissionDTO)
+                                    ?.databaseName && (
                                     <Text
                                         variant="body-1"
                                         color="danger"
@@ -171,8 +178,8 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
                                             (
                                                 formik.errors.permissions[
                                                     index
-                                                ] as MongoPermissionToCreate
-                                            ).databaseId
+                                                ] as CreateMongoPermissionDTO
+                                            ).databaseName
                                         }
                                     </Text>
                                 )}
@@ -189,15 +196,15 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
                                 errorMessage={
                                     formik.touched.permissions?.[index]?.roles &&
                                     formik.errors.permissions &&
-                                    (formik.errors.permissions[index] as MongoPermissionToCreate)
+                                    (formik.errors.permissions[index] as CreateMongoPermissionDTO)
                                         ?.roles &&
-                                    (formik.errors.permissions[index] as MongoPermissionToCreate)
+                                    (formik.errors.permissions[index] as CreateMongoPermissionDTO)
                                         .roles[0]
                                 }
                                 validationState={
                                     formik.touched.permissions?.[index]?.roles &&
                                     formik.errors.permissions &&
-                                    (formik.errors.permissions[index] as MongoPermissionToCreate)
+                                    (formik.errors.permissions[index] as CreateMongoPermissionDTO)
                                         ?.roles.length > 0
                                         ? 'invalid'
                                         : undefined

@@ -92,7 +92,7 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                                                     {project.description}
                                                 </Text>
                                             </div>
-                                            {project.isArchived && (
+                                            {project.isDeleted && (
                                                 <Label theme="warning">Архив</Label>
                                             )}
                                         </HorizontalStack>

@@ -14,7 +14,7 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {MongoDatabase, MongoUser} from '@/generated/api';
+import {MongoDatabaseDTO, MongoUserDTO} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {formatDistanceToNow} from 'date-fns';
@@ -27,8 +27,8 @@ import {TrashBin} from '@gravity-ui/icons';
 import {UserBlock} from '@/components/common/UserBlock';
 
 interface DBUsersTableProps {
-    users: MongoUser[];
-    databases: MongoDatabase[];
+    users: MongoUserDTO[];
+    databases: MongoDatabaseDTO[];
     deleteAction: (userId: string) => void;
 }
 
@@ -121,8 +121,8 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, databases, del
         setPopupContent('');
     };
 
-    const handleOpenDeleteModal = (userId: string) => {
-        setDeletingUserId(userId);
+    const handleOpenDeleteModal = (userName: string) => {
+        setDeletingUserId(userName);
         setIsDeleteModalOpen(true);
     };
 
@@ -133,7 +133,7 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, databases, del
 
     console.log('userCache', userCache);
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<MongoUser>[] = [
+    const columns: TableColumnConfig<MongoUserDTO>[] = [
         // {
         //     id: 'id',
         //     name: 'ID',
@@ -174,43 +174,45 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, databases, del
             name: 'Разрешения',
             template: (user) => (
                 <div>
-                    {user.permissions.map((permission) => (
-                        <Card key={permission.id} style={{padding: '2px'}}>
-                            <VerticalStack>
-                                <Text variant="subheader-1" color="secondary">
-                                    База данных:{' '}
-                                    {databases.find((p) => p.id === permission.databaseId)?.name ??
-                                        permission.databaseId}
-                                </Text>
-                                <Text variant="subheader-1" color="secondary">
-                                    Роли: {permission.roles.join(', ')}
-                                </Text>
-                                {permission.isDeleted && (
-                                    <Label theme="warning">
-                                        Удалено{' '}
-                                        {formatDistanceToNow(new Date(permission.deletedAt), {
-                                            locale: ru,
-                                            addSuffix: true,
-                                        })}
-                                        <Button
-                                            view="flat"
-                                            size="xs"
-                                            onClick={(event) =>
-                                                handleTogglePopup(
-                                                    event,
-                                                    `Удалено ${new Date(permission.deletedAt).toLocaleString()} пользователем ${permissionCache[permission.deletedBy] || 'Загрузка...'}`,
-                                                )
-                                            }
-                                        >
-                                            <Text variant="body-1" color="secondary">
-                                                Подробнее
-                                            </Text>
-                                        </Button>
-                                    </Label>
-                                )}
-                            </VerticalStack>
-                        </Card>
-                    ))}
+                    {user.permissions.map((permission) => {
+                        return (
+                            <Card key={permission.createdAt} style={{padding: '2px'}}>
+                                <VerticalStack>
+                                    <Text variant="subheader-1" color="secondary">
+                                        База данных:{' '}
+                                        {databases.find((p) => p.name === permission.databaseName)
+                                            ?.name ?? permission.databaseName}
+                                    </Text>
+                                    <Text variant="subheader-1" color="secondary">
+                                        Роли: {permission.roles.join(', ')}
+                                    </Text>
+                                    {permission.isDeleted && (
+                                        <Label theme="warning">
+                                            Удалено{' '}
+                                            {formatDistanceToNow(new Date(permission.deletedAt), {
+                                                locale: ru,
+                                                addSuffix: true,
+                                            })}
+                                            <Button
+                                                view="flat"
+                                                size="xs"
+                                                onClick={(event) =>
+                                                    handleTogglePopup(
+                                                        event,
+                                                        `Удалено ${new Date(permission.deletedAt).toLocaleString()} пользователем ${permissionCache[permission.deletedBy] || 'Загрузка...'}`,
+                                                    )
+                                                }
+                                            >
+                                                <Text variant="body-1" color="secondary">
+                                                    Подробнее
+                                                </Text>
+                                            </Button>
+                                        </Label>
+                                    )}
+                                </VerticalStack>
+                            </Card>
+                        );
+                    })}
                 </div>
             ),
         },
@@ -250,11 +252,11 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, databases, del
             name: 'Действия',
             template: (user) => (
                 <HorizontalStack gap={10}>
-                    {checkPermission('user', 'delete', user.id) && (
+                    {checkPermission('user', 'delete', user.name) && (
                         <Button
                             view="outlined-danger"
                             size="m"
-                            onClick={() => handleOpenDeleteModal(user.id)}
+                            onClick={() => handleOpenDeleteModal(user.name)}
                         >
                             <Icon data={TrashBin} />
                             Удалить

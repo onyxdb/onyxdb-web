@@ -5,6 +5,7 @@ import {domainComponentsApi, organizationUnitsApi} from '@/app/apis';
 import {
     AccountDTO,
     DomainComponentDTO,
+    DomainComponentPostDTO,
     DomainTreeDTO,
     OrganizationTreeDTO,
     OrganizationUnitDTO,
@@ -155,7 +156,7 @@ export default function StructurePage({}: StructurePageProps) {
         }
     };
 
-    const handleDcSubmitCreate = async (values: DomainComponentDTO) => {
+    const handleDcSubmitCreate = async (values: DomainComponentPostDTO) => {
         try {
             if (editingDomainComponent) {
                 await domainComponentsApi.updateDomainComponent({

@@ -3,15 +3,15 @@
 import React from 'react';
 import {useFormik} from 'formik';
 import {Button, Modal, Text} from '@gravity-ui/uikit';
-import {CreateMongoDatabaseRequest} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
+import {CreateMongoDatabaseRequestDTO} from '@/generated/api';
 
 interface DatabaseFormProps {
     closeAction: () => void;
-    submitAction: (database: CreateMongoDatabaseRequest) => void;
-    initialValue?: CreateMongoDatabaseRequest;
+    submitAction: (database: CreateMongoDatabaseRequestDTO) => void;
+    initialValue?: CreateMongoDatabaseRequestDTO;
 }
 
 export const DatabaseForm: React.FC<DatabaseFormProps> = ({
@@ -19,12 +19,12 @@ export const DatabaseForm: React.FC<DatabaseFormProps> = ({
     submitAction,
     initialValue,
 }) => {
-    const formik = useFormik<CreateMongoDatabaseRequest>({
+    const formik = useFormik<CreateMongoDatabaseRequestDTO>({
         initialValues: {
             name: initialValue?.name || '',
         },
         validate: (values) => {
-            const errors: Partial<CreateMongoDatabaseRequest> = {};
+            const errors: Partial<CreateMongoDatabaseRequestDTO> = {};
             if (!values.name) {
                 errors.name = 'Название обязательно';
             } else if (values.name.length > 100) {

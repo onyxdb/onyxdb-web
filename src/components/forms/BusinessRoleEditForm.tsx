@@ -63,7 +63,7 @@ export const BusinessRoleEditForm: React.FC<BusinessRoleEditFormProps> = ({
             }
             return errors;
         },
-        submitAction: submitAction,
+        onSubmit: submitAction,
     });
 
     useEffect(() => {

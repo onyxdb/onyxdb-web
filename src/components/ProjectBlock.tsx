@@ -27,7 +27,7 @@ export const ProjectBlock: React.FC<ProjectBlockProps> = ({
             <HorizontalStack justify="space-between">
                 <VerticalStack>
                     <Text variant="subheader-3">
-                        {data.name} {data.isArchived && <Label theme="warning">Архив</Label>}
+                        {data.name} {data.isDeleted && <Label theme="warning">Архив</Label>}
                     </Text>
                     <Text variant="subheader-1" color="secondary">
                         {data.description?.split(' ').slice(0, 5).join(' ')}
@@ -47,7 +47,7 @@ export const ProjectBlock: React.FC<ProjectBlockProps> = ({
                     {checkActions([
                         {name: 'product', action: 'delete'},
                         {name: `web-product-${data.id}`, action: 'delete'},
-                    ]) && data.isArchived ? (
+                    ]) && data.isDeleted ? (
                         <Button
                             view="outlined-danger"
                             size="m"

@@ -2,14 +2,14 @@
 
 import React from 'react';
 import {Button, Icon, Table, TableColumnConfig, Text, withTableSorting} from '@gravity-ui/uikit';
-import {MongoBackup} from '@/generated/api';
+import {MongoBackupDTO} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {TrashBin} from '@gravity-ui/icons';
 
 interface BackupsTableProps {
     clusterId: string;
-    backups: MongoBackup[];
+    backups: MongoBackupDTO[];
     deleteAction: (backupName: string) => void;
     restoreAction: (backupName: string) => void;
 }
@@ -23,7 +23,7 @@ export const BackupsTable: React.FC<BackupsTableProps> = ({
     const {checkPermission} = useAuth();
 
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<MongoBackup>[] = [
+    const columns: TableColumnConfig<MongoBackupDTO>[] = [
         {
             id: 'name',
             name: 'Название',

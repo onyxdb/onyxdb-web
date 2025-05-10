@@ -46,7 +46,7 @@ export const CreateRoleRequestModal: React.FC<CreateRoleRequestModalProps> = ({r
             try {
                 if (selectedAccountId) {
                     await rolesRequestsApi.createRoleRequest({
-                        roleRequestDTO: {
+                        roleRequestPostDTO: {
                             roleId: role.id ?? '',
                             accountId: values.accountId,
                             ownerId: selectedAccountId,

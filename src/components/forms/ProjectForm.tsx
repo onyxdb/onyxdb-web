@@ -2,14 +2,14 @@
 
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
-import {Button, Text} from '@gravity-ui/uikit';
+import {Button, Select, Text} from '@gravity-ui/uikit';
 import {CreateProjectRequestDTO, ProductDTO, ProjectDTO} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
 import {ProductSelector} from '@/components/ProductSelector';
-import {productsApi} from '@/app/apis';
+import {mdbApi, productsApi} from '@/app/apis';
 
 interface ProjectFormProps {
     closeAction: () => void;
@@ -23,12 +23,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     initialValue,
 }) => {
     const [initialProduct, setInitialProduct] = useState<ProductDTO | null>(null);
+    const [namespaces, setNamespaces] = useState<string[]>([]);
 
     const formik = useFormik<CreateProjectRequestDTO>({
         initialValues: {
             name: initialValue?.name || '',
             description: initialValue?.description || '',
             productId: initialValue?.productId || '',
+            namespace: '',
         },
         validate: (values) => {
             const errors: Partial<CreateProjectRequestDTO> = {};
@@ -68,10 +70,20 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         }
     };
 
+    const fetchNamespaces = async () => {
+        try {
+            const response = await mdbApi.listNamespaces();
+            setNamespaces(response.data.namespaces);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    };
+
     useEffect(() => {
         if (initialValue) {
             fetchProduct(initialValue.productId);
         }
+        fetchNamespaces();
     }, [initialValue]);
 
     return (
@@ -106,6 +118,23 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                         header="Поиск продукта"
                     />
                 )}
+                <Box marginBottom="10px">
+                    <Select
+                        size="m"
+                        placeholder="Выберите неймспейс"
+                        value={[formik.values.namespace]}
+                        onUpdate={(value) => formik.setFieldValue('quota.namespace', value[0])}
+                        errorMessage={
+                            formik.touched.namespace ? formik.errors.namespace : undefined
+                        }
+                    >
+                        {namespaces.map((ns) => (
+                            <Select.Option key={ns} value={ns}>
+                                {ns}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Box>
                 <HorizontalStack>
                     <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
                         {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}

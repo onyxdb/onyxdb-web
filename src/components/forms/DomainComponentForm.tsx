@@ -3,7 +3,7 @@
 import React from 'react';
 import {useFormik} from 'formik';
 import {Button, Text} from '@gravity-ui/uikit';
-import {DomainComponentDTO} from '@/generated/api';
+import {DomainComponentDTO, DomainComponentPostDTO} from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
@@ -11,7 +11,7 @@ import {TextAreaField} from '@/components/formik/TextAreaField';
 
 interface DomainComponentFormProps {
     initialValue?: DomainComponentDTO;
-    submitAction: (values: DomainComponentDTO) => void;
+    submitAction: (values: DomainComponentPostDTO) => void;
     closeAction: () => void;
 }
 
@@ -20,14 +20,14 @@ export const DomainComponentForm: React.FC<DomainComponentFormProps> = ({
     submitAction,
     closeAction,
 }) => {
-    const formik = useFormik<DomainComponentDTO>({
+    const formik = useFormik<DomainComponentPostDTO>({
         initialValues: initialValue ?? {
             id: '',
             name: '',
             description: '',
         },
         validate: (values) => {
-            const errors: Partial<DomainComponentDTO> = {};
+            const errors: Partial<DomainComponentPostDTO> = {};
             if (!values.name) {
                 errors.name = 'Имя обязательно';
             }

@@ -40,7 +40,7 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
                     style={{cursor: 'pointer', color: 'var(--g-color-text-link)'}}
                     onClick={() => onView?.(project)}
                 >
-                    {project.name} {project.isArchived && <Label theme="warning">Архив</Label>}
+                    {project.name} {project.isDeleted && <Label theme="warning">Архив</Label>}
                 </span>
             ),
             meta: {
@@ -70,12 +70,12 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
                             Редактировать
                         </Button>
                     )}
-                    {checkPermission('project', 'delete', project.id) && project.isArchived && (
+                    {checkPermission('project', 'delete', project.id) && project.isDeleted && (
                         <Button view="normal" size="m" onClick={() => onUnarchive?.(project.id)}>
                             Переоткрыть
                         </Button>
                     )}
-                    {checkPermission('project', 'delete', project.id) && !project.isArchived && (
+                    {checkPermission('project', 'delete', project.id) && !project.isDeleted && (
                         <Button view="normal" size="m" onClick={() => onArchive?.(project.id)}>
                             Архивировать
                         </Button>

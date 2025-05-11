@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {FormikErrors, useFormik} from 'formik';
+import {FormikErrors, FormikTouched, useFormik} from 'formik';
 import {Button, Checkbox, Icon, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
 import {mdbApi, mdbQuotasApi} from '@/app/apis';
@@ -22,13 +22,7 @@ import {AccountSelector} from '@/components/formik/AccountSelector';
 import {ProjectSelector} from '@/components/ProjectsSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {
-    BytesGB,
-    CoresCPU,
-    ResourceInputField,
-    ResourceUnit,
-    ResourceUnitEnum,
-} from '@/components/formik/ResourceInputField';
+import {BytesGB, CoresCPU, ResourceInputField, ResourceUnit, ResourceUnitEnum} from '@/components/formik/ResourceInputField';
 import {QuotaSimulationResult} from '@/components/QuotaSimulationResult';
 import MongoLogo from '@/styles/mongodb.svg';
 
@@ -58,11 +52,7 @@ export interface ClusterCreateFormProps {
 }
 
 // eslint-disable-next-line complexity
-export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
-    initialValues,
-    submitAction,
-    cancelAction,
-}) => {
+export const ClusterForm: React.FC<ClusterCreateFormProps> = ({initialValues, submitAction, cancelAction}) => {
     const [storageClasses, setStorageClasses] = useState<string[]>([]);
     const [clusterVersions, setClusterVersions] = useState<string[]>([]);
     const [resourcePresetsTypes, setResourcePresetsTypes] = useState<string[]>([]);
@@ -77,20 +67,12 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             .listResourcePresets()
             .then((response) => {
                 setResourcePresets(response.data.resourcePresets);
-                const presetsTypes = response.data.resourcePresets
-                    .map((p) => p.type)
-                    .filter((obj, index, self) => index === self.findIndex((t) => t === obj));
+                const presetsTypes = response.data.resourcePresets.map((p) => p.type).filter((obj, index, self) => index === self.findIndex((t) => t === obj));
                 setResourcePresetsTypes(presetsTypes);
-                const presetsByType = response.data.resourcePresets.filter(
-                    (preset) => preset.type === DEFAULT_PRESET,
-                );
+                const presetsByType = response.data.resourcePresets.filter((preset) => preset.type === DEFAULT_PRESET);
                 setFilteredPresets(presetsByType);
                 if (initialValues) {
-                    setSelectedPreset(
-                        response.data.resourcePresets.find(
-                            (preset) => preset.id === initialValues.config.resources.presetId,
-                        ) ?? null,
-                    );
+                    setSelectedPreset(response.data.resourcePresets.find((preset) => preset.id === initialValues.config.resources.presetId) ?? null);
                 }
             })
             .catch((error) => console.error('Error fetching resource presets:', error));
@@ -118,7 +100,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             ownerId: '',
             database: {name: ''},
             user: {name: '', password: ''},
-            clusterVersion: clusterVersions[0] ?? '8.0',
+            clusterVersion: clusterVersions[0],
             backupIsEnabled: true,
             backupSchedule: '0 0 * * *',
             backupLimit: 5,
@@ -210,25 +192,34 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
     ));
 
     const handleSimulateQuotas = async () => {
-        if (
-            !formik.values.projectId ||
-            !formik.values.presetId ||
-            !formik.values.storageClass ||
-            !formik.values.storage ||
-            !formik.values.replicas
-        ) {
-            formik.setErrors({
-                projectId: formik.values.projectId ? undefined : 'ID проекта обязателен',
-                presetId: formik.values.presetId ? undefined : 'Выбор пресета обязателен',
-                storageClass: formik.values.storageClass
-                    ? undefined
-                    : 'Выбор класса хранения обязателен',
-                storage: formik.values.storage > 0 ? undefined : 'Хранилище должно быть больше 0',
-                replicas:
-                    formik.values.replicas > 0
-                        ? undefined
-                        : 'Количество реплик должно быть больше 0',
-            });
+        const validateErrors = await formik.validateForm(formik.values);
+        formik.setErrors(validateErrors);
+
+        const convertErrorsToTouched = (errors: FormikErrors<ClusterFormValues>): FormikTouched<ClusterFormValues> => {
+            const touched: FormikTouched<ClusterFormValues> = {};
+
+            for (const key in errors) {
+                // @ts-ignore
+                const value = errors[key];
+
+                if (Array.isArray(value)) {
+                    // @ts-ignore
+                    touched[key] = value.map((item) => (typeof item === 'object' ? convertErrorsToTouched(item) : true)) as any;
+                } else if (typeof value === 'object' && value !== null) {
+                    // @ts-ignore
+                    touched[key] = convertErrorsToTouched(value) as any;
+                } else {
+                    // @ts-ignore
+                    touched[key] = value !== undefined;
+                }
+            }
+
+            return touched;
+        };
+
+        const validateTouched = convertErrorsToTouched(validateErrors);
+        formik.setTouched(validateTouched);
+        if (!formik.values.projectId || !formik.values.presetId || !formik.values.storageClass || !formik.values.storage || !formik.values.replicas) {
             return;
         }
 
@@ -273,16 +264,14 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         return BytesGB;
     };
 
+    // console.log('formik.errors', formik.errors);
+    // console.log('formik.touched', formik.touched);
     return (
         <div style={{display: 'flex', gap: '20px'}}>
             <div style={{flex: 1, maxWidth: '600px', alignItems: 'center'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
                     <Icon data={MongoLogo} size={40} />
-                    <Text variant="header-1">
-                        {isEditMode
-                            ? 'Обновление MongoDB кластера'
-                            : 'Создание нового MongoDB кластера'}
-                    </Text>
+                    <Text variant="header-1">{isEditMode ? 'Обновление MongoDB кластера' : 'Создание нового MongoDB кластера'}</Text>
                 </div>
                 <form onSubmit={formik.handleSubmit}>
                     <div style={{marginTop: '16px', marginBottom: '16px'}}>
@@ -303,9 +292,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             value={formik.values.description}
                             onChange={formik.handleChange('description')}
                             onBlur={formik.handleBlur('description')}
-                            error={
-                                formik.touched.description ? formik.errors.description : undefined
-                            }
+                            error={formik.touched.description ? formik.errors.description : undefined}
                             placeholder="Введите описание кластера"
                         />
                         <ProjectSelector
@@ -313,6 +300,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             selectProjectAction={handleProjectSelect}
                             label="В каком проекте создать кластер?"
                             header="Поиск проекта для создания кластера"
+                            error={formik.touched.projectId ? formik.errors.projectId : undefined}
                             disabled={isEditMode}
                         />
                         <AccountSelector
@@ -320,6 +308,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             label="Кто владелец кластера?"
                             header="Поиск владельца кластера"
                             disabled={isEditMode}
+                            error={formik.touched.ownerId ? formik.errors.ownerId : undefined}
                         />
                     </div>
                     <div style={{marginBottom: '16px'}}>
@@ -364,19 +353,9 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                     size="m"
                                     placeholder="Выберите класс хранилища"
                                     value={[formik.values.storageClass]}
-                                    onUpdate={(value: string[]) =>
-                                        formik.setFieldValue('storageClass', value[0])
-                                    }
-                                    errorMessage={
-                                        formik.touched.storageClass && formik.errors.storageClass
-                                    }
-                                    validationState={
-                                        formik.touched.storageClass &&
-                                        formik.errors.storageClass &&
-                                        formik.errors.storageClass?.length === 0
-                                            ? 'invalid'
-                                            : undefined
-                                    }
+                                    onUpdate={(value: string[]) => formik.setFieldValue('storageClass', value[0])}
+                                    errorMessage={formik.touched.storageClass && formik.errors.storageClass}
+                                    validationState={formik.touched.storageClass && formik.errors.storageClass && formik.errors.storageClass?.length > 0 ? 'invalid' : undefined}
                                     disabled={isEditMode}
                                 >
                                     {storageClassOptions}
@@ -390,19 +369,10 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                     size="m"
                                     placeholder="Выберите версию MongoDB"
                                     value={[formik.values.clusterVersion]}
-                                    onUpdate={(value: string[]) =>
-                                        formik.setFieldValue('clusterVersion', value[0])
-                                    }
-                                    errorMessage={
-                                        formik.touched.clusterVersion &&
-                                        formik.errors.clusterVersion
-                                    }
+                                    onUpdate={(value: string[]) => formik.setFieldValue('clusterVersion', value[0])}
+                                    errorMessage={formik.touched.clusterVersion && formik.errors.clusterVersion}
                                     validationState={
-                                        formik.touched.clusterVersion &&
-                                        formik.errors.clusterVersion &&
-                                        formik.errors.clusterVersion?.length === 0
-                                            ? 'invalid'
-                                            : undefined
+                                        formik.touched.clusterVersion && formik.errors.clusterVersion && formik.errors.clusterVersion?.length > 0 ? 'invalid' : undefined
                                     }
                                     disabled={isEditMode}
                                 >
@@ -412,6 +382,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                         </Box>
                         <ResourceInputField
                             name="storage"
+                            label={"Размер хранилища"}
                             value={formik.values.storage}
                             changeAction={(value: number) => {
                                 formik.setFieldValue('storage', value);
@@ -421,6 +392,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             placeholder="Введите размер хранилища"
                             unitType={ResourceUnitEnum.BYTES}
                             disabled={isEditMode}
+                            min={0}
                         />
                     </div>
                     <div style={{marginBottom: '16px'}}>
@@ -428,9 +400,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             label="Количество реплик"
                             name="replicas"
                             value={formik.values.replicas.toString()}
-                            onChange={(value) =>
-                                formik.setFieldValue('replicas', Math.max(parseInt(value, 10), 1))
-                            }
+                            onChange={(value) => formik.setFieldValue('replicas', Math.max(parseInt(value, 10), 1))}
                             onBlur={formik.handleBlur('replicas')}
                             error={formik.touched.replicas ? formik.errors.replicas : undefined}
                             placeholder="Введите количество реплик"
@@ -438,11 +408,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                         />
                     </div>
                     <Box marginTop={16} marginBottom={16}>
-                        <Checkbox
-                            size="l"
-                            checked={formik.values.backupIsEnabled}
-                            onUpdate={(value) => formik.setFieldValue('backupIsEnabled', value)}
-                        >
+                        <Checkbox size="l" checked={formik.values.backupIsEnabled} onUpdate={(value) => formik.setFieldValue('backupIsEnabled', value)}>
                             Нужно ли автосоздание бекапов?
                         </Checkbox>
                     </Box>
@@ -454,29 +420,16 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                 value={formik.values.backupSchedule.toString()}
                                 onChange={(value) => formik.setFieldValue('backupSchedule', value)}
                                 onBlur={formik.handleBlur('backupSchedule')}
-                                error={
-                                    formik.touched.backupSchedule
-                                        ? formik.errors.backupSchedule
-                                        : undefined
-                                }
+                                error={formik.touched.backupSchedule ? formik.errors.backupSchedule : undefined}
                                 placeholder="<Минуты> <Часы> <Дни_месяца> <Месяцы> <Дни_недели> <Годы>"
                             />
                             <InputField
                                 label="Количество бекапов"
                                 name="backupLimit"
                                 value={formik.values.backupLimit.toString()}
-                                onChange={(value) =>
-                                    formik.setFieldValue(
-                                        'backupLimit',
-                                        Math.max(parseInt(value, 10), 1),
-                                    )
-                                }
+                                onChange={(value) => formik.setFieldValue('backupLimit', Math.max(parseInt(value, 10), 1))}
                                 onBlur={formik.handleBlur('backupLimit')}
-                                error={
-                                    formik.touched.backupLimit
-                                        ? formik.errors.backupLimit
-                                        : undefined
-                                }
+                                error={formik.touched.backupLimit ? formik.errors.backupLimit : undefined}
                                 placeholder="Введите число"
                                 type="number"
                             />
@@ -491,11 +444,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                 value={formik.values.database.name}
                                 onChange={formik.handleChange('database.name')}
                                 onBlur={formik.handleBlur('database.name')}
-                                error={
-                                    formik.touched.database?.name
-                                        ? formik.errors.database?.name
-                                        : undefined
-                                }
+                                error={formik.touched.database?.name ? formik.errors.database?.name : undefined}
                                 placeholder="Введите название базы данных"
                                 disabled={isEditMode}
                             />
@@ -506,9 +455,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                 value={formik.values.user.name}
                                 onChange={formik.handleChange('user.name')}
                                 onBlur={formik.handleBlur('user.name')}
-                                error={
-                                    formik.touched.user?.name ? formik.errors.user?.name : undefined
-                                }
+                                error={formik.touched.user?.name ? formik.errors.user?.name : undefined}
                                 placeholder="Введите имя пользователя"
                                 disabled={isEditMode}
                             />
@@ -518,11 +465,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                 value={formik.values.user.password}
                                 onChange={formik.handleChange('user.password')}
                                 onBlur={formik.handleBlur('user.password')}
-                                error={
-                                    formik.touched.user?.password
-                                        ? formik.errors.user?.password
-                                        : undefined
-                                }
+                                error={formik.touched.user?.password ? formik.errors.user?.password : undefined}
                                 placeholder="Введите пароль"
                                 type="password"
                                 disabled={isEditMode}
@@ -530,35 +473,14 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                         </div>
                     )}
                     <HorizontalStack gap={20}>
-                        <Button
-                            view="action"
-                            size="l"
-                            onClick={handleSimulateQuotas}
-                            disabled={formik.isSubmitting}
-                        >
+                        <Button view="action" size="l" onClick={handleSimulateQuotas} disabled={formik.isSubmitting}>
                             Симулировать
                         </Button>
-                        <Button
-                            type="submit"
-                            view={isSimulationValid ? 'outlined-success' : 'normal'}
-                            size="l"
-                            disabled={formik.isSubmitting || !isSimulationValid}
-                        >
+                        <Button type="submit" view={isSimulationValid ? 'outlined-success' : 'normal'} size="l" disabled={formik.isSubmitting || !isSimulationValid}>
                             {/* eslint-disable-next-line no-nested-ternary */}
-                            {formik.isSubmitting
-                                ? isEditMode
-                                    ? 'Обновление...'
-                                    : 'Создание...'
-                                : isEditMode
-                                    ? 'Обновить кластер'
-                                    : 'Создать кластер'}
+                            {formik.isSubmitting ? (isEditMode ? 'Обновление...' : 'Создание...') : isEditMode ? 'Обновить кластер' : 'Создать кластер'}
                         </Button>
-                        <Button
-                            view="normal"
-                            size="l"
-                            disabled={formik.isSubmitting}
-                            onClick={cancelAction}
-                        >
+                        <Button view="normal" size="l" disabled={formik.isSubmitting} onClick={cancelAction}>
                             Отменить
                         </Button>
                     </HorizontalStack>
@@ -578,11 +500,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                     <div style={{marginTop: '16px'}}>
                         {simulationResult.map((quota) => (
                             <Box key={quota.resource.id} marginTop="16px">
-                                <QuotaSimulationResult
-                                    title={quota.resource.description}
-                                    quota={quota}
-                                    unit={getUnitByResource(quota.resource)}
-                                />
+                                <QuotaSimulationResult title={quota.resource.description} quota={quota} unit={getUnitByResource(quota.resource)} />
                             </Box>
                         ))}
                     </div>

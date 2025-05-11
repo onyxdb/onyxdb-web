@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {Select, TextInput} from '@gravity-ui/uikit';
 
 export enum ResourceUnitEnum {
-    CORES = 'cores',
+    CORES = 'millicores',
     BYTES = 'bytes',
 }
 
@@ -19,7 +19,7 @@ interface ResourceInputFieldProps {
     note?: React.ReactNode;
     unitType: ResourceUnitEnum;
     // max?: number;
-    // min?: number;
+    min?: number;
 
     [key: string]: unknown;
 }
@@ -56,13 +56,14 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     note,
     unitType,
     // max,
-    // min,
+    min,
     ...props
 }) => {
     const [currentValue, setCurrentValue] = useState<number>(value);
     const [currentUnit, setCurrentUnit] = useState<ResourceUnit>(CoresCPU);
     const [units, setUnits] = useState<ResourceUnit[]>([]);
 
+    console.log('unit', label, unitType, units)
     useEffect(() => {
         if (unitType === ResourceUnitEnum.CORES) {
             setUnits(coresUnits);
@@ -88,9 +89,10 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     const handleValueChange = (newValue: string) => {
         const parsedValue = parseFloat(newValue);
         const val = convertToBaseUnit(parsedValue, currentUnit);
-        setCurrentValue(val);
-        console.info('handleValueChange', val, currentUnit);
-        changeAction(val, currentUnit);
+        const valMinMaxed = min === undefined ? val : Math.max(val, min);
+        setCurrentValue(valMinMaxed);
+        // console.info('handleValueChange', valMinMaxed, currentUnit);
+        changeAction(valMinMaxed, currentUnit);
     };
 
     const handleUnitChange = (newUnit: string[]) => {

@@ -233,6 +233,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                                 (resources.find((r) => r.id === formik.values.quota.resourceId)
                                     ?.unit as ResourceUnitEnum) ?? ResourceUnitEnum.BYTES
                             }
+                            min={0}
                         />
                     </Box>
                     <Box marginBottom="20px">

@@ -19,7 +19,6 @@ interface ClusterViewPageProps {
     cluster: MongoClusterDTO;
 }
 
- 
 export default function ClusterView({cluster}: ClusterViewPageProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -62,6 +61,9 @@ export default function ClusterView({cluster}: ClusterViewPageProps) {
         return <div>No data</div>;
     }
 
+    const grafanaMetrics = process.env.GRAFANA_DASHBOARD_METRICS || 'onyxdb-mongodb-metrics'
+    const grafanaLogs = process.env.GRAFANA_DASHBOARD_LOGS || 'onyxdb-mongodb-logs'
+
     return (
         <div style={{padding: '20px', display: 'flex', flexDirection: 'column'}}>
             <div style={{display: 'flex', alignItems: 'center', gap: '20px'}}>
@@ -99,10 +101,10 @@ export default function ClusterView({cluster}: ClusterViewPageProps) {
                             <UsersTab clusterId={cluster.id} />
                         </TabPanel>
                         <TabPanel value="monitoring">
-                            <GrafanaFrame dashboardId="SsEeTs97k" />
+                            <GrafanaFrame dashboardId={grafanaMetrics} />
                         </TabPanel>
                         <TabPanel value="logs">
-                            <GrafanaFrame dashboardId="bdpzp3w3jkt8ga" />
+                            <GrafanaFrame dashboardId={grafanaLogs} />
                         </TabPanel>
                         <TabPanel value="backups">
                             <BackupsTab clusterId={cluster.id} />

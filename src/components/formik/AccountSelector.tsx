@@ -14,6 +14,7 @@ interface AccountSelectorProps {
     label?: string;
     placeholder?: string;
     disabled?: boolean;
+    error?: string;
 }
 
 export const AccountSelector: React.FC<AccountSelectorProps> = ({
@@ -22,6 +23,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
     label = 'Аккаунт',
     placeholder = 'Введите и выберите аккаунт',
     disabled,
+    error,
 }) => {
     const {user} = useAuth();
     const [accountOptions, setAccountOptions] = useState<AccountDTO[]>([]);
@@ -73,14 +75,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
         return (
             <div style={{marginBottom: '20px'}}>
                 <label style={{display: 'block', marginBottom: '8px'}}>{label}</label>
-                <TextInput
-                    name="account"
-                    value={searchAccount}
-                    placeholder={placeholder}
-                    onUpdate={handleAccountChange}
-                    disabled={disabled}
-                    hasClear={true}
-                />
+                <TextInput name="account" value={searchAccount} placeholder={placeholder} onUpdate={handleAccountChange} disabled={disabled} hasClear={true} />
             </div>
         );
     }
@@ -89,13 +84,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
         <div style={{marginBottom: '20px'}}>
             <label style={{display: 'block', marginBottom: '8px'}}>{label}</label>
             <HorizontalStack align="center" gap={10}>
-                <TextInput
-                    name="account"
-                    value={searchAccount}
-                    placeholder={placeholder}
-                    onUpdate={handleAccountChange}
-                    hasClear={true}
-                />
+                <TextInput name="account" value={searchAccount} placeholder={placeholder} onUpdate={handleAccountChange} hasClear={true} error={error} />
                 <Button view="action" size="m" onClick={handleOpenAccountsModal}>
                     Поиск
                 </Button>
@@ -108,12 +97,7 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
                     <Text variant="header-1">{header}</Text>
                     <Box marginTop="10px">
                         {accountOptions.map((item) => (
-                            <Card
-                                key={item.id}
-                                type="selection"
-                                onClick={() => handleAccountSelect(item)}
-                                style={{marginBottom: '10px', padding: '16px'}}
-                            >
+                            <Card key={item.id} type="selection" onClick={() => handleAccountSelect(item)} style={{marginBottom: '10px', padding: '16px'}}>
                                 <Text variant="header-1">{`${item.firstName} ${item.lastName}`}</Text>
                                 <Box>
                                     <Text variant="subheader-1" color="secondary" ellipsis={true}>

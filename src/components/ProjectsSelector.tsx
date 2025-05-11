@@ -14,6 +14,7 @@ interface ProjectSelectorProps {
     label?: string;
     placeholder?: string;
     disabled?: boolean;
+    error?: string;
 }
 
 export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
@@ -23,6 +24,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
     label = 'Проект',
     placeholder = 'Введите и выберите проект',
     disabled,
+    error,
 }) => {
     const [projectsAll, setProjectsAll] = useState<ProjectDTO[]>([]);
     const [projectOptions, setProjectOptions] = useState<ProjectDTO[]>([]);
@@ -103,6 +105,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
                     value={searchQuery}
                     placeholder={placeholder}
                     onUpdate={handleProjectSearchChange}
+                    error={error}
                 />
                 <Button view="action" size="m" onClick={handleOpenProjectsModal}>
                     Поиск

@@ -3,12 +3,12 @@
 import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Card, Select, Text} from '@gravity-ui/uikit';
-import {InputField} from '@/components/formik/InputField';
 import {ResourceDTO} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {ProductSelector} from '@/components/formik/ProductSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
+import {ResourceInputField, ResourceUnitEnum} from '@/components/formik/ResourceInputField';
 
 interface CreateQuotaModalProps {
     productId?: string;
@@ -27,11 +27,7 @@ export interface CreateQuotaFormFields {
     quotas: CreateQuota[];
 }
 
-export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
-    productId,
-    closeAction,
-    submitAction,
-}) => {
+export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({productId, closeAction, submitAction}) => {
     const [resources, setResources] = useState<ResourceDTO[]>([]);
 
     const formik = useFormik<CreateQuotaFormFields>({
@@ -119,13 +115,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
         <div>
             <Text variant="header-1">Загрузка квоты</Text>
             <form onSubmit={formik.handleSubmit} style={{marginTop: '20px'}}>
-                {!productId && (
-                    <ProductSelector
-                        selectProductAction={(product) =>
-                            formik.setFieldValue('productId', product.id)
-                        }
-                    />
-                )}
+                {!productId && <ProductSelector selectProductAction={(product) => formik.setFieldValue('productId', product.id)} />}
                 <Box marginTop="20px">
                     <Text variant="subheader-2">Разрешения</Text>
                     {formik.values.quotas.map((quota, index) => (
@@ -134,72 +124,36 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                                 <Select
                                     size="m"
                                     placeholder="Выберите ресурс"
-                                    value={[
-                                        resources.find((p) => p.id === quota.resourceId)
-                                            ?.description ?? quota.resourceId,
-                                    ]}
-                                    onUpdate={(value: string[]) =>
-                                        handleQuotaChange(index, 'resourceId', value[0])
-                                    }
+                                    value={[resources.find((p) => p.id === quota.resourceId)?.description ?? quota.resourceId]}
+                                    onUpdate={(value: string[]) => handleQuotaChange(index, 'resourceId', value[0])}
                                 >
                                     {resourceOptions}
                                 </Select>
-                                {formik.touched.quotas?.[index]?.resourceId &&
-                                    (formik.errors?.quotas?.[index] as FormikErrors<CreateQuota>)
-                                        ?.resourceId && (
-                                    <Text
-                                        variant="body-1"
-                                        color="danger"
-                                        style={{marginTop: '4px'}}
-                                    >
-                                        {
-                                            (
-                                                    formik.errors?.quotas?.[
-                                                        index
-                                                    ] as FormikErrors<CreateQuota>
-                                            ).resourceId
-                                        }
+                                {formik.touched.quotas?.[index]?.resourceId && (formik.errors?.quotas?.[index] as FormikErrors<CreateQuota>)?.resourceId && (
+                                    <Text variant="body-1" color="danger" style={{marginTop: '4px'}}>
+                                        {(formik.errors?.quotas?.[index] as FormikErrors<CreateQuota>).resourceId}
                                     </Text>
                                 )}
                             </Box>
                             <Box marginBottom="10px">
-                                <InputField
+                                <ResourceInputField
                                     label="Лимит"
-                                    name={`quotas[${index}].limit`}
-                                    value={quota.limit.toString()}
-                                    onChange={(value) =>
-                                        handleQuotaChange(index, 'limit', parseInt(value, 10))
-                                    }
+                                    name="quotas[${index}].limit"
+                                    value={quota.limit}
+                                    changeAction={(value) => handleQuotaChange(index, 'limit', value)}
                                     onBlur={() => {}}
-                                    error={
-                                        formik.touched?.quotas?.[index]?.limit
-                                            ? (
-                                                  formik.errors?.quotas?.[
-                                                      index
-                                                  ] as FormikErrors<CreateQuota>
-                                            )?.limit
-                                            : undefined
-                                    }
+                                    error={formik.touched?.quotas?.[index]?.limit ? (formik.errors?.quotas?.[index] as FormikErrors<CreateQuota>)?.limit : undefined}
                                     placeholder="Введите лимит"
-                                    type="number"
-                                    // endContent={selectedResource?.units}
+                                    unitType={(resources.find((r) => r.id === formik.values.quotas[index].resourceId)?.unit as ResourceUnitEnum) ?? ResourceUnitEnum.BYTES}
+                                    min={0}
                                 />
                             </Box>
-                            <Button
-                                view="outlined-danger"
-                                size="m"
-                                onClick={() => handleRemoveQuota(index)}
-                            >
+                            <Button view="outlined-danger" size="m" onClick={() => handleRemoveQuota(index)}>
                                 Удалить квоту
                             </Button>
                         </Card>
                     ))}
-                    <Button
-                        view="normal"
-                        size="m"
-                        onClick={handleAddQuota}
-                        style={{marginTop: '8px', marginBottom: '16px'}}
-                    >
+                    <Button view="normal" size="m" onClick={handleAddQuota} style={{marginTop: '8px', marginBottom: '16px'}}>
                         Добавить квоту
                     </Button>
                 </Box>
@@ -208,12 +162,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                         {formik.isSubmitting ? 'Создание...' : 'Создать квоту'}
                     </Button>
                     <Box marginLeft="20px">
-                        <Button
-                            view="normal"
-                            size="l"
-                            onClick={closeAction}
-                            disabled={formik.isSubmitting}
-                        >
+                        <Button view="normal" size="l" onClick={closeAction} disabled={formik.isSubmitting}>
                             Отмена
                         </Button>
                     </Box>

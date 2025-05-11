@@ -38,7 +38,7 @@ export default function ClusterCreatePage() {
                 password: values.user.password,
             },
         };
-        console.log('Cluster create request values', request);
+        console.info('Cluster create request values', request);
         mdbApi
             .createCluster({createMongoClusterRequestDTO: request})
             .then((_) => {

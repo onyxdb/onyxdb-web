@@ -114,14 +114,14 @@ export const OperationsTab: React.FC<OperationsTabProps> = ({clusterId}) => {
                 <HorizontalStack>
                     {operation.isRestartAllowed &&
                         checkPermission('cluster', 'operations', clusterId) && (
-                            <Button
-                                view="outlined-action"
-                                size="m"
-                                onClick={() => handleRestartOperation(operation.id)}
-                            >
-                                <Icon data={Arrows3RotateLeft} />
-                            </Button>
-                        )}
+                        <Button
+                            view="outlined-action"
+                            size="m"
+                            onClick={() => handleRestartOperation(operation.id)}
+                        >
+                            <Icon data={Arrows3RotateLeft} />
+                        </Button>
+                    )}
                 </HorizontalStack>
             ),
         },

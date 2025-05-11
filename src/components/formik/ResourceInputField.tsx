@@ -89,7 +89,7 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
         const parsedValue = parseFloat(newValue);
         const val = convertToBaseUnit(parsedValue, currentUnit);
         setCurrentValue(val);
-        console.log('handleValueChange', val, currentUnit);
+        console.info('handleValueChange', val, currentUnit);
         changeAction(val, currentUnit);
     };
 
@@ -98,7 +98,7 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
         const selectedUnit = units.find((u) => u.value === unit);
         if (selectedUnit) {
             setCurrentUnit(selectedUnit);
-            console.log('handleUnitChange', unit);
+            console.info('handleUnitChange', unit);
             changeAction(currentValue, selectedUnit);
         }
     };

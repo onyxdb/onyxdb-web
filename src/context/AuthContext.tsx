@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
         const fetchUser = async () => {
             try {
                 const userData = await getCurrentUser();
-                console.log('My account data:', userData);
+                console.info('My account data:', userData);
 
                 const filteredPermissions: Permissions = {};
                 for (const item in userData.permissions) {

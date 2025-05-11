@@ -46,10 +46,10 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
                 startDate: rangeDate.start.format('YYYY-MM-DD'),
                 endDate: rangeDate.end.format('YYYY-MM-DD'),
             };
-            console.log('getProductQuotaUsageReport request', body);
+            console.info('getProductQuotaUsageReport request', body);
             const response = await mdbBillingApi.getProductQuotaUsageReport(body);
             setReportData(response.data.resources);
-            console.log('getProductQuotaUsageReport response', response);
+            console.info('getProductQuotaUsageReport response', response);
         } catch (fetchError) {
             console.error('Ошибка при получении отчёта о квотах:', fetchError);
             if ((fetchError as AxiosError).status === 403) {
@@ -80,7 +80,7 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
 
         const maxY = Math.max(...usageData, ...limitData);
         const minY = Math.min(...usageData, ...freeData);
-        console.log('minY', minY, 'maxY', maxY);
+        console.info('minY', minY, 'maxY', maxY);
         return {
             resource: data.resource,
             data: {

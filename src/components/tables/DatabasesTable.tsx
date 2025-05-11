@@ -159,15 +159,15 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
                 <HorizontalStack gap={10}>
                     {checkPermission('database', 'delete', database.name) &&
                         !database.isDeleted && (
-                            <Button
-                                view="outlined-danger"
-                                size="m"
-                                onClick={() => deleteAction(database.name)}
-                            >
-                                <Icon data={TrashBin} />
-                                Удалить
-                            </Button>
-                        )}
+                        <Button
+                            view="outlined-danger"
+                            size="m"
+                            onClick={() => deleteAction(database.name)}
+                        >
+                            <Icon data={TrashBin} />
+                              Удалить
+                        </Button>
+                    )}
                 </HorizontalStack>
             ),
         },

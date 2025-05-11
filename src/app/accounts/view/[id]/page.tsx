@@ -210,7 +210,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     ];
 
     const actions = [];
-    console.log('user.account.id', user?.account.id, account.id);
+    console.info('user.account.id', user?.account.id, account.id);
     if (user?.account.id === account.id || checkPermission(`account`, 'edit', accountId)) {
         actions.push({
             text: 'Редактировать',

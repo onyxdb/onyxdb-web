@@ -169,20 +169,20 @@ export const DBUserForm: React.FC<DBUserFormProps> = ({
                                 formik.errors.permissions &&
                                 (formik.errors.permissions[index] as CreateMongoPermissionDTO)
                                     ?.databaseName && (
-                                    <Text
-                                        variant="body-1"
-                                        color="danger"
-                                        style={{marginTop: '4px'}}
-                                    >
-                                        {
-                                            (
+                                <Text
+                                    variant="body-1"
+                                    color="danger"
+                                    style={{marginTop: '4px'}}
+                                >
+                                    {
+                                        (
                                                 formik.errors.permissions[
                                                     index
                                                 ] as CreateMongoPermissionDTO
-                                            ).databaseName
-                                        }
-                                    </Text>
-                                )}
+                                        ).databaseName
+                                    }
+                                </Text>
+                            )}
                         </Box>
                         <Box marginBottom="10px">
                             <Select

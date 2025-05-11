@@ -20,7 +20,7 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
     const fetchDataUsers = async () => {
         try {
             const usersResponse = await mdbMongoDbUserApi.listUsers({clusterId});
-            console.log('usersResponse', usersResponse);
+            console.info('usersResponse', usersResponse);
             setUsers(usersResponse.data.users);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -30,7 +30,7 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
     const fetchDataDBs = async () => {
         try {
             const databasesResponse = await mdbMongoDbDatabasesApi.listDatabases({clusterId});
-            console.log('databases resp', databasesResponse.data.databases);
+            console.info('databases resp', databasesResponse.data.databases);
             setDatabases(databasesResponse.data.databases);
         } catch (error) {
             console.error('Error fetching databases:', error);

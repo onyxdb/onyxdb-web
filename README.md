@@ -43,10 +43,19 @@ docker build -t onyxdb-web .
 ---
 
 При запуске фронтенда обратите внимание на env и окружение, в котором вы запускаете. 
-Выберите env бекенда для запуска в различных системах
+
+**Выберите env бекенда для запуска в различных системах**
 
 > ENV BACKEND_URL=http://localhost:9001 - стоит по умолчанию
 
-> ENV BACKEND_URL=http://host.docker.internal:9001
+> ENV BACKEND_URL=http://host.docker.internal:9001 - для докера
 
-> ENV BACKEND_URL=http://onyxdb:9001
+> ENV BACKEND_URL=http://onyxdb:9001 - для K8s
+
+**Выберите env grafana для отображения dashboard'а в различных системах**
+
+> ENV GRAFANA_URL=http://localhost:3000 - стоит по умолчанию
+
+> ENV GRAFANA_URL=http://host.docker.internal:3000 - для докера
+
+> ENV GRAFANA_URL=http://grafana:3000 - для K8s

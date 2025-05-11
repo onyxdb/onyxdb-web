@@ -29,6 +29,7 @@ export type AccountFormDTO = AccountDTO & {
     anyData: AccountData;
 };
 
+// eslint-disable-next-line complexity
 function mapDTOtoForm(data?: AccountDTO): AccountFormDTO {
     return {
         id: data?.id ?? '',

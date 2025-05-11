@@ -39,7 +39,9 @@ export const ProjectsTable: React.FC<ProjectsTableProps> = ({
     const fetchProducts = async () => {
         const prdIds = new Set<string>();
         projects.forEach((prj) => {
-            if (prj.productId) prdIds.add(prj.productId);
+            if (prj.productId) {
+                prdIds.add(prj.productId);
+            }
         });
 
         const prdPromises = Array.from(prdIds).map(async (prdId) => {

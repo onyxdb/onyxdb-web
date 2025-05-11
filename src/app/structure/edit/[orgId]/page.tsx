@@ -64,6 +64,6 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
         );
     }
 
-    console.log(orgUnit);
+    console.info(orgUnit);
     return <div style={{padding: '20px'}}>TODO</div>;
 }

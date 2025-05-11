@@ -53,12 +53,12 @@ export const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
         initialValues: initialValue
             ? mapDTOtoFormFields(initialValue)
             : {
-                  name: '',
-                  shopName: '',
-                  description: '',
-                  parentBusinessRole: '',
-                  parentBusinessRoleId: '',
-              },
+                name: '',
+                shopName: '',
+                description: '',
+                parentBusinessRole: '',
+                parentBusinessRoleId: '',
+            },
         validate: (values) => {
             const errors: Partial<BusinessRoleFormFields> = {};
             if (!values.name) {

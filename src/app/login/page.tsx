@@ -25,7 +25,7 @@ export default function LoginPage() {
             router.replace('/');
             router.refresh();
         } catch (error) {
-            console.log('login_failed', error);
+            console.info('login_failed', error);
             toaster.add({
                 name: `login_failed`,
                 title: 'Ошибка логина в аккаунт',

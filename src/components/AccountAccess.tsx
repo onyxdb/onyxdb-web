@@ -138,7 +138,7 @@ const BusinessRolesHierarchy: React.FC<{
     allBusinessRoles: BusinessRoleWithRolesDTO[];
     level?: number;
 }> = ({businessRoles, allBusinessRoles, level = 0}) => {
-    if (businessRoles.length === 0) return null;
+    if (businessRoles.length === 0) {return null;}
 
     return (
         <VerticalStack gap={5}>

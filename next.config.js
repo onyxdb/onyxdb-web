@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 const path = require('path');
 
 // Базовый конфиг
@@ -11,6 +12,7 @@ const nextConfig = {
 
         config.resolve.alias = {
             ...config.resolve.alias,
+            // eslint-disable-next-line no-undef
             '@': path.resolve(__dirname, 'src'),
         };
 
@@ -21,6 +23,7 @@ const nextConfig = {
         // ENV BACKEND_URL=http://localhost:9001
         // ENV BACKEND_URL=http://host.docker.internal:9001
         // ENV BACKEND_URL=http://onyxdb:9001
+        // eslint-disable-next-line no-undef
         const backendUrl = process.env.BACKEND_URL || 'http://localhost:9001';
 
         return [
@@ -36,4 +39,5 @@ const nextConfig = {
     },
 };
 
+// eslint-disable-next-line no-undef
 module.exports = nextConfig;

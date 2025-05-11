@@ -19,7 +19,7 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
     const fetchData = async () => {
         try {
             const databasesResponse = await mdbMongoDbDatabasesApi.listDatabases({clusterId});
-            console.log('databases resp', databasesResponse.data.databases);
+            console.info('databases resp', databasesResponse.data.databases);
             setDatabases(databasesResponse.data.databases);
         } catch (error) {
             console.error('Error fetching databases:', error);

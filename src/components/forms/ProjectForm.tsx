@@ -50,14 +50,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             return errors;
         },
         onSubmit: (values) => {
-            console.log('submitAction project');
+            console.info('submitAction project');
             submitAction(values);
             formik.resetForm();
         },
     });
 
     const handleProductSelect = (product: ProductDTO) => {
-        console.log('ProjectForm handleProductSelect', product);
+        console.info('ProjectForm handleProductSelect', product);
         formik.setFieldValue('productId', product.id);
     };
 

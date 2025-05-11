@@ -51,7 +51,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                 errors.productId = 'ID продукта обязателен';
             }
             values.quotas.forEach((quota, index) => {
-                console.log('quota', quota, !quota.resourceId || quota.limit <= 0);
+                console.info('quota', quota, !quota.resourceId || quota.limit <= 0);
                 if (!quota.resourceId || quota.limit <= 0) {
                     if (!errors.quotas) {
                         errors.quotas = [];
@@ -147,20 +147,20 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                                 {formik.touched.quotas?.[index]?.resourceId &&
                                     (formik.errors?.quotas?.[index] as FormikErrors<CreateQuota>)
                                         ?.resourceId && (
-                                        <Text
-                                            variant="body-1"
-                                            color="danger"
-                                            style={{marginTop: '4px'}}
-                                        >
-                                            {
-                                                (
+                                    <Text
+                                        variant="body-1"
+                                        color="danger"
+                                        style={{marginTop: '4px'}}
+                                    >
+                                        {
+                                            (
                                                     formik.errors?.quotas?.[
                                                         index
                                                     ] as FormikErrors<CreateQuota>
-                                                ).resourceId
-                                            }
-                                        </Text>
-                                    )}
+                                            ).resourceId
+                                        }
+                                    </Text>
+                                )}
                             </Box>
                             <Box marginBottom="10px">
                                 <InputField
@@ -177,7 +177,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
                                                   formik.errors?.quotas?.[
                                                       index
                                                   ] as FormikErrors<CreateQuota>
-                                              )?.limit
+                                            )?.limit
                                             : undefined
                                     }
                                     placeholder="Введите лимит"

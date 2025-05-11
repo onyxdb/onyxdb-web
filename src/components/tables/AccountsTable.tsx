@@ -123,11 +123,11 @@ export const AccountsTable: React.FC<AccountsTableProps> = ({editAction, deleteA
                 <div style={{display: 'flex', gap: '10px'}}>
                     {editAction &&
                     (checkPermission('account', 'edit') || user?.account.id === account.id) ? (
-                        <Button view="normal" size="m" onClick={() => editAction(account.id)}>
-                            <Icon data={Pencil} />
+                            <Button view="normal" size="m" onClick={() => editAction(account.id)}>
+                                <Icon data={Pencil} />
                             Редактировать
-                        </Button>
-                    ) : null}
+                            </Button>
+                        ) : null}
                     {deleteAction && checkPermission('account', 'delete') ? (
                         <Button
                             view="outlined-danger"

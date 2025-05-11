@@ -46,7 +46,7 @@ export const ProjectSelector: React.FC<ProjectSelectorProps> = ({
                     handleProjectSelect(initial);
                 }
             }
-            // console.log('fetchProjectsAll', response.data.projects);
+            // console.info('fetchProjectsAll', response.data.projects);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }

@@ -12,8 +12,8 @@ interface QuotaSimulationResultProps {
 }
 
 const getColorByStatus = (isDanger: boolean, isWarning: boolean) => {
-    if (isDanger) return 'danger';
-    if (isWarning) return 'warning';
+    if (isDanger) {return 'danger';}
+    if (isWarning) {return 'warning';}
     return 'success';
 };
 

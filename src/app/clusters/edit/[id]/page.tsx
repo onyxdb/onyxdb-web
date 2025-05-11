@@ -48,7 +48,7 @@ export default function ClusterEditPage() {
                     },
                 },
             };
-            console.log('Cluster create request values', request);
+            console.info('Cluster create request values', request);
             await mdbApi.updateCluster({
                 clusterId: clusterId,
                 updateMongoClusterRequestDTO: request,

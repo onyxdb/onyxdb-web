@@ -56,13 +56,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({onSubmit, closeAction, 
         initialValues: initialValue
             ? mapDTOtoFormFields(initialValue)
             : {
-                  name: '',
-                  description: '',
-                  parentProduct: '',
-                  parentProductId: '',
-                  ownerAccount: '',
-                  ownerAccountId: '',
-              },
+                name: '',
+                description: '',
+                parentProduct: '',
+                parentProductId: '',
+                ownerAccount: '',
+                ownerAccountId: '',
+            },
         validate: (values) => {
             const errors: Partial<ProductFormFields> = {};
             if (!values.name) {

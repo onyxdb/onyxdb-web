@@ -6,20 +6,22 @@ export function getLinkedResourceLabel(role: RoleDTO) {
     if (role.productId) {
         return (
             <div>
-                Продукт <Label theme="info">{role.productId}</Label>
+                <Label theme="utility">{role.entity}</Label>{' '}
+                <Label theme="info">{role.productId}</Label>
             </div>
         );
     }
     if (role.orgUnitId) {
         return (
             <div>
-                Продукт <Label theme="info">{role.orgUnitId}</Label>
+                <Label theme="utility">{role.entity}</Label>
+                <Label theme="info">{role.orgUnitId}</Label>
             </div>
         );
     }
     return (
         <div>
-            <Label theme="info">Глобальная</Label>
+            <Label theme="utility">{role.entity ?? 'Глобальная'}</Label>
         </div>
     );
 }

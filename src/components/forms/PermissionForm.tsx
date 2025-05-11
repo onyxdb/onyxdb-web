@@ -83,7 +83,7 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({
                     onBlur={formik.handleBlur('actionType')}
                     error={formik.touched.actionType ? formik.errors.actionType : undefined}
                     placeholder="Введите тип действия"
-                    note="Тип действия, например, READ, WRITE"
+                    note="Тип действия, например, get | create | update | delete"
                 />
                 <InputField
                     label="Название ресурса"

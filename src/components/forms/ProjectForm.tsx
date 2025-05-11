@@ -111,31 +111,33 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     placeholder="Введите описание проекта"
                 />
                 {!initialValue && (
-                    <ProductSelector
-                        selectProductAction={handleProductSelect}
-                        initialValue={initialProduct ?? undefined}
-                        label="В каком продукте создать проект?"
-                        header="Поиск продукта"
-                    />
+                    <Box marginBottom="10px">
+                        <ProductSelector
+                            selectProductAction={handleProductSelect}
+                            initialValue={initialProduct ?? undefined}
+                            label="В каком продукте создать проект?"
+                            header="Поиск продукта"
+                        />
+                        <label style={{display: 'block', marginBottom: '8px'}}>
+                            Неймспейс проекта
+                        </label>
+                        <Select
+                            size="m"
+                            placeholder="Выберите неймспейс"
+                            value={[formik.values.namespace]}
+                            onUpdate={(value) => formik.setFieldValue('namespace', value[0])}
+                            errorMessage={
+                                formik.touched.namespace ? formik.errors.namespace : undefined
+                            }
+                        >
+                            {namespaces.map((ns) => (
+                                <Select.Option key={ns} value={ns}>
+                                    {ns}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Box>
                 )}
-                <Box marginBottom="10px">
-                    <label style={{display: 'block', marginBottom: '8px'}}>Неймспейс проекта</label>
-                    <Select
-                        size="m"
-                        placeholder="Выберите неймспейс"
-                        value={[formik.values.namespace]}
-                        onUpdate={(value) => formik.setFieldValue('namespace', value[0])}
-                        errorMessage={
-                            formik.touched.namespace ? formik.errors.namespace : undefined
-                        }
-                    >
-                        {namespaces.map((ns) => (
-                            <Select.Option key={ns} value={ns}>
-                                {ns}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Box>
                 <HorizontalStack>
                     <Button type="submit" view="action" size="l" disabled={formik.isSubmitting}>
                         {formik.isSubmitting ? 'Сохранение...' : 'Сохранить'}

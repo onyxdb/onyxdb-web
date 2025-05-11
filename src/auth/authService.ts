@@ -38,7 +38,7 @@ export const refreshToken = async () => {
     const response = await authApi.refreshToken({
         refreshTokenDTO: {refreshToken: refreshTokenValue},
     });
-    if (response.status === 403) {
+    if (response.status === 401) {
         clearTokens();
         throw new Error('Unauthorized');
     }

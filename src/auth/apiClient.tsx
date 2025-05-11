@@ -23,7 +23,7 @@ apiClient.interceptors.response.use(
     async (error: AxiosError) => {
         const originalRequest = error.config;
         try {
-            if (error.response?.status === 403 && originalRequest) {
+            if (error.response?.status === 401 && originalRequest) {
                 const newTokens = await refreshToken();
                 setTokens(newTokens.accessToken, newTokens.refreshToken);
                 originalRequest.headers = originalRequest.headers || {};

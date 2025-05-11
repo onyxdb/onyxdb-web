@@ -63,7 +63,7 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
             <Text variant="header-2">Выбор ролей</Text>
             <div style={{marginBottom: '20px'}}>
                 <TextInput
-                    placeholder="Поиск по имени пользователя"
+                    placeholder="Поиск по имени роли"
                     value={searchQuery}
                     onUpdate={handleSearch}
                 />

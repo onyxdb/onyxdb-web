@@ -183,6 +183,26 @@ export interface AccountPostDTO {
 /**
  *
  * @export
+ * @interface AccountRolesAllDTO
+ */
+export interface AccountRolesAllDTO {
+    /**
+     *
+     * @type {Array<BusinessRoleWithRolesDTO>}
+     * @memberof AccountRolesAllDTO
+     */
+    businessRoles: Array<BusinessRoleWithRolesDTO>;
+    /**
+     *
+     * @type {Array<RoleWithPermissionsDTO>}
+     * @memberof AccountRolesAllDTO
+     */
+    roles: Array<RoleWithPermissionsDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface AccountRolesHistoryDTO
  */
 export interface AccountRolesHistoryDTO {
@@ -336,24 +356,6 @@ export interface BusinessRoleDTO {
     data?: {[key: string]: object};
     /**
      *
-     * @type {boolean}
-     * @memberof BusinessRoleDTO
-     */
-    is_deleted?: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof BusinessRoleDTO
-     */
-    deleted_at?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof BusinessRoleDTO
-     */
-    deleted_by?: string;
-    /**
-     *
      * @type {string}
      * @memberof BusinessRoleDTO
      */
@@ -408,6 +410,26 @@ export interface BusinessRolePostDTO {
      * @memberof BusinessRolePostDTO
      */
     data?: {[key: string]: object};
+}
+
+/**
+ *
+ * @export
+ * @interface BusinessRoleWithRolesDTO
+ */
+export interface BusinessRoleWithRolesDTO {
+    /**
+     *
+     * @type {BusinessRoleDTO}
+     * @memberof BusinessRoleWithRolesDTO
+     */
+    businessRole: BusinessRoleDTO;
+    /**
+     *
+     * @type {Array<RoleWithPermissionsDTO>}
+     * @memberof BusinessRoleWithRolesDTO
+     */
+    roles: Array<RoleWithPermissionsDTO>;
 }
 
 /**
@@ -2932,25 +2954,7 @@ export interface UpdateProjectRequestDTO {
      * @type {string}
      * @memberof UpdateProjectRequestDTO
      */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateProjectRequestDTO
-     */
     description: string;
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateProjectRequestDTO
-     */
-    productId: string;
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateProjectRequestDTO
-     */
-    namespace: string;
 }
 
 /**
@@ -3172,6 +3176,52 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             }
 
             const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get all account BRs, Roles and Permissions
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountAccess: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountAccess', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/access`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -3900,6 +3950,33 @@ export const AccountsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get all account BRs, Roles and Permissions
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountAccess(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountRolesAllDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountAccess(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountAccess']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get account business roles
          * @param {string} accountId
          * @param {*} [options] Override http request option.
@@ -4351,6 +4428,21 @@ export const AccountsApiFactory = function (
         },
         /**
          *
+         * @summary Get all account BRs, Roles and Permissions
+         * @param {AccountsApiGetAccountAccessRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountAccess(
+            requestParameters: AccountsApiGetAccountAccessRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<AccountRolesAllDTO> {
+            return localVarFp
+                .getAccountAccess(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Get account business roles
          * @param {AccountsApiGetAccountBusinessRolesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4617,6 +4709,20 @@ export interface AccountsApiDeleteAccountRequest {
      *
      * @type {string}
      * @memberof AccountsApiDeleteAccount
+     */
+    readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAccountAccess operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountAccessRequest
+ */
+export interface AccountsApiGetAccountAccessRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountAccess
      */
     readonly accountId: string;
 }
@@ -4900,6 +5006,23 @@ export class AccountsApi extends BaseAPI {
     ) {
         return AccountsApiFp(this.configuration)
             .deleteAccount(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get all account BRs, Roles and Permissions
+     * @param {AccountsApiGetAccountAccessRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAccountAccess(
+        requestParameters: AccountsApiGetAccountAccessRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAccountAccess(requestParameters.accountId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -21582,7 +21705,6 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
          * @param {string} [search]
          * @param {string} [productId]
          * @param {string} [orgUnitId]
-         * @param {string} [entity]
          * @param {number} [limit]
          * @param {number} [offset]
          * @param {*} [options] Override http request option.
@@ -21592,7 +21714,6 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
             search?: string,
             productId?: string,
             orgUnitId?: string,
-            entity?: string,
             limit?: number,
             offset?: number,
             options: RawAxiosRequestConfig = {},
@@ -21623,10 +21744,6 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
 
             if (orgUnitId !== undefined) {
                 localVarQueryParameter['orgUnitId'] = orgUnitId;
-            }
-
-            if (entity !== undefined) {
-                localVarQueryParameter['entity'] = entity;
             }
 
             if (limit !== undefined) {
@@ -21917,7 +22034,6 @@ export const RolesApiFp = function (configuration?: Configuration) {
          * @param {string} [search]
          * @param {string} [productId]
          * @param {string} [orgUnitId]
-         * @param {string} [entity]
          * @param {number} [limit]
          * @param {number} [offset]
          * @param {*} [options] Override http request option.
@@ -21927,7 +22043,6 @@ export const RolesApiFp = function (configuration?: Configuration) {
             search?: string,
             productId?: string,
             orgUnitId?: string,
-            entity?: string,
             limit?: number,
             offset?: number,
             options?: RawAxiosRequestConfig,
@@ -21938,7 +22053,6 @@ export const RolesApiFp = function (configuration?: Configuration) {
                 search,
                 productId,
                 orgUnitId,
-                entity,
                 limit,
                 offset,
                 options,
@@ -22124,7 +22238,6 @@ export const RolesApiFactory = function (
                     requestParameters.search,
                     requestParameters.productId,
                     requestParameters.orgUnitId,
-                    requestParameters.entity,
                     requestParameters.limit,
                     requestParameters.offset,
                     options,
@@ -22252,13 +22365,6 @@ export interface RolesApiGetAllRolesRequest {
      * @memberof RolesApiGetAllRoles
      */
     readonly orgUnitId?: string;
-
-    /**
-     *
-     * @type {string}
-     * @memberof RolesApiGetAllRoles
-     */
-    readonly entity?: string;
 
     /**
      *
@@ -22396,7 +22502,6 @@ export class RolesApi extends BaseAPI {
                 requestParameters.search,
                 requestParameters.productId,
                 requestParameters.orgUnitId,
-                requestParameters.entity,
                 requestParameters.limit,
                 requestParameters.offset,
                 options,

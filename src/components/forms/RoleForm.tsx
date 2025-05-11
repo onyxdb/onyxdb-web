@@ -141,17 +141,17 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
         initialValues: initialValue
             ? mapDTOtoFormFields(initialValue, permissions)
             : {
-                  roleType: RoleTypeEnum.EDITOR,
-                  roleConnectionType: RoleConnectionEnum.GLOBAL,
-                  name: '',
-                  shopName: '',
-                  isShopHidden: false,
-                  description: '',
-                  entity: '',
-                  productId: undefined,
-                  orgUnitId: undefined,
-                  permissions: [],
-              },
+                roleType: RoleTypeEnum.EDITOR,
+                roleConnectionType: RoleConnectionEnum.GLOBAL,
+                name: '',
+                shopName: '',
+                isShopHidden: false,
+                description: '',
+                entity: '',
+                productId: undefined,
+                orgUnitId: undefined,
+                permissions: [],
+            },
         validate: (values) => {
             const errors: Partial<RoleFormFields> = {};
             if (!values.name) {

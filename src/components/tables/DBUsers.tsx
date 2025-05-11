@@ -131,7 +131,7 @@ export const DBUsersTable: React.FC<DBUsersTableProps> = ({users, databases, del
         setIsDeleteModalOpen(false);
     };
 
-    console.log('userCache', userCache);
+    console.info('userCache', userCache);
     const MyTable = withTableSorting(Table);
     const columns: TableColumnConfig<MongoUserDTO>[] = [
         // {

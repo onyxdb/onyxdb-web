@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
+ 
 import {useFormik} from 'formik';
 import {Button} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';

@@ -14,12 +14,12 @@ export default function RolesPage() {
     const {checkPermission} = useAuth();
 
     const handleEdit = (roleId: string) => {
-        console.log('Edit role with ID:', roleId);
+        console.info('Edit role with ID:', roleId);
         router.push(`/access/edit/${roleId}`);
     };
 
     const handleDelete = async (roleId: string) => {
-        console.log('Delete role with ID:', roleId);
+        console.info('Delete role with ID:', roleId);
         if (roleId) {
             await rolesApi.deleteRole({roleId: roleId});
         }

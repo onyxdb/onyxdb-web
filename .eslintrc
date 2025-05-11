@@ -9,6 +9,7 @@
         "jest": true
     },
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "indent": ["error", 4]
     }
 }

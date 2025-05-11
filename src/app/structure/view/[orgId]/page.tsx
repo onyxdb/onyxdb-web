@@ -84,7 +84,7 @@ export default function OrgUnitDetailPage() {
     }
 
     const renderOrgUnitTree = (tree: OrganizationTreeDTO | null) => {
-        if (!tree) return null;
+        if (!tree) {return null;}
 
         const renderItem = (item: OrganizationTreeDTO, level = 0) => {
             return (

@@ -44,7 +44,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
     };
 
     const handleProductSelect = (data: ProductDTO) => {
-        console.log('ProductSelector handleProductSelect', data);
+        console.info('ProductSelector handleProductSelect', data);
         setIsProductsModalOpen(false);
         selectProductAction(data);
         setSearchQuery(data.name);

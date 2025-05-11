@@ -107,7 +107,7 @@ export default function ProductsPage({}: ProductsPageProps) {
     }, [selectedProductId]);
 
     const renderProductTree = (tree: ProductTreeDTO[]) => {
-        if (!tree) return null;
+        if (!tree) {return null;}
 
         const renderItem = (item: ProductTreeDTO, level = 0) => {
             return (

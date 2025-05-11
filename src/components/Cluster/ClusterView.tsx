@@ -19,7 +19,7 @@ interface ClusterViewPageProps {
     cluster: MongoClusterDTO;
 }
 
-// eslint-disable-next-line no-empty-pattern
+ 
 export default function ClusterView({cluster}: ClusterViewPageProps) {
     const router = useRouter();
     const pathname = usePathname();

@@ -197,8 +197,8 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
                                     usedPercentage > 100
                                         ? 'danger'
                                         : usedPercentage > 75
-                                          ? 'warning'
-                                          : 'info',
+                                            ? 'warning'
+                                            : 'info',
                                 content: `${roundTo(usedPercentage, 0)}%`,
                                 value: toPercent(usedPercentage),
                             },

@@ -68,7 +68,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     }, [selectedDcId]);
 
     const fetchAccountOptions = async () => {
-        console.log('fetchAccountOptions searchAccount', searchAccount, Boolean(searchAccount));
+        console.info('fetchAccountOptions searchAccount', searchAccount, Boolean(searchAccount));
         if (searchAccount) {
             const response = await accountsApi.getAllAccounts({
                 search: searchAccount,
@@ -114,7 +114,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     };
 
     const handleDcSelect = (dc: DomainComponentDTO) => {
-        console.log('handleDcSelect dc', dc);
+        console.info('handleDcSelect dc', dc);
         setIsDcModalOpen(false);
         setSelectedDcId(dc.id);
         setSearchDc(dc.name);
@@ -128,7 +128,7 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     };
 
     const handleParentOuSelect = (ou: OrganizationUnitDTO) => {
-        console.log('handleParentOuSelect ou', ou);
+        console.info('handleParentOuSelect ou', ou);
         setIsParentModalOpen(false);
         setSelectedParentOuId(ou.id);
         setSearchOu(ou.name);
@@ -137,13 +137,13 @@ export const OrgCreateForm: React.FC<OrgCreateFormProps> = ({onSubmit, closeActi
     };
 
     const handleAccountChange = (value: string) => {
-        console.log('handleAccountChange value', value);
+        console.info('handleAccountChange value', value);
         setSearchAccount(value);
         formik.setFieldValue('ownerAccount', value);
     };
 
     const handleAccountSelect = (data: AccountDTO) => {
-        console.log('handleAccountSelect data', data);
+        console.info('handleAccountSelect data', data);
         setIsAccountsModalOpen(false);
         setSelectedAccountId(data.id);
         setSearchAccount(`${data.firstName} ${data.lastName} (${data.email})`);

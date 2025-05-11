@@ -550,8 +550,8 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                     ? 'Обновление...'
                                     : 'Создание...'
                                 : isEditMode
-                                  ? 'Обновить кластер'
-                                  : 'Создать кластер'}
+                                    ? 'Обновить кластер'
+                                    : 'Создать кластер'}
                         </Button>
                         <Button
                             view="normal"

@@ -40,6 +40,7 @@ export interface TransferQuotaFormFields {
     simulation: string;
 }
 
+// eslint-disable-next-line complexity
 export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     product,
     resources,
@@ -70,7 +71,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
             if (!values.dstProductId) {
                 errors.dstProductId = 'ID продукта, который принимает квоты, обязателен';
             }
-            // console.log(
+            // console.info(
             //     'validate',
             //     values.quota.limit,
             //     !values.quota.resourceId || values.quota.limit <= 0,
@@ -102,7 +103,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                 dstProductId: values.dstProductId,
                 quotas: [values.quota],
             };
-            console.log('Transfer Quotas request', request, 'formik', formik.values);
+            console.info('Transfer Quotas request', request, 'formik', formik.values);
 
             try {
                 await mdbQuotasApi.transferQuotasBetweenProducts({
@@ -128,7 +129,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     });
 
     const handleSimulateQuotasTransfer = async () => {
-        console.log('Simulate Quotas request', formik.values);
+        console.info('Simulate Quotas request', formik.values);
         const request: TransferQuotasBetweenProductsRequestDTO = {
             srcProductId: formik.values.srcProductId,
             dstProductId: formik.values.dstProductId,
@@ -139,7 +140,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
             const simulationResponse = await mdbQuotasApi.simulateTransferQuotasBetweenProducts({
                 transferQuotasBetweenProductsRequestDTO: request,
             });
-            console.log('Simulate Quotas response', simulationResponse.data);
+            console.info('Simulate Quotas response', simulationResponse.data);
             setSimulationResult(simulationResponse.data);
         } catch (error) {
             console.error('Error simulating quotas exchange:', error);

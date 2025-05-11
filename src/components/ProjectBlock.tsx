@@ -48,22 +48,22 @@ export const ProjectBlock: React.FC<ProjectBlockProps> = ({
                         {name: 'product', action: 'delete'},
                         {name: `web-product-${data.id}`, action: 'delete'},
                     ]) && data.isDeleted ? (
-                        <Button
-                            view="outlined-danger"
-                            size="m"
-                            onClick={() => unArchiveAction(data.id)}
-                        >
-                            <Icon data={ArrowUpFromSquare} />
-                        </Button>
-                    ) : (
-                        <Button
-                            view="outlined-danger"
-                            size="m"
-                            onClick={() => archiveAction(data.id)}
-                        >
-                            <Icon data={TrashBin} />
-                        </Button>
-                    )}
+                            <Button
+                                view="outlined-danger"
+                                size="m"
+                                onClick={() => unArchiveAction(data.id)}
+                            >
+                                <Icon data={ArrowUpFromSquare} />
+                            </Button>
+                        ) : (
+                            <Button
+                                view="outlined-danger"
+                                size="m"
+                                onClick={() => archiveAction(data.id)}
+                            >
+                                <Icon data={TrashBin} />
+                            </Button>
+                        )}
                 </div>
             </HorizontalStack>
             <ClustersTable projectsIds={[data.id]} />

@@ -122,7 +122,7 @@ export default function StructurePage({}: StructurePageProps) {
     }, [selectedOu?.id]);
 
     const handleCreateDC = () => {
-        console.log('domainComponent handleCreateDC');
+        console.info('domainComponent handleCreateDC');
         setIsCreateModalOpen(true);
     };
 
@@ -137,7 +137,7 @@ export default function StructurePage({}: StructurePageProps) {
 
     const handleDcEdit = (id: string) => {
         const dc = domainComponents.find((dc2) => dc2.id === id);
-        console.log('domainComponent handleDcEdit id', id, 'dc', dc);
+        console.info('domainComponent handleDcEdit id', id, 'dc', dc);
         if (dc) {
             setEditingDomainComponent(dc);
             setIsCreateModalOpen(true);
@@ -146,7 +146,7 @@ export default function StructurePage({}: StructurePageProps) {
 
     const handleDcDelete = async (id: string) => {
         const dc = domainComponents.find((dc2) => dc2.id === id);
-        console.log('domainComponent handleDcDelete id', id, 'dc', dc);
+        console.info('domainComponent handleDcDelete id', id, 'dc', dc);
         if (dc && dc.id) {
             await domainComponentsApi.deleteDomainComponent({dcId: dc.id});
             await fetchDomainComponents();
@@ -183,7 +183,7 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     const handleSelectedOuDelete = async (id: string) => {
-        console.log('handleOuDelete id', id);
+        console.info('handleOuDelete id', id);
         if (id) {
             await organizationUnitsApi.deleteOrganizationUnit({ouId: id});
             await fetchDomainComponents();
@@ -194,7 +194,7 @@ export default function StructurePage({}: StructurePageProps) {
     };
 
     const renderDomainTree = (tree: DomainTreeDTO | null) => {
-        if (!tree) return null;
+        if (!tree) {return null;}
 
         const renderItem = (item: OrganizationTreeDTO, level = 0) => {
             return (

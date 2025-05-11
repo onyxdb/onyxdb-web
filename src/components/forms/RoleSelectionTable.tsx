@@ -60,8 +60,8 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
 
     return (
         <div>
-            <Text variant="header-2">Выбор ролей</Text>
-            <div style={{marginBottom: '20px'}}>
+            <Text variant="header-1">Выбор ролей</Text>
+            <div style={{marginBottom: '10px', marginTop: '10px'}}>
                 <TextInput
                     placeholder="Поиск по имени роли"
                     value={searchQuery}

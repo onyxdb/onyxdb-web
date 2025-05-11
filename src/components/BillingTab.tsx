@@ -9,6 +9,7 @@ import {ProductDTO, ProductQuotaUsageByResourceDTO, ResourceDTO} from '@/generat
 import ChartKit, {settings} from '@gravity-ui/chartkit';
 import {YagrPlugin, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {AxiosError} from 'axios';
 
 settings.set({plugins: [YagrPlugin]});
 
@@ -51,9 +52,15 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
             console.log('getProductQuotaUsageReport response', response);
         } catch (fetchError) {
             console.error('Ошибка при получении отчёта о квотах:', fetchError);
-            setError(
-                'Не удалось получить отчёт о квотах. Пожалуйста, проверьте даты и попробуйте снова.',
-            );
+            if ((fetchError as AxiosError).status === 403) {
+                setError(
+                    'Недостаточный уровень доступа. Необходим product-billing. Обратитесь к системному администратору.',
+                );
+            } else {
+                setError(
+                    'Не удалось получить отчёт о квотах. Пожалуйста, проверьте даты и попробуйте снова.',
+                );
+            }
             toaster.add({
                 name: 'error_get_billing',
                 title: 'Ошибка получения отчёта',
@@ -147,7 +154,7 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
                         <Text variant="body-1">{error}</Text>
                     </div>
                 )}
-                {chartsData.length === 0 && (
+                {chartsData.length === 0 && error.length === 0 && (
                     <Text>Нет данных. Попробуйте изменить временной промежуток</Text>
                 )}
                 {chartsData.map((cd) => (

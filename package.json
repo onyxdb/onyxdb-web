@@ -12,6 +12,7 @@
     "lint:prettier": "prettier --check '**/*.md'",
     "lint": "npm run lint:js && npm run lint:styles && npm run lint:prettier"
   },
+  "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
     "@gravity-ui/chartkit": "^6.1.1",
@@ -62,7 +63,7 @@
     "react-dom": "$react-dom"
   },
   "lint-staged": {
-    "*.{scss}": [
+    "*.scss": [
       "stylelint --fix --quiet"
     ],
     "*.{js,jsx,ts,tsx}": [

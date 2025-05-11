@@ -199,7 +199,11 @@ export default function StructurePage({}: StructurePageProps) {
         const renderItem = (item: OrganizationTreeDTO, level = 0) => {
             return (
                 <div key={item.unit.id} style={{marginLeft: `${level * 30}px`}}>
-                    <OrganizationUnitSmallCard orgUnit={item.unit} onSelect={handleOuSelect} />
+                    <OrganizationUnitSmallCard
+                        orgUnit={item.unit}
+                        onSelect={handleOuSelect}
+                        isActive={item.unit.id === selectedOu?.id}
+                    />
                     {item.items && item.items.length > 0 && (
                         <div>{item.items.map((child) => renderItem(child, level + 1))}</div>
                     )}

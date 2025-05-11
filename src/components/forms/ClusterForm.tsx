@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
-import {Button, Checkbox, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
+import {Button, Checkbox, Icon, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
 import {mdbApi, mdbQuotasApi} from '@/app/apis';
 import {
@@ -30,6 +30,7 @@ import {
     ResourceUnitEnum,
 } from '@/components/formik/ResourceInputField';
 import {QuotaSimulationResult} from '@/components/QuotaSimulationResult';
+import MongoLogo from '@/styles/mongodb.svg';
 
 export interface ClusterFormValues {
     name: string;
@@ -76,7 +77,9 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             .listResourcePresets()
             .then((response) => {
                 setResourcePresets(response.data.resourcePresets);
-                const presetsTypes = response.data.resourcePresets.map((p) => p.type);
+                const presetsTypes = response.data.resourcePresets
+                    .map((p) => p.type)
+                    .filter((obj, index, self) => index === self.findIndex((t) => t === obj));
                 setResourcePresetsTypes(presetsTypes);
                 const presetsByType = response.data.resourcePresets.filter(
                     (preset) => preset.type === DEFAULT_PRESET,
@@ -117,7 +120,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             user: {name: '', password: ''},
             clusterVersion: clusterVersions[0] ?? '8.0',
             backupIsEnabled: true,
-            backupSchedule: '0 0 * * * *',
+            backupSchedule: '0 0 * * *',
             backupLimit: 5,
         },
         validate: (values) => {
@@ -155,7 +158,9 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                 }
             }
             if (values.backupIsEnabled) {
-                const re = new RegExp('/(((\\d+,)+\\d+|(\\d+([/\\-])\\d+)|\\d+|\\*) ?){5,7}/');
+                const re = new RegExp(
+                    '^(\\*|([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])|\\*\\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\\*|([0-9]|1[0-9]|2[0-3])|\\*\\/([0-9]|1[0-9]|2[0-3])) (\\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\\*\\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\\*|([1-9]|1[0-2])|\\*\\/([1-9]|1[0-2])) (\\*|([0-6])|\\*\\/([0-6]))$',
+                );
                 if (!re.test(values.backupSchedule)) {
                     errors.backupSchedule = 'Формат крон неверный';
                 }
@@ -198,6 +203,12 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         </Select.Option>
     ));
 
+    const clusterVersionOptions = Object.values(clusterVersions).map((clusterVersion) => (
+        <Select.Option key={clusterVersion} value={clusterVersion}>
+            {clusterVersion}
+        </Select.Option>
+    ));
+
     const handleSimulateQuotas = async () => {
         if (
             !formik.values.projectId ||
@@ -225,7 +236,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             const simulateRequest: SimulateMongoDBQuotasUsageRequestDTO = {
                 projectId: formik.values.projectId,
                 config: {
-                    version: '',
+                    version: formik.values.clusterVersion,
                     backup: {
                         isEnabled: formik.values.backupIsEnabled,
                         schedule: formik.values.backupSchedule,
@@ -264,10 +275,15 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
 
     return (
         <div style={{display: 'flex', gap: '20px'}}>
-            <div style={{flex: 1, maxWidth: '600px'}}>
-                <Text variant="header-1">
-                    {isEditMode ? 'Обновление кластера' : 'Создание нового кластера'}
-                </Text>
+            <div style={{flex: 1, maxWidth: '600px', alignItems: 'center'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+                    <Icon data={MongoLogo} size={40} />
+                    <Text variant="header-1">
+                        {isEditMode
+                            ? 'Обновление MongoDB кластера'
+                            : 'Создание нового MongoDB кластера'}
+                    </Text>
+                </div>
                 <form onSubmit={formik.handleSubmit}>
                     <div style={{marginTop: '16px', marginBottom: '16px'}}>
                         <Text variant="subheader-2">Метаданные</Text>
@@ -323,13 +339,14 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                         </Box>
                         <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
                             {filteredPresets.map((preset) => (
-                                <ResourcePresetCard
-                                    key={preset.id}
-                                    preset={preset}
-                                    onSelect={handlePresetSelect}
-                                    isActive={selectedPreset?.id === preset.id}
-                                    // disabled={isEditMode}
-                                />
+                                <div style={{width: '150px'}} key={preset.id}>
+                                    <ResourcePresetCard
+                                        preset={preset}
+                                        onSelect={handlePresetSelect}
+                                        isActive={selectedPreset?.id === preset.id}
+                                        // disabled={isEditMode}
+                                    />
+                                </div>
                             ))}
                         </div>
                         {formik.touched.presetId && formik.errors.presetId && (
@@ -363,6 +380,33 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                                     disabled={isEditMode}
                                 >
                                     {storageClassOptions}
+                                </Select>
+                            </HorizontalStack>
+                        </Box>
+                        <Box marginBottom={8}>
+                            <HorizontalStack align="center" gap={10}>
+                                <Text variant="body-1">Версия MongoDB хранилища</Text>
+                                <Select
+                                    size="m"
+                                    placeholder="Выберите версию MongoDB"
+                                    value={[formik.values.clusterVersion]}
+                                    onUpdate={(value: string[]) =>
+                                        formik.setFieldValue('clusterVersion', value[0])
+                                    }
+                                    errorMessage={
+                                        formik.touched.clusterVersion &&
+                                        formik.errors.clusterVersion
+                                    }
+                                    validationState={
+                                        formik.touched.clusterVersion &&
+                                        formik.errors.clusterVersion &&
+                                        formik.errors.clusterVersion?.length === 0
+                                            ? 'invalid'
+                                            : undefined
+                                    }
+                                    disabled={isEditMode}
+                                >
+                                    {clusterVersionOptions}
                                 </Select>
                             </HorizontalStack>
                         </Box>

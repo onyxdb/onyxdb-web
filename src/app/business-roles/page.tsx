@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import {Modal} from '@gravity-ui/uikit';
+import {Modal, Text} from '@gravity-ui/uikit';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {useAuth} from '@/context/AuthContext';
 import {CirclePlus} from '@gravity-ui/icons';
@@ -10,6 +10,7 @@ import {businessRolesApi} from '@/app/apis';
 import BusinessRolesTable from '@/components/tables/BusinessRolesTable';
 import BusinessRoleForm, {BusinessRoleFormFields} from '@/components/forms/BusinessRoleForm';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {Box} from '@/components/Layout/Box';
 
 export default function BusinessRolesPage() {
     const {checkPermission} = useAuth();
@@ -106,6 +107,9 @@ export default function BusinessRolesPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
+                <Box marginBottom="20px">
+                    <Text variant="header-1">Каталог бизнес-ролей</Text>
+                </Box>
                 <BusinessRolesTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
             <Modal open={isCreateModalVisible} onOpenChange={handleCreateModalCancel}>

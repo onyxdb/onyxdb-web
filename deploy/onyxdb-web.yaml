@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onyxdb-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: onyxdb-web
+  template:
+    metadata:
+      labels:
+        app: onyxdb-web
+    spec:
+      containers:
+        - name: onyxdb-web
+          image: onyxdb-web  # Для локального registry
+          # image: sirdaukar/onyxdb-web:latest  # Для Docker Hub
+          ports:
+            - containerPort: 3002
+          env:
+            - name: BACKEND_URL
+              value: "http://host.docker.internal:9001"  # Для доступа к локальному бекенду
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: onyxdb-web
+spec:
+  selector:
+    app: onyxdb-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3002
+  type: NodePort

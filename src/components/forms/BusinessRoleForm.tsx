@@ -188,7 +188,9 @@ export const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
 
     return (
         <div style={{padding: '20px', maxWidth: '600px', margin: '0 auto'}}>
-            <h1>{initialValue ? 'Редактирование бизнес-роли' : 'Создание новой бизнес-роли'}</h1>
+            <Text variant="header-1">
+                {initialValue ? 'Редактирование бизнес-роли' : 'Создание новой бизнес-роли'}
+            </Text>
             <form onSubmit={formik.handleSubmit}>
                 <InputField
                     label="Название"

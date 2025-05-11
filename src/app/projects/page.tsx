@@ -175,6 +175,9 @@ export default function ProjectsPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
+                <Box marginBottom="20px">
+                    <Text variant="header-1">Каталог проектов</Text>
+                </Box>
                 <Text variant="body-1">Поиск проекта</Text>
                 <div style={{maxWidth: '350px'}}>
                     <HorizontalStack align="center" gap={10}>

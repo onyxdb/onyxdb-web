@@ -140,7 +140,7 @@ export const BusinessRolesTable: React.FC<BusinessRolesTableProps> = ({
         {
             id: 'name',
             name: 'Название',
-            template: (businessRole) => businessRole.name,
+            template: (businessRole) => businessRole.shopName,
             meta: {
                 sort: true,
             },

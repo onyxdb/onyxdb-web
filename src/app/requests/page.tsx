@@ -26,6 +26,7 @@ import {AccountSelector} from '@/components/formik/AccountSelector';
 import {RoleSelector} from '@/components/formik/RoleSelector';
 import {StatusLabel} from '@/components/common/StatusLabel';
 import {UserBlock} from '@/components/common/UserBlock';
+import {Box} from '@/components/Layout/Box';
 
 export default function RoleRequestsTable() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestFullDTO[]>([]);
@@ -155,6 +156,9 @@ export default function RoleRequestsTable() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <div style={{padding: '20px'}}>
+                <Box marginBottom="20px">
+                    <Text variant="header-1">Каталог запросов ролей</Text>
+                </Box>
                 <div style={{width: '500px'}}>
                     <AccountSelector
                         selectAccountAction={handleReceiverSelect}

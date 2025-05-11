@@ -112,7 +112,11 @@ export default function ProductsPage({}: ProductsPageProps) {
         const renderItem = (item: ProductTreeDTO, level = 0) => {
             return (
                 <div key={item.item.id} style={{marginLeft: `${level * 30}px`}}>
-                    <ProductSmallCard product={item.item} onSelect={handleProductSelect} />
+                    <ProductSmallCard
+                        product={item.item}
+                        onSelect={handleProductSelect}
+                        isActive={item.item.id === selectedProductId}
+                    />
                     {item.children && item.children.length > 0 && (
                         <div>{item.children.map((child) => renderItem(child, level + 1))}</div>
                     )}

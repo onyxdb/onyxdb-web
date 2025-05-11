@@ -1,5 +1,11 @@
 import axios, {AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
-import {clearTokens, getAccessToken, refreshToken, setTokens} from '@/auth/authService';
+import {
+    clearTokens,
+    getAccessToken,
+    getRefreshToken,
+    refreshToken,
+    setTokens,
+} from '@/auth/authService';
 
 const apiClient: AxiosInstance = axios.create({
     baseURL: '',
@@ -23,7 +29,15 @@ apiClient.interceptors.response.use(
     async (error: AxiosError) => {
         const originalRequest = error.config;
         try {
-            if (error.response?.status === 401 && originalRequest) {
+            if (
+                error.response?.status === 401 &&
+                // @ts-ignore
+                error.response.data.error.includes('JWT expired at')
+            ) {
+                clearTokens();
+                throw new Error('Unauthorized');
+            }
+            if (error.response?.status === 401 && originalRequest && getRefreshToken()) {
                 const newTokens = await refreshToken();
                 setTokens(newTokens.accessToken, newTokens.refreshToken);
                 originalRequest.headers = originalRequest.headers || {};
@@ -34,7 +48,9 @@ apiClient.interceptors.response.use(
             }
         } catch (refreshError) {
             clearTokens();
-            window.location.href = '/login';
+            if (!window.location.href.endsWith('/login')) {
+                window.location.href = '/login';
+            }
             return Promise.reject(refreshError);
         }
         return Promise.reject(error);

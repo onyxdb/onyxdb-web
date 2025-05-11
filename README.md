@@ -1,44 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# НИУ ВШЭ ВКР "DBaaS Platform"
+Тема: "Управляемые базы данных в Kubernetes как сервис. Модули управления доступами и пользовательского интерфейса"
 
-## Getting Started
+Выполнил студент группы БПИ217 `Федоров Артём`
 
-First, get the example app and install dependencies:
+Проект можно заустить в нескольких вариантах:
 
+1) Локальный запуск для разработки фронтенда (Web) и бекенда (IDM + MDB). Позволяет запустить легковестную часть работу, исключая работу с Kubernetes, из-за чего работа модуля MDB и соответственной части фронтенда может работать некорректно.
+2) Запуск в Minikube всей системы. Практически соответствует работе в реальном Kubernetes, но могут быть ошибки из-за нюансов локальной системы. Требует большого количества железа (больше 16гб RAM)
+3) Запуск в настроящем Kubernetes.
+
+### Локальный запуск (не полный)
+
+Для запуска проекта локально (1) необходимо выполнить несколько шагов:
+
+1) Запустить бекенд по правилам как указано в его репозитории https://github.com/onyxdb/onyxdb.
+
+Должен быть поднят Java монолит, PostgreSQL, Redis, ClickHouse.
+
+2) Запуск фронтенда:
+
+Если установлен Homebrew, то для подготовки выполнить в консоли:
 ```bash
-npx create-next-app@latest my-app --example "https://github.com/gravity-ui/gravity-ui-example-nextjs"
+brew install nvm
+source $(brew --prefix nvm)/nvm.sh
+nvm install node
+nvm install 20.18.2
+```
+Далее выполнить из корня репозитория
+```bash
+nvm use 20.18.2
+make up
+```
+### Запуск проекта в Minikube и Kubernetes
+
+Для запуска проекта в Minikube и Kubernetes стоит обратиться к документации в репозитории https://github.com/onyxdb/onyxdb
+
+Сборка в Docker:
+```bash
+docker build -t onyxdb-web .
 ```
 
-After then, run the development server:
+---
 
-```bash
-cd my-app
+При запуске фронтенда обратите внимание на env и окружение, в котором вы запускаете. 
+Выберите env бекенда для запуска в различных системах
 
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> ENV BACKEND_URL=http://localhost:9001 - стоит по умолчанию
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> ENV BACKEND_URL=http://host.docker.internal:9001
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> ENV BACKEND_URL=http://onyxdb:9001

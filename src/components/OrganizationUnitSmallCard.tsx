@@ -12,11 +12,13 @@ import {Box} from '@/components/Layout/Box';
 interface OrganizationUnitSmallCardProps {
     orgUnit: OrganizationUnitDTO;
     onSelect?: (ou: OrganizationUnitDTO) => void;
+    isActive?: boolean;
 }
 
 export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps> = ({
     orgUnit,
     onSelect,
+    isActive,
 }) => {
     const router = useRouter();
 
@@ -28,6 +30,7 @@ export const OrganizationUnitSmallCard: React.FC<OrganizationUnitSmallCardProps>
         <Card
             type="selection"
             style={{marginBottom: '10px', padding: '10px'}}
+            selected={isActive}
             onClick={() => onSelect && onSelect(orgUnit)}
         >
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>

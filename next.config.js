@@ -1,4 +1,6 @@
-/** @type {import('next').NextConfig} */
+const path = require('path');
+
+// Базовый конфиг
 const nextConfig = {
     webpack: (config) => {
         config.module.rules.push({
@@ -7,18 +9,28 @@ const nextConfig = {
             use: ['@svgr/webpack'],
         });
 
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            '@': path.resolve(__dirname, 'src'),
+        };
+
         return config;
     },
 
     async rewrites() {
+        // ENV BACKEND_URL=http://localhost:9001
+        // ENV BACKEND_URL=http://host.docker.internal:9001
+        // ENV BACKEND_URL=http://onyxdb:9001
+        const backendUrl = process.env.BACKEND_URL || 'http://localhost:9001';
+
         return [
             {
                 source: '/idm/api/:path*', // Все запросы, начинающиеся с /idm/api
-                destination: 'http://localhost:9001/api/:path*', // Перенаправлять на бекенд
+                destination: `${backendUrl}/api/:path*`, // Перенаправлять на бекенд
             },
             {
                 source: '/mdb/api/:path*', // Все запросы, начинающиеся с /mdb/api
-                destination: 'http://localhost:9001/api/:path*', // Перенаправлять на бекенд
+                destination: `${backendUrl}/api/:path*`, // Перенаправлять на бекенд
             },
         ];
     },

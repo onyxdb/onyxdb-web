@@ -36,7 +36,7 @@ export default function ClustersPage() {
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
-                    <Text variant="header-2">Кластер</Text>
+                    <Text variant="header-1">Каталог кластеров</Text>
                 </Box>
                 <ClusterTable />
             </div>

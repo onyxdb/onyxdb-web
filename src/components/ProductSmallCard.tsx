@@ -10,13 +10,15 @@ import {Box} from '@/components/Layout/Box';
 interface ProductSmallCardProps {
     product: ProductDTO;
     onSelect: (product: ProductDTO) => void;
+    isActive?: boolean;
 }
 
-export function ProductSmallCard({product, onSelect}: ProductSmallCardProps) {
+export function ProductSmallCard({product, onSelect, isActive}: ProductSmallCardProps) {
     return (
         <Card
             type="selection"
             style={{marginBottom: '10px', padding: '10px'}}
+            selected={isActive}
             onClick={() => onSelect(product)}
         >
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>

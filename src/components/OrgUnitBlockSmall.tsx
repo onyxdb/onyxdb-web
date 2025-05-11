@@ -24,13 +24,6 @@ export const OrgUnitBlockSmall: React.FC<DomainComponentProps> = ({data}) => {
                 .getAccountById({accountId: data.ownerId})
                 .then((response) => setOwner(response.data))
                 .catch((error) => console.error('Error fetching account:', error));
-        } else {
-            setOwner({
-                username: '???',
-                email: '???',
-                firstName: 'Not',
-                lastName: 'Stated',
-            });
         }
     }, [data.ownerId]);
 

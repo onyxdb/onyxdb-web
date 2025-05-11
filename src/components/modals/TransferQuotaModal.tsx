@@ -5,21 +5,25 @@ import {Button, Progress, Select, Text, Tooltip} from '@gravity-ui/uikit';
 import {FormikErrors, useFormik} from 'formik';
 import {
     ProductDTO,
-    Resource,
-    SimulateTransferQuotasBetweenProductsResponse,
-    TransferQuotasBetweenProductsRequest,
+    ResourceDTO,
+    SimulateTransferQuotasBetweenProductsResponseDTO,
+    TransferQuotasBetweenProductsRequestDTO,
 } from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
-import {ProductSelector} from '@/components/ProductSelector';
-import {ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
+import {ProductSelector} from '@/components/formik/ProductSelector';
+import {
+    ResourceInputField,
+    ResourceUnit,
+    ResourceUnitEnum,
+} from '@/components/formik/ResourceInputField';
 import {QuotaTransferSimulationResult} from '@/components/QuotaTransferSimulationResult';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 
 interface TransferQuotaModalProps {
     product: ProductDTO;
-    resources: Resource[];
+    resources: ResourceDTO[];
     closeAction: () => void;
 }
 
@@ -45,7 +49,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
     const [monitoringInterval, setMonitoringInterval] = useState<NodeJS.Timeout | null>(null);
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [simulationResult, setSimulationResult] =
-        useState<SimulateTransferQuotasBetweenProductsResponse | null>(null);
+        useState<SimulateTransferQuotasBetweenProductsResponseDTO | null>(null);
 
     const formik = useFormik<TransferQuotaFormFields>({
         initialValues: {
@@ -93,7 +97,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
             return errors;
         },
         onSubmit: async (values) => {
-            const request: TransferQuotasBetweenProductsRequest = {
+            const request: TransferQuotasBetweenProductsRequestDTO = {
                 srcProductId: values.srcProductId,
                 dstProductId: values.dstProductId,
                 quotas: [values.quota],
@@ -102,7 +106,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
 
             try {
                 await mdbQuotasApi.transferQuotasBetweenProducts({
-                    transferQuotasBetweenProductsRequest: request,
+                    transferQuotasBetweenProductsRequestDTO: request,
                 });
                 closeAction();
                 toaster.add({
@@ -125,7 +129,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
 
     const handleSimulateQuotasTransfer = async () => {
         console.log('Simulate Quotas request', formik.values);
-        const request: TransferQuotasBetweenProductsRequest = {
+        const request: TransferQuotasBetweenProductsRequestDTO = {
             srcProductId: formik.values.srcProductId,
             dstProductId: formik.values.dstProductId,
             quotas: [formik.values.quota],
@@ -133,7 +137,7 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
 
         try {
             const simulationResponse = await mdbQuotasApi.simulateTransferQuotasBetweenProducts({
-                transferQuotasBetweenProductsRequest: request,
+                transferQuotasBetweenProductsRequestDTO: request,
             });
             console.log('Simulate Quotas response', simulationResponse.data);
             setSimulationResult(simulationResponse.data);
@@ -225,8 +229,8 @@ export const TransferQuotaModal: React.FC<TransferQuotaModalProps> = ({
                             }
                             placeholder="Введите лимит"
                             unitType={
-                                resources.find((r) => r.id === formik.values.quota.resourceId)
-                                    ?.unit ?? 'bytes'
+                                (resources.find((r) => r.id === formik.values.quota.resourceId)
+                                    ?.unit as ResourceUnitEnum) ?? ResourceUnitEnum.BYTES
                             }
                         />
                     </Box>

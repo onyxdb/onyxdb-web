@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Modal} from '@gravity-ui/uikit';
-import {MongoDatabase, MongoUser, MongoUserToCreate} from '@/generated/api';
+import {CreateMongoUserRequestDTO, MongoDatabaseDTO, MongoUserDTO} from '@/generated/api';
 import {Box} from '@/components/Layout/Box';
 import {DBUsersTable} from '@/components/tables/DBUsers';
 import {DBUserForm} from '@/components/forms/DBUserForm';
@@ -13,8 +13,8 @@ interface UsersTabProps {
 }
 
 const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
-    const [users, setUsers] = useState<MongoUser[]>([]);
-    const [databases, setDatabases] = useState<MongoDatabase[]>([]);
+    const [users, setUsers] = useState<MongoUserDTO[]>([]);
+    const [databases, setDatabases] = useState<MongoDatabaseDTO[]>([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
     const fetchDataUsers = async () => {
@@ -42,9 +42,9 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
         fetchDataDBs();
     }, [clusterId]);
 
-    const handleCreateUser = (user: MongoUserToCreate) => {
+    const handleCreateUser = (user: CreateMongoUserRequestDTO) => {
         mdbMongoDbUserApi
-            .createUser({clusterId, mongoUserToCreate: user})
+            .createUser({clusterId, createMongoUserRequestDTO: user})
             .then(() => {
                 fetchDataUsers();
                 setIsCreateModalOpen(false);
@@ -54,7 +54,7 @@ const UsersTab: React.FC<UsersTabProps> = ({clusterId}) => {
 
     const handleDeleteUser = (userId: string) => {
         mdbMongoDbUserApi
-            .deleteUser({userId})
+            .deleteUser({clusterId, userName: userId})
             .then(() => {
                 fetchDataUsers();
             })

@@ -62,8 +62,7 @@ export default function CreateAccountPage() {
         },
         onSubmit: async (values) => {
             try {
-                const response = await accountsApi.createAccount({accountDTO: values});
-
+                const response = await accountsApi.createAccount({accountPostDTO: values});
                 if (selectedOrganizationUnitId && response.data.id) {
                     await organizationUnitsApi.addAccountToOrganizationUnit({
                         ouId: selectedOrganizationUnitId,

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import {Table, TableColumnConfig, Text, TextInput, withTableSelection} from '@gravity-ui/uikit';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 
 export interface RoleSelectionTableProps {
     selectedRoles: string[];
@@ -63,7 +63,7 @@ export const RoleSelectionTable: React.FC<RoleSelectionTableProps> = ({
             <Text variant="header-2">Выбор ролей</Text>
             <div style={{marginBottom: '20px'}}>
                 <TextInput
-                    placeholder="Поиск по имени пользователя"
+                    placeholder="Поиск по имени роли"
                     value={searchQuery}
                     onUpdate={handleSearch}
                 />

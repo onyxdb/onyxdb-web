@@ -2,20 +2,20 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button, Icon, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
-import {OperationOA} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import {Arrows3RotateLeft} from '@gravity-ui/icons';
 import {mdbOperationApi} from '@/app/apis';
 import {useAuth} from '@/context/AuthContext';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
+import {OperationDTO} from '@/generated/api';
 
 interface OperationsTabProps {
     clusterId: string;
 }
 
 export const OperationsTab: React.FC<OperationsTabProps> = ({clusterId}) => {
-    const [operations, setOperations] = useState<OperationOA[]>([]);
+    const [operations, setOperations] = useState<OperationDTO[]>([]);
     const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [selectedInterval, setSelectedInterval] = useState<number>(10); // Интервал в секундах
@@ -71,7 +71,7 @@ export const OperationsTab: React.FC<OperationsTabProps> = ({clusterId}) => {
     };
 
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<OperationOA>[] = [
+    const columns: TableColumnConfig<OperationDTO>[] = [
         {
             id: 'id',
             name: 'Id',

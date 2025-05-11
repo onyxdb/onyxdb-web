@@ -16,7 +16,7 @@ import {useAuth} from '@/context/AuthContext';
 import {Box} from '@/components/Layout/Box';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {ProjectsTable} from '@/components/tables/ProjectsTable';
-import {ProductSelector} from '@/components/ProductSelector';
+import {ProductSelector} from '@/components/formik/ProductSelector';
 import {ProjectBlock} from '@/components/ProjectBlock';
 import {useSearchParams} from 'next/navigation';
 
@@ -127,10 +127,6 @@ export default function ProjectsPage() {
         }
     };
 
-    const handleProductSearchChange = (value: string) => {
-        setSearchQuery(value);
-    };
-
     const fetchFilteredProjects = () => {
         const filtered = projects
             .filter(
@@ -179,26 +175,28 @@ export default function ProjectsPage() {
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
-                <Box marginBottom="20px">
-                    <Text variant="header-2">Каталог проектов</Text>
-                </Box>
-                <HorizontalStack align="center" gap={10}>
-                    <TextInput
-                        name="product"
-                        value={searchQuery}
-                        placeholder="Введите и выберите продукт"
-                        onUpdate={handleProductSearchChange}
-                    />
-                    <Button view="action" size="m" onClick={fetchFilteredProjects}>
-                        Поиск
-                    </Button>
-                </HorizontalStack>
+                <Text variant="body-1">Поиск проекта</Text>
+                <div style={{maxWidth: '350px'}}>
+                    <HorizontalStack align="center" gap={10}>
+                        <TextInput
+                            name="project"
+                            value={searchQuery}
+                            placeholder="Введите текст"
+                            onUpdate={(value) => setSearchQuery(value)}
+                        />
+                        <Button view="action" size="m" onClick={fetchFilteredProjects}>
+                            Поиск
+                        </Button>
+                    </HorizontalStack>
+                </div>
+                <div style={{maxWidth: '350px', marginTop: '16px'}}>
+                    <ProductSelector selectProductAction={handleProductSelect} />
+                </div>
                 <Box marginTop={16} marginBottom={16}>
                     <Checkbox size="l" checked={showArchived} onUpdate={handleShowArchivedChange}>
                         Показывать архивные проекты
                     </Checkbox>
                 </Box>
-                <ProductSelector selectProductAction={handleProductSelect} />
                 <ProjectsTable
                     projects={filteredProjects}
                     onView={handleOpenViewModal}

@@ -4,7 +4,7 @@ import React from 'react';
 import {AccountDTO} from '@/generated/api';
 import {Table, TableColumnConfig, withTableSorting} from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 
 interface AccountsTableSimpleProps {
     accounts: AccountDTO[];

@@ -7,7 +7,7 @@ import {Eye} from '@gravity-ui/icons';
 import {MongoClusterDTO} from '@/generated/api';
 import {StatusLabel} from '@/components/common/StatusLabel';
 import {useRouter} from 'next/navigation';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 
 export interface ClustersTableProps {
     projectsIds?: string[];

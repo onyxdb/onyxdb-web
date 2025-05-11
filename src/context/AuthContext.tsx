@@ -10,7 +10,7 @@ interface Permissions {
     [key: string]: null;
 }
 
-interface User {
+export interface User {
     account: AccountDTO;
     permissions: Permissions;
 }
@@ -50,10 +50,10 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
 
                 const filteredPermissions: Permissions = {};
                 for (const item in userData.permissions) {
-                    if (item.startsWith('global-')) {
-                        filteredPermissions[item.substring('global-'.length)] = null;
-                    } else if (item.startsWith('web-')) {
+                    if (item.startsWith('web-')) {
                         filteredPermissions[item.substring('web-'.length)] = null;
+                    } else {
+                        filteredPermissions[item] = null;
                     }
                 }
 
@@ -84,13 +84,14 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
         return false;
     }
 
-    function checkPermission(name: string, action?: string, id?: string) {
+    function checkPermission(entity: string, action?: string, id?: string) {
         const suitablePermission = [
-            'any',
-            `${name}-any`,
-            `${name}-${id}`,
-            `${name}-${id}-any`,
-            `${name}-${id}-${action}`,
+            'global-any',
+            `global-${action}`,
+            `${entity}-any`,
+            `${entity}-${action}`,
+            `${entity}-${action}-any`,
+            `${entity}-${action}-${id}`,
         ];
         for (const permission of suitablePermission) {
             if (permissions[permission] !== undefined) {

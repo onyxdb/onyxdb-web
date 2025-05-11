@@ -12,7 +12,7 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {AccountDTO, MongoDatabase} from '@/generated/api';
+import {AccountDTO, MongoDatabaseDTO} from '@/generated/api';
 import {useAuth} from '@/context/AuthContext';
 import {accountsApi} from '@/app/apis';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
@@ -21,7 +21,7 @@ import {UserBlock} from '@/components/common/UserBlock';
 import {TrashBin} from '@gravity-ui/icons';
 
 interface DatabasesTableProps {
-    databases: MongoDatabase[];
+    databases: MongoDatabaseDTO[];
     deleteAction: (databaseId: string) => void;
 }
 
@@ -88,12 +88,7 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
     };
 
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<MongoDatabase>[] = [
-        // {
-        //     id: 'id',
-        //     name: 'ID',
-        //     template: (database) => <TextWithCopy text={database.id} maxLength={5} />,
-        // },
+    const columns: TableColumnConfig<MongoDatabaseDTO>[] = [
         {
             id: 'name',
             name: 'Название',
@@ -162,16 +157,17 @@ export const DatabasesTable: React.FC<DatabasesTableProps> = ({databases, delete
             name: 'Действия',
             template: (database) => (
                 <HorizontalStack gap={10}>
-                    {checkPermission('database', 'delete', database.id) && !database.isDeleted && (
-                        <Button
-                            view="outlined-danger"
-                            size="m"
-                            onClick={() => deleteAction(database.id)}
-                        >
-                            <Icon data={TrashBin} />
-                            Удалить
-                        </Button>
-                    )}
+                    {checkPermission('database', 'delete', database.name) &&
+                        !database.isDeleted && (
+                            <Button
+                                view="outlined-danger"
+                                size="m"
+                                onClick={() => deleteAction(database.name)}
+                            >
+                                <Icon data={TrashBin} />
+                                Удалить
+                            </Button>
+                        )}
                 </HorizontalStack>
             ),
         },

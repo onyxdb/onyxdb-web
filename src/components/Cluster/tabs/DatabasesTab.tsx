@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {CreateMongoDatabaseRequest, MongoDatabase} from '@/generated/api';
+import {CreateMongoDatabaseRequestDTO, MongoDatabaseDTO} from '@/generated/api';
 import {mdbMongoDbDatabasesApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {DatabasesTable} from '@/components/tables/DatabasesTable';
@@ -13,7 +13,7 @@ interface DatabasesTabProps {
 }
 
 const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
-    const [databases, setDatabases] = useState<MongoDatabase[]>([]);
+    const [databases, setDatabases] = useState<MongoDatabaseDTO[]>([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
     const fetchData = async () => {
@@ -30,9 +30,9 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
         fetchData();
     }, [clusterId]);
 
-    const handleCreateDatabase = (database: CreateMongoDatabaseRequest) => {
+    const handleCreateDatabase = (database: CreateMongoDatabaseRequestDTO) => {
         mdbMongoDbDatabasesApi
-            .createDatabase({clusterId, createMongoDatabaseRequest: database})
+            .createDatabase({clusterId, createMongoDatabaseRequestDTO: database})
             .then(() => {
                 fetchData();
                 setIsCreateModalOpen(false);
@@ -40,9 +40,9 @@ const DatabasesTab: React.FC<DatabasesTabProps> = ({clusterId}) => {
             .catch((error) => console.error('Error creating database:', error));
     };
 
-    const handleDeleteDatabase = (databaseId: string) => {
+    const handleDeleteDatabase = (databaseName: string) => {
         mdbMongoDbDatabasesApi
-            .deleteDatabase({clusterId, databaseId})
+            .deleteDatabase({clusterId, databaseName})
             .then(() => {
                 fetchData();
             })

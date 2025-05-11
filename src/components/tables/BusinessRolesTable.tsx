@@ -20,7 +20,7 @@ import {Eye, Pencil, TrashBin} from '@gravity-ui/icons';
 import BusinessRoleViewModal from '@/components/modals/BusinessRoleViewModal';
 import BusinessRoleAssignModal from '@/components/modals/BusinessRoleAssignModal';
 import {useAuth} from '@/context/AuthContext';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 
 export interface BusinessRolesTableProps {
     editAction: (businessRoleId: string) => void;

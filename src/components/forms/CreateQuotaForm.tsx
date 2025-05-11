@@ -4,10 +4,10 @@ import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Card, Select, Text} from '@gravity-ui/uikit';
 import {InputField} from '@/components/formik/InputField';
-import {Resource} from '@/generated/api';
+import {ResourceDTO} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
-import {ProductSelector} from '@/components/ProductSelector';
+import {ProductSelector} from '@/components/formik/ProductSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 
 interface CreateQuotaModalProps {
@@ -32,7 +32,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({
     closeAction,
     submitAction,
 }) => {
-    const [resources, setResources] = useState<Resource[]>([]);
+    const [resources, setResources] = useState<ResourceDTO[]>([]);
 
     const formik = useFormik<CreateQuotaFormFields>({
         initialValues: {

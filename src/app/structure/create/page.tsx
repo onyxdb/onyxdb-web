@@ -24,7 +24,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
     const handleSubmitCreate = async (values: OrgUnitFormFields) => {
         try {
             await organizationUnitsApi.createOrganizationUnit({
-                organizationUnitDTO: {
+                organizationUnitPostDTO: {
                     name: values.name,
                     description: values.description,
                     domainComponentId: values.domainComponentId,

@@ -485,7 +485,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({onSubmit, closeAction, initia
                 <div>
                     {formik.values.permissions.map((permission) => (
                         <Card
-                            key={permission.id}
+                            key={permission.id ?? permission.actionType + permission.resourceType}
                             type="selection"
                             style={{marginBottom: '10px', padding: '16px'}}
                             theme={getCardTheme(permission)}

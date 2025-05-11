@@ -1,7 +1,12 @@
 'use client';
+
 import React, {useEffect, useState} from 'react';
 import {Select, TextInput} from '@gravity-ui/uikit';
-import {ResourceUnitEnum} from '@/generated/api'; // Предполагается, что ResourceUnitEnum определён в этом файле
+
+export enum ResourceUnitEnum {
+    CORES = 'cores',
+    BYTES = 'bytes',
+}
 
 interface ResourceInputFieldProps {
     label?: string;
@@ -28,9 +33,9 @@ export interface ResourceUnit {
 export const CoresMilliCPU: ResourceUnit = {
     value: 'milliCPU',
     label: 'milliCPU',
-    coefficient: 0.001,
+    coefficient: 1,
 };
-export const CoresCPU: ResourceUnit = {value: 'cores', label: 'CPU', coefficient: 1};
+export const CoresCPU: ResourceUnit = {value: 'cores', label: 'CPU', coefficient: 1000};
 
 export const coresUnits = [CoresCPU, CoresMilliCPU];
 
@@ -59,10 +64,10 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     const [units, setUnits] = useState<ResourceUnit[]>([]);
 
     useEffect(() => {
-        if (unitType === ResourceUnitEnum.Cores) {
+        if (unitType === ResourceUnitEnum.CORES) {
             setUnits(coresUnits);
             setCurrentUnit(CoresCPU);
-        } else if (unitType === ResourceUnitEnum.Bytes) {
+        } else if (unitType === ResourceUnitEnum.BYTES) {
             setUnits(bytesUnits);
             setCurrentUnit(BytesGB);
         }

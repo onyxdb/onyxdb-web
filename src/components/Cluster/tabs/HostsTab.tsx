@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {MongoHost} from '@/generated/api';
+import {MongoHostDTO} from '@/generated/api';
 import {mdbApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {HostsTable} from '@/components/tables/HostsTable';
@@ -12,7 +12,7 @@ interface HostsTabProps {
 }
 
 const HostsTab: React.FC<HostsTabProps> = ({clusterId}) => {
-    const [clusterHosts, setClusterHosts] = useState<MongoHost[]>([]);
+    const [clusterHosts, setClusterHosts] = useState<MongoHostDTO[]>([]);
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [monitoringInterval, setMonitoringInterval] = useState<NodeJS.Timeout | null>(null);
     const [lastUpdate, setLastUpdate] = useState<Date | null>(null);

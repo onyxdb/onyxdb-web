@@ -1,29 +1,34 @@
 'use client';
+
 import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Checkbox, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
 import {ResourcePresetCard} from '@/components/ResourcePresetCard';
-import {mdbQuotasApi, mdbResourcePresetsApi} from '@/app/apis';
+import {mdbApi, mdbQuotasApi} from '@/app/apis';
 import {
     AccountDTO,
     MongoClusterDTO,
-    MongoDatabaseDTO,
-    MongoUserDTO,
+    MongoInitDatabaseDTO,
+    MongoInitUserDTO,
     ProjectDTO,
-    Quota,
-    Resource,
-    ResourceUnitEnum,
-    SimulateMongoDBQuotasUsageRequest,
-    V1ResourcePresetResponse,
-    V1ResourcePresetResponseTypeEnum,
+    QuotaDTO,
+    ResourceDTO,
+    ResourcePresetResponseDTO,
+    SimulateMongoDBQuotasUsageRequestDTO,
 } from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
-import {AccountSelector} from '@/components/AccountSelector';
+import {AccountSelector} from '@/components/formik/AccountSelector';
 import {ProjectSelector} from '@/components/ProjectsSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {BytesGB, CoresCPU, ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
+import {
+    BytesGB,
+    CoresCPU,
+    ResourceInputField,
+    ResourceUnit,
+    ResourceUnitEnum,
+} from '@/components/formik/ResourceInputField';
 import {QuotaSimulationResult} from '@/components/QuotaSimulationResult';
 
 export interface ClusterFormValues {
@@ -35,19 +40,15 @@ export interface ClusterFormValues {
     storage: number;
     replicas: number;
     ownerId: string;
-    database: MongoDatabaseDTO;
-    user: MongoUserDTO;
+    clusterVersion: string;
+    database: MongoInitDatabaseDTO;
+    user: MongoInitUserDTO;
     backupIsEnabled: boolean;
     backupSchedule: string;
+    backupLimit: number;
 }
 
-const V1StorageClassTypeEnum = {
-    HDD: 'HDD',
-    SSD: 'SSD',
-    NVME: 'NVME',
-} as const;
-
-const DEFAULT_PRESET = V1ResourcePresetResponseTypeEnum.Standard;
+const DEFAULT_PRESET = 'standard';
 
 export interface ClusterCreateFormProps {
     initialValues?: MongoClusterDTO;
@@ -61,17 +62,22 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
     submitAction,
     cancelAction,
 }) => {
-    const [resourcePresets, setResourcePresets] = useState<V1ResourcePresetResponse[]>([]);
-    const [filteredPresets, setFilteredPresets] = useState<V1ResourcePresetResponse[]>([]);
-    const [selectedPreset, setSelectedPreset] = useState<V1ResourcePresetResponse | null>(null);
-    const [simulationResult, setSimulationResult] = useState<Quota[] | null>(null);
+    const [storageClasses, setStorageClasses] = useState<string[]>([]);
+    const [clusterVersions, setClusterVersions] = useState<string[]>([]);
+    const [resourcePresetsTypes, setResourcePresetsTypes] = useState<string[]>([]);
+    const [resourcePresets, setResourcePresets] = useState<ResourcePresetResponseDTO[]>([]);
+    const [filteredPresets, setFilteredPresets] = useState<ResourcePresetResponseDTO[]>([]);
+    const [selectedPreset, setSelectedPreset] = useState<ResourcePresetResponseDTO | null>(null);
+    const [simulationResult, setSimulationResult] = useState<QuotaDTO[] | null>(null);
     const [isSimulationValid, setIsSimulationValid] = useState<boolean>(false);
 
     useEffect(() => {
-        mdbResourcePresetsApi
+        mdbApi
             .listResourcePresets()
             .then((response) => {
                 setResourcePresets(response.data.resourcePresets);
+                const presetsTypes = response.data.resourcePresets.map((p) => p.type);
+                setResourcePresetsTypes(presetsTypes);
                 const presetsByType = response.data.resourcePresets.filter(
                     (preset) => preset.type === DEFAULT_PRESET,
                 );
@@ -85,6 +91,14 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                 }
             })
             .catch((error) => console.error('Error fetching resource presets:', error));
+
+        mdbApi.listVersions().then((response) => {
+            setClusterVersions(response.data.versions);
+        });
+
+        mdbApi.listStorageClasses().then((response) => {
+            setStorageClasses(response.data.storageClasses);
+        });
     }, [initialValues]);
 
     const isEditMode = Boolean(initialValues);
@@ -101,8 +115,10 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
             ownerId: '',
             database: {name: ''},
             user: {name: '', password: ''},
+            clusterVersion: clusterVersions[0] ?? '8.0',
             backupIsEnabled: true,
             backupSchedule: '0 0 * * * *',
+            backupLimit: 5,
         },
         validate: (values) => {
             const errors: Partial<FormikErrors<ClusterFormValues>> = {};
@@ -138,6 +154,12 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                     errors.user = {name: '', password: 'Пароль обязателен'};
                 }
             }
+            if (values.backupIsEnabled) {
+                const re = new RegExp('/(((\\d+,)+\\d+|(\\d+([/\\-])\\d+)|\\d+|\\*) ?){5,7}/');
+                if (!re.test(values.backupSchedule)) {
+                    errors.backupSchedule = 'Формат крон неверный';
+                }
+            }
             return errors;
         },
         onSubmit: (values) => {
@@ -151,7 +173,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         setFilteredPresets(presetsByType);
     };
 
-    const handlePresetSelect = (preset: V1ResourcePresetResponse) => {
+    const handlePresetSelect = (preset: ResourcePresetResponseDTO) => {
         setSelectedPreset(preset);
         formik.setFieldValue('presetId', preset.id);
     };
@@ -164,13 +186,13 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         formik.setFieldValue('ownerId', account?.id ?? '');
     };
 
-    const typeOptions = Object.values(V1ResourcePresetResponseTypeEnum).map((type) => (
+    const typeOptions = Object.values(resourcePresetsTypes).map((type) => (
         <SegmentedRadioGroup.Option key={type} value={type}>
             {type}
         </SegmentedRadioGroup.Option>
     ));
 
-    const storageClassOptions = Object.values(V1StorageClassTypeEnum).map((storageClass) => (
+    const storageClassOptions = Object.values(storageClasses).map((storageClass) => (
         <Select.Option key={storageClass} value={storageClass}>
             {storageClass}
         </Select.Option>
@@ -200,13 +222,14 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         }
 
         try {
-            const simulateRequest: SimulateMongoDBQuotasUsageRequest = {
+            const simulateRequest: SimulateMongoDBQuotasUsageRequestDTO = {
                 projectId: formik.values.projectId,
                 config: {
                     version: '',
                     backup: {
                         isEnabled: formik.values.backupIsEnabled,
                         schedule: formik.values.backupSchedule,
+                        limit: formik.values.backupLimit,
                     },
                     resources: {
                         presetId: formik.values.presetId,
@@ -217,7 +240,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                 },
             };
             const simulationResponse = await mdbQuotasApi.simulateMongoDbQuotasUsage({
-                simulateMongoDBQuotasUsageRequest: simulateRequest,
+                simulateMongoDBQuotasUsageRequestDTO: simulateRequest,
             });
             const quotas = simulationResponse.data.quotas;
             setSimulationResult(quotas);
@@ -232,8 +255,8 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         }
     };
 
-    const getUnitByResource = (resource: Resource): ResourceUnit => {
-        if (resource.unit === ResourceUnitEnum.Cores) {
+    const getUnitByResource = (resource: ResourceDTO): ResourceUnit => {
+        if (resource.unit === 'cores') {
             return CoresCPU;
         }
         return BytesGB;
@@ -352,7 +375,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             onBlur={formik.handleBlur('storage')}
                             error={formik.touched.storage ? formik.errors.storage : undefined}
                             placeholder="Введите размер хранилища"
-                            unitType={ResourceUnitEnum.Bytes}
+                            unitType={ResourceUnitEnum.BYTES}
                             disabled={isEditMode}
                         />
                     </div>
@@ -362,7 +385,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             name="replicas"
                             value={formik.values.replicas.toString()}
                             onChange={(value) =>
-                                formik.setFieldValue('replicas', parseInt(value, 10))
+                                formik.setFieldValue('replicas', Math.max(parseInt(value, 10), 1))
                             }
                             onBlur={formik.handleBlur('replicas')}
                             error={formik.touched.replicas ? formik.errors.replicas : undefined}
@@ -380,21 +403,40 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                         </Checkbox>
                     </Box>
                     {formik.values.backupIsEnabled && (
-                        <InputField
-                            label="График создания бекапов"
-                            name="backupSchedule"
-                            value={formik.values.backupSchedule.toString()}
-                            onChange={(value) =>
-                                formik.setFieldValue('backupSchedule', parseInt(value, 10))
-                            }
-                            onBlur={formik.handleBlur('backupSchedule')}
-                            error={
-                                formik.touched.backupSchedule
-                                    ? formik.errors.backupSchedule
-                                    : undefined
-                            }
-                            placeholder="<Минуты> <Часы> <Дни_месяца> <Месяцы> <Дни_недели> <Годы>"
-                        />
+                        <>
+                            <InputField
+                                label="График создания бекапов"
+                                name="backupSchedule"
+                                value={formik.values.backupSchedule.toString()}
+                                onChange={(value) => formik.setFieldValue('backupSchedule', value)}
+                                onBlur={formik.handleBlur('backupSchedule')}
+                                error={
+                                    formik.touched.backupSchedule
+                                        ? formik.errors.backupSchedule
+                                        : undefined
+                                }
+                                placeholder="<Минуты> <Часы> <Дни_месяца> <Месяцы> <Дни_недели> <Годы>"
+                            />
+                            <InputField
+                                label="Количество бекапов"
+                                name="backupLimit"
+                                value={formik.values.backupLimit.toString()}
+                                onChange={(value) =>
+                                    formik.setFieldValue(
+                                        'backupLimit',
+                                        Math.max(parseInt(value, 10), 1),
+                                    )
+                                }
+                                onBlur={formik.handleBlur('backupLimit')}
+                                error={
+                                    formik.touched.backupLimit
+                                        ? formik.errors.backupLimit
+                                        : undefined
+                                }
+                                placeholder="Введите число"
+                                type="number"
+                            />
+                        </>
                     )}
                     {!isEditMode && (
                         <div>

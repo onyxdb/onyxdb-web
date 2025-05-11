@@ -65,9 +65,9 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialValue, onSubmit,
             if (!values.username) {
                 errors.username = 'Имя пользователя обязательно';
             }
-            if (!values.password) {
-                errors.email = 'Пароль обязателен';
-            }
+            // if (!values.password) {
+            //     errors.password = 'Пароль обязателен';
+            // }
             if (!values.email) {
                 errors.email = 'Email обязателен';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {

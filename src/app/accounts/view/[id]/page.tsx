@@ -1,7 +1,13 @@
 'use client';
 import React, {useEffect, useState} from 'react';
 import {accountsApi} from '@/app/apis';
-import {AccountDTO, BusinessRoleDTO, OrganizationUnitDTO, RoleDTO} from '@/generated/api';
+import {
+    AccountDTO,
+    AccountRolesAllDTO,
+    BusinessRoleDTO,
+    OrganizationUnitDTO,
+    RoleDTO,
+} from '@/generated/api';
 import {usePathname, useRouter} from 'next/navigation';
 import {Card, Icon, Modal, Tab, TabList, TabPanel, TabProvider, Text} from '@gravity-ui/uikit';
 import {useAuth} from '@/context/AuthContext';
@@ -27,6 +33,7 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {MyLoader} from '@/components/Loader';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {RolesViewer} from '@/components/AccountAccess';
 
 interface AccountViewPageProps {}
 
@@ -38,6 +45,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     const [accountOrgUnits, setAccountOrgUnits] = useState<OrganizationUnitDTO[]>([]);
     const [accountRoles, setAccountRoles] = useState<RoleDTO[]>([]);
     const [accountBusinessRoles, setAccountBusinessRoles] = useState<BusinessRoleDTO[]>([]);
+    const [accountAccess, setAccountAccess] = useState<AccountRolesAllDTO | null>(null);
     const [activeTab, setActiveTab] = useState<string>('additional-info');
     const router = useRouter();
     const pathname = usePathname();
@@ -61,10 +69,6 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         }
     };
 
-    useEffect(() => {
-        fetchAccount();
-    }, [accountId]);
-
     const fetchAccountOrgUnits = async () => {
         try {
             const response = await accountsApi.getAccountOrganizationUnits({accountId});
@@ -84,10 +88,6 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         }
     };
 
-    useEffect(() => {
-        fetchAccountOrgUnits();
-    }, [accountId]);
-
     const fetchAccountRoles = async () => {
         try {
             const response = await accountsApi.getAccountRoles({accountId});
@@ -101,10 +101,6 @@ export default function AccountViewPage({}: AccountViewPageProps) {
             });
         }
     };
-
-    useEffect(() => {
-        fetchAccountRoles();
-    }, [accountId]);
 
     const fetchAccountBusinessRoles = async () => {
         try {
@@ -120,8 +116,26 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         }
     };
 
+    const fetchAccountAccess = async () => {
+        try {
+            const response = await accountsApi.getAccountAccess({accountId});
+            setAccountAccess(response.data);
+        } catch (error) {
+            toaster.add({
+                name: 'error_account_access',
+                title: 'Ошибка при загрузке доступов аккаунта',
+                content: `Не удалось загрузить доступы аккаунта ${error}`,
+                theme: 'danger',
+            });
+        }
+    };
+
     useEffect(() => {
+        fetchAccount();
+        fetchAccountOrgUnits();
+        fetchAccountRoles();
         fetchAccountBusinessRoles();
+        fetchAccountAccess();
     }, [accountId]);
 
     const handleEdit = () => {
@@ -410,10 +424,10 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         );
     };
 
-    const renderRolesTab = () => {
+    const renderRolesTab = (roles: RoleDTO[]) => {
         return (
             <div>
-                {accountRoles.map((role) => (
+                {roles.map((role) => (
                     <div key={role.id} style={{marginBottom: '10px'}}>
                         <Card style={{padding: '16px'}}>
                             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
@@ -447,10 +461,10 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         );
     };
 
-    const renderBusinessRolesTab = () => {
+    const renderBusinessRolesTab = (businessRoles: BusinessRoleDTO[]) => {
         return (
             <div>
-                {accountBusinessRoles.map((br) => (
+                {businessRoles.map((br) => (
                     <div key={br.id} style={{marginBottom: '10px'}}>
                         <Card style={{padding: '16px'}}>
                             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
@@ -484,6 +498,19 @@ export default function AccountViewPage({}: AccountViewPageProps) {
         );
     };
 
+    const renderAccessTab = () => {
+        return (
+            <div>
+                {accountAccess && (
+                    <RolesViewer
+                        accountAccess={accountAccess}
+                        accountBusinessRoles={accountBusinessRoles}
+                    />
+                )}
+            </div>
+        );
+    };
+
     return (
         <div>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
@@ -499,14 +526,18 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                         <TabList>
                             <Tab value="additional-info">Дополнительная информация</Tab>
                             <Tab value="org-units">Organization Units</Tab>
+                            <Tab value="access">Все доступы</Tab>
                             <Tab value="roles">Роли</Tab>
                             <Tab value="business-roles">Бизнес Роли</Tab>
                         </TabList>
                         <Box marginTop="10px">
                             <TabPanel value="additional-info">{renderAdditionalInfoTab()}</TabPanel>
                             <TabPanel value="org-units">{renderOrgUnitsTab()}</TabPanel>
-                            <TabPanel value="roles">{renderRolesTab()}</TabPanel>
-                            <TabPanel value="business-roles">{renderBusinessRolesTab()}</TabPanel>
+                            <TabPanel value="access">{renderAccessTab()}</TabPanel>
+                            <TabPanel value="roles">{renderRolesTab(accountRoles)}</TabPanel>
+                            <TabPanel value="business-roles">
+                                {renderBusinessRolesTab(accountBusinessRoles)}
+                            </TabPanel>
                         </Box>
                     </TabProvider>
                 </Box>

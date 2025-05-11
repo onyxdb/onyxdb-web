@@ -1,13 +1,13 @@
 import React from 'react';
 import {Progress, Text, Tooltip} from '@gravity-ui/uikit';
 import {Box} from '@/components/Layout/Box';
-import {ResourceUnit} from '@/components/ResourceInputField';
+import {ResourceUnit} from '@/components/formik/ResourceInputField';
 import {roundTo, toPercent} from '@/utils/math';
-import {Quota} from '@/generated/api';
+import {QuotaDTO} from '@/generated/api';
 
 interface QuotaTransferSimulationResultProps {
     title: string;
-    quota: Quota;
+    quota: QuotaDTO;
     transferAmount: number;
     unit: ResourceUnit;
     isSource?: boolean;

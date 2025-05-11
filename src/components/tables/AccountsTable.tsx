@@ -15,7 +15,7 @@ import {
 } from '@gravity-ui/uikit';
 import {useRouter} from 'next/navigation';
 import {useAuth} from '@/context/AuthContext';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 import {Pencil, TrashBin} from '@gravity-ui/icons';
 
 interface AccountsTableProps {

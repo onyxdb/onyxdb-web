@@ -2,10 +2,10 @@
 
 import React, {useEffect, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {MongoBackup} from '@/generated/api';
+import {MongoBackupDTO} from '@/generated/api';
 import {BackupsTable} from '@/components/tables/BackupsTable';
-import {ConfirmationModal} from '@/components/ConfirmationModal';
-import {mdbMongoDbBackupsApi} from '@/app/apis';
+import {ConfirmationModal} from '@/components/modals/ConfirmationModal';
+import {mdbApi, mdbMongoDbBackupsApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 
@@ -14,7 +14,7 @@ interface BackupsTabProps {
 }
 
 const BackupsTab: React.FC<BackupsTabProps> = ({clusterId}) => {
-    const [backups, setBackups] = useState<MongoBackup[]>([]);
+    const [backups, setBackups] = useState<MongoBackupDTO[]>([]);
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [monitoringInterval, setMonitoringInterval] = useState<NodeJS.Timeout | null>(null);
     const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -83,8 +83,8 @@ const BackupsTab: React.FC<BackupsTabProps> = ({clusterId}) => {
     };
 
     const handleRestoreBackup = (backupName: string) => {
-        mdbMongoDbBackupsApi
-            .restoreFromBackup({clusterId, backupName})
+        mdbApi
+            .restoreCluster({clusterId, backupName})
             .then(() => {
                 fetchData();
             })

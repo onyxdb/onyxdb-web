@@ -3,14 +3,14 @@
 import React from 'react';
 import {Icon, Label, Text} from '@gravity-ui/uikit';
 import {Circles5Random, Cpu, Cpus, Database, SquareListUl} from '@gravity-ui/icons';
-import {ClusterResourcesDTO, MongoClusterDTO, V1ResourcePresetResponse} from '@/generated/api';
+import {ClusterResourcesDTO, MongoClusterDTO, ResourcePresetResponseDTO} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {BytesGB} from '@/components/ResourceInputField';
+import {BytesGB} from '@/components/formik/ResourceInputField';
 
 interface InfoTabProps {
     cluster: MongoClusterDTO;
-    clusterPreset: V1ResourcePresetResponse;
+    clusterPreset: ResourcePresetResponseDTO;
 }
 
 const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
@@ -37,7 +37,7 @@ const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
                             Конфиг:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
-                            {clusterPreset.name} <Label>{clusterPreset.type}</Label>
+                            {clusterPreset.type} <Label>{clusterPreset.type}</Label>
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">
@@ -59,7 +59,7 @@ const InfoTab: React.FC<InfoTabProps> = ({cluster, clusterPreset}) => {
                             Процессор:&nbsp;
                         </Text>
                         <Text variant="body-1" color="primary">
-                            {clusterPreset.vcpu * 1000} milliCPU
+                            {clusterPreset.vcpu} milliCPU
                         </Text>
                     </HorizontalStack>
                     <HorizontalStack align="center">

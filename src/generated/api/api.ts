@@ -22,10 +22,7 @@ import {
     createRequestFunction,
     DUMMY_BASE_URL,
     serializeDataIfNeeded,
-    setApiKeyToObject,
-    setBasicAuthToObject,
     setBearerAuthToObject,
-    setOAuthToObject,
     setSearchParams,
     toPathString,
 } from './common';
@@ -186,6 +183,26 @@ export interface AccountPostDTO {
 /**
  *
  * @export
+ * @interface AccountRolesAllDTO
+ */
+export interface AccountRolesAllDTO {
+    /**
+     *
+     * @type {Array<BusinessRoleWithRolesDTO>}
+     * @memberof AccountRolesAllDTO
+     */
+    businessRoles: Array<BusinessRoleWithRolesDTO>;
+    /**
+     *
+     * @type {Array<RoleWithPermissionsDTO>}
+     * @memberof AccountRolesAllDTO
+     */
+    roles: Array<RoleWithPermissionsDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface AccountRolesHistoryDTO
  */
 export interface AccountRolesHistoryDTO {
@@ -239,6 +256,46 @@ export interface AuthRequestDTO {
      * @memberof AuthRequestDTO
      */
     password: string;
+}
+
+/**
+ *
+ * @export
+ * @interface BackupStatusDTO
+ */
+export interface BackupStatusDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof BackupStatusDTO
+     */
+    value: string;
+    /**
+     *
+     * @type {string}
+     * @memberof BackupStatusDTO
+     */
+    displayValue: string;
+}
+
+/**
+ *
+ * @export
+ * @interface BackupTypeDTO
+ */
+export interface BackupTypeDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof BackupTypeDTO
+     */
+    value: string;
+    /**
+     *
+     * @type {string}
+     * @memberof BackupTypeDTO
+     */
+    displayValue: string;
 }
 
 /**
@@ -358,6 +415,26 @@ export interface BusinessRolePostDTO {
 /**
  *
  * @export
+ * @interface BusinessRoleWithRolesDTO
+ */
+export interface BusinessRoleWithRolesDTO {
+    /**
+     *
+     * @type {BusinessRoleDTO}
+     * @memberof BusinessRoleWithRolesDTO
+     */
+    businessRole: BusinessRoleDTO;
+    /**
+     *
+     * @type {Array<RoleWithPermissionsDTO>}
+     * @memberof BusinessRoleWithRolesDTO
+     */
+    roles: Array<RoleWithPermissionsDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface CheckPermission200Response
  */
 export interface CheckPermission200Response {
@@ -387,6 +464,12 @@ export interface ClusterBackupConfigDTO {
      * @memberof ClusterBackupConfigDTO
      */
     schedule: string;
+    /**
+     *
+     * @type {number}
+     * @memberof ClusterBackupConfigDTO
+     */
+    limit: number;
 }
 
 /**
@@ -516,6 +599,52 @@ export interface CreateMongoDatabaseRequestDTO {
 /**
  *
  * @export
+ * @interface CreateMongoPermissionDTO
+ */
+export interface CreateMongoPermissionDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof CreateMongoPermissionDTO
+     */
+    databaseName: string;
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof CreateMongoPermissionDTO
+     */
+    roles: Array<string>;
+}
+
+/**
+ *
+ * @export
+ * @interface CreateMongoUserRequestDTO
+ */
+export interface CreateMongoUserRequestDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof CreateMongoUserRequestDTO
+     */
+    name: string;
+    /**
+     *
+     * @type {string}
+     * @memberof CreateMongoUserRequestDTO
+     */
+    password: string;
+    /**
+     *
+     * @type {Array<CreateMongoPermissionDTO>}
+     * @memberof CreateMongoUserRequestDTO
+     */
+    permissions: Array<CreateMongoPermissionDTO>;
+}
+
+/**
+ *
+ * @export
  * @interface CreateProjectRequestDTO
  */
 export interface CreateProjectRequestDTO {
@@ -557,6 +686,38 @@ export interface CreateProjectResponseDTO {
      * @memberof CreateProjectResponseDTO
      */
     projectId: string;
+}
+
+/**
+ *
+ * @export
+ * @interface CreateResourcePresetRequestDTO
+ */
+export interface CreateResourcePresetRequestDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    type: string;
+    /**
+     *
+     * @type {number}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CreateResourcePresetRequestDTO
+     */
+    ram: number;
 }
 
 /**
@@ -666,15 +827,15 @@ export interface GetCurrentUser200Response {
 /**
  *
  * @export
- * @interface GetProductQuotaUsageReportResponseOA
+ * @interface GetProductQuotaUsageReportResponseDTO
  */
-export interface GetProductQuotaUsageReportResponseOA {
+export interface GetProductQuotaUsageReportResponseDTO {
     /**
      *
-     * @type {Array<ProductQuotaUsageByResourceOA>}
-     * @memberof GetProductQuotaUsageReportResponseOA
+     * @type {Array<ProductQuotaUsageByResourceDTO>}
+     * @memberof GetProductQuotaUsageReportResponseDTO
      */
-    resources: Array<ProductQuotaUsageByResourceOA>;
+    resources: Array<ProductQuotaUsageByResourceDTO>;
 }
 
 /**
@@ -700,15 +861,15 @@ export interface JwtResponseDTO {
 /**
  *
  * @export
- * @interface ListMongoBackupsResponse
+ * @interface ListMongoBackupsResponseDTO
  */
-export interface ListMongoBackupsResponse {
+export interface ListMongoBackupsResponseDTO {
     /**
      *
-     * @type {Array<MongoBackup>}
-     * @memberof ListMongoBackupsResponse
+     * @type {Array<MongoBackupDTO>}
+     * @memberof ListMongoBackupsResponseDTO
      */
-    backups: Array<MongoBackup>;
+    backups: Array<MongoBackupDTO>;
 }
 
 /**
@@ -742,13 +903,27 @@ export interface ListMongoDatabasesResponseDTO {
 /**
  *
  * @export
- * @interface ListMongoRolesResponse
+ * @interface ListMongoHostsResponseDTO
  */
-export interface ListMongoRolesResponse {
+export interface ListMongoHostsResponseDTO {
+    /**
+     *
+     * @type {Array<MongoHostDTO>}
+     * @memberof ListMongoHostsResponseDTO
+     */
+    hosts: Array<MongoHostDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface ListMongoRolesResponseDTO
+ */
+export interface ListMongoRolesResponseDTO {
     /**
      *
      * @type {Array<string>}
-     * @memberof ListMongoRolesResponse
+     * @memberof ListMongoRolesResponseDTO
      */
     roles: Array<string>;
 }
@@ -756,15 +931,15 @@ export interface ListMongoRolesResponse {
 /**
  *
  * @export
- * @interface ListMongoUsersResponse
+ * @interface ListMongoUsersResponseDTO
  */
-export interface ListMongoUsersResponse {
+export interface ListMongoUsersResponseDTO {
     /**
      *
-     * @type {Array<MongoUser>}
-     * @memberof ListMongoUsersResponse
+     * @type {Array<MongoUserDTO>}
+     * @memberof ListMongoUsersResponseDTO
      */
-    users: Array<MongoUser>;
+    users: Array<MongoUserDTO>;
 }
 
 /**
@@ -826,29 +1001,43 @@ export interface ListProjectsResponseDTO {
 /**
  *
  * @export
- * @interface ListQuotasByProductsResponse
+ * @interface ListQuotasByProductsResponseDTO
  */
-export interface ListQuotasByProductsResponse {
+export interface ListQuotasByProductsResponseDTO {
     /**
      *
-     * @type {Array<ProductQuotas>}
-     * @memberof ListQuotasByProductsResponse
+     * @type {Array<ProductQuotasDTO>}
+     * @memberof ListQuotasByProductsResponseDTO
      */
-    products: Array<ProductQuotas>;
+    products: Array<ProductQuotasDTO>;
 }
 
 /**
  *
  * @export
- * @interface ListResourcesResponse
+ * @interface ListResourcePresetsResponseDTO
  */
-export interface ListResourcesResponse {
+export interface ListResourcePresetsResponseDTO {
     /**
      *
-     * @type {Array<Resource>}
-     * @memberof ListResourcesResponse
+     * @type {Array<ResourcePresetResponseDTO>}
+     * @memberof ListResourcePresetsResponseDTO
      */
-    resources: Array<Resource>;
+    resourcePresets: Array<ResourcePresetResponseDTO>;
+}
+
+/**
+ *
+ * @export
+ * @interface ListResourcesResponseDTO
+ */
+export interface ListResourcesResponseDTO {
+    /**
+     *
+     * @type {Array<ResourceDTO>}
+     * @memberof ListResourcesResponseDTO
+     */
+    resources: Array<ResourceDTO>;
 }
 
 /**
@@ -868,47 +1057,52 @@ export interface ListStorageClassesResponseDTO {
 /**
  *
  * @export
- * @interface MongoBackup
+ * @interface MongoBackupDTO
  */
-export interface MongoBackup {
+export interface MongoBackupDTO {
     /**
      *
      * @type {string}
-     * @memberof MongoBackup
+     * @memberof MongoBackupDTO
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof MongoBackup
+     * @memberof MongoBackupDTO
      */
     clusterId: string;
     /**
      *
-     * @type {string}
-     * @memberof MongoBackup
+     * @type {BackupTypeDTO}
+     * @memberof MongoBackupDTO
      */
-    type: MongoBackupTypeEnum;
+    type: BackupTypeDTO;
+    /**
+     *
+     * @type {BackupStatusDTO}
+     * @memberof MongoBackupDTO
+     */
+    status: BackupStatusDTO;
+    /**
+     *
+     * @type {boolean}
+     * @memberof MongoBackupDTO
+     */
+    isReady: boolean;
     /**
      *
      * @type {string}
-     * @memberof MongoBackup
+     * @memberof MongoBackupDTO
      */
     startedAt: string;
     /**
      *
      * @type {string}
-     * @memberof MongoBackup
+     * @memberof MongoBackupDTO
      */
     finishedAt: string;
 }
-
-export const MongoBackupTypeEnum = {
-    Automated: 'automated',
-    Manual: 'manual',
-} as const;
-
-export type MongoBackupTypeEnum = (typeof MongoBackupTypeEnum)[keyof typeof MongoBackupTypeEnum];
 
 /**
  *
@@ -1075,61 +1269,40 @@ export interface MongoDatabaseDTO {
 /**
  *
  * @export
- * @interface MongoHost
+ * @interface MongoHostDTO
  */
-export interface MongoHost {
+export interface MongoHostDTO {
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
     clusterId: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
-    type: MongoHostTypeEnum;
+    type: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
-    status: MongoHostStatusEnum;
+    status: string;
     /**
      *
      * @type {string}
-     * @memberof MongoHost
+     * @memberof MongoHostDTO
      */
-    role: MongoHostRoleEnum;
+    role: string;
 }
-
-export const MongoHostTypeEnum = {
-    Unknown: 'unknown',
-    Mongod: 'mongod',
-} as const;
-
-export type MongoHostTypeEnum = (typeof MongoHostTypeEnum)[keyof typeof MongoHostTypeEnum];
-export const MongoHostStatusEnum = {
-    Unknown: 'unknown',
-    Alive: 'alive',
-    Dead: 'dead',
-} as const;
-
-export type MongoHostStatusEnum = (typeof MongoHostStatusEnum)[keyof typeof MongoHostStatusEnum];
-export const MongoHostRoleEnum = {
-    Unknown: 'unknown',
-    Primary: 'primary',
-    Secondary: 'secondary',
-} as const;
-
-export type MongoHostRoleEnum = (typeof MongoHostRoleEnum)[keyof typeof MongoHostRoleEnum];
 
 /**
  *
@@ -1168,55 +1341,49 @@ export interface MongoInitUserDTO {
 /**
  *
  * @export
- * @interface MongoPermission
+ * @interface MongoPermissionDTO
  */
-export interface MongoPermission {
+export interface MongoPermissionDTO {
     /**
      *
      * @type {string}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
-    id: string;
+    databaseName: string;
     /**
      *
      * @type {string}
-     * @memberof MongoPermission
-     */
-    databaseId: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
     createdAt: string;
     /**
      *
      * @type {string}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
     createdBy: string;
     /**
      *
      * @type {boolean}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
     isDeleted: boolean;
     /**
      *
      * @type {string}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
     deletedAt: string;
     /**
      *
      * @type {string}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
     deletedBy: string;
     /**
      *
      * @type {Array<string>}
-     * @memberof MongoPermission
+     * @memberof MongoPermissionDTO
      */
     roles: Array<string>;
 }
@@ -1224,109 +1391,57 @@ export interface MongoPermission {
 /**
  *
  * @export
- * @interface MongoPermissionToCreate
+ * @interface MongoUserDTO
  */
-export interface MongoPermissionToCreate {
+export interface MongoUserDTO {
     /**
      *
      * @type {string}
-     * @memberof MongoPermissionToCreate
-     */
-    databaseId: string;
-    /**
-     *
-     * @type {Array<string>}
-     * @memberof MongoPermissionToCreate
-     */
-    roles: Array<string>;
-}
-
-/**
- *
- * @export
- * @interface MongoUser
- */
-export interface MongoUser {
-    /**
-     *
-     * @type {string}
-     * @memberof MongoUser
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     clusterId: string;
     /**
      *
      * @type {string}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     createdAt: string;
     /**
      *
      * @type {string}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     createdBy: string;
     /**
      *
      * @type {boolean}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     isDeleted: boolean;
     /**
      *
      * @type {string}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     deletedAt: string;
     /**
      *
      * @type {string}
-     * @memberof MongoUser
+     * @memberof MongoUserDTO
      */
     deletedBy: string;
     /**
      *
-     * @type {Array<MongoPermission>}
-     * @memberof MongoUser
+     * @type {Array<MongoPermissionDTO>}
+     * @memberof MongoUserDTO
      */
-    permissions: Array<MongoPermission>;
-}
-
-/**
- *
- * @export
- * @interface MongoUserToCreate
- */
-export interface MongoUserToCreate {
-    /**
-     *
-     * @type {string}
-     * @memberof MongoUserToCreate
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof MongoUserToCreate
-     */
-    password: string;
-    /**
-     *
-     * @type {Array<MongoPermissionToCreate>}
-     * @memberof MongoUserToCreate
-     */
-    permissions: Array<MongoPermissionToCreate>;
+    permissions: Array<MongoPermissionDTO>;
 }
 
 /**
@@ -1924,63 +2039,63 @@ export interface ProductPostDTO {
 /**
  *
  * @export
- * @interface ProductQuotaUsageByResourceOA
+ * @interface ProductQuotaUsageByResourceDTO
  */
-export interface ProductQuotaUsageByResourceOA {
+export interface ProductQuotaUsageByResourceDTO {
     /**
      *
-     * @type {Resource}
-     * @memberof ProductQuotaUsageByResourceOA
+     * @type {ResourceDTO}
+     * @memberof ProductQuotaUsageByResourceDTO
      */
-    resource: Resource;
+    resource: ResourceDTO;
     /**
      *
-     * @type {Array<ProductQuotaUsageReportItemOA>}
-     * @memberof ProductQuotaUsageByResourceOA
+     * @type {Array<ProductQuotaUsageReportItemDTO>}
+     * @memberof ProductQuotaUsageByResourceDTO
      */
-    items: Array<ProductQuotaUsageReportItemOA>;
+    items: Array<ProductQuotaUsageReportItemDTO>;
 }
 
 /**
  *
  * @export
- * @interface ProductQuotaUsageReportItemOA
+ * @interface ProductQuotaUsageReportItemDTO
  */
-export interface ProductQuotaUsageReportItemOA {
+export interface ProductQuotaUsageReportItemDTO {
     /**
      *
      * @type {string}
-     * @memberof ProductQuotaUsageReportItemOA
+     * @memberof ProductQuotaUsageReportItemDTO
      */
     productId: string;
     /**
      *
      * @type {string}
-     * @memberof ProductQuotaUsageReportItemOA
+     * @memberof ProductQuotaUsageReportItemDTO
      */
     quotaProvider: string;
     /**
      *
      * @type {number}
-     * @memberof ProductQuotaUsageReportItemOA
+     * @memberof ProductQuotaUsageReportItemDTO
      */
     limit: number;
     /**
      *
      * @type {number}
-     * @memberof ProductQuotaUsageReportItemOA
+     * @memberof ProductQuotaUsageReportItemDTO
      */
     usage: number;
     /**
      *
      * @type {number}
-     * @memberof ProductQuotaUsageReportItemOA
+     * @memberof ProductQuotaUsageReportItemDTO
      */
     free: number;
     /**
      *
      * @type {number}
-     * @memberof ProductQuotaUsageReportItemOA
+     * @memberof ProductQuotaUsageReportItemDTO
      */
     timestamp: number;
 }
@@ -1988,41 +2103,41 @@ export interface ProductQuotaUsageReportItemOA {
 /**
  *
  * @export
- * @interface ProductQuotas
+ * @interface ProductQuotasDTO
  */
-export interface ProductQuotas {
+export interface ProductQuotasDTO {
     /**
      *
      * @type {string}
-     * @memberof ProductQuotas
+     * @memberof ProductQuotasDTO
      */
     productId: string;
     /**
      *
-     * @type {Array<Quota>}
-     * @memberof ProductQuotas
+     * @type {Array<QuotaDTO>}
+     * @memberof ProductQuotasDTO
      */
-    quotas: Array<Quota>;
+    quotas: Array<QuotaDTO>;
 }
 
 /**
  *
  * @export
- * @interface ProductQuotasToTransfer
+ * @interface ProductQuotasToTransferDTO
  */
-export interface ProductQuotasToTransfer {
+export interface ProductQuotasToTransferDTO {
     /**
      *
      * @type {string}
-     * @memberof ProductQuotasToTransfer
+     * @memberof ProductQuotasToTransferDTO
      */
     productId: string;
     /**
      *
-     * @type {Array<QuotaToTransfer>}
-     * @memberof ProductQuotasToTransfer
+     * @type {Array<QuotaToTransferDTO>}
+     * @memberof ProductQuotasToTransferDTO
      */
-    quotas: Array<QuotaToTransfer>;
+    quotas: Array<QuotaToTransferDTO>;
 }
 
 /**
@@ -2116,31 +2231,31 @@ export interface ProjectDTO {
 /**
  *
  * @export
- * @interface Quota
+ * @interface QuotaDTO
  */
-export interface Quota {
+export interface QuotaDTO {
     /**
      *
-     * @type {Resource}
-     * @memberof Quota
+     * @type {ResourceDTO}
+     * @memberof QuotaDTO
      */
-    resource: Resource;
+    resource: ResourceDTO;
     /**
      *
      * @type {number}
-     * @memberof Quota
+     * @memberof QuotaDTO
      */
     limit: number;
     /**
      *
      * @type {number}
-     * @memberof Quota
+     * @memberof QuotaDTO
      */
     usage: number;
     /**
      *
      * @type {number}
-     * @memberof Quota
+     * @memberof QuotaDTO
      */
     free: number;
 }
@@ -2148,19 +2263,19 @@ export interface Quota {
 /**
  *
  * @export
- * @interface QuotaToTransfer
+ * @interface QuotaToTransferDTO
  */
-export interface QuotaToTransfer {
+export interface QuotaToTransferDTO {
     /**
      *
      * @type {string}
-     * @memberof QuotaToTransfer
+     * @memberof QuotaToTransferDTO
      */
     resourceId: string;
     /**
      *
      * @type {number}
-     * @memberof QuotaToTransfer
+     * @memberof QuotaToTransferDTO
      */
     limit: number;
 }
@@ -2182,53 +2297,72 @@ export interface RefreshTokenDTO {
 /**
  *
  * @export
- * @interface Resource
+ * @interface ResourceDTO
  */
-export interface Resource {
+export interface ResourceDTO {
     /**
      *
      * @type {string}
-     * @memberof Resource
+     * @memberof ResourceDTO
      */
     id: string;
     /**
      *
      * @type {string}
-     * @memberof Resource
+     * @memberof ResourceDTO
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof Resource
+     * @memberof ResourceDTO
      */
     description: string;
     /**
      *
      * @type {string}
-     * @memberof Resource
+     * @memberof ResourceDTO
      */
-    type: ResourceTypeEnum;
+    type: string;
     /**
      *
      * @type {string}
-     * @memberof Resource
+     * @memberof ResourceDTO
      */
-    unit: ResourceUnitEnum;
+    unit: string;
 }
 
-export const ResourceTypeEnum = {
-    Vcpu: 'vcpu',
-    Ram: 'ram',
-} as const;
-
-export type ResourceTypeEnum = (typeof ResourceTypeEnum)[keyof typeof ResourceTypeEnum];
-export const ResourceUnitEnum = {
-    Cores: 'cores',
-    Bytes: 'bytes',
-} as const;
-
-export type ResourceUnitEnum = (typeof ResourceUnitEnum)[keyof typeof ResourceUnitEnum];
+/**
+ *
+ * @export
+ * @interface ResourcePresetResponseDTO
+ */
+export interface ResourcePresetResponseDTO {
+    /**
+     *
+     * @type {string}
+     * @memberof ResourcePresetResponseDTO
+     */
+    id: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ResourcePresetResponseDTO
+     */
+    type: string;
+    /**
+     *
+     * @type {number}
+     * @memberof ResourcePresetResponseDTO
+     */
+    vcpu: number;
+    /**
+     *
+     * @type {number}
+     * @memberof ResourcePresetResponseDTO
+     */
+    ram: number;
+}
 
 /**
  *
@@ -2638,19 +2772,19 @@ export interface ScheduledOperationDTO {
 /**
  *
  * @export
- * @interface SimulateMongoDBQuotasUsageRequest
+ * @interface SimulateMongoDBQuotasUsageRequestDTO
  */
-export interface SimulateMongoDBQuotasUsageRequest {
+export interface SimulateMongoDBQuotasUsageRequestDTO {
     /**
      *
      * @type {string}
-     * @memberof SimulateMongoDBQuotasUsageRequest
+     * @memberof SimulateMongoDBQuotasUsageRequestDTO
      */
     projectId: string;
     /**
      *
      * @type {MongoConfigDTO}
-     * @memberof SimulateMongoDBQuotasUsageRequest
+     * @memberof SimulateMongoDBQuotasUsageRequestDTO
      */
     config: MongoConfigDTO;
 }
@@ -2658,61 +2792,61 @@ export interface SimulateMongoDBQuotasUsageRequest {
 /**
  *
  * @export
- * @interface SimulateMongoDBQuotasUsageResponse
+ * @interface SimulateMongoDBQuotasUsageResponseDTO
  */
-export interface SimulateMongoDBQuotasUsageResponse {
+export interface SimulateMongoDBQuotasUsageResponseDTO {
     /**
      *
-     * @type {Array<Quota>}
-     * @memberof SimulateMongoDBQuotasUsageResponse
+     * @type {Array<QuotaDTO>}
+     * @memberof SimulateMongoDBQuotasUsageResponseDTO
      */
-    quotas: Array<Quota>;
+    quotas: Array<QuotaDTO>;
 }
 
 /**
  *
  * @export
- * @interface SimulateTransferQuotasBetweenProductsResponse
+ * @interface SimulateTransferQuotasBetweenProductsResponseDTO
  */
-export interface SimulateTransferQuotasBetweenProductsResponse {
+export interface SimulateTransferQuotasBetweenProductsResponseDTO {
     /**
      *
-     * @type {ProductQuotas}
-     * @memberof SimulateTransferQuotasBetweenProductsResponse
+     * @type {ProductQuotasDTO}
+     * @memberof SimulateTransferQuotasBetweenProductsResponseDTO
      */
-    srcProduct: ProductQuotas;
+    srcProduct: ProductQuotasDTO;
     /**
      *
-     * @type {ProductQuotas}
-     * @memberof SimulateTransferQuotasBetweenProductsResponse
+     * @type {ProductQuotasDTO}
+     * @memberof SimulateTransferQuotasBetweenProductsResponseDTO
      */
-    dstProduct: ProductQuotas;
+    dstProduct: ProductQuotasDTO;
 }
 
 /**
  *
  * @export
- * @interface TransferQuotasBetweenProductsRequest
+ * @interface TransferQuotasBetweenProductsRequestDTO
  */
-export interface TransferQuotasBetweenProductsRequest {
+export interface TransferQuotasBetweenProductsRequestDTO {
     /**
      *
      * @type {string}
-     * @memberof TransferQuotasBetweenProductsRequest
+     * @memberof TransferQuotasBetweenProductsRequestDTO
      */
     srcProductId: string;
     /**
      *
      * @type {string}
-     * @memberof TransferQuotasBetweenProductsRequest
+     * @memberof TransferQuotasBetweenProductsRequestDTO
      */
     dstProductId: string;
     /**
      *
-     * @type {Array<QuotaToTransfer>}
-     * @memberof TransferQuotasBetweenProductsRequest
+     * @type {Array<QuotaToTransferDTO>}
+     * @memberof TransferQuotasBetweenProductsRequestDTO
      */
-    quotas: Array<QuotaToTransfer>;
+    quotas: Array<QuotaToTransferDTO>;
 }
 
 /**
@@ -2798,15 +2932,15 @@ export interface UpdateMongoConfigDTO {
 /**
  *
  * @export
- * @interface UpdateMongoHostsRequest
+ * @interface UpdateMongoHostsRequestDTO
  */
-export interface UpdateMongoHostsRequest {
+export interface UpdateMongoHostsRequestDTO {
     /**
      *
-     * @type {Array<MongoHost>}
-     * @memberof UpdateMongoHostsRequest
+     * @type {Array<MongoHostDTO>}
+     * @memberof UpdateMongoHostsRequestDTO
      */
-    hosts?: Array<MongoHost>;
+    hosts: Array<MongoHostDTO>;
 }
 
 /**
@@ -2820,197 +2954,48 @@ export interface UpdateProjectRequestDTO {
      * @type {string}
      * @memberof UpdateProjectRequestDTO
      */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateProjectRequestDTO
-     */
     description: string;
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateProjectRequestDTO
-     */
-    productId: string;
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateProjectRequestDTO
-     */
-    namespace: string;
 }
 
 /**
  *
  * @export
- * @interface UploadQuotasToProductsRequest
+ * @interface UpdateResourcePresetRequestDTO
  */
-export interface UploadQuotasToProductsRequest {
-    /**
-     *
-     * @type {Array<ProductQuotasToTransfer>}
-     * @memberof UploadQuotasToProductsRequest
-     */
-    products: Array<ProductQuotasToTransfer>;
-}
-
-/**
- *
- * @export
- * @interface V1CreateResourcePresetRequest
- */
-export interface V1CreateResourcePresetRequest {
+export interface UpdateResourcePresetRequestDTO {
     /**
      *
      * @type {string}
-     * @memberof V1CreateResourcePresetRequest
+     * @memberof UpdateResourcePresetRequestDTO
      */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1CreateResourcePresetRequest
-     */
-    type: V1CreateResourcePresetRequestTypeEnum;
+    type: string;
     /**
      *
      * @type {number}
-     * @memberof V1CreateResourcePresetRequest
+     * @memberof UpdateResourcePresetRequestDTO
      */
     vcpu: number;
     /**
      *
      * @type {number}
-     * @memberof V1CreateResourcePresetRequest
+     * @memberof UpdateResourcePresetRequestDTO
      */
     ram: number;
 }
 
-export const V1CreateResourcePresetRequestTypeEnum = {
-    CpuOptimized: 'cpu_optimized',
-    Standard: 'standard',
-    RamOptimized: 'ram_optimized',
-} as const;
-
-export type V1CreateResourcePresetRequestTypeEnum =
-    (typeof V1CreateResourcePresetRequestTypeEnum)[keyof typeof V1CreateResourcePresetRequestTypeEnum];
-
 /**
  *
  * @export
- * @interface V1ListResourcePresetsResponse
+ * @interface UploadQuotasToProductsRequestDTO
  */
-export interface V1ListResourcePresetsResponse {
+export interface UploadQuotasToProductsRequestDTO {
     /**
      *
-     * @type {Array<V1ResourcePresetResponse>}
-     * @memberof V1ListResourcePresetsResponse
+     * @type {Array<ProductQuotasToTransferDTO>}
+     * @memberof UploadQuotasToProductsRequestDTO
      */
-    resourcePresets: Array<V1ResourcePresetResponse>;
+    products: Array<ProductQuotasToTransferDTO>;
 }
-
-/**
- *
- * @export
- * @interface V1ResourcePresetResponse
- */
-export interface V1ResourcePresetResponse {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ResourcePresetResponse
-     */
-    id: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1ResourcePresetResponse
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1ResourcePresetResponse
-     */
-    type: V1ResourcePresetResponseTypeEnum;
-    /**
-     *
-     * @type {number}
-     * @memberof V1ResourcePresetResponse
-     */
-    vcpu: number;
-    /**
-     *
-     * @type {number}
-     * @memberof V1ResourcePresetResponse
-     */
-    ram: number;
-}
-
-export const V1ResourcePresetResponseTypeEnum = {
-    CpuOptimized: 'cpu_optimized',
-    Standard: 'standard',
-    RamOptimized: 'ram_optimized',
-} as const;
-
-export type V1ResourcePresetResponseTypeEnum =
-    (typeof V1ResourcePresetResponseTypeEnum)[keyof typeof V1ResourcePresetResponseTypeEnum];
-
-/**
- *
- * @export
- * @interface V1ScheduledOperationResponse
- */
-export interface V1ScheduledOperationResponse {
-    /**
-     *
-     * @type {string}
-     * @memberof V1ScheduledOperationResponse
-     */
-    id: string;
-}
-
-/**
- *
- * @export
- * @interface V1UpdateResourcePresetRequest
- */
-export interface V1UpdateResourcePresetRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    name: string;
-    /**
-     *
-     * @type {string}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    type: V1UpdateResourcePresetRequestTypeEnum;
-    /**
-     *
-     * @type {number}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    vcpu: number;
-    /**
-     *
-     * @type {number}
-     * @memberof V1UpdateResourcePresetRequest
-     */
-    ram: number;
-}
-
-export const V1UpdateResourcePresetRequestTypeEnum = {
-    CpuOptimized: 'cpu_optimized',
-    Standard: 'standard',
-    RamOptimized: 'ram_optimized',
-} as const;
-
-export type V1UpdateResourcePresetRequestTypeEnum =
-    (typeof V1UpdateResourcePresetRequestTypeEnum)[keyof typeof V1UpdateResourcePresetRequestTypeEnum];
 
 /**
  * AccountsApi - axios parameter creator
@@ -3191,6 +3176,52 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             }
 
             const localVarRequestOptions = {method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary Get all account BRs, Roles and Permissions
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountAccess: async (
+            accountId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'accountId' is not null or undefined
+            assertParamExists('getAccountAccess', 'accountId', accountId);
+            const localVarPath = `/api/v1/accounts/{accountId}/access`.replace(
+                `{${'accountId'}}`,
+                encodeURIComponent(String(accountId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -3919,6 +3950,33 @@ export const AccountsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
+         * @summary Get all account BRs, Roles and Permissions
+         * @param {string} accountId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAccountAccess(
+            accountId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountRolesAllDTO>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountAccess(
+                accountId,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['AccountsApi.getAccountAccess']?.[localVarOperationServerIndex]
+                    ?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Get account business roles
          * @param {string} accountId
          * @param {*} [options] Override http request option.
@@ -4370,6 +4428,21 @@ export const AccountsApiFactory = function (
         },
         /**
          *
+         * @summary Get all account BRs, Roles and Permissions
+         * @param {AccountsApiGetAccountAccessRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountAccess(
+            requestParameters: AccountsApiGetAccountAccessRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<AccountRolesAllDTO> {
+            return localVarFp
+                .getAccountAccess(requestParameters.accountId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Get account business roles
          * @param {AccountsApiGetAccountBusinessRolesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4636,6 +4709,20 @@ export interface AccountsApiDeleteAccountRequest {
      *
      * @type {string}
      * @memberof AccountsApiDeleteAccount
+     */
+    readonly accountId: string;
+}
+
+/**
+ * Request parameters for getAccountAccess operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountAccessRequest
+ */
+export interface AccountsApiGetAccountAccessRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof AccountsApiGetAccountAccess
      */
     readonly accountId: string;
 }
@@ -4919,6 +5006,23 @@ export class AccountsApi extends BaseAPI {
     ) {
         return AccountsApiFp(this.configuration)
             .deleteAccount(requestParameters.accountId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @summary Get all account BRs, Roles and Permissions
+     * @param {AccountsApiGetAccountAccessRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getAccountAccess(
+        requestParameters: AccountsApiGetAccountAccessRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return AccountsApiFp(this.configuration)
+            .getAccountAccess(requestParameters.accountId, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -5769,7 +5873,7 @@ export const BillingApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('getProductQuotaUsageReport', 'startDate', startDate);
             // verify required parameter 'endDate' is not null or undefined
             assertParamExists('getProductQuotaUsageReport', 'endDate', endDate);
-            const localVarPath = `/api/billing/product-quota-usage-report`;
+            const localVarPath = `/api/mdb/billing/product-quota-usage-report`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5845,7 +5949,7 @@ export const BillingApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<GetProductQuotaUsageReportResponseOA>
+            ) => AxiosPromise<GetProductQuotaUsageReportResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProductQuotaUsageReport(
                 productId,
@@ -5890,7 +5994,7 @@ export const BillingApiFactory = function (
         getProductQuotaUsageReport(
             requestParameters: BillingApiGetProductQuotaUsageReportRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<GetProductQuotaUsageReportResponseOA> {
+        ): AxiosPromise<GetProductQuotaUsageReportResponseDTO> {
             return localVarFp
                 .getProductQuotaUsageReport(
                     requestParameters.productId,
@@ -8232,7 +8336,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          *
-         * @summary Create backup of MongoDB cluster
+         * @summary Create MongoDB backup
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8243,7 +8347,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('createBackup', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups`.replace(
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/backups`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -8351,7 +8455,10 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 'createMongoDatabaseRequestDTO',
                 createMongoDatabaseRequestDTO,
             );
-            const localVarPath = `/api/mdb/mongodb/databases`;
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8366,10 +8473,6 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            if (clusterId !== undefined) {
-                localVarQueryParameter['clusterId'] = clusterId;
-            }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -8445,21 +8548,21 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createResourcePreset: async (
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'createResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'createResourcePreset',
-                'v1CreateResourcePresetRequest',
-                v1CreateResourcePresetRequest,
+                'createResourcePresetRequestDTO',
+                createResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8486,7 +8589,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -8498,22 +8601,22 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Create MongoDB user in cluster
+         * @summary Create MongoDB user
          * @param {string} clusterId
-         * @param {MongoUserToCreate} mongoUserToCreate
+         * @param {CreateMongoUserRequestDTO} createMongoUserRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createUser: async (
             clusterId: string,
-            mongoUserToCreate: MongoUserToCreate,
+            createMongoUserRequestDTO: CreateMongoUserRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('createUser', 'clusterId', clusterId);
-            // verify required parameter 'mongoUserToCreate' is not null or undefined
-            assertParamExists('createUser', 'mongoUserToCreate', mongoUserToCreate);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
+            // verify required parameter 'createMongoUserRequestDTO' is not null or undefined
+            assertParamExists('createUser', 'createMongoUserRequestDTO', createMongoUserRequestDTO);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/users`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -8543,7 +8646,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                mongoUserToCreate,
+                createMongoUserRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -8570,7 +8673,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             assertParamExists('deleteBackup', 'clusterId', clusterId);
             // verify required parameter 'backupName' is not null or undefined
             assertParamExists('deleteBackup', 'backupName', backupName);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups/{backupName}`
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/backups/{backupName}`
                 .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
                 .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8665,7 +8768,9 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             assertParamExists('deleteDatabase', 'clusterId', clusterId);
             // verify required parameter 'databaseName' is not null or undefined
             assertParamExists('deleteDatabase', 'databaseName', databaseName);
-            const localVarPath = `/api/mdb/mongodb/databases`;
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases/{databaseName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'databaseName'}}`, encodeURIComponent(String(databaseName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8680,14 +8785,6 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            if (clusterId !== undefined) {
-                localVarQueryParameter['clusterId'] = clusterId;
-            }
-
-            if (databaseName !== undefined) {
-                localVarQueryParameter['databaseName'] = databaseName;
-            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -8762,7 +8859,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('deleteResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -8798,20 +8895,23 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary Delete MongoDB user
-         * @param {string} userId
+         * @param {string} clusterId
+         * @param {string} userName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteUser: async (
-            userId: string,
+            clusterId: string,
+            userName: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('deleteUser', 'userId', userId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
-                `{${'userId'}}`,
-                encodeURIComponent(String(userId)),
-            );
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('deleteUser', 'clusterId', clusterId);
+            // verify required parameter 'userName' is not null or undefined
+            assertParamExists('deleteUser', 'userName', userName);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/users/{userName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'userName'}}`, encodeURIComponent(String(userName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8908,7 +9008,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             assertParamExists('getProductQuotaUsageReport', 'startDate', startDate);
             // verify required parameter 'endDate' is not null or undefined
             assertParamExists('getProductQuotaUsageReport', 'endDate', endDate);
-            const localVarPath = `/api/billing/product-quota-usage-report`;
+            const localVarPath = `/api/mdb/billing/product-quota-usage-report`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9015,7 +9115,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('getResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -9050,53 +9150,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUser: async (
-            userId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('getUser', 'userId', userId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
-                `{${'userId'}}`,
-                encodeURIComponent(String(userId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary List backups of MongoDB cluster
+         * @summary List MongoDB backups
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9107,7 +9161,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listBackups', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups`.replace(
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/backups`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -9204,7 +9258,10 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listDatabases', 'clusterId', clusterId);
-            const localVarPath = `/api/mdb/mongodb/databases`;
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9220,9 +9277,51 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-            if (clusterId !== undefined) {
-                localVarQueryParameter['clusterId'] = clusterId;
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listHosts', 'clusterId', clusterId);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/hosts`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
             }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -9359,7 +9458,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary List MDB quotas by products
+         * @summary List quotas by products
          * @param {Array<string>} [productIds]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9368,7 +9467,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
             productIds?: Array<string>,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            const localVarPath = `/api/quotas/mdb/by-products`;
+            const localVarPath = `/api/mdb/quotas/list-by-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9404,12 +9503,12 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9446,7 +9545,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
          * @throws {RequiredError}
          */
         listResources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/quotas/mdb/resources`;
+            const localVarPath = `/api/mdb/resources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9483,7 +9582,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
          * @throws {RequiredError}
          */
         listRoles: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/managed-mongodb/v1/users/roles`;
+            const localVarPath = `/api/mdb/mongodb/users/roles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9552,7 +9651,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary List MongoDB users in cluster
+         * @summary List MongoDB users
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9563,7 +9662,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listUsers', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/users`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -9681,25 +9780,24 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Restore MongoDB cluster from backup
+         * @summary Restore MongoDB cluster
          * @param {string} clusterId
          * @param {string} backupName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restoreFromBackup: async (
+        restoreCluster: async (
             clusterId: string,
             backupName: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('restoreFromBackup', 'clusterId', clusterId);
+            assertParamExists('restoreCluster', 'clusterId', clusterId);
             // verify required parameter 'backupName' is not null or undefined
-            assertParamExists('restoreFromBackup', 'backupName', backupName);
-            const localVarPath =
-                `/api/managed-mongodb/v1/clusters/{clusterId}/backups/{backupName}/restore`
-                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
-                    .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
+            assertParamExists('restoreCluster', 'backupName', backupName);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/restore/{backupName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9732,21 +9830,21 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary Simulate usage of quotas for MongoDB cluster
-         * @param {SimulateMongoDBQuotasUsageRequest} simulateMongoDBQuotasUsageRequest
+         * @param {SimulateMongoDBQuotasUsageRequestDTO} simulateMongoDBQuotasUsageRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         simulateMongoDbQuotasUsage: async (
-            simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest,
+            simulateMongoDBQuotasUsageRequestDTO: SimulateMongoDBQuotasUsageRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'simulateMongoDBQuotasUsageRequest' is not null or undefined
+            // verify required parameter 'simulateMongoDBQuotasUsageRequestDTO' is not null or undefined
             assertParamExists(
                 'simulateMongoDbQuotasUsage',
-                'simulateMongoDBQuotasUsageRequest',
-                simulateMongoDBQuotasUsageRequest,
+                'simulateMongoDBQuotasUsageRequestDTO',
+                simulateMongoDBQuotasUsageRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/managed-mongodb/simulate-usage`;
+            const localVarPath = `/api/mdb/quotas/mongodb/simulate-usage`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9773,7 +9871,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                simulateMongoDBQuotasUsageRequest,
+                simulateMongoDBQuotasUsageRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -9785,22 +9883,22 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Simulate transfer of MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Simulate transfer of quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         simulateTransferQuotasBetweenProducts: async (
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'transferQuotasBetweenProductsRequest' is not null or undefined
+            // verify required parameter 'transferQuotasBetweenProductsRequestDTO' is not null or undefined
             assertParamExists(
                 'simulateTransferQuotasBetweenProducts',
-                'transferQuotasBetweenProductsRequest',
-                transferQuotasBetweenProductsRequest,
+                'transferQuotasBetweenProductsRequestDTO',
+                transferQuotasBetweenProductsRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/simulate-transfer-between-products`;
+            const localVarPath = `/api/mdb/quotas/simulate-transfer-between-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9827,7 +9925,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                transferQuotasBetweenProductsRequest,
+                transferQuotasBetweenProductsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -9839,22 +9937,22 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Exchange quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         transferQuotasBetweenProducts: async (
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'transferQuotasBetweenProductsRequest' is not null or undefined
+            // verify required parameter 'transferQuotasBetweenProductsRequestDTO' is not null or undefined
             assertParamExists(
                 'transferQuotasBetweenProducts',
-                'transferQuotasBetweenProductsRequest',
-                transferQuotasBetweenProductsRequest,
+                'transferQuotasBetweenProductsRequestDTO',
+                transferQuotasBetweenProductsRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/transfer-between-products`;
+            const localVarPath = `/api/mdb/quotas/transfer-between-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9881,7 +9979,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                transferQuotasBetweenProductsRequest,
+                transferQuotasBetweenProductsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -9955,17 +10053,21 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateHosts: async (
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
-            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
-            const localVarPath = `/api/managed-mongodb/v1/internal/hosts`;
+            // verify required parameter 'updateMongoHostsRequestDTO' is not null or undefined
+            assertParamExists(
+                'updateHosts',
+                'updateMongoHostsRequestDTO',
+                updateMongoHostsRequestDTO,
+            );
+            const localVarPath = `/api/mdb/mongodb/internal/hosts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9992,7 +10094,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -10063,24 +10165,24 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateResourcePreset: async (
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('updateResourcePreset', 'resourcePresetId', resourcePresetId);
-            // verify required parameter 'v1UpdateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'updateResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'updateResourcePreset',
-                'v1UpdateResourcePresetRequest',
-                v1UpdateResourcePresetRequest,
+                'updateResourcePresetRequestDTO',
+                updateResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -10110,7 +10212,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -10122,22 +10224,22 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          *
-         * @summary Upload MDB quotas to multiple products
-         * @param {UploadQuotasToProductsRequest} uploadQuotasToProductsRequest
+         * @summary Upload quotas to multiple products
+         * @param {UploadQuotasToProductsRequestDTO} uploadQuotasToProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         uploadQuotasToProducts: async (
-            uploadQuotasToProductsRequest: UploadQuotasToProductsRequest,
+            uploadQuotasToProductsRequestDTO: UploadQuotasToProductsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'uploadQuotasToProductsRequest' is not null or undefined
+            // verify required parameter 'uploadQuotasToProductsRequestDTO' is not null or undefined
             assertParamExists(
                 'uploadQuotasToProducts',
-                'uploadQuotasToProductsRequest',
-                uploadQuotasToProductsRequest,
+                'uploadQuotasToProductsRequestDTO',
+                uploadQuotasToProductsRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/upload-to-products`;
+            const localVarPath = `/api/mdb/quotas/upload-to-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10164,7 +10266,7 @@ export const MDBApiAxiosParamCreator = function (configuration?: Configuration) 
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                uploadQuotasToProductsRequest,
+                uploadQuotasToProductsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -10186,7 +10288,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary Create backup of MongoDB cluster
+         * @summary Create MongoDB backup
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10195,7 +10297,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createBackup(
                 clusterId,
@@ -10305,16 +10407,16 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createResourcePreset(
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createResourcePreset(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10331,22 +10433,22 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Create MongoDB user in cluster
+         * @summary Create MongoDB user
          * @param {string} clusterId
-         * @param {MongoUserToCreate} mongoUserToCreate
+         * @param {CreateMongoUserRequestDTO} createMongoUserRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createUser(
             clusterId: string,
-            mongoUserToCreate: MongoUserToCreate,
+            createMongoUserRequestDTO: CreateMongoUserRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(
                 clusterId,
-                mongoUserToCreate,
+                createMongoUserRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10373,7 +10475,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             backupName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteBackup(
                 clusterId,
@@ -10506,17 +10608,23 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Delete MongoDB user
-         * @param {string} userId
+         * @param {string} clusterId
+         * @param {string} userName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteUser(
-            userId: string,
+            clusterId: string,
+            userName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userId, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(
+                clusterId,
+                userName,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['MDBApi.deleteUser']?.[localVarOperationServerIndex]?.url;
@@ -10572,7 +10680,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<GetProductQuotaUsageReportResponseOA>
+            ) => AxiosPromise<GetProductQuotaUsageReportResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProductQuotaUsageReport(
                 productId,
@@ -10630,7 +10738,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             resourcePresetId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ResourcePresetResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourcePresetResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getResourcePreset(
                 resourcePresetId,
@@ -10649,30 +10757,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getUser(
-            userId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MongoUser>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUser(userId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['MDBApi.getUser']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary List backups of MongoDB cluster
+         * @summary List MongoDB backups
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10681,7 +10766,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoBackupsResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoBackupsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listBackups(
                 clusterId,
@@ -10752,6 +10837,31 @@ export const MDBApiFp = function (configuration?: Configuration) {
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['MDBApi.listDatabases']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listHosts(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoHostsResponseDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listHosts(clusterId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['MDBApi.listHosts']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -10836,7 +10946,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary List MDB quotas by products
+         * @summary List quotas by products
          * @param {Array<string>} [productIds]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10845,7 +10955,10 @@ export const MDBApiFp = function (configuration?: Configuration) {
             productIds?: Array<string>,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListQuotasByProductsResponse>
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<ListQuotasByProductsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listQuotasByProducts(
                 productIds,
@@ -10865,7 +10978,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10875,7 +10988,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<V1ListResourcePresetsResponse>
+            ) => AxiosPromise<ListResourcePresetsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResourcePresets(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10899,7 +11012,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         async listResources(
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListResourcesResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListResourcesResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10922,7 +11035,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         async listRoles(
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoRolesResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoRolesResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listRoles(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -10965,7 +11078,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary List MongoDB users in cluster
+         * @summary List MongoDB users
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10974,7 +11087,7 @@ export const MDBApiFp = function (configuration?: Configuration) {
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoUsersResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoUsersResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(clusterId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11039,27 +11152,27 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Restore MongoDB cluster from backup
+         * @summary Restore MongoDB cluster
          * @param {string} clusterId
          * @param {string} backupName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async restoreFromBackup(
+        async restoreCluster(
             clusterId: string,
             backupName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreFromBackup(
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreCluster(
                 clusterId,
                 backupName,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
-                operationServerMap['MDBApi.restoreFromBackup']?.[localVarOperationServerIndex]?.url;
+                operationServerMap['MDBApi.restoreCluster']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -11071,21 +11184,21 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Simulate usage of quotas for MongoDB cluster
-         * @param {SimulateMongoDBQuotasUsageRequest} simulateMongoDBQuotasUsageRequest
+         * @param {SimulateMongoDBQuotasUsageRequestDTO} simulateMongoDBQuotasUsageRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async simulateMongoDbQuotasUsage(
-            simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest,
+            simulateMongoDBQuotasUsageRequestDTO: SimulateMongoDBQuotasUsageRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<SimulateMongoDBQuotasUsageResponse>
+            ) => AxiosPromise<SimulateMongoDBQuotasUsageResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.simulateMongoDbQuotasUsage(
-                simulateMongoDBQuotasUsageRequest,
+                simulateMongoDBQuotasUsageRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11103,23 +11216,23 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Simulate transfer of MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Simulate transfer of quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async simulateTransferQuotasBetweenProducts(
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<SimulateTransferQuotasBetweenProductsResponse>
+            ) => AxiosPromise<SimulateTransferQuotasBetweenProductsResponseDTO>
         > {
             const localVarAxiosArgs =
                 await localVarAxiosParamCreator.simulateTransferQuotasBetweenProducts(
-                    transferQuotasBetweenProductsRequest,
+                    transferQuotasBetweenProductsRequestDTO,
                     options,
                 );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11137,17 +11250,17 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Exchange quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async transferQuotasBetweenProducts(
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.transferQuotasBetweenProducts(
-                transferQuotasBetweenProductsRequest,
+                transferQuotasBetweenProductsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11197,16 +11310,16 @@ export const MDBApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateHosts(
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11253,18 +11366,18 @@ export const MDBApiFp = function (configuration?: Configuration) {
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateResourcePreset(
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateResourcePreset(
                 resourcePresetId,
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11281,17 +11394,17 @@ export const MDBApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Upload MDB quotas to multiple products
-         * @param {UploadQuotasToProductsRequest} uploadQuotasToProductsRequest
+         * @summary Upload quotas to multiple products
+         * @param {UploadQuotasToProductsRequestDTO} uploadQuotasToProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async uploadQuotasToProducts(
-            uploadQuotasToProductsRequest: UploadQuotasToProductsRequest,
+            uploadQuotasToProductsRequestDTO: UploadQuotasToProductsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadQuotasToProducts(
-                uploadQuotasToProductsRequest,
+                uploadQuotasToProductsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11322,7 +11435,7 @@ export const MDBApiFactory = function (
     return {
         /**
          *
-         * @summary Create backup of MongoDB cluster
+         * @summary Create MongoDB backup
          * @param {MDBApiCreateBackupRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11330,7 +11443,7 @@ export const MDBApiFactory = function (
         createBackup(
             requestParameters: MDBApiCreateBackupRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .createBackup(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -11396,12 +11509,12 @@ export const MDBApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+                .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Create MongoDB user in cluster
+         * @summary Create MongoDB user
          * @param {MDBApiCreateUserRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11409,11 +11522,11 @@ export const MDBApiFactory = function (
         createUser(
             requestParameters: MDBApiCreateUserRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .createUser(
                     requestParameters.clusterId,
-                    requestParameters.mongoUserToCreate,
+                    requestParameters.createMongoUserRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -11428,7 +11541,7 @@ export const MDBApiFactory = function (
         deleteBackup(
             requestParameters: MDBApiDeleteBackupRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .deleteBackup(requestParameters.clusterId, requestParameters.backupName, options)
                 .then((request) => request(axios, basePath));
@@ -11507,9 +11620,9 @@ export const MDBApiFactory = function (
         deleteUser(
             requestParameters: MDBApiDeleteUserRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
-                .deleteUser(requestParameters.userId, options)
+                .deleteUser(requestParameters.clusterId, requestParameters.userName, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11537,7 +11650,7 @@ export const MDBApiFactory = function (
         getProductQuotaUsageReport(
             requestParameters: MDBApiGetProductQuotaUsageReportRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<GetProductQuotaUsageReportResponseOA> {
+        ): AxiosPromise<GetProductQuotaUsageReportResponseDTO> {
             return localVarFp
                 .getProductQuotaUsageReport(
                     requestParameters.productId,
@@ -11572,29 +11685,14 @@ export const MDBApiFactory = function (
         getResourcePreset(
             requestParameters: MDBApiGetResourcePresetRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ResourcePresetResponse> {
+        ): AxiosPromise<ResourcePresetResponseDTO> {
             return localVarFp
                 .getResourcePreset(requestParameters.resourcePresetId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {MDBApiGetUserRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUser(
-            requestParameters: MDBApiGetUserRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<MongoUser> {
-            return localVarFp
-                .getUser(requestParameters.userId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary List backups of MongoDB cluster
+         * @summary List MongoDB backups
          * @param {MDBApiListBackupsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11602,7 +11700,7 @@ export const MDBApiFactory = function (
         listBackups(
             requestParameters: MDBApiListBackupsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoBackupsResponse> {
+        ): AxiosPromise<ListMongoBackupsResponseDTO> {
             return localVarFp
                 .listBackups(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -11635,6 +11733,21 @@ export const MDBApiFactory = function (
         ): AxiosPromise<ListMongoDatabasesResponseDTO> {
             return localVarFp
                 .listDatabases(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {MDBApiListHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts(
+            requestParameters: MDBApiListHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoHostsResponseDTO> {
+            return localVarFp
+                .listHosts(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11672,7 +11785,7 @@ export const MDBApiFactory = function (
         },
         /**
          *
-         * @summary List MDB quotas by products
+         * @summary List quotas by products
          * @param {MDBApiListQuotasByProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11680,20 +11793,20 @@ export const MDBApiFactory = function (
         listQuotasByProducts(
             requestParameters: MDBApiListQuotasByProductsRequest = {},
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListQuotasByProductsResponse> {
+        ): AxiosPromise<ListQuotasByProductsResponseDTO> {
             return localVarFp
                 .listQuotasByProducts(requestParameters.productIds, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets(
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ListResourcePresetsResponse> {
+        ): AxiosPromise<ListResourcePresetsResponseDTO> {
             return localVarFp
                 .listResourcePresets(options)
                 .then((request) => request(axios, basePath));
@@ -11704,7 +11817,7 @@ export const MDBApiFactory = function (
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listResources(options?: RawAxiosRequestConfig): AxiosPromise<ListResourcesResponse> {
+        listResources(options?: RawAxiosRequestConfig): AxiosPromise<ListResourcesResponseDTO> {
             return localVarFp.listResources(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11713,7 +11826,7 @@ export const MDBApiFactory = function (
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRoles(options?: RawAxiosRequestConfig): AxiosPromise<ListMongoRolesResponse> {
+        listRoles(options?: RawAxiosRequestConfig): AxiosPromise<ListMongoRolesResponseDTO> {
             return localVarFp.listRoles(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11731,7 +11844,7 @@ export const MDBApiFactory = function (
         },
         /**
          *
-         * @summary List MongoDB users in cluster
+         * @summary List MongoDB users
          * @param {MDBApiListUsersRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11739,7 +11852,7 @@ export const MDBApiFactory = function (
         listUsers(
             requestParameters: MDBApiListUsersRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoUsersResponse> {
+        ): AxiosPromise<ListMongoUsersResponseDTO> {
             return localVarFp
                 .listUsers(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -11770,21 +11883,17 @@ export const MDBApiFactory = function (
         },
         /**
          *
-         * @summary Restore MongoDB cluster from backup
-         * @param {MDBApiRestoreFromBackupRequest} requestParameters Request parameters.
+         * @summary Restore MongoDB cluster
+         * @param {MDBApiRestoreClusterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restoreFromBackup(
-            requestParameters: MDBApiRestoreFromBackupRequest,
+        restoreCluster(
+            requestParameters: MDBApiRestoreClusterRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
-                .restoreFromBackup(
-                    requestParameters.clusterId,
-                    requestParameters.backupName,
-                    options,
-                )
+                .restoreCluster(requestParameters.clusterId, requestParameters.backupName, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11797,17 +11906,17 @@ export const MDBApiFactory = function (
         simulateMongoDbQuotasUsage(
             requestParameters: MDBApiSimulateMongoDbQuotasUsageRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<SimulateMongoDBQuotasUsageResponse> {
+        ): AxiosPromise<SimulateMongoDBQuotasUsageResponseDTO> {
             return localVarFp
                 .simulateMongoDbQuotasUsage(
-                    requestParameters.simulateMongoDBQuotasUsageRequest,
+                    requestParameters.simulateMongoDBQuotasUsageRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Simulate transfer of MDB quotas between products
+         * @summary Simulate transfer of quotas between products
          * @param {MDBApiSimulateTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11815,17 +11924,17 @@ export const MDBApiFactory = function (
         simulateTransferQuotasBetweenProducts(
             requestParameters: MDBApiSimulateTransferQuotasBetweenProductsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<SimulateTransferQuotasBetweenProductsResponse> {
+        ): AxiosPromise<SimulateTransferQuotasBetweenProductsResponseDTO> {
             return localVarFp
                 .simulateTransferQuotasBetweenProducts(
-                    requestParameters.transferQuotasBetweenProductsRequest,
+                    requestParameters.transferQuotasBetweenProductsRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Exchange MDB quotas between products
+         * @summary Exchange quotas between products
          * @param {MDBApiTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11836,7 +11945,7 @@ export const MDBApiFactory = function (
         ): AxiosPromise<void> {
             return localVarFp
                 .transferQuotasBetweenProducts(
-                    requestParameters.transferQuotasBetweenProductsRequest,
+                    requestParameters.transferQuotasBetweenProductsRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -11872,7 +11981,7 @@ export const MDBApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .updateHosts(requestParameters.updateMongoHostsRequest, options)
+                .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -11908,14 +12017,14 @@ export const MDBApiFactory = function (
             return localVarFp
                 .updateResourcePreset(
                     requestParameters.resourcePresetId,
-                    requestParameters.v1UpdateResourcePresetRequest,
+                    requestParameters.updateResourcePresetRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Upload MDB quotas to multiple products
+         * @summary Upload quotas to multiple products
          * @param {MDBApiUploadQuotasToProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11925,7 +12034,7 @@ export const MDBApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequest, options)
+                .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
     };
@@ -12002,10 +12111,10 @@ export interface MDBApiCreateProjectRequest {
 export interface MDBApiCreateResourcePresetRequest {
     /**
      *
-     * @type {V1CreateResourcePresetRequest}
+     * @type {CreateResourcePresetRequestDTO}
      * @memberof MDBApiCreateResourcePreset
      */
-    readonly v1CreateResourcePresetRequest: V1CreateResourcePresetRequest;
+    readonly createResourcePresetRequestDTO: CreateResourcePresetRequestDTO;
 }
 
 /**
@@ -12023,10 +12132,10 @@ export interface MDBApiCreateUserRequest {
 
     /**
      *
-     * @type {MongoUserToCreate}
+     * @type {CreateMongoUserRequestDTO}
      * @memberof MDBApiCreateUser
      */
-    readonly mongoUserToCreate: MongoUserToCreate;
+    readonly createMongoUserRequestDTO: CreateMongoUserRequestDTO;
 }
 
 /**
@@ -12124,7 +12233,14 @@ export interface MDBApiDeleteUserRequest {
      * @type {string}
      * @memberof MDBApiDeleteUser
      */
-    readonly userId: string;
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof MDBApiDeleteUser
+     */
+    readonly userName: string;
 }
 
 /**
@@ -12198,20 +12314,6 @@ export interface MDBApiGetResourcePresetRequest {
 }
 
 /**
- * Request parameters for getUser operation in MDBApi.
- * @export
- * @interface MDBApiGetUserRequest
- */
-export interface MDBApiGetUserRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof MDBApiGetUser
-     */
-    readonly userId: string;
-}
-
-/**
  * Request parameters for listBackups operation in MDBApi.
  * @export
  * @interface MDBApiListBackupsRequest
@@ -12256,6 +12358,20 @@ export interface MDBApiListDatabasesRequest {
      *
      * @type {string}
      * @memberof MDBApiListDatabases
+     */
+    readonly clusterId: string;
+}
+
+/**
+ * Request parameters for listHosts operation in MDBApi.
+ * @export
+ * @interface MDBApiListHostsRequest
+ */
+export interface MDBApiListHostsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof MDBApiListHosts
      */
     readonly clusterId: string;
 }
@@ -12317,22 +12433,22 @@ export interface MDBApiRestartOperationRequest {
 }
 
 /**
- * Request parameters for restoreFromBackup operation in MDBApi.
+ * Request parameters for restoreCluster operation in MDBApi.
  * @export
- * @interface MDBApiRestoreFromBackupRequest
+ * @interface MDBApiRestoreClusterRequest
  */
-export interface MDBApiRestoreFromBackupRequest {
+export interface MDBApiRestoreClusterRequest {
     /**
      *
      * @type {string}
-     * @memberof MDBApiRestoreFromBackup
+     * @memberof MDBApiRestoreCluster
      */
     readonly clusterId: string;
 
     /**
      *
      * @type {string}
-     * @memberof MDBApiRestoreFromBackup
+     * @memberof MDBApiRestoreCluster
      */
     readonly backupName: string;
 }
@@ -12345,10 +12461,10 @@ export interface MDBApiRestoreFromBackupRequest {
 export interface MDBApiSimulateMongoDbQuotasUsageRequest {
     /**
      *
-     * @type {SimulateMongoDBQuotasUsageRequest}
+     * @type {SimulateMongoDBQuotasUsageRequestDTO}
      * @memberof MDBApiSimulateMongoDbQuotasUsage
      */
-    readonly simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest;
+    readonly simulateMongoDBQuotasUsageRequestDTO: SimulateMongoDBQuotasUsageRequestDTO;
 }
 
 /**
@@ -12359,10 +12475,10 @@ export interface MDBApiSimulateMongoDbQuotasUsageRequest {
 export interface MDBApiSimulateTransferQuotasBetweenProductsRequest {
     /**
      *
-     * @type {TransferQuotasBetweenProductsRequest}
+     * @type {TransferQuotasBetweenProductsRequestDTO}
      * @memberof MDBApiSimulateTransferQuotasBetweenProducts
      */
-    readonly transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest;
+    readonly transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO;
 }
 
 /**
@@ -12373,10 +12489,10 @@ export interface MDBApiSimulateTransferQuotasBetweenProductsRequest {
 export interface MDBApiTransferQuotasBetweenProductsRequest {
     /**
      *
-     * @type {TransferQuotasBetweenProductsRequest}
+     * @type {TransferQuotasBetweenProductsRequestDTO}
      * @memberof MDBApiTransferQuotasBetweenProducts
      */
-    readonly transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest;
+    readonly transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO;
 }
 
 /**
@@ -12408,10 +12524,10 @@ export interface MDBApiUpdateClusterRequest {
 export interface MDBApiUpdateHostsRequest {
     /**
      *
-     * @type {UpdateMongoHostsRequest}
+     * @type {UpdateMongoHostsRequestDTO}
      * @memberof MDBApiUpdateHosts
      */
-    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
+    readonly updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO;
 }
 
 /**
@@ -12450,10 +12566,10 @@ export interface MDBApiUpdateResourcePresetRequest {
 
     /**
      *
-     * @type {V1UpdateResourcePresetRequest}
+     * @type {UpdateResourcePresetRequestDTO}
      * @memberof MDBApiUpdateResourcePreset
      */
-    readonly v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest;
+    readonly updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO;
 }
 
 /**
@@ -12464,10 +12580,10 @@ export interface MDBApiUpdateResourcePresetRequest {
 export interface MDBApiUploadQuotasToProductsRequest {
     /**
      *
-     * @type {UploadQuotasToProductsRequest}
+     * @type {UploadQuotasToProductsRequestDTO}
      * @memberof MDBApiUploadQuotasToProducts
      */
-    readonly uploadQuotasToProductsRequest: UploadQuotasToProductsRequest;
+    readonly uploadQuotasToProductsRequestDTO: UploadQuotasToProductsRequestDTO;
 }
 
 /**
@@ -12479,7 +12595,7 @@ export interface MDBApiUploadQuotasToProductsRequest {
 export class MDBApi extends BaseAPI {
     /**
      *
-     * @summary Create backup of MongoDB cluster
+     * @summary Create MongoDB backup
      * @param {MDBApiCreateBackupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12562,13 +12678,13 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+            .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
     /**
      *
-     * @summary Create MongoDB user in cluster
+     * @summary Create MongoDB user
      * @param {MDBApiCreateUserRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12576,7 +12692,11 @@ export class MDBApi extends BaseAPI {
      */
     public createUser(requestParameters: MDBApiCreateUserRequest, options?: RawAxiosRequestConfig) {
         return MDBApiFp(this.configuration)
-            .createUser(requestParameters.clusterId, requestParameters.mongoUserToCreate, options)
+            .createUser(
+                requestParameters.clusterId,
+                requestParameters.createMongoUserRequestDTO,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -12675,7 +12795,7 @@ export class MDBApi extends BaseAPI {
      */
     public deleteUser(requestParameters: MDBApiDeleteUserRequest, options?: RawAxiosRequestConfig) {
         return MDBApiFp(this.configuration)
-            .deleteUser(requestParameters.userId, options)
+            .deleteUser(requestParameters.clusterId, requestParameters.userName, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -12748,21 +12868,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Get MongoDB user
-     * @param {MDBApiGetUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MDBApi
-     */
-    public getUser(requestParameters: MDBApiGetUserRequest, options?: RawAxiosRequestConfig) {
-        return MDBApiFp(this.configuration)
-            .getUser(requestParameters.userId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary List backups of MongoDB cluster
+     * @summary List MongoDB backups
      * @param {MDBApiListBackupsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12813,6 +12919,20 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
+     * @summary List MongoDB hosts
+     * @param {MDBApiListHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MDBApi
+     */
+    public listHosts(requestParameters: MDBApiListHostsRequest, options?: RawAxiosRequestConfig) {
+        return MDBApiFp(this.configuration)
+            .listHosts(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @summary List namespaces
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12856,7 +12976,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary List MDB quotas by products
+     * @summary List quotas by products
      * @param {MDBApiListQuotasByProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12873,7 +12993,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Get resource presets
+     * @summary List resource presets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MDBApi
@@ -12925,7 +13045,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary List MongoDB users in cluster
+     * @summary List MongoDB users
      * @param {MDBApiListUsersRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12969,18 +13089,18 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Restore MongoDB cluster from backup
-     * @param {MDBApiRestoreFromBackupRequest} requestParameters Request parameters.
+     * @summary Restore MongoDB cluster
+     * @param {MDBApiRestoreClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MDBApi
      */
-    public restoreFromBackup(
-        requestParameters: MDBApiRestoreFromBackupRequest,
+    public restoreCluster(
+        requestParameters: MDBApiRestoreClusterRequest,
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .restoreFromBackup(requestParameters.clusterId, requestParameters.backupName, options)
+            .restoreCluster(requestParameters.clusterId, requestParameters.backupName, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -12998,7 +13118,7 @@ export class MDBApi extends BaseAPI {
     ) {
         return MDBApiFp(this.configuration)
             .simulateMongoDbQuotasUsage(
-                requestParameters.simulateMongoDBQuotasUsageRequest,
+                requestParameters.simulateMongoDBQuotasUsageRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -13006,7 +13126,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Simulate transfer of MDB quotas between products
+     * @summary Simulate transfer of quotas between products
      * @param {MDBApiSimulateTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13018,7 +13138,7 @@ export class MDBApi extends BaseAPI {
     ) {
         return MDBApiFp(this.configuration)
             .simulateTransferQuotasBetweenProducts(
-                requestParameters.transferQuotasBetweenProductsRequest,
+                requestParameters.transferQuotasBetweenProductsRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -13026,7 +13146,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Exchange MDB quotas between products
+     * @summary Exchange quotas between products
      * @param {MDBApiTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13038,7 +13158,7 @@ export class MDBApi extends BaseAPI {
     ) {
         return MDBApiFp(this.configuration)
             .transferQuotasBetweenProducts(
-                requestParameters.transferQuotasBetweenProductsRequest,
+                requestParameters.transferQuotasBetweenProductsRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -13078,7 +13198,7 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .updateHosts(requestParameters.updateMongoHostsRequest, options)
+            .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -13118,7 +13238,7 @@ export class MDBApi extends BaseAPI {
         return MDBApiFp(this.configuration)
             .updateResourcePreset(
                 requestParameters.resourcePresetId,
-                requestParameters.v1UpdateResourcePresetRequest,
+                requestParameters.updateResourcePresetRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -13126,7 +13246,7 @@ export class MDBApi extends BaseAPI {
 
     /**
      *
-     * @summary Upload MDB quotas to multiple products
+     * @summary Upload quotas to multiple products
      * @param {MDBApiUploadQuotasToProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13137,7 +13257,7 @@ export class MDBApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBApiFp(this.configuration)
-            .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequest, options)
+            .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -13365,7 +13485,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          *
-         * @summary List MDB quotas by products
+         * @summary List quotas by products
          * @param {Array<string>} [productIds]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13374,7 +13494,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
             productIds?: Array<string>,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            const localVarPath = `/api/quotas/mdb/by-products`;
+            const localVarPath = `/api/mdb/quotas/list-by-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13415,7 +13535,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
          * @throws {RequiredError}
          */
         listResources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/quotas/mdb/resources`;
+            const localVarPath = `/api/mdb/resources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13448,21 +13568,21 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
         /**
          *
          * @summary Simulate usage of quotas for MongoDB cluster
-         * @param {SimulateMongoDBQuotasUsageRequest} simulateMongoDBQuotasUsageRequest
+         * @param {SimulateMongoDBQuotasUsageRequestDTO} simulateMongoDBQuotasUsageRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         simulateMongoDbQuotasUsage: async (
-            simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest,
+            simulateMongoDBQuotasUsageRequestDTO: SimulateMongoDBQuotasUsageRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'simulateMongoDBQuotasUsageRequest' is not null or undefined
+            // verify required parameter 'simulateMongoDBQuotasUsageRequestDTO' is not null or undefined
             assertParamExists(
                 'simulateMongoDbQuotasUsage',
-                'simulateMongoDBQuotasUsageRequest',
-                simulateMongoDBQuotasUsageRequest,
+                'simulateMongoDBQuotasUsageRequestDTO',
+                simulateMongoDBQuotasUsageRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/managed-mongodb/simulate-usage`;
+            const localVarPath = `/api/mdb/quotas/mongodb/simulate-usage`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13489,7 +13609,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                simulateMongoDBQuotasUsageRequest,
+                simulateMongoDBQuotasUsageRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -13501,22 +13621,22 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          *
-         * @summary Simulate transfer of MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Simulate transfer of quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         simulateTransferQuotasBetweenProducts: async (
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'transferQuotasBetweenProductsRequest' is not null or undefined
+            // verify required parameter 'transferQuotasBetweenProductsRequestDTO' is not null or undefined
             assertParamExists(
                 'simulateTransferQuotasBetweenProducts',
-                'transferQuotasBetweenProductsRequest',
-                transferQuotasBetweenProductsRequest,
+                'transferQuotasBetweenProductsRequestDTO',
+                transferQuotasBetweenProductsRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/simulate-transfer-between-products`;
+            const localVarPath = `/api/mdb/quotas/simulate-transfer-between-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13543,7 +13663,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                transferQuotasBetweenProductsRequest,
+                transferQuotasBetweenProductsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -13555,22 +13675,22 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Exchange quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         transferQuotasBetweenProducts: async (
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'transferQuotasBetweenProductsRequest' is not null or undefined
+            // verify required parameter 'transferQuotasBetweenProductsRequestDTO' is not null or undefined
             assertParamExists(
                 'transferQuotasBetweenProducts',
-                'transferQuotasBetweenProductsRequest',
-                transferQuotasBetweenProductsRequest,
+                'transferQuotasBetweenProductsRequestDTO',
+                transferQuotasBetweenProductsRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/transfer-between-products`;
+            const localVarPath = `/api/mdb/quotas/transfer-between-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13597,7 +13717,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                transferQuotasBetweenProductsRequest,
+                transferQuotasBetweenProductsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -13609,22 +13729,22 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          *
-         * @summary Upload MDB quotas to multiple products
-         * @param {UploadQuotasToProductsRequest} uploadQuotasToProductsRequest
+         * @summary Upload quotas to multiple products
+         * @param {UploadQuotasToProductsRequestDTO} uploadQuotasToProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         uploadQuotasToProducts: async (
-            uploadQuotasToProductsRequest: UploadQuotasToProductsRequest,
+            uploadQuotasToProductsRequestDTO: UploadQuotasToProductsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'uploadQuotasToProductsRequest' is not null or undefined
+            // verify required parameter 'uploadQuotasToProductsRequestDTO' is not null or undefined
             assertParamExists(
                 'uploadQuotasToProducts',
-                'uploadQuotasToProductsRequest',
-                uploadQuotasToProductsRequest,
+                'uploadQuotasToProductsRequestDTO',
+                uploadQuotasToProductsRequestDTO,
             );
-            const localVarPath = `/api/quotas/mdb/upload-to-products`;
+            const localVarPath = `/api/mdb/quotas/upload-to-products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13651,7 +13771,7 @@ export const MDBQuotasApiAxiosParamCreator = function (configuration?: Configura
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                uploadQuotasToProductsRequest,
+                uploadQuotasToProductsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -13673,7 +13793,7 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
     return {
         /**
          *
-         * @summary List MDB quotas by products
+         * @summary List quotas by products
          * @param {Array<string>} [productIds]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13682,7 +13802,10 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
             productIds?: Array<string>,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListQuotasByProductsResponse>
+            (
+                axios?: AxiosInstance,
+                basePath?: string,
+            ) => AxiosPromise<ListQuotasByProductsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listQuotasByProducts(
                 productIds,
@@ -13710,7 +13833,7 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         async listResources(
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListResourcesResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListResourcesResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -13728,21 +13851,21 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Simulate usage of quotas for MongoDB cluster
-         * @param {SimulateMongoDBQuotasUsageRequest} simulateMongoDBQuotasUsageRequest
+         * @param {SimulateMongoDBQuotasUsageRequestDTO} simulateMongoDBQuotasUsageRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async simulateMongoDbQuotasUsage(
-            simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest,
+            simulateMongoDBQuotasUsageRequestDTO: SimulateMongoDBQuotasUsageRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<SimulateMongoDBQuotasUsageResponse>
+            ) => AxiosPromise<SimulateMongoDBQuotasUsageResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.simulateMongoDbQuotasUsage(
-                simulateMongoDBQuotasUsageRequest,
+                simulateMongoDBQuotasUsageRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -13760,23 +13883,23 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Simulate transfer of MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Simulate transfer of quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async simulateTransferQuotasBetweenProducts(
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<SimulateTransferQuotasBetweenProductsResponse>
+            ) => AxiosPromise<SimulateTransferQuotasBetweenProductsResponseDTO>
         > {
             const localVarAxiosArgs =
                 await localVarAxiosParamCreator.simulateTransferQuotasBetweenProducts(
-                    transferQuotasBetweenProductsRequest,
+                    transferQuotasBetweenProductsRequestDTO,
                     options,
                 );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -13794,17 +13917,17 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Exchange MDB quotas between products
-         * @param {TransferQuotasBetweenProductsRequest} transferQuotasBetweenProductsRequest
+         * @summary Exchange quotas between products
+         * @param {TransferQuotasBetweenProductsRequestDTO} transferQuotasBetweenProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async transferQuotasBetweenProducts(
-            transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest,
+            transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.transferQuotasBetweenProducts(
-                transferQuotasBetweenProductsRequest,
+                transferQuotasBetweenProductsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -13822,17 +13945,17 @@ export const MDBQuotasApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Upload MDB quotas to multiple products
-         * @param {UploadQuotasToProductsRequest} uploadQuotasToProductsRequest
+         * @summary Upload quotas to multiple products
+         * @param {UploadQuotasToProductsRequestDTO} uploadQuotasToProductsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async uploadQuotasToProducts(
-            uploadQuotasToProductsRequest: UploadQuotasToProductsRequest,
+            uploadQuotasToProductsRequestDTO: UploadQuotasToProductsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadQuotasToProducts(
-                uploadQuotasToProductsRequest,
+                uploadQuotasToProductsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -13864,7 +13987,7 @@ export const MDBQuotasApiFactory = function (
     return {
         /**
          *
-         * @summary List MDB quotas by products
+         * @summary List quotas by products
          * @param {MDBQuotasApiListQuotasByProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13872,7 +13995,7 @@ export const MDBQuotasApiFactory = function (
         listQuotasByProducts(
             requestParameters: MDBQuotasApiListQuotasByProductsRequest = {},
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListQuotasByProductsResponse> {
+        ): AxiosPromise<ListQuotasByProductsResponseDTO> {
             return localVarFp
                 .listQuotasByProducts(requestParameters.productIds, options)
                 .then((request) => request(axios, basePath));
@@ -13883,7 +14006,7 @@ export const MDBQuotasApiFactory = function (
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listResources(options?: RawAxiosRequestConfig): AxiosPromise<ListResourcesResponse> {
+        listResources(options?: RawAxiosRequestConfig): AxiosPromise<ListResourcesResponseDTO> {
             return localVarFp.listResources(options).then((request) => request(axios, basePath));
         },
         /**
@@ -13896,17 +14019,17 @@ export const MDBQuotasApiFactory = function (
         simulateMongoDbQuotasUsage(
             requestParameters: MDBQuotasApiSimulateMongoDbQuotasUsageRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<SimulateMongoDBQuotasUsageResponse> {
+        ): AxiosPromise<SimulateMongoDBQuotasUsageResponseDTO> {
             return localVarFp
                 .simulateMongoDbQuotasUsage(
-                    requestParameters.simulateMongoDBQuotasUsageRequest,
+                    requestParameters.simulateMongoDBQuotasUsageRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Simulate transfer of MDB quotas between products
+         * @summary Simulate transfer of quotas between products
          * @param {MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13914,17 +14037,17 @@ export const MDBQuotasApiFactory = function (
         simulateTransferQuotasBetweenProducts(
             requestParameters: MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<SimulateTransferQuotasBetweenProductsResponse> {
+        ): AxiosPromise<SimulateTransferQuotasBetweenProductsResponseDTO> {
             return localVarFp
                 .simulateTransferQuotasBetweenProducts(
-                    requestParameters.transferQuotasBetweenProductsRequest,
+                    requestParameters.transferQuotasBetweenProductsRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Exchange MDB quotas between products
+         * @summary Exchange quotas between products
          * @param {MDBQuotasApiTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13935,14 +14058,14 @@ export const MDBQuotasApiFactory = function (
         ): AxiosPromise<void> {
             return localVarFp
                 .transferQuotasBetweenProducts(
-                    requestParameters.transferQuotasBetweenProductsRequest,
+                    requestParameters.transferQuotasBetweenProductsRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Upload MDB quotas to multiple products
+         * @summary Upload quotas to multiple products
          * @param {MDBQuotasApiUploadQuotasToProductsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13952,7 +14075,7 @@ export const MDBQuotasApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequest, options)
+                .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
     };
@@ -13980,10 +14103,10 @@ export interface MDBQuotasApiListQuotasByProductsRequest {
 export interface MDBQuotasApiSimulateMongoDbQuotasUsageRequest {
     /**
      *
-     * @type {SimulateMongoDBQuotasUsageRequest}
+     * @type {SimulateMongoDBQuotasUsageRequestDTO}
      * @memberof MDBQuotasApiSimulateMongoDbQuotasUsage
      */
-    readonly simulateMongoDBQuotasUsageRequest: SimulateMongoDBQuotasUsageRequest;
+    readonly simulateMongoDBQuotasUsageRequestDTO: SimulateMongoDBQuotasUsageRequestDTO;
 }
 
 /**
@@ -13994,10 +14117,10 @@ export interface MDBQuotasApiSimulateMongoDbQuotasUsageRequest {
 export interface MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest {
     /**
      *
-     * @type {TransferQuotasBetweenProductsRequest}
+     * @type {TransferQuotasBetweenProductsRequestDTO}
      * @memberof MDBQuotasApiSimulateTransferQuotasBetweenProducts
      */
-    readonly transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest;
+    readonly transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO;
 }
 
 /**
@@ -14008,10 +14131,10 @@ export interface MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest {
 export interface MDBQuotasApiTransferQuotasBetweenProductsRequest {
     /**
      *
-     * @type {TransferQuotasBetweenProductsRequest}
+     * @type {TransferQuotasBetweenProductsRequestDTO}
      * @memberof MDBQuotasApiTransferQuotasBetweenProducts
      */
-    readonly transferQuotasBetweenProductsRequest: TransferQuotasBetweenProductsRequest;
+    readonly transferQuotasBetweenProductsRequestDTO: TransferQuotasBetweenProductsRequestDTO;
 }
 
 /**
@@ -14022,10 +14145,10 @@ export interface MDBQuotasApiTransferQuotasBetweenProductsRequest {
 export interface MDBQuotasApiUploadQuotasToProductsRequest {
     /**
      *
-     * @type {UploadQuotasToProductsRequest}
+     * @type {UploadQuotasToProductsRequestDTO}
      * @memberof MDBQuotasApiUploadQuotasToProducts
      */
-    readonly uploadQuotasToProductsRequest: UploadQuotasToProductsRequest;
+    readonly uploadQuotasToProductsRequestDTO: UploadQuotasToProductsRequestDTO;
 }
 
 /**
@@ -14037,7 +14160,7 @@ export interface MDBQuotasApiUploadQuotasToProductsRequest {
 export class MDBQuotasApi extends BaseAPI {
     /**
      *
-     * @summary List MDB quotas by products
+     * @summary List quotas by products
      * @param {MDBQuotasApiListQuotasByProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14079,7 +14202,7 @@ export class MDBQuotasApi extends BaseAPI {
     ) {
         return MDBQuotasApiFp(this.configuration)
             .simulateMongoDbQuotasUsage(
-                requestParameters.simulateMongoDBQuotasUsageRequest,
+                requestParameters.simulateMongoDBQuotasUsageRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -14087,7 +14210,7 @@ export class MDBQuotasApi extends BaseAPI {
 
     /**
      *
-     * @summary Simulate transfer of MDB quotas between products
+     * @summary Simulate transfer of quotas between products
      * @param {MDBQuotasApiSimulateTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14099,7 +14222,7 @@ export class MDBQuotasApi extends BaseAPI {
     ) {
         return MDBQuotasApiFp(this.configuration)
             .simulateTransferQuotasBetweenProducts(
-                requestParameters.transferQuotasBetweenProductsRequest,
+                requestParameters.transferQuotasBetweenProductsRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -14107,7 +14230,7 @@ export class MDBQuotasApi extends BaseAPI {
 
     /**
      *
-     * @summary Exchange MDB quotas between products
+     * @summary Exchange quotas between products
      * @param {MDBQuotasApiTransferQuotasBetweenProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14119,7 +14242,7 @@ export class MDBQuotasApi extends BaseAPI {
     ) {
         return MDBQuotasApiFp(this.configuration)
             .transferQuotasBetweenProducts(
-                requestParameters.transferQuotasBetweenProductsRequest,
+                requestParameters.transferQuotasBetweenProductsRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));
@@ -14127,7 +14250,7 @@ export class MDBQuotasApi extends BaseAPI {
 
     /**
      *
-     * @summary Upload MDB quotas to multiple products
+     * @summary Upload quotas to multiple products
      * @param {MDBQuotasApiUploadQuotasToProductsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14138,7 +14261,7 @@ export class MDBQuotasApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return MDBQuotasApiFp(this.configuration)
-            .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequest, options)
+            .uploadQuotasToProducts(requestParameters.uploadQuotasToProductsRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -14151,7 +14274,7 @@ export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration
     return {
         /**
          *
-         * @summary Create backup of MongoDB cluster
+         * @summary Create MongoDB backup
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14162,7 +14285,7 @@ export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('createBackup', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups`.replace(
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/backups`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -14212,7 +14335,7 @@ export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration
             assertParamExists('deleteBackup', 'clusterId', clusterId);
             // verify required parameter 'backupName' is not null or undefined
             assertParamExists('deleteBackup', 'backupName', backupName);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups/{backupName}`
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/backups/{backupName}`
                 .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
                 .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -14246,7 +14369,7 @@ export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration
         },
         /**
          *
-         * @summary List backups of MongoDB cluster
+         * @summary List MongoDB backups
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14257,7 +14380,7 @@ export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listBackups', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/backups`.replace(
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/backups`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -14269,56 +14392,6 @@ export const ManagedMongoDBBackupsApiAxiosParamCreator = function (configuration
             }
 
             const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Restore MongoDB cluster from backup
-         * @param {string} clusterId
-         * @param {string} backupName
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        restoreFromBackup: async (
-            clusterId: string,
-            backupName: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'clusterId' is not null or undefined
-            assertParamExists('restoreFromBackup', 'clusterId', clusterId);
-            // verify required parameter 'backupName' is not null or undefined
-            assertParamExists('restoreFromBackup', 'backupName', backupName);
-            const localVarPath =
-                `/api/managed-mongodb/v1/clusters/{clusterId}/backups/{backupName}/restore`
-                    .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
-                    .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -14352,7 +14425,7 @@ export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuratio
     return {
         /**
          *
-         * @summary Create backup of MongoDB cluster
+         * @summary Create MongoDB backup
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14361,7 +14434,7 @@ export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuratio
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createBackup(
                 clusterId,
@@ -14393,7 +14466,7 @@ export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuratio
             backupName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteBackup(
                 clusterId,
@@ -14415,7 +14488,7 @@ export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuratio
         },
         /**
          *
-         * @summary List backups of MongoDB cluster
+         * @summary List MongoDB backups
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14424,7 +14497,7 @@ export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuratio
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoBackupsResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoBackupsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listBackups(
                 clusterId,
@@ -14433,39 +14506,6 @@ export const ManagedMongoDBBackupsApiFp = function (configuration?: Configuratio
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['ManagedMongoDBBackupsApi.listBackups']?.[
-                    localVarOperationServerIndex
-                ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Restore MongoDB cluster from backup
-         * @param {string} clusterId
-         * @param {string} backupName
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async restoreFromBackup(
-            clusterId: string,
-            backupName: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
-        > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreFromBackup(
-                clusterId,
-                backupName,
-                options,
-            );
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['ManagedMongoDBBackupsApi.restoreFromBackup']?.[
                     localVarOperationServerIndex
                 ]?.url;
             return (axios, basePath) =>
@@ -14492,7 +14532,7 @@ export const ManagedMongoDBBackupsApiFactory = function (
     return {
         /**
          *
-         * @summary Create backup of MongoDB cluster
+         * @summary Create MongoDB backup
          * @param {ManagedMongoDBBackupsApiCreateBackupRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14500,7 +14540,7 @@ export const ManagedMongoDBBackupsApiFactory = function (
         createBackup(
             requestParameters: ManagedMongoDBBackupsApiCreateBackupRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .createBackup(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -14515,14 +14555,14 @@ export const ManagedMongoDBBackupsApiFactory = function (
         deleteBackup(
             requestParameters: ManagedMongoDBBackupsApiDeleteBackupRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .deleteBackup(requestParameters.clusterId, requestParameters.backupName, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary List backups of MongoDB cluster
+         * @summary List MongoDB backups
          * @param {ManagedMongoDBBackupsApiListBackupsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14530,28 +14570,9 @@ export const ManagedMongoDBBackupsApiFactory = function (
         listBackups(
             requestParameters: ManagedMongoDBBackupsApiListBackupsRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoBackupsResponse> {
+        ): AxiosPromise<ListMongoBackupsResponseDTO> {
             return localVarFp
                 .listBackups(requestParameters.clusterId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Restore MongoDB cluster from backup
-         * @param {ManagedMongoDBBackupsApiRestoreFromBackupRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        restoreFromBackup(
-            requestParameters: ManagedMongoDBBackupsApiRestoreFromBackupRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
-            return localVarFp
-                .restoreFromBackup(
-                    requestParameters.clusterId,
-                    requestParameters.backupName,
-                    options,
-                )
                 .then((request) => request(axios, basePath));
         },
     };
@@ -14607,27 +14628,6 @@ export interface ManagedMongoDBBackupsApiListBackupsRequest {
 }
 
 /**
- * Request parameters for restoreFromBackup operation in ManagedMongoDBBackupsApi.
- * @export
- * @interface ManagedMongoDBBackupsApiRestoreFromBackupRequest
- */
-export interface ManagedMongoDBBackupsApiRestoreFromBackupRequest {
-    /**
-     *
-     * @type {string}
-     * @memberof ManagedMongoDBBackupsApiRestoreFromBackup
-     */
-    readonly clusterId: string;
-
-    /**
-     *
-     * @type {string}
-     * @memberof ManagedMongoDBBackupsApiRestoreFromBackup
-     */
-    readonly backupName: string;
-}
-
-/**
  * ManagedMongoDBBackupsApi - object-oriented interface
  * @export
  * @class ManagedMongoDBBackupsApi
@@ -14636,7 +14636,7 @@ export interface ManagedMongoDBBackupsApiRestoreFromBackupRequest {
 export class ManagedMongoDBBackupsApi extends BaseAPI {
     /**
      *
-     * @summary Create backup of MongoDB cluster
+     * @summary Create MongoDB backup
      * @param {ManagedMongoDBBackupsApiCreateBackupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14670,7 +14670,7 @@ export class ManagedMongoDBBackupsApi extends BaseAPI {
 
     /**
      *
-     * @summary List backups of MongoDB cluster
+     * @summary List MongoDB backups
      * @param {ManagedMongoDBBackupsApiListBackupsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14682,23 +14682,6 @@ export class ManagedMongoDBBackupsApi extends BaseAPI {
     ) {
         return ManagedMongoDBBackupsApiFp(this.configuration)
             .listBackups(requestParameters.clusterId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Restore MongoDB cluster from backup
-     * @param {ManagedMongoDBBackupsApiRestoreFromBackupRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ManagedMongoDBBackupsApi
-     */
-    public restoreFromBackup(
-        requestParameters: ManagedMongoDBBackupsApiRestoreFromBackupRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return ManagedMongoDBBackupsApiFp(this.configuration)
-            .restoreFromBackup(requestParameters.clusterId, requestParameters.backupName, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -14945,6 +14928,55 @@ export const ManagedMongoDBClustersApiAxiosParamCreator = function (configuratio
         },
         /**
          *
+         * @summary Restore MongoDB cluster
+         * @param {string} clusterId
+         * @param {string} backupName
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreCluster: async (
+            clusterId: string,
+            backupName: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('restoreCluster', 'clusterId', clusterId);
+            // verify required parameter 'backupName' is not null or undefined
+            assertParamExists('restoreCluster', 'backupName', backupName);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/restore/{backupName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'backupName'}}`, encodeURIComponent(String(backupName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @summary Update MongoDB cluster
          * @param {string} clusterId
          * @param {UpdateMongoClusterRequestDTO} updateMongoClusterRequestDTO
@@ -15165,6 +15197,39 @@ export const ManagedMongoDBClustersApiFp = function (configuration?: Configurati
         },
         /**
          *
+         * @summary Restore MongoDB cluster
+         * @param {string} clusterId
+         * @param {string} backupName
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async restoreCluster(
+            clusterId: string,
+            backupName: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreCluster(
+                clusterId,
+                backupName,
+                options,
+            );
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBClustersApi.restoreCluster']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         *
          * @summary Update MongoDB cluster
          * @param {string} clusterId
          * @param {UpdateMongoClusterRequestDTO} updateMongoClusterRequestDTO
@@ -15281,6 +15346,21 @@ export const ManagedMongoDBClustersApiFactory = function (
         },
         /**
          *
+         * @summary Restore MongoDB cluster
+         * @param {ManagedMongoDBClustersApiRestoreClusterRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreCluster(
+            requestParameters: ManagedMongoDBClustersApiRestoreClusterRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ScheduledOperationDTO> {
+            return localVarFp
+                .restoreCluster(requestParameters.clusterId, requestParameters.backupName, options)
+                .then((request) => request(axios, basePath));
+        },
+        /**
+         *
          * @summary Update MongoDB cluster
          * @param {ManagedMongoDBClustersApiUpdateClusterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -15362,6 +15442,27 @@ export interface ManagedMongoDBClustersApiListClustersRequest {
      * @memberof ManagedMongoDBClustersApiListClusters
      */
     readonly isDeleted?: boolean;
+}
+
+/**
+ * Request parameters for restoreCluster operation in ManagedMongoDBClustersApi.
+ * @export
+ * @interface ManagedMongoDBClustersApiRestoreClusterRequest
+ */
+export interface ManagedMongoDBClustersApiRestoreClusterRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBClustersApiRestoreCluster
+     */
+    readonly clusterId: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBClustersApiRestoreCluster
+     */
+    readonly backupName: string;
 }
 
 /**
@@ -15475,6 +15576,23 @@ export class ManagedMongoDBClustersApi extends BaseAPI {
 
     /**
      *
+     * @summary Restore MongoDB cluster
+     * @param {ManagedMongoDBClustersApiRestoreClusterRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBClustersApi
+     */
+    public restoreCluster(
+        requestParameters: ManagedMongoDBClustersApiRestoreClusterRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBClustersApiFp(this.configuration)
+            .restoreCluster(requestParameters.clusterId, requestParameters.backupName, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @summary Update MongoDB cluster
      * @param {ManagedMongoDBClustersApiUpdateClusterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -15524,7 +15642,10 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
                 'createMongoDatabaseRequestDTO',
                 createMongoDatabaseRequestDTO,
             );
-            const localVarPath = `/api/mdb/mongodb/databases`;
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15539,10 +15660,6 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            if (clusterId !== undefined) {
-                localVarQueryParameter['clusterId'] = clusterId;
-            }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -15582,7 +15699,9 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             assertParamExists('deleteDatabase', 'clusterId', clusterId);
             // verify required parameter 'databaseName' is not null or undefined
             assertParamExists('deleteDatabase', 'databaseName', databaseName);
-            const localVarPath = `/api/mdb/mongodb/databases`;
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases/{databaseName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'databaseName'}}`, encodeURIComponent(String(databaseName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15597,14 +15716,6 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            if (clusterId !== undefined) {
-                localVarQueryParameter['clusterId'] = clusterId;
-            }
-
-            if (databaseName !== undefined) {
-                localVarQueryParameter['databaseName'] = databaseName;
-            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -15633,7 +15744,10 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listDatabases', 'clusterId', clusterId);
-            const localVarPath = `/api/mdb/mongodb/databases`;
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/databases`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15648,10 +15762,6 @@ export const ManagedMongoDBDatabasesApiAxiosParamCreator = function (
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            if (clusterId !== undefined) {
-                localVarQueryParameter['clusterId'] = clusterId;
-            }
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions =
@@ -15966,6 +16076,166 @@ export class ManagedMongoDBDatabasesApi extends BaseAPI {
 }
 
 /**
+ * ManagedMongoDBHostsApi - axios parameter creator
+ * @export
+ */
+export const ManagedMongoDBHostsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts: async (
+            clusterId: string,
+            options: RawAxiosRequestConfig = {},
+        ): Promise<RequestArgs> => {
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('listHosts', 'clusterId', clusterId);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/hosts`.replace(
+                `{${'clusterId'}}`,
+                encodeURIComponent(String(clusterId)),
+            );
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions =
+                baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {
+                ...localVarHeaderParameter,
+                ...headersFromBaseOptions,
+                ...options.headers,
+            };
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBHostsApi - functional programming interface
+ * @export
+ */
+export const ManagedMongoDBHostsApiFp = function (configuration?: Configuration) {
+    const localVarAxiosParamCreator = ManagedMongoDBHostsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {string} clusterId
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listHosts(
+            clusterId: string,
+            options?: RawAxiosRequestConfig,
+        ): Promise<
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoHostsResponseDTO>
+        > {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listHosts(clusterId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath =
+                operationServerMap['ManagedMongoDBHostsApi.listHosts']?.[
+                    localVarOperationServerIndex
+                ]?.url;
+            return (axios, basePath) =>
+                createRequestFunction(
+                    localVarAxiosArgs,
+                    globalAxios,
+                    BASE_PATH,
+                    configuration,
+                )(axios, localVarOperationServerBasePath || basePath);
+        },
+    };
+};
+
+/**
+ * ManagedMongoDBHostsApi - factory interface
+ * @export
+ */
+export const ManagedMongoDBHostsApiFactory = function (
+    configuration?: Configuration,
+    basePath?: string,
+    axios?: AxiosInstance,
+) {
+    const localVarFp = ManagedMongoDBHostsApiFp(configuration);
+    return {
+        /**
+         *
+         * @summary List MongoDB hosts
+         * @param {ManagedMongoDBHostsApiListHostsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHosts(
+            requestParameters: ManagedMongoDBHostsApiListHostsRequest,
+            options?: RawAxiosRequestConfig,
+        ): AxiosPromise<ListMongoHostsResponseDTO> {
+            return localVarFp
+                .listHosts(requestParameters.clusterId, options)
+                .then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for listHosts operation in ManagedMongoDBHostsApi.
+ * @export
+ * @interface ManagedMongoDBHostsApiListHostsRequest
+ */
+export interface ManagedMongoDBHostsApiListHostsRequest {
+    /**
+     *
+     * @type {string}
+     * @memberof ManagedMongoDBHostsApiListHosts
+     */
+    readonly clusterId: string;
+}
+
+/**
+ * ManagedMongoDBHostsApi - object-oriented interface
+ * @export
+ * @class ManagedMongoDBHostsApi
+ * @extends {BaseAPI}
+ */
+export class ManagedMongoDBHostsApi extends BaseAPI {
+    /**
+     *
+     * @summary List MongoDB hosts
+     * @param {ManagedMongoDBHostsApiListHostsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ManagedMongoDBHostsApi
+     */
+    public listHosts(
+        requestParameters: ManagedMongoDBHostsApiListHostsRequest,
+        options?: RawAxiosRequestConfig,
+    ) {
+        return ManagedMongoDBHostsApiFp(this.configuration)
+            .listHosts(requestParameters.clusterId, options)
+            .then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
  * ManagedMongoDBInternalsApi - axios parameter creator
  * @export
  */
@@ -15976,17 +16246,21 @@ export const ManagedMongoDBInternalsApiAxiosParamCreator = function (
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateHosts: async (
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'updateMongoHostsRequest' is not null or undefined
-            assertParamExists('updateHosts', 'updateMongoHostsRequest', updateMongoHostsRequest);
-            const localVarPath = `/api/managed-mongodb/v1/internal/hosts`;
+            // verify required parameter 'updateMongoHostsRequestDTO' is not null or undefined
+            assertParamExists(
+                'updateHosts',
+                'updateMongoHostsRequestDTO',
+                updateMongoHostsRequestDTO,
+            );
+            const localVarPath = `/api/mdb/mongodb/internal/hosts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -16013,7 +16287,7 @@ export const ManagedMongoDBInternalsApiAxiosParamCreator = function (
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -16036,16 +16310,16 @@ export const ManagedMongoDBInternalsApiFp = function (configuration?: Configurat
         /**
          *
          * @summary Update MongoDB hosts
-         * @param {UpdateMongoHostsRequest} updateMongoHostsRequest
+         * @param {UpdateMongoHostsRequestDTO} updateMongoHostsRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateHosts(
-            updateMongoHostsRequest: UpdateMongoHostsRequest,
+            updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateHosts(
-                updateMongoHostsRequest,
+                updateMongoHostsRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -16087,7 +16361,7 @@ export const ManagedMongoDBInternalsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .updateHosts(requestParameters.updateMongoHostsRequest, options)
+                .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
     };
@@ -16101,10 +16375,10 @@ export const ManagedMongoDBInternalsApiFactory = function (
 export interface ManagedMongoDBInternalsApiUpdateHostsRequest {
     /**
      *
-     * @type {UpdateMongoHostsRequest}
+     * @type {UpdateMongoHostsRequestDTO}
      * @memberof ManagedMongoDBInternalsApiUpdateHosts
      */
-    readonly updateMongoHostsRequest: UpdateMongoHostsRequest;
+    readonly updateMongoHostsRequestDTO: UpdateMongoHostsRequestDTO;
 }
 
 /**
@@ -16127,7 +16401,7 @@ export class ManagedMongoDBInternalsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ManagedMongoDBInternalsApiFp(this.configuration)
-            .updateHosts(requestParameters.updateMongoHostsRequest, options)
+            .updateHosts(requestParameters.updateMongoHostsRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 }
@@ -16140,22 +16414,22 @@ export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?:
     return {
         /**
          *
-         * @summary Create MongoDB user in cluster
+         * @summary Create MongoDB user
          * @param {string} clusterId
-         * @param {MongoUserToCreate} mongoUserToCreate
+         * @param {CreateMongoUserRequestDTO} createMongoUserRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createUser: async (
             clusterId: string,
-            mongoUserToCreate: MongoUserToCreate,
+            createMongoUserRequestDTO: CreateMongoUserRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('createUser', 'clusterId', clusterId);
-            // verify required parameter 'mongoUserToCreate' is not null or undefined
-            assertParamExists('createUser', 'mongoUserToCreate', mongoUserToCreate);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
+            // verify required parameter 'createMongoUserRequestDTO' is not null or undefined
+            assertParamExists('createUser', 'createMongoUserRequestDTO', createMongoUserRequestDTO);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/users`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -16185,7 +16459,7 @@ export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?:
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                mongoUserToCreate,
+                createMongoUserRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -16198,20 +16472,23 @@ export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?:
         /**
          *
          * @summary Delete MongoDB user
-         * @param {string} userId
+         * @param {string} clusterId
+         * @param {string} userName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         deleteUser: async (
-            userId: string,
+            clusterId: string,
+            userName: string,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('deleteUser', 'userId', userId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
-                `{${'userId'}}`,
-                encodeURIComponent(String(userId)),
-            );
+            // verify required parameter 'clusterId' is not null or undefined
+            assertParamExists('deleteUser', 'clusterId', clusterId);
+            // verify required parameter 'userName' is not null or undefined
+            assertParamExists('deleteUser', 'userName', userName);
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/users/{userName}`
+                .replace(`{${'clusterId'}}`, encodeURIComponent(String(clusterId)))
+                .replace(`{${'userName'}}`, encodeURIComponent(String(userName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -16243,58 +16520,12 @@ export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?:
         },
         /**
          *
-         * @summary Get MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUser: async (
-            userId: string,
-            options: RawAxiosRequestConfig = {},
-        ): Promise<RequestArgs> => {
-            // verify required parameter 'userId' is not null or undefined
-            assertParamExists('getUser', 'userId', userId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/users/{userId}`.replace(
-                `{${'userId'}}`,
-                encodeURIComponent(String(userId)),
-            );
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = {method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions =
-                baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {
-                ...localVarHeaderParameter,
-                ...headersFromBaseOptions,
-                ...options.headers,
-            };
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
          * @summary List available MongoDB roles
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listRoles: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/managed-mongodb/v1/users/roles`;
+            const localVarPath = `/api/mdb/mongodb/users/roles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -16326,7 +16557,7 @@ export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?:
         },
         /**
          *
-         * @summary List MongoDB users in cluster
+         * @summary List MongoDB users
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16337,7 +16568,7 @@ export const ManagedMongoDBUsersApiAxiosParamCreator = function (configuration?:
         ): Promise<RequestArgs> => {
             // verify required parameter 'clusterId' is not null or undefined
             assertParamExists('listUsers', 'clusterId', clusterId);
-            const localVarPath = `/api/managed-mongodb/v1/clusters/{clusterId}/users`.replace(
+            const localVarPath = `/api/mdb/mongodb/clusters/{clusterId}/users`.replace(
                 `{${'clusterId'}}`,
                 encodeURIComponent(String(clusterId)),
             );
@@ -16382,22 +16613,22 @@ export const ManagedMongoDBUsersApiFp = function (configuration?: Configuration)
     return {
         /**
          *
-         * @summary Create MongoDB user in cluster
+         * @summary Create MongoDB user
          * @param {string} clusterId
-         * @param {MongoUserToCreate} mongoUserToCreate
+         * @param {CreateMongoUserRequestDTO} createMongoUserRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createUser(
             clusterId: string,
-            mongoUserToCreate: MongoUserToCreate,
+            createMongoUserRequestDTO: CreateMongoUserRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(
                 clusterId,
-                mongoUserToCreate,
+                createMongoUserRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -16416,46 +16647,28 @@ export const ManagedMongoDBUsersApiFp = function (configuration?: Configuration)
         /**
          *
          * @summary Delete MongoDB user
-         * @param {string} userId
+         * @param {string} clusterId
+         * @param {string} userName
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteUser(
-            userId: string,
+            clusterId: string,
+            userName: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ScheduledOperationResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScheduledOperationDTO>
         > {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userId, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(
+                clusterId,
+                userName,
+                options,
+            );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath =
                 operationServerMap['ManagedMongoDBUsersApi.deleteUser']?.[
                     localVarOperationServerIndex
                 ]?.url;
-            return (axios, basePath) =>
-                createRequestFunction(
-                    localVarAxiosArgs,
-                    globalAxios,
-                    BASE_PATH,
-                    configuration,
-                )(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         *
-         * @summary Get MongoDB user
-         * @param {string} userId
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getUser(
-            userId: string,
-            options?: RawAxiosRequestConfig,
-        ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MongoUser>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUser(userId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath =
-                operationServerMap['ManagedMongoDBUsersApi.getUser']?.[localVarOperationServerIndex]
-                    ?.url;
             return (axios, basePath) =>
                 createRequestFunction(
                     localVarAxiosArgs,
@@ -16473,7 +16686,7 @@ export const ManagedMongoDBUsersApiFp = function (configuration?: Configuration)
         async listRoles(
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoRolesResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoRolesResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listRoles(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -16491,7 +16704,7 @@ export const ManagedMongoDBUsersApiFp = function (configuration?: Configuration)
         },
         /**
          *
-         * @summary List MongoDB users in cluster
+         * @summary List MongoDB users
          * @param {string} clusterId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16500,7 +16713,7 @@ export const ManagedMongoDBUsersApiFp = function (configuration?: Configuration)
             clusterId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoUsersResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListMongoUsersResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(clusterId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -16532,7 +16745,7 @@ export const ManagedMongoDBUsersApiFactory = function (
     return {
         /**
          *
-         * @summary Create MongoDB user in cluster
+         * @summary Create MongoDB user
          * @param {ManagedMongoDBUsersApiCreateUserRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16540,11 +16753,11 @@ export const ManagedMongoDBUsersApiFactory = function (
         createUser(
             requestParameters: ManagedMongoDBUsersApiCreateUserRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
                 .createUser(
                     requestParameters.clusterId,
-                    requestParameters.mongoUserToCreate,
+                    requestParameters.createMongoUserRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -16559,24 +16772,9 @@ export const ManagedMongoDBUsersApiFactory = function (
         deleteUser(
             requestParameters: ManagedMongoDBUsersApiDeleteUserRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ScheduledOperationResponse> {
+        ): AxiosPromise<ScheduledOperationDTO> {
             return localVarFp
-                .deleteUser(requestParameters.userId, options)
-                .then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get MongoDB user
-         * @param {ManagedMongoDBUsersApiGetUserRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUser(
-            requestParameters: ManagedMongoDBUsersApiGetUserRequest,
-            options?: RawAxiosRequestConfig,
-        ): AxiosPromise<MongoUser> {
-            return localVarFp
-                .getUser(requestParameters.userId, options)
+                .deleteUser(requestParameters.clusterId, requestParameters.userName, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -16585,12 +16783,12 @@ export const ManagedMongoDBUsersApiFactory = function (
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRoles(options?: RawAxiosRequestConfig): AxiosPromise<ListMongoRolesResponse> {
+        listRoles(options?: RawAxiosRequestConfig): AxiosPromise<ListMongoRolesResponseDTO> {
             return localVarFp.listRoles(options).then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary List MongoDB users in cluster
+         * @summary List MongoDB users
          * @param {ManagedMongoDBUsersApiListUsersRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16598,7 +16796,7 @@ export const ManagedMongoDBUsersApiFactory = function (
         listUsers(
             requestParameters: ManagedMongoDBUsersApiListUsersRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<ListMongoUsersResponse> {
+        ): AxiosPromise<ListMongoUsersResponseDTO> {
             return localVarFp
                 .listUsers(requestParameters.clusterId, options)
                 .then((request) => request(axios, basePath));
@@ -16621,10 +16819,10 @@ export interface ManagedMongoDBUsersApiCreateUserRequest {
 
     /**
      *
-     * @type {MongoUserToCreate}
+     * @type {CreateMongoUserRequestDTO}
      * @memberof ManagedMongoDBUsersApiCreateUser
      */
-    readonly mongoUserToCreate: MongoUserToCreate;
+    readonly createMongoUserRequestDTO: CreateMongoUserRequestDTO;
 }
 
 /**
@@ -16638,21 +16836,14 @@ export interface ManagedMongoDBUsersApiDeleteUserRequest {
      * @type {string}
      * @memberof ManagedMongoDBUsersApiDeleteUser
      */
-    readonly userId: string;
-}
+    readonly clusterId: string;
 
-/**
- * Request parameters for getUser operation in ManagedMongoDBUsersApi.
- * @export
- * @interface ManagedMongoDBUsersApiGetUserRequest
- */
-export interface ManagedMongoDBUsersApiGetUserRequest {
     /**
      *
      * @type {string}
-     * @memberof ManagedMongoDBUsersApiGetUser
+     * @memberof ManagedMongoDBUsersApiDeleteUser
      */
-    readonly userId: string;
+    readonly userName: string;
 }
 
 /**
@@ -16678,7 +16869,7 @@ export interface ManagedMongoDBUsersApiListUsersRequest {
 export class ManagedMongoDBUsersApi extends BaseAPI {
     /**
      *
-     * @summary Create MongoDB user in cluster
+     * @summary Create MongoDB user
      * @param {ManagedMongoDBUsersApiCreateUserRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16689,7 +16880,11 @@ export class ManagedMongoDBUsersApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ManagedMongoDBUsersApiFp(this.configuration)
-            .createUser(requestParameters.clusterId, requestParameters.mongoUserToCreate, options)
+            .createUser(
+                requestParameters.clusterId,
+                requestParameters.createMongoUserRequestDTO,
+                options,
+            )
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -16706,24 +16901,7 @@ export class ManagedMongoDBUsersApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ManagedMongoDBUsersApiFp(this.configuration)
-            .deleteUser(requestParameters.userId, options)
-            .then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     *
-     * @summary Get MongoDB user
-     * @param {ManagedMongoDBUsersApiGetUserRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ManagedMongoDBUsersApi
-     */
-    public getUser(
-        requestParameters: ManagedMongoDBUsersApiGetUserRequest,
-        options?: RawAxiosRequestConfig,
-    ) {
-        return ManagedMongoDBUsersApiFp(this.configuration)
-            .getUser(requestParameters.userId, options)
+            .deleteUser(requestParameters.clusterId, requestParameters.userName, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -16742,7 +16920,7 @@ export class ManagedMongoDBUsersApi extends BaseAPI {
 
     /**
      *
-     * @summary List MongoDB users in cluster
+     * @summary List MongoDB users
      * @param {ManagedMongoDBUsersApiListUsersRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -20769,21 +20947,21 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createResourcePreset: async (
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
-            // verify required parameter 'v1CreateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'createResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'createResourcePreset',
-                'v1CreateResourcePresetRequest',
-                v1CreateResourcePresetRequest,
+                'createResourcePresetRequestDTO',
+                createResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -20810,7 +20988,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -20833,7 +21011,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('deleteResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -20879,7 +21057,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('getResourcePreset', 'resourcePresetId', resourcePresetId);
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -20914,12 +21092,12 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/resource-presets`;
+            const localVarPath = `/api/mdb/resource-presets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -20953,24 +21131,24 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateResourcePreset: async (
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options: RawAxiosRequestConfig = {},
         ): Promise<RequestArgs> => {
             // verify required parameter 'resourcePresetId' is not null or undefined
             assertParamExists('updateResourcePreset', 'resourcePresetId', resourcePresetId);
-            // verify required parameter 'v1UpdateResourcePresetRequest' is not null or undefined
+            // verify required parameter 'updateResourcePresetRequestDTO' is not null or undefined
             assertParamExists(
                 'updateResourcePreset',
-                'v1UpdateResourcePresetRequest',
-                v1UpdateResourcePresetRequest,
+                'updateResourcePresetRequestDTO',
+                updateResourcePresetRequestDTO,
             );
-            const localVarPath = `/api/v1/resource-presets/{resourcePresetId}`.replace(
+            const localVarPath = `/api/mdb/resource-presets/{resourcePresetId}`.replace(
                 `{${'resourcePresetId'}}`,
                 encodeURIComponent(String(resourcePresetId)),
             );
@@ -21000,7 +21178,7 @@ export const ResourcePresetsApiAxiosParamCreator = function (configuration?: Con
                 ...options.headers,
             };
             localVarRequestOptions.data = serializeDataIfNeeded(
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 localVarRequestOptions,
                 configuration,
             );
@@ -21023,16 +21201,16 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
         /**
          *
          * @summary Create resource preset
-         * @param {V1CreateResourcePresetRequest} v1CreateResourcePresetRequest
+         * @param {CreateResourcePresetRequestDTO} createResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async createResourcePreset(
-            v1CreateResourcePresetRequest: V1CreateResourcePresetRequest,
+            createResourcePresetRequestDTO: CreateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createResourcePreset(
-                v1CreateResourcePresetRequest,
+                createResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -21087,7 +21265,7 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
             resourcePresetId: string,
             options?: RawAxiosRequestConfig,
         ): Promise<
-            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ResourcePresetResponse>
+            (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourcePresetResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getResourcePreset(
                 resourcePresetId,
@@ -21108,7 +21286,7 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21118,7 +21296,7 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
             (
                 axios?: AxiosInstance,
                 basePath?: string,
-            ) => AxiosPromise<V1ListResourcePresetsResponse>
+            ) => AxiosPromise<ListResourcePresetsResponseDTO>
         > {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listResourcePresets(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -21138,18 +21316,18 @@ export const ResourcePresetsApiFp = function (configuration?: Configuration) {
          *
          * @summary Update resource preset
          * @param {string} resourcePresetId
-         * @param {V1UpdateResourcePresetRequest} v1UpdateResourcePresetRequest
+         * @param {UpdateResourcePresetRequestDTO} updateResourcePresetRequestDTO
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async updateResourcePreset(
             resourcePresetId: string,
-            v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest,
+            updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO,
             options?: RawAxiosRequestConfig,
         ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateResourcePreset(
                 resourcePresetId,
-                v1UpdateResourcePresetRequest,
+                updateResourcePresetRequestDTO,
                 options,
             );
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -21191,7 +21369,7 @@ export const ResourcePresetsApiFactory = function (
             options?: RawAxiosRequestConfig,
         ): AxiosPromise<void> {
             return localVarFp
-                .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+                .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
                 .then((request) => request(axios, basePath));
         },
         /**
@@ -21219,20 +21397,20 @@ export const ResourcePresetsApiFactory = function (
         getResourcePreset(
             requestParameters: ResourcePresetsApiGetResourcePresetRequest,
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ResourcePresetResponse> {
+        ): AxiosPromise<ResourcePresetResponseDTO> {
             return localVarFp
                 .getResourcePreset(requestParameters.resourcePresetId, options)
                 .then((request) => request(axios, basePath));
         },
         /**
          *
-         * @summary Get resource presets
+         * @summary List resource presets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listResourcePresets(
             options?: RawAxiosRequestConfig,
-        ): AxiosPromise<V1ListResourcePresetsResponse> {
+        ): AxiosPromise<ListResourcePresetsResponseDTO> {
             return localVarFp
                 .listResourcePresets(options)
                 .then((request) => request(axios, basePath));
@@ -21251,7 +21429,7 @@ export const ResourcePresetsApiFactory = function (
             return localVarFp
                 .updateResourcePreset(
                     requestParameters.resourcePresetId,
-                    requestParameters.v1UpdateResourcePresetRequest,
+                    requestParameters.updateResourcePresetRequestDTO,
                     options,
                 )
                 .then((request) => request(axios, basePath));
@@ -21267,10 +21445,10 @@ export const ResourcePresetsApiFactory = function (
 export interface ResourcePresetsApiCreateResourcePresetRequest {
     /**
      *
-     * @type {V1CreateResourcePresetRequest}
+     * @type {CreateResourcePresetRequestDTO}
      * @memberof ResourcePresetsApiCreateResourcePreset
      */
-    readonly v1CreateResourcePresetRequest: V1CreateResourcePresetRequest;
+    readonly createResourcePresetRequestDTO: CreateResourcePresetRequestDTO;
 }
 
 /**
@@ -21316,10 +21494,10 @@ export interface ResourcePresetsApiUpdateResourcePresetRequest {
 
     /**
      *
-     * @type {V1UpdateResourcePresetRequest}
+     * @type {UpdateResourcePresetRequestDTO}
      * @memberof ResourcePresetsApiUpdateResourcePreset
      */
-    readonly v1UpdateResourcePresetRequest: V1UpdateResourcePresetRequest;
+    readonly updateResourcePresetRequestDTO: UpdateResourcePresetRequestDTO;
 }
 
 /**
@@ -21342,7 +21520,7 @@ export class ResourcePresetsApi extends BaseAPI {
         options?: RawAxiosRequestConfig,
     ) {
         return ResourcePresetsApiFp(this.configuration)
-            .createResourcePreset(requestParameters.v1CreateResourcePresetRequest, options)
+            .createResourcePreset(requestParameters.createResourcePresetRequestDTO, options)
             .then((request) => request(this.axios, this.basePath));
     }
 
@@ -21382,7 +21560,7 @@ export class ResourcePresetsApi extends BaseAPI {
 
     /**
      *
-     * @summary Get resource presets
+     * @summary List resource presets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcePresetsApi
@@ -21408,7 +21586,7 @@ export class ResourcePresetsApi extends BaseAPI {
         return ResourcePresetsApiFp(this.configuration)
             .updateResourcePreset(
                 requestParameters.resourcePresetId,
-                requestParameters.v1UpdateResourcePresetRequest,
+                requestParameters.updateResourcePresetRequestDTO,
                 options,
             )
             .then((request) => request(this.axios, this.basePath));

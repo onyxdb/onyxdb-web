@@ -6,15 +6,15 @@ import {useAuth} from '@/context/AuthContext';
 import {useRouter} from 'next/navigation';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {mdbApi} from '@/app/apis';
-import {V1CreateMongoClusterRequest} from '@/generated/api';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {CreateMongoClusterRequestDTO} from '@/generated/api';
 
 export default function ClusterCreatePage() {
     const {checkPermission} = useAuth();
     const router = useRouter();
 
     const handleCreate = (values: ClusterFormValues) => {
-        const request: V1CreateMongoClusterRequest = {
+        const request: CreateMongoClusterRequestDTO = {
             name: values.name,
             description: values.description,
             projectId: values.projectId,
@@ -25,13 +25,22 @@ export default function ClusterCreatePage() {
                     presetId: values.presetId,
                 },
                 replicas: values.replicas,
+                version: values.clusterVersion,
+                backup: {
+                    isEnabled: values.backupIsEnabled,
+                    schedule: values.backupSchedule,
+                    limit: values.backupLimit,
+                },
             },
             database: values.database,
-            user: values.user,
+            user: {
+                name: values.user.name,
+                password: values.user.password,
+            },
         };
         console.log('Cluster create request values', request);
         mdbApi
-            .createCluster({v1CreateMongoClusterRequest: request})
+            .createCluster({createMongoClusterRequestDTO: request})
             .then((_) => {
                 return toaster.add({
                     name: 'cluster_created',

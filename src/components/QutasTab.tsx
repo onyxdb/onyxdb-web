@@ -10,7 +10,7 @@ import {
     Text,
     withTableSorting,
 } from '@gravity-ui/uikit';
-import {ProductDTO, Quota, Resource, ResourceUnitEnum} from '@/generated/api';
+import {ProductDTO, QuotaDTO, ResourceDTO} from '@/generated/api';
 import {mdbQuotasApi} from '@/app/apis';
 import {useAuth} from '@/context/AuthContext';
 import {Box} from '@/components/Layout/Box';
@@ -18,14 +18,15 @@ import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import CreateQuotaModal from '@/components/modals/CreateQuotaModal';
 import {TransferQuotaModal} from '@/components/modals/TransferQuotaModal';
 import {roundTo, toPercent} from '@/utils/math';
+import {ResourceUnitEnum} from '@/components/formik/ResourceInputField';
 
 interface QuotasTabProps {
     product: ProductDTO;
 }
 
 const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
-    const [quotas, setQuotas] = useState<Quota[]>([]);
-    const [resources, setResources] = useState<Resource[]>([]);
+    const [quotas, setQuotas] = useState<QuotaDTO[]>([]);
+    const [resources, setResources] = useState<ResourceDTO[]>([]);
     const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
     const [monitoringInterval, setMonitoringInterval] = useState<NodeJS.Timeout | null>(null);
     const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -105,7 +106,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
     };
 
     const MyTable = withTableSorting(Table);
-    const columns: TableColumnConfig<Quota>[] = [
+    const columns: TableColumnConfig<QuotaDTO>[] = [
         {
             id: 'resource',
             name: 'Ресурс',
@@ -124,7 +125,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
                 sort: true,
             },
             template: (quota) => {
-                if (quota.resource.unit === ResourceUnitEnum.Bytes) {
+                if (quota.resource.unit === ResourceUnitEnum.BYTES) {
                     return (
                         <Text variant="subheader-1" color="secondary">
                             {convertRamToGB(quota.limit).toLocaleString()}&nbsp;GB
@@ -145,7 +146,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
                 sort: true,
             },
             template: (quota) => {
-                if (quota.resource.unit === ResourceUnitEnum.Bytes) {
+                if (quota.resource.unit === ResourceUnitEnum.BYTES) {
                     return (
                         <Text variant="subheader-1" color="secondary">
                             {convertRamToGB(quota.usage).toLocaleString()}&nbsp;GB
@@ -166,7 +167,7 @@ const QuotasTab: React.FC<QuotasTabProps> = ({product}) => {
                 sort: true,
             },
             template: (quota) => {
-                if (quota.resource.unit === ResourceUnitEnum.Bytes) {
+                if (quota.resource.unit === ResourceUnitEnum.BYTES) {
                     return (
                         <Text variant="subheader-1" color="secondary">
                             {convertRamToGB(quota.free).toLocaleString()}&nbsp;GB

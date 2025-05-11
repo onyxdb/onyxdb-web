@@ -12,7 +12,7 @@ interface CreateQuotaModalProps {
 }
 
 export const CreateQuotaModal: React.FC<CreateQuotaModalProps> = ({productId, closeAction}) => {
-    // const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+    // const [selectedResource, setSelectedResource] = useState<ResourceDTO | null>(null);
 
     const handleCloseCreateModal = () => {
         closeAction();
@@ -21,7 +21,7 @@ export const CreateQuotaModal: React.FC<CreateQuotaModalProps> = ({productId, cl
     const handleSubmit = async (values: CreateQuotaFormFields) => {
         try {
             const request: MDBQuotasApiUploadQuotasToProductsRequest = {
-                uploadQuotasToProductsRequest: {
+                uploadQuotasToProductsRequestDTO: {
                     products: [
                         {
                             productId: productId,

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
 import {MongoBackupDTO} from '@/generated/api';
 import {BackupsTable} from '@/components/tables/BackupsTable';
-import {ConfirmationModal} from '@/components/ConfirmationModal';
+import {ConfirmationModal} from '@/components/modals/ConfirmationModal';
 import {mdbApi, mdbMongoDbBackupsApi} from '@/app/apis';
 import {Box} from '@/components/Layout/Box';
 import {SelectRequestInterval} from '@/components/SelectRequestInterval';

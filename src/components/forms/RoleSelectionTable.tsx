@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import {Table, TableColumnConfig, Text, TextInput, withTableSelection} from '@gravity-ui/uikit';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 
 export interface RoleSelectionTableProps {
     selectedRoles: string[];

@@ -6,7 +6,7 @@ import {Circles5Random, Cpu, Cpus, Database, SquareListUl} from '@gravity-ui/ico
 import {ClusterResourcesDTO, MongoClusterDTO, ResourcePresetResponseDTO} from '@/generated/api';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {BytesGB} from '@/components/ResourceInputField';
+import {BytesGB} from '@/components/formik/ResourceInputField';
 
 interface InfoTabProps {
     cluster: MongoClusterDTO;

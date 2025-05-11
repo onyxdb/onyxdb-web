@@ -7,7 +7,7 @@ import {SelectRequestInterval} from '@/components/SelectRequestInterval';
 import {Arrows3RotateLeft} from '@gravity-ui/icons';
 import {mdbOperationApi} from '@/app/apis';
 import {useAuth} from '@/context/AuthContext';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 import {OperationDTO} from '@/generated/api';
 
 interface OperationsTabProps {

@@ -2,7 +2,11 @@
 
 import React, {useEffect, useState} from 'react';
 import {Select, TextInput} from '@gravity-ui/uikit';
-import {ResourceUnitEnum} from '@/generated/api';
+
+export enum ResourceUnitEnum {
+    CORES = 'cores',
+    BYTES = 'bytes',
+}
 
 interface ResourceInputFieldProps {
     label?: string;
@@ -60,10 +64,10 @@ export const ResourceInputField: React.FC<ResourceInputFieldProps> = ({
     const [units, setUnits] = useState<ResourceUnit[]>([]);
 
     useEffect(() => {
-        if (unitType === ResourceUnitEnum.Cores) {
+        if (unitType === ResourceUnitEnum.CORES) {
             setUnits(coresUnits);
             setCurrentUnit(CoresCPU);
-        } else if (unitType === ResourceUnitEnum.Bytes) {
+        } else if (unitType === ResourceUnitEnum.BYTES) {
             setUnits(bytesUnits);
             setCurrentUnit(BytesGB);
         }

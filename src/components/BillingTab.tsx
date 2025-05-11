@@ -5,7 +5,7 @@ import {Button, Card, Label, Text} from '@gravity-ui/uikit';
 import {DateTime} from '@gravity-ui/date-utils';
 import {RangeCalendar, RangeValue} from '@gravity-ui/date-components';
 import {mdbBillingApi} from '@/app/apis';
-import {ProductDTO, ProductQuotaUsageByResourceOA, Resource} from '@/generated/api';
+import {ProductDTO, ProductQuotaUsageByResourceDTO, ResourceDTO} from '@/generated/api';
 import ChartKit, {settings} from '@gravity-ui/chartkit';
 import {YagrPlugin, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
@@ -13,7 +13,7 @@ import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 settings.set({plugins: [YagrPlugin]});
 
 type ResourceYagrWidgetData = {
-    resource: Resource;
+    resource: ResourceDTO;
     data: YagrWidgetData;
 };
 
@@ -23,7 +23,7 @@ interface BillingTabProps {
 
 const BillingTab: React.FC<BillingTabProps> = ({product}) => {
     const [rangeDate, setRangeDate] = useState<RangeValue<DateTime> | null>(null);
-    const [reportData, setReportData] = useState<ProductQuotaUsageByResourceOA[]>([]);
+    const [reportData, setReportData] = useState<ProductQuotaUsageByResourceDTO[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
 
@@ -65,7 +65,7 @@ const BillingTab: React.FC<BillingTabProps> = ({product}) => {
         }
     };
 
-    const prepareChartData = (data: ProductQuotaUsageByResourceOA): ResourceYagrWidgetData => {
+    const prepareChartData = (data: ProductQuotaUsageByResourceDTO): ResourceYagrWidgetData => {
         const timeline = data.items.map((item) => item.timestamp);
         const usageData = data.items.map((item) => item.usage);
         const freeData = data.items.map((item) => item.free);

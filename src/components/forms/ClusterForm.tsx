@@ -1,4 +1,5 @@
 'use client';
+
 import React, {useEffect, useState} from 'react';
 import {FormikErrors, useFormik} from 'formik';
 import {Button, Checkbox, SegmentedRadioGroup, Select, Text} from '@gravity-ui/uikit';
@@ -10,19 +11,24 @@ import {
     MongoInitDatabaseDTO,
     MongoInitUserDTO,
     ProjectDTO,
-    Quota,
-    Resource,
+    QuotaDTO,
+    ResourceDTO,
     ResourcePresetResponseDTO,
-    ResourceUnitEnum,
-    SimulateMongoDBQuotasUsageRequest,
+    SimulateMongoDBQuotasUsageRequestDTO,
 } from '@/generated/api';
 import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
-import {AccountSelector} from '@/components/AccountSelector';
+import {AccountSelector} from '@/components/formik/AccountSelector';
 import {ProjectSelector} from '@/components/ProjectsSelector';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {BytesGB, CoresCPU, ResourceInputField, ResourceUnit} from '@/components/ResourceInputField';
+import {
+    BytesGB,
+    CoresCPU,
+    ResourceInputField,
+    ResourceUnit,
+    ResourceUnitEnum,
+} from '@/components/formik/ResourceInputField';
 import {QuotaSimulationResult} from '@/components/QuotaSimulationResult';
 
 export interface ClusterFormValues {
@@ -62,7 +68,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
     const [resourcePresets, setResourcePresets] = useState<ResourcePresetResponseDTO[]>([]);
     const [filteredPresets, setFilteredPresets] = useState<ResourcePresetResponseDTO[]>([]);
     const [selectedPreset, setSelectedPreset] = useState<ResourcePresetResponseDTO | null>(null);
-    const [simulationResult, setSimulationResult] = useState<Quota[] | null>(null);
+    const [simulationResult, setSimulationResult] = useState<QuotaDTO[] | null>(null);
     const [isSimulationValid, setIsSimulationValid] = useState<boolean>(false);
 
     useEffect(() => {
@@ -216,7 +222,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         }
 
         try {
-            const simulateRequest: SimulateMongoDBQuotasUsageRequest = {
+            const simulateRequest: SimulateMongoDBQuotasUsageRequestDTO = {
                 projectId: formik.values.projectId,
                 config: {
                     version: '',
@@ -234,7 +240,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                 },
             };
             const simulationResponse = await mdbQuotasApi.simulateMongoDbQuotasUsage({
-                simulateMongoDBQuotasUsageRequest: simulateRequest,
+                simulateMongoDBQuotasUsageRequestDTO: simulateRequest,
             });
             const quotas = simulationResponse.data.quotas;
             setSimulationResult(quotas);
@@ -249,8 +255,8 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
         }
     };
 
-    const getUnitByResource = (resource: Resource): ResourceUnit => {
-        if (resource.unit === ResourceUnitEnum.Cores) {
+    const getUnitByResource = (resource: ResourceDTO): ResourceUnit => {
+        if (resource.unit === 'cores') {
             return CoresCPU;
         }
         return BytesGB;
@@ -369,7 +375,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({
                             onBlur={formik.handleBlur('storage')}
                             error={formik.touched.storage ? formik.errors.storage : undefined}
                             placeholder="Введите размер хранилища"
-                            unitType={ResourceUnitEnum.Bytes}
+                            unitType={ResourceUnitEnum.BYTES}
                             disabled={isEditMode}
                         />
                     </div>

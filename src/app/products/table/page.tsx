@@ -5,7 +5,7 @@ import {Button, Table, TableColumnConfig, withTableSorting} from '@gravity-ui/ui
 import {useRouter} from 'next/navigation';
 import {AccountDTO, ProductDTO} from '@/generated/api';
 import {accountsApi, productsApi} from '@/app/apis';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 
 export default function ProductsPage() {
     const router = useRouter();

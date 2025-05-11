@@ -8,7 +8,7 @@ import {InputField} from '@/components/formik/InputField';
 import {TextAreaField} from '@/components/formik/TextAreaField';
 import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Box} from '@/components/Layout/Box';
-import {ProductSelector} from '@/components/ProductSelector';
+import {ProductSelector} from '@/components/formik/ProductSelector';
 import {mdbApi, productsApi} from '@/app/apis';
 
 interface ProjectFormProps {
@@ -119,11 +119,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     />
                 )}
                 <Box marginBottom="10px">
+                    <label style={{display: 'block', marginBottom: '8px'}}>Неймспейс проекта</label>
                     <Select
                         size="m"
                         placeholder="Выберите неймспейс"
                         value={[formik.values.namespace]}
-                        onUpdate={(value) => formik.setFieldValue('quota.namespace', value[0])}
+                        onUpdate={(value) => formik.setFieldValue('namespace', value[0])}
                         errorMessage={
                             formik.touched.namespace ? formik.errors.namespace : undefined
                         }

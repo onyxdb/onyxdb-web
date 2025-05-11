@@ -20,10 +20,10 @@ import {
 } from '@gravity-ui/uikit';
 import RoleRequestDecisionModal from '@/components/modals/RoleRequestDecisionModal';
 import {useAuth} from '@/context/AuthContext';
-import {TextWithCopy} from '@/components/TextWithCopy';
+import {TextWithCopy} from '@/components/common/TextWithCopy';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
-import {AccountSelector} from '@/components/AccountSelector';
-import {RoleSelector} from '@/components/RoleSelector';
+import {AccountSelector} from '@/components/formik/AccountSelector';
+import {RoleSelector} from '@/components/formik/RoleSelector';
 import {StatusLabel} from '@/components/common/StatusLabel';
 import {UserBlock} from '@/components/common/UserBlock';
 

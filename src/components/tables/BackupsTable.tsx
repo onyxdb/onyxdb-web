@@ -37,6 +37,11 @@ export const BackupsTable: React.FC<BackupsTableProps> = ({
             meta: {
                 sort: true,
             },
+            template: (backup) => (
+                <Text variant="subheader-1" color="secondary">
+                    {backup.type.displayValue ?? backup.type.value}
+                </Text>
+            ),
         },
         {
             id: 'startedAt',

@@ -2,15 +2,18 @@ import baseConfig from '@gravity-ui/eslint-config';
 // import prettierConfig from '@gravity-ui/eslint-config/prettier';
 
 export default [
+    {
+        ignores: ['.next/*', 'node_modules/*'],
+    },
     ...baseConfig,
     // ...prettierConfig,
     {
         rules: {
-            "no-console": "off",
+            'no-console': 'off',
             // Настройки отступов
             'indent': ['error', 4, {
                 'SwitchCase': 1,
-                'ignoredNodes': ['PropertyDefinition']
+                'ignoredNodes': ['PropertyDefinition'],
             }],
 
             // Для JSX отдельное правило
@@ -19,6 +22,6 @@ export default [
 
             // Если используете TypeScript
             // '@typescript-eslint/indent': ['error', 4]
-        }
-    }
+        },
+    },
 ];

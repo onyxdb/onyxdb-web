@@ -7,9 +7,7 @@ interface GrafanaFrameProps {
 }
 
 const GrafanaFrame: React.FC<GrafanaFrameProps> = ({dashboardId}) => {
-    const grafanaUrl = process.env.GRAFANA_URL || 'http://localhost:3333';
-    const url = `${grafanaUrl}/d/${dashboardId}`;
-    console.info('GrafanaFrame', url);
+    const url = `http://localhost:3333/grafana/d/${dashboardId}`;
     return (
         <div>
             <iframe

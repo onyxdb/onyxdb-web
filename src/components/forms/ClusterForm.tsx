@@ -119,6 +119,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({initialValues, su
             backupSchedule: '0 0 * * *',
             backupLimit: 5,
         },
+        // eslint-disable-next-line complexity
         validate: (values) => {
             const errors: Partial<FormikErrors<ClusterFormValues>> = {};
             if (!values.name && !isEditMode) {

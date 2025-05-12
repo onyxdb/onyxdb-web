@@ -118,6 +118,7 @@ export const CreateQuotaForm: React.FC<CreateQuotaModalProps> = ({productId, clo
                 {!productId && <ProductSelector selectProductAction={(product) => formik.setFieldValue('productId', product.id)} />}
                 <Box marginTop="20px">
                     <Text variant="subheader-2">Разрешения</Text>
+                    {/* eslint-disable-next-line complexity */}
                     {formik.values.quotas.map((quota, index) => (
                         <Card key={index} style={{padding: '10px', marginBottom: '10px'}}>
                             <Box marginBottom="10px">

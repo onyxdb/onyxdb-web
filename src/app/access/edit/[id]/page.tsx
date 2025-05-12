@@ -6,6 +6,7 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {rolesApi} from '@/app/apis';
 import {RoleDTO} from '@/generated/api';
 import RoleForm, {RoleFormFields, mapPermissionFormToDTO} from '@/components/forms/RoleForm';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function EditRolePage() {
     const router = useRouter();
@@ -67,13 +68,13 @@ export default function EditRolePage() {
     };
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleEdit}
                 closeAction={handleEditModalCancel}
                 initialValue={role}
             />
-        </div>
+        </AsideComp>
     );
 }

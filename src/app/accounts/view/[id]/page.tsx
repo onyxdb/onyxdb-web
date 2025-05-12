@@ -1,4 +1,5 @@
 'use client';
+
 import React, {useEffect, useState} from 'react';
 import {accountsApi} from '@/app/apis';
 import {
@@ -34,6 +35,7 @@ import {MyLoader} from '@/components/Loader';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 import {RolesViewer} from '@/components/AccountAccess';
+import {AsideComp} from '@/app/AsideComp';
 
 interface AccountViewPageProps {}
 
@@ -512,7 +514,7 @@ export default function AccountViewPage({}: AccountViewPageProps) {
     };
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <HorizontalStack align="center" justify="space-between">
@@ -549,6 +551,6 @@ export default function AccountViewPage({}: AccountViewPageProps) {
                     closeAction={handleCloseEditModal}
                 />
             </Modal>
-        </div>
+        </AsideComp>
     );
 }

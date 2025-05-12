@@ -11,6 +11,7 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
 import {Box} from '@/components/Layout/Box';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {AsideComp} from '@/app/AsideComp';
 
 interface AccountsPageProps {}
 
@@ -132,7 +133,7 @@ export default function AccountsPage({}: AccountsPageProps) {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
@@ -147,6 +148,6 @@ export default function AccountsPage({}: AccountsPageProps) {
                     closeAction={handleCloseCreateModal}
                 />
             </Modal>
-        </div>
+        </AsideComp>
     );
 }

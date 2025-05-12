@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import {Breadcrumbs, BreadcrumbsItem, Button, Icon, IconData} from '@gravity-ui/uikit';

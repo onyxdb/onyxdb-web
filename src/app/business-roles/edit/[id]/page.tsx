@@ -9,6 +9,7 @@ import {
     BusinessRoleEditFormFields,
 } from '@/components/forms/BusinessRoleEditForm';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function BusinessRoleEditPage() {
     const router = useRouter();
@@ -67,13 +68,13 @@ export default function BusinessRoleEditPage() {
     ];
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <BusinessRoleEditForm
                 submitAction={handleBusinessRoleEdit}
                 closeAction={handleModalCancel}
                 initialValue={businessRole}
             />
-        </div>
+        </AsideComp>
     );
 }

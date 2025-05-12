@@ -5,6 +5,7 @@ import {useRouter} from 'next/navigation';
 import {useAuth} from '@/context/AuthContext';
 import {organizationUnitsApi} from '@/app/apis';
 import {OrgCreateForm, OrgUnitFormFields} from '@/components/forms/OrgCreateForm';
+import {AsideComp} from '@/app/AsideComp';
 
 interface OrgCreatePageProps {}
 
@@ -33,7 +34,7 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
                 },
             });
             handleClose();
-            router.push(`/structure/${values.domainComponentId}`);
+            router.push(`/structure?dcId=${values.domainComponentId}`);
         } catch (error) {
             console.error('Ошибка при создании OU:', error);
         }
@@ -46,8 +47,8 @@ export default function OrgCreatePage({}: OrgCreatePageProps) {
     }
 
     return (
-        <div style={{padding: '20px'}}>
+        <AsideComp>
             <OrgCreateForm onSubmit={handleSubmitCreate} closeAction={handleClose} />
-        </div>
+        </AsideComp>
     );
 }

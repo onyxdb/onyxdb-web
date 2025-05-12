@@ -5,6 +5,7 @@ import {usePathname, useRouter} from 'next/navigation';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {rolesApi} from '@/app/apis';
 import {RoleForm, RoleFormFields, mapPermissionFormToDTO} from '@/components/forms/RoleForm';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function CreateRolePage() {
     const router = useRouter();
@@ -43,13 +44,13 @@ export default function CreateRolePage() {
     };
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <RoleForm
                 onSubmit={handleRoleCreate}
                 closeAction={handleCreateModalCancel}
                 initialValue={undefined}
             />
-        </div>
+        </AsideComp>
     );
 }

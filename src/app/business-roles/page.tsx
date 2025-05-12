@@ -11,6 +11,7 @@ import BusinessRolesTable from '@/components/tables/BusinessRolesTable';
 import BusinessRoleForm, {BusinessRoleFormFields} from '@/components/forms/BusinessRoleForm';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 import {Box} from '@/components/Layout/Box';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function BusinessRolesPage() {
     const {checkPermission} = useAuth();
@@ -104,7 +105,7 @@ export default function BusinessRolesPage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
@@ -118,6 +119,6 @@ export default function BusinessRolesPage() {
                     closeAction={handleCreateModalCancel}
                 />
             </Modal>
-        </div>
+        </AsideComp>
     );
 }

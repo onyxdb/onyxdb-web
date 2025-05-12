@@ -8,6 +8,7 @@ import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {mdbApi} from '@/app/apis';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 import {CreateMongoClusterRequestDTO} from '@/generated/api';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ClusterCreatePage() {
     const {checkPermission} = useAuth();
@@ -75,11 +76,11 @@ export default function ClusterCreatePage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} />
             <div style={{padding: '20px'}}>
                 <ClusterForm submitAction={handleCreate} cancelAction={handleCancel} />
             </div>
-        </div>
+        </AsideComp>
     );
 }

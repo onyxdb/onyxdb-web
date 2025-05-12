@@ -27,6 +27,7 @@ import {RoleSelector} from '@/components/formik/RoleSelector';
 import {StatusLabel} from '@/components/common/StatusLabel';
 import {UserBlock} from '@/components/common/UserBlock';
 import {Box} from '@/components/Layout/Box';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function RoleRequestsTable() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestFullDTO[]>([]);
@@ -153,7 +154,7 @@ export default function RoleRequestsTable() {
     ];
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
@@ -227,6 +228,6 @@ export default function RoleRequestsTable() {
                     </div>
                 </Modal>
             </div>
-        </div>
+        </AsideComp>
     );
 }

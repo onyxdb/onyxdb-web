@@ -32,7 +32,7 @@ apiClient.interceptors.response.use(
             if (
                 error.response?.status === 401 &&
                 // @ts-ignore
-                error.response.data.error.includes('JWT expired at')
+                error.response.data.error?.includes('JWT expired at')
             ) {
                 clearTokens();
                 throw new Error('Unauthorized');

@@ -2,16 +2,25 @@
 
 import {Button, Card, Modal} from '@gravity-ui/uikit';
 import {useAuth} from '@/context/AuthContext';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {UserBlock} from '@/components/common/UserBlock';
 import {useRouter} from 'next/navigation';
 
-export function LoginInfo() {
-    // TODO не обновляется компонент
-    const {user} = useAuth();
+export const LoginInfo = () => {
+    const {user, fetchUser} = useAuth();
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const router = useRouter();
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchUser();
+        }, 300000); // Обновление каждые 5 минут
+
+        return () => clearInterval(interval);
+    }, [fetchUser]);
+
+
+    console.log('LoginInfo', user);
     if (!user) {
         return (
             <Card type="action">

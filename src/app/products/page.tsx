@@ -13,6 +13,7 @@ import {ProductForm, ProductFormFields} from '@/components/forms/ProductForm';
 import {Box} from '@/components/Layout/Box';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
+import {AsideComp} from '@/app/AsideComp';
 
 interface ProductsPageProps {}
 
@@ -186,7 +187,7 @@ export default function ProductsPage({}: ProductsPageProps) {
         });
     }
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
@@ -220,6 +221,6 @@ export default function ProductsPage({}: ProductsPageProps) {
                     )}
                 </Modal>
             </div>
-        </div>
+        </AsideComp>
     );
 }

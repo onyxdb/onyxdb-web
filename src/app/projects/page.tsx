@@ -19,6 +19,7 @@ import {ProjectsTable} from '@/components/tables/ProjectsTable';
 import {ProductSelector} from '@/components/formik/ProductSelector';
 import {ProjectBlock} from '@/components/ProjectBlock';
 import {useSearchParams} from 'next/navigation';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<ProjectDTO[]>([]);
@@ -172,7 +173,7 @@ export default function ProjectsPage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
@@ -211,6 +212,7 @@ export default function ProjectsPage() {
                     {selectedProject && (
                         <ProjectBlock
                             data={selectedProject}
+                            onEdit={handleOpenEditModal}
                             archiveAction={handleArchive}
                             unArchiveAction={handleUnArchive}
                         />
@@ -232,6 +234,6 @@ export default function ProjectsPage() {
                     )}
                 </Modal>
             </div>
-        </div>
+        </AsideComp>
     );
 }

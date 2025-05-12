@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {getCurrentUser} from '@/auth/authService';
 import {AccountDTO} from '@/generated/api';
+import {useToaster} from '@gravity-ui/uikit';
 
 // interface Permissions {
 //     [key: string]: {[key: string]: object} | null;
@@ -26,6 +27,7 @@ interface AuthContextType {
     permissions: Permissions;
     checkActions: (actions: Action[]) => boolean;
     checkPermission: (entity: string, action?: string, id?: string) => boolean;
+    fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -34,6 +36,7 @@ const AuthContext = createContext<AuthContextType>({
     permissions: {},
     checkActions: () => false,
     checkPermission: () => false,
+    fetchUser: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -41,36 +44,46 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
     const [permissions, setPermissions] = useState<Permissions>({});
+    const toaster = useToaster();
+
+    const fetchUser = async () => {
+        try {
+            const userData = await getCurrentUser();
+            if (!userData) {
+                throw new Error('Error fetching user data');
+            }
+            console.info('My account data:', userData);
+
+            const filteredPermissions: Permissions = {};
+            for (const item in userData.permissions) {
+                if (item.startsWith('web-')) {
+                    filteredPermissions[item.substring('web-'.length)] = null;
+                } else {
+                    filteredPermissions[item] = null;
+                }
+            }
+
+            setUser({account: userData.account, permissions: filteredPermissions});
+            setPermissions(filteredPermissions);
+        } catch (err) {
+            toaster.add({
+                name: 'error_get_user_data',
+                title: 'Ошибка авторизации',
+                content: `Не удалось получить данные пользователя. Попробуйте выполнить перезайти в аккаунт.`,
+                theme: 'danger',
+            });
+            console.error('Error fetching user:', err);
+            setUser(null);
+            setPermissions({});
+        }
+    };
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const userData = await getCurrentUser();
-                console.info('My account data:', userData);
-
-                const filteredPermissions: Permissions = {};
-                for (const item in userData.permissions) {
-                    if (item.startsWith('web-')) {
-                        filteredPermissions[item.substring('web-'.length)] = null;
-                    } else {
-                        filteredPermissions[item] = null;
-                    }
-                }
-
-                setUser({account: userData.account, permissions: filteredPermissions});
-                setPermissions(filteredPermissions);
-            } catch (err) {
-                console.error('Error fetching user:', err);
-                setUser(null);
-                setPermissions({});
-            }
-        };
-
         fetchUser();
     }, []);
 
     function checkActions(actions: Action[]) {
-        if (permissions['any'] !== undefined || permissions['any'] !== undefined) {
+        if (permissions['any'] !== undefined) {
             return true;
         }
         for (const action of actions) {
@@ -101,8 +114,9 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
         return false;
     }
 
+    console.log('AuthProvider user=', user)
     return (
-        <AuthContext.Provider value={{user, setUser, permissions, checkActions, checkPermission}}>
+        <AuthContext.Provider value={{user, setUser, permissions, checkActions, checkPermission, fetchUser}}>
             {children}
         </AuthContext.Provider>
     );

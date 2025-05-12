@@ -14,6 +14,7 @@ import ProductInfoTab from '@/components/ProductInfoTab';
 import QuotasTab from '@/components/QutasTab';
 import BillingTab from '@/components/BillingTab';
 import {ProductTree} from '@/components/ProductsTree';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ProductDetailPage() {
     const router = useRouter();
@@ -104,7 +105,7 @@ export default function ProductDetailPage() {
     ];
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <div style={{padding: '20px'}}>
                 <Text variant="header-1">{product.name}</Text>
@@ -163,6 +164,6 @@ export default function ProductDetailPage() {
                     </TabPanel>
                 </TabProvider>
             </div>
-        </div>
+        </AsideComp>
     );
 }

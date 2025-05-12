@@ -8,6 +8,7 @@ import {useAuth} from '@/context/AuthContext';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useRouter} from 'next/navigation';
 import ClusterTable from '@/components/tables/ClustersTable';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ClustersPage() {
     const {checkPermission} = useAuth();
@@ -32,7 +33,7 @@ export default function ClustersPage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <Box marginBottom="20px">
@@ -40,6 +41,6 @@ export default function ClustersPage() {
                 </Box>
                 <ClusterTable />
             </div>
-        </div>
+        </AsideComp>
     );
 }

@@ -6,16 +6,20 @@ import {login} from '@/auth/authService';
 import {Box} from '@/components/Layout/Box';
 import {VerticalStack} from '@/components/Layout/VerticalStack';
 import {useRouter} from 'next/navigation';
+import {useAuth} from '@/context/AuthContext';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
     const toaster = useToaster();
+    const {fetchUser} = useAuth()
 
     const handleLogin = async () => {
         try {
             await login(username, password);
+            await fetchUser()
+
             toaster.add({
                 name: `login_success`,
                 title: 'Успешный логин',

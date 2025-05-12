@@ -19,6 +19,7 @@ export const login = async (username: string, password: string) => {
     const response = await authApi.login({authRequestDTO: {username, password}});
     console.info('login response', response);
     setTokens(response.data.accessToken, response.data.refreshToken);
+
     return response.data;
 };
 

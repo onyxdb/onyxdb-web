@@ -43,6 +43,20 @@ export interface ClusterFormValues {
     backupLimit: number;
 }
 
+
+export function validateDashedName(value: string, maxLen = 60): string | undefined {
+    const regex = /^(?!-)[a-z0-9-]+[a-z0-9]$/;
+
+    if (value.length > maxLen) {
+        return 'Слишком длинное значение';
+    }
+    if (!regex.test(value)) {
+        return `Может содержать только латиницу, цифры и '-' (${regex})`;
+    }
+
+    return undefined;
+}
+
 const DEFAULT_PRESET = 'standard';
 
 export interface ClusterCreateFormProps {
@@ -108,9 +122,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({initialValues, su
         validate: (values) => {
             const errors: Partial<FormikErrors<ClusterFormValues>> = {};
             if (!values.name && !isEditMode) {
-                errors.name = 'Название обязательно';
-            } else if (values.name.length > 100 && !isEditMode) {
-                errors.name = 'Название не должно превышать 100 символов';
+                errors.name = validateDashedName(values.name)
             }
             if (!values.description) {
                 errors.description = 'Описание обязательно';
@@ -120,6 +132,12 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({initialValues, su
             }
             if (!values.storageClass) {
                 errors.storageClass = 'Выбор класса хранения обязателен';
+            }
+            if (!values.clusterVersion) {
+                errors.clusterVersion = 'Выбор версии кластера обязателен';
+            }
+            if (!values.storage || values.storage <= 0) {
+                errors.storage = 'Количество выделенной памяти должно быть больше 0';
             }
             if (!values.ownerId && !isEditMode) {
                 errors.ownerId = 'Владелец кластера обязателен';
@@ -198,6 +216,7 @@ export const ClusterForm: React.FC<ClusterCreateFormProps> = ({initialValues, su
         const convertErrorsToTouched = (errors: FormikErrors<ClusterFormValues>): FormikTouched<ClusterFormValues> => {
             const touched: FormikTouched<ClusterFormValues> = {};
 
+            // eslint-disable-next-line guard-for-in
             for (const key in errors) {
                 // @ts-ignore
                 const value = errors[key];

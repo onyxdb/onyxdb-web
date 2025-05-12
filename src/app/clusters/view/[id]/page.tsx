@@ -9,6 +9,7 @@ import ClusterView from '@/components/Cluster/ClusterView';
 import {mdbApi, mdbProjectsApi, productsApi} from '@/app/apis';
 import {MongoClusterDTO, ProductDTO} from '@/generated/api';
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ClusterViewPage() {
     const [cluster, setCluster] = useState<MongoClusterDTO | null>(null);
@@ -109,9 +110,9 @@ export default function ClusterViewPage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             {cluster && <ClusterView cluster={cluster} />}
-        </div>
+        </AsideComp>
     );
 }

@@ -37,8 +37,8 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({
                 limit: 10,
             });
             setAccountOptions(response.data.data ?? []);
-        } catch (error) {
-            console.error('Error fetching accounts:', error);
+        } catch (err) {
+            console.error('Error fetching accounts:', err);
         }
     };
 

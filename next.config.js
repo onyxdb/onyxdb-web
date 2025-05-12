@@ -3,6 +3,10 @@ const path = require('path');
 
 // Базовый конфиг
 const nextConfig = {
+    // serverExternalPackages: ['@gravity-ui/uikit'],
+    compiler: {
+        styledComponents: true,
+    },
     webpack: (config) => {
         config.module.rules.push({
             test: /\.svg$/i,

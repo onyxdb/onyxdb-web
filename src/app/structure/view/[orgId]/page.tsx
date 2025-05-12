@@ -11,6 +11,7 @@ import {HorizontalStack} from '@/components/Layout/HorizontalStack';
 import {Clock, ClockArrowRotateLeft, Persons, Star} from '@gravity-ui/icons';
 import {AccountsTableSimple} from '@/components/tables/AccountsTableSimple';
 import {OrganizationUnitSmallCard} from '@/components/OrganizationUnitSmallCard';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function OrgUnitDetailPage() {
     const router = useRouter();
@@ -116,7 +117,7 @@ export default function OrgUnitDetailPage() {
     ];
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={[]} />
             <div style={{padding: '20px'}}>
                 <Text variant="header-1">{orgUnit.name}</Text>
@@ -191,6 +192,6 @@ export default function OrgUnitDetailPage() {
                     </TabPanel>
                 </TabProvider>
             </div>
-        </div>
+        </AsideComp>
     );
 }

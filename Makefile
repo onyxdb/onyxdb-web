@@ -2,8 +2,8 @@
 .PHONY: up
 up:
 	#nvm use 20.18.2
-	yarn
-	yarn dev -p 3002
+	yarn build
+	yarn start -p 3002
 
 .PHONY: uup
 uup:

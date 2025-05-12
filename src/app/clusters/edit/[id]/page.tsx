@@ -7,6 +7,7 @@ import {usePathname, useRouter} from 'next/navigation';
 import {mdbApi} from '@/app/apis';
 import {ClusterForm, ClusterFormValues} from '@/components/forms/ClusterForm';
 import {MongoClusterDTO, UpdateMongoClusterRequestDTO} from '@/generated/api';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ClusterEditPage() {
     const {checkPermission} = useAuth();
@@ -78,7 +79,7 @@ export default function ClusterEditPage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} />
             <div style={{padding: '20px'}}>
                 <ClusterForm
@@ -87,6 +88,6 @@ export default function ClusterEditPage() {
                     cancelAction={handleCancel}
                 />
             </div>
-        </div>
+        </AsideComp>
     );
 }

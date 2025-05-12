@@ -8,6 +8,7 @@ import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
 import {useAuth} from '@/context/AuthContext';
 import {Text} from '@gravity-ui/uikit';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function RolesPage() {
     const router = useRouter();
@@ -44,7 +45,7 @@ export default function RolesPage() {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <div style={{marginBottom: '5px'}}>
@@ -52,6 +53,6 @@ export default function RolesPage() {
                 </div>
                 <RoleTable editAction={handleEdit} deleteAction={handleDelete} />
             </div>
-        </div>
+        </AsideComp>
     );
 }

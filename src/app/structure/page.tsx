@@ -21,6 +21,7 @@ import {Box} from '@/components/Layout/Box';
 import {OrgUnitBlock} from '@/components/OrgUnitBlock';
 import {AppHeader} from '@/components/AppHeader/AppHeader';
 import {CirclePlus} from '@gravity-ui/icons';
+import {AsideComp} from '@/app/AsideComp';
 
 interface StructurePageProps {}
 
@@ -242,7 +243,7 @@ export default function StructurePage({}: StructurePageProps) {
     }
 
     return (
-        <div>
+        <AsideComp>
             <AppHeader breadCrumbs={breadCrumbs} actions={actions} />
             <div style={{padding: '20px'}}>
                 <div style={{marginBottom: '5px'}}>
@@ -287,6 +288,6 @@ export default function StructurePage({}: StructurePageProps) {
                     />
                 </Modal>
             </div>
-        </div>
+        </AsideComp>
     );
 }

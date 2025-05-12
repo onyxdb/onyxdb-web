@@ -6,6 +6,7 @@ export default [
     // ...prettierConfig,
     {
         rules: {
+            "no-console": "off",
             // Настройки отступов
             'indent': ['error', 4, {
                 'SwitchCase': 1,

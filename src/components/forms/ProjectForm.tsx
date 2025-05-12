@@ -24,13 +24,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
 }) => {
     const [initialProduct, setInitialProduct] = useState<ProductDTO | null>(null);
     const [namespaces, setNamespaces] = useState<string[]>([]);
+    const isEditMode = initialValue !== undefined && initialValue !== null;
 
     const formik = useFormik<CreateProjectRequestDTO>({
         initialValues: {
             name: initialValue?.name || '',
             description: initialValue?.description || '',
             productId: initialValue?.productId || '',
-            namespace: '',
+            namespace: initialValue?.namespace || '',
         },
         validate: (values) => {
             const errors: Partial<CreateProjectRequestDTO> = {};
@@ -100,6 +101,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     onBlur={formik.handleBlur('name')}
                     error={formik.touched.name ? formik.errors.name : undefined}
                     placeholder="Введите название проекта"
+                    disabled={isEditMode}
                 />
                 <TextAreaField
                     label="Описание"
@@ -110,7 +112,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     error={formik.touched.description ? formik.errors.description : undefined}
                     placeholder="Введите описание проекта"
                 />
-                {!initialValue && (
+                {!isEditMode && (
                     <Box marginBottom="10px">
                         <ProductSelector
                             selectProductAction={handleProductSelect}

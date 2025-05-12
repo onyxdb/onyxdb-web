@@ -6,6 +6,7 @@ import {useRouter} from 'next/navigation';
 import {AccountDTO, ProductDTO} from '@/generated/api';
 import {accountsApi, productsApi} from '@/app/apis';
 import {TextWithCopy} from '@/components/common/TextWithCopy';
+import {AsideComp} from '@/app/AsideComp';
 
 export default function ProductsPage() {
     const router = useRouter();
@@ -81,13 +82,14 @@ export default function ProductsPage() {
     };
 
     return (
-        <div style={{padding: '20px'}}>
+        <AsideComp>
             <div
                 style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     marginBottom: '20px',
+                    padding: '20px'
                 }}
             >
                 <h1>Каталог проектов</h1>
@@ -101,6 +103,6 @@ export default function ProductsPage() {
                 // @ts-ignore
                 columns={columns}
             />
-        </div>
+        </AsideComp>
     );
 }

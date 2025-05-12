@@ -21,7 +21,7 @@ interface ProductBlockProps {
 export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, deleteAction}) => {
     const [projectsAll, setProjectsAll] = useState<ProjectDTO[]>([]);
     const router = useRouter();
-    const {checkActions} = useAuth();
+    const {checkPermission} = useAuth();
 
     const fetchProductProjects = async (productId: string) => {
         try {
@@ -110,20 +110,14 @@ export const ProductBlock: React.FC<ProductBlockProps> = ({data, editAction, del
                         </Button>
                     </VerticalStack>
                     <div style={{flexDirection: 'row'}}>
-                        {checkActions([
-                            {name: 'product', action: 'edit'},
-                            {name: `web-product-${data.id}`, action: 'edit'},
-                        ]) && (
+                        {checkPermission('product', 'edit', data.id) && (
                             <Box marginBottom="5px">
                                 <Button view="normal" size="m" onClick={() => editAction(data)}>
                                     <Icon data={Pencil} />
                                 </Button>
                             </Box>
                         )}
-                        {checkActions([
-                            {name: 'product', action: 'delete'},
-                            {name: `web-product-${data.id}`, action: 'delete'},
-                        ]) && (
+                        {checkPermission('product', 'delete') && (
                             <Button
                                 view="outlined-danger"
                                 size="m"
